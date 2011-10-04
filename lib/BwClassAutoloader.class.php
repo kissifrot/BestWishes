@@ -11,12 +11,11 @@ class BwClassAutoloader
 	private function loader($className) {
 		global $bwLibDir;
 
-		echo 'Trying to load ', $className, ' via ', __METHOD__, "()\n";
 		$fileToLoad = $bwLibDir . DS . $className . '.class.php';
 		if(!is_file($fileToLoad)) {
 			exit('<span style="color: #ff0000">Could not load file ' . $fileToLoad . '</span>');
 		}
-		require_once($fileToLoad);
+		require($fileToLoad);
 	}
 
 	public static function getInstance()
