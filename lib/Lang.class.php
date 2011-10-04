@@ -5,14 +5,14 @@ class Lang
 	public function __construct($lang = '')
 	{
 		// Import params from config file
-		global $bwDS, $bwLang, $bwVendorDir;
+		global $bwLang, $bwVendorDir;
 
 		if(!empty($lang))
 			$this->currentLanguage = $lang;
 		else
 			$this->currentLanguage = $bwLang;
 
-		require_once($bwVendorDir . $bwDS . 'php-gettext' . $bwDS . 'gettext.inc');
+		require_once($bwVendorDir . DS . 'php-gettext' . DS . 'gettext.inc');
 	}
 
 	/**
@@ -20,7 +20,7 @@ class Lang
 	 */
 	public function getLangList()
 	{
-		global $bwDS, $bwLocaleDir;
+		global $bwLocaleDir;
 		/* We can always speak English */
 		$result = array('en' => $this->getLangDetails('en'));
 
@@ -37,7 +37,7 @@ class Lang
 
 		/* Process all files */
 		while (FALSE !== ($file = readdir($handle))) {
-			if ($file != "." && $file != ".." && file_exists($bwLocaleDir . $bwDS . $file . $bwDS . 'LC_MESSAGES' . $bwDS . 'bestwishes.mo')) {
+			if ($file != '.' && $file != '..' && file_exists($bwLocaleDir . DS . $file . DS . 'LC_MESSAGES' . DS . 'bestwishes.mo')) {
 				$result[$file] = $this->getLangDetails($file);
 			}
 		}

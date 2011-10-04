@@ -12,7 +12,7 @@ class BwClassAutoloader
 		global $bwLibDir;
 
 		echo 'Trying to load ', $className, ' via ', __METHOD__, "()\n";
-		$fileToLoad = $bwLibDir . DIRECTORY_SEPARATOR . $className . '.class.php';
+		$fileToLoad = $bwLibDir . DS . $className . '.class.php';
 		if(!is_file($fileToLoad)) {
 			exit('<span style="color: #ff0000">Could not load file ' . $fileToLoad . '</span>');
 		}

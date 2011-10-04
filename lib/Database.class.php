@@ -12,7 +12,7 @@ class Database
 	private $dbPrefix;
 
 	protected static $instance;
-	
+
 	public static function getInstance()
 	{
 		if (!isset (self::$instance))
@@ -20,7 +20,7 @@ class Database
 		
 		return self::$instance;
 	}
-	
+
 	protected function __construct()
 	{
 		// Import params from config file
@@ -69,7 +69,7 @@ class Database
 			exit('<span style="color: #ff0000">Error!<br /><strong>' . $e->getMessage() . '</strong></span>');
 		}
 	}
-	
+
 	public function disconnect()
 	{
 		if( $this->db != null )

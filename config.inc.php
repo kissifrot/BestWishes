@@ -18,7 +18,9 @@ $confDBPasswd  = '';
 $confDBPort    = '3306';
 
 /* DIRECTORIES INFO */
-$bwDS        = DIRECTORY_SEPARATOR; // Just to have a shortcut
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
 $bwMainDir   = dirname(__FILE__);
 $bwLibDir    = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'lib';
 $bwVendorDir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'lib'  . DIRECTORY_SEPARATOR . 'vendor';
