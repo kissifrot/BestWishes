@@ -13,6 +13,8 @@ class BwDatabase
 
 	protected static $instance;
 
+	protected $currentStatement = null;
+
 	public static function getInstance()
 	{
 		if (!isset (self::$instance))
@@ -70,9 +72,160 @@ class BwDatabase
 		}
 	}
 
-	public function query($query)
+	public function prepareQuery($queryParams = array())
 	{
-		return $this->db->query($query);
+		if(empty($queryParams))
+			return false;
+		
+		$defaults = array(
+			'queryType' => 'SELECT',
+			'queryFields' => '',
+			'queryCondition' => '',
+			'queryValues' => ''
+        );
+        $params = array_merge($defaults, $queryParams);
+		if(!isset($params['tableName']))
+			return false;
+		
+		switch($params['queryType']) {
+			case 'SELECT':
+				$query = 'SELECT ';
+				if(is_array($params['queryFields'])) {
+					$query .= implode(', ', $params['queryFields']);
+				} else {
+					$query .= '*';
+				}
+				$query .= ' FROM ' . $this->dbPrefix . $params['tableName'];
+				if(!empty($params['queryCondition'])) {
+					$query .= ' WHERE ' . $params['queryCondition'];
+				}
+				echo $query;
+			break;
+			case 'UPDATE':
+				if(empty($params['queryValues']) || empty($params['queryFields'])) {
+					return false;
+				}
+				$query = 'UPDATE ' . $this->dbPrefix . $params['tableName'] . ' SET ';
+				if(is_array($params['queryFields'])) {
+					foreach($params['queryFields'] as $queryField => $queryVariable) {
+						$query .= $queryField . ' = ' . $queryVariable . ', ';
+					}
+					$query = substr($query, 0, - 2);
+				} else {
+					$query .= '*';
+				}
+				$query .= ' WHERE ';
+				if(is_array($params['queryCondition'])) {
+					$query .= '(';
+					$query .= implode(' AND ', $params['queryCondition']);
+					$query .= ')';
+				} else {
+					$query .= $params['queryCondition'];
+				}
+				echo $query;
+			break;
+			case 'INSERT':
+				if(empty($params['queryValues']) || empty($params['queryFields'])) {
+					return false;
+				}
+				$query = 'INSERT INTO ' . $this->dbPrefix . $params['tableName'] . ' (';
+				if(is_array($params['queryFields'])) {
+					$query .= implode(', ', array_keys($params['queryFields']));
+				}
+				$query .= ') VALUES ( ';
+					$query .= implode(', ', array_values($params['queryFields']));
+				$query .= ')';
+				echo $query;
+			break;
+			default:
+			return false;
+		}
+		// Prepare the PDO statement
+		try
+		{
+			$this->currentStatement = $this->db->prepare($query);
+			// Bind the params given
+			if(is_array($params['queryValues'])) {
+				if(!empty($params['queryValues'])) {
+					foreach($params['queryValues'] as $queryValue) {
+						$this->currentStatement->bindParam(
+							$queryValue['parameter'],
+							$queryValue['variable'],
+							$queryValue['data_type']
+						);
+					}
+				}
+			}
+			return true;
+		}
+		catch(PDOException $e)
+		{
+			$this->currentStatement = null;
+			echo $e->getMessage();
+			return false;
+			// exit('<span style="color: #ff0000">Query error!<br /><strong>' . $e->getMessage() . '</strong></span>');
+		}
+	}
+
+	private function executeStatement()
+	{
+		if(empty($this->currentStatement))
+			return false;
+
+		try {
+			return $this->currentStatement->execute();
+		} 
+		catch(PDOException $e)
+		{
+			echo $e->getMessage();
+			return false;
+		}
+	}
+
+	public function fetch()
+	{
+		if(!$this->executeStatement())
+			return false;
+		
+		try {
+			return $this->currentStatement->fetch(PDO::FETCH_ASSOC);
+		} 
+		catch(PDOException $e)
+		{
+			echo $e->getMessage();
+			return false;
+		}
+	}
+
+	public function fetchAll()
+	{
+		if(!$this->executeStatement())
+			return false;
+		
+		try {
+			return $this->currentStatement->fetchAll(PDO::FETCH_ASSOC);
+		} 
+		catch(PDOException $e)
+		{
+			echo $e->getMessage();
+			return false;
+		}
+	}
+
+	public function closeQuery()
+	{
+		if(empty($this->currentStatement))
+			return false;
+
+		$closeResult = $this->currentStatement->closeCursor();
+		$this->currentStatement = null;
+		
+		return $closeResult;
+	}
+
+	public function exec()
+	{
+		return $this->executeStatement();
 	}
 
 	public function disconnect()

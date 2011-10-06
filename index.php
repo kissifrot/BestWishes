@@ -19,3 +19,6 @@ var_dump($lang->getLangList());
 $config = BwConfig::get('foo');
 
 var_dump($config);
+
+var_dump(BwConfig::set('foo', 'bar', true));
+var_dump(BwConfig::set('foo', 'bar'));
