@@ -1,5 +1,5 @@
 <?php
-if (version_compare(PHP_VERSION, '5.2.0', '<')) exit("Sorry, BewtWishes will only run on PHP version 5.2.x or greater!\n");
+if (version_compare(PHP_VERSION, '5.2.0', '<')) exit("Sorry, BestWishes will only run on PHP version 5.2.x or greater!\n");
 
 $availableDatabasesInfo = array(
 	'mysql' => array(

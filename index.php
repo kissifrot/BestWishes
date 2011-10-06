@@ -1,5 +1,5 @@
 <?php
-if (version_compare(PHP_VERSION, '5.2.0', '<')) exit("Sorry, BewtWishes will only run on PHP version 5.2.x or greater!\n");
+if (version_compare(PHP_VERSION, '5.2.0', '<')) exit("Sorry, BestWishes will only run on PHP version 5.2.x or greater!\n");
 
 define('BESTWISHES', true);
 
@@ -10,9 +10,12 @@ require_once($bwLibDir . DS . 'BwClassAutoloader.class.php');
 
 $autoloader = BwClassAutoloader::getInstance();
 
-$db = Database::getInstance();
+$db = BwDatabase::getInstance();
 var_dump($db);
-$lang = new Lang();
+$lang = new BwLang();
 var_dump($lang);
 var_dump($lang->getLangList());
 
+$config = BwConfig::get('foo');
+
+var_dump($config);

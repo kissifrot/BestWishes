@@ -1,5 +1,5 @@
 <?php
-class Database
+class BwDatabase
 {
 	protected $db = null;
 
@@ -68,6 +68,11 @@ class Database
 		{
 			exit('<span style="color: #ff0000">Error!<br /><strong>' . $e->getMessage() . '</strong></span>');
 		}
+	}
+
+	public function query($query)
+	{
+		return $this->db->query($query);
 	}
 
 	public function disconnect()

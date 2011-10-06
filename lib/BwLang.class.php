@@ -1,5 +1,5 @@
 <?php
-class Lang
+class BwLang
 {
 	private $currentLanguage = '';
 	public function __construct($lang = '')
