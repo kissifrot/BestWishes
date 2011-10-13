@@ -15,6 +15,8 @@ class BwDatabase
 
 	protected $currentStatement = null;
 
+	protected $debugMode;
+
 	public static function getInstance()
 	{
 		if (!isset (self::$instance))
@@ -23,7 +25,7 @@ class BwDatabase
 		return self::$instance;
 	}
 
-	protected function __construct()
+	protected function __construct($debugMode = BwDebug::NO_DEBUG)
 	{
 		// Import params from config file
 		global $confDBType, $confDBServer, $confDBName, $confDBPrefix, $confDBUser, $confDBPasswd, $confDBPort;
@@ -35,6 +37,8 @@ class BwDatabase
 		$this->dbPort     = $confDBPort;
 		$this->dbName     = $confDBName;
 		$this->dbPrefix   = $confDBPrefix;
+
+		$this->debugMode = $debugMode;
 
 		$this->connect();
 	}
@@ -167,6 +171,31 @@ class BwDatabase
 		}
 	}
 
+	/**
+	 * Prepare a manual query
+	 */
+	public function prepare($query)
+	{
+		$this->currentStatement = $this->db->prepare($query);
+	}
+
+	/**
+	 * 
+	 */
+	public function bindParams($params = array())
+	{
+		// Bind the params given
+		if(!empty($params)) {
+			foreach($params as $queryValue) {
+				$this->currentStatement->bindParam(
+					$queryValue['parameter'],
+					$queryValue['variable'],
+					$queryValue['data_type']
+				);
+			}
+		}
+	}
+
 	private function executeStatement()
 	{
 		if(empty($this->currentStatement))
@@ -182,13 +211,13 @@ class BwDatabase
 		}
 	}
 
-	public function fetch()
+	public function fetch($fetchMode = PDO::FETCH_ASSOC)
 	{
 		if(!$this->executeStatement())
 			return false;
 		
 		try {
-			return $this->currentStatement->fetch(PDO::FETCH_ASSOC);
+			return $this->currentStatement->fetch($fetchMode);
 		} 
 		catch(PDOException $e)
 		{
@@ -197,13 +226,13 @@ class BwDatabase
 		}
 	}
 
-	public function fetchAll()
+	public function fetchAll($fetchMode = PDO::FETCH_ASSOC)
 	{
 		if(!$this->executeStatement())
 			return false;
 		
 		try {
-			return $this->currentStatement->fetchAll(PDO::FETCH_ASSOC);
+			return $this->currentStatement->fetchAll($fetchMode);
 		} 
 		catch(PDOException $e)
 		{
