@@ -25,7 +25,7 @@ class BwDatabase
 		return self::$instance;
 	}
 
-	protected function __construct($debugMode = BwDebug::NO_DEBUG)
+	protected function __construct()
 	{
 		// Import params from config file
 		global $confDBType, $confDBServer, $confDBName, $confDBPrefix, $confDBUser, $confDBPasswd, $confDBPort;
@@ -38,7 +38,7 @@ class BwDatabase
 		$this->dbName     = $confDBName;
 		$this->dbPrefix   = $confDBPrefix;
 
-		$this->debugMode = $debugMode;
+		$this->debugMode = BwDebug::getDebugMode();
 
 		$this->connect();
 	}
@@ -165,7 +165,9 @@ class BwDatabase
 		catch(PDOException $e)
 		{
 			$this->currentStatement = null;
-			echo $e->getMessage();
+			if($this->debugMode > 0) {
+				BwDebug::storeError($e->getMessage());
+			}
 			return false;
 			// exit('<span style="color: #ff0000">Query error!<br /><strong>' . $e->getMessage() . '</strong></span>');
 		}
@@ -202,11 +204,17 @@ class BwDatabase
 			return false;
 
 		try {
-			return $this->currentStatement->execute();
+			$this->currentStatement->execute();
+			if($this->debugMode == BwDebug::LOG_ALL) {
+				BwDebug::storeQuery($this->currentStatement->queryString);
+			}
+			return true;
 		} 
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			if($this->debugMode > 0) {
+				BwDebug::storeError($e->getMessage());
+			}
 			return false;
 		}
 	}
@@ -221,7 +229,9 @@ class BwDatabase
 		} 
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			if($this->debugMode > 0) {
+				BwDebug::storeError($e->getMessage());
+			}
 			return false;
 		}
 	}
@@ -236,7 +246,9 @@ class BwDatabase
 		} 
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			if($this->debugMode > 0) {
+				BwDebug::storeError($e->getMessage());
+			}
 			return false;
 		}
 	}
