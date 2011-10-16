@@ -14,6 +14,12 @@ class BwLang
 
 		require_once($bwVendorDir . DS . 'php-gettext' . DS . 'gettext.inc');
 	}
+	
+	public static function load()
+	{
+		$lang = new self();
+		$lang->setupLocale();
+	}
 
 	/**
 	 * Borrowed to phpMyAdmin ;)
@@ -58,5 +64,17 @@ class BwLang
 				return array('fr|french', 'fr', 'Fran&ccedil;ais');
 		}
 		return array("$lang|$lang", $lang, $lang);
+	}
+	
+	public function setupLocale()
+	{
+		global $bwLocaleDir;
+		// Set locale
+		_setlocale(LC_MESSAGES, $this->currentLanguage);
+		_bindtextdomain('bestwishes', $bwLocaleDir);
+		_bind_textdomain_codeset('bestwishes', 'UTF-8');
+		_textdomain('bestwishes');
+
+		return true;
 	}
 }

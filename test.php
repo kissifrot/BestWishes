@@ -30,3 +30,12 @@ var_dump(BwConfig::set('foo', 'bar', true));
 var_dump(BwConfig::set('foo', 'bar'));
 var_dump(BwDebug::getInstance());
 
+ob_start();
+phpinfo(INFO_MODULES);
+$phpinfo = ob_get_contents();
+ob_end_clean();
+
+var_dump(preg_match('#PDO#', $phpinfo));
+if(preg_match('#PDO#', $phpinfo) > 0) {
+	echo "Seems PDO is available<br />\n";
+}

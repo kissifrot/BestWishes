@@ -13,7 +13,7 @@ class BwUser
 		$usernameTrim = trim($username);
 		$passwordTrim = trim($password);
 
-		if(empty(trim($username)) || empty($password)) {
+		if(empty($usernameTrim) || empty($passwordTrim)) {
 			return false;
 		}
 	}
@@ -46,6 +46,37 @@ class BwUser
 			}
 			
 			return true;
+		}
+	}
+
+	/**
+	 * Checks if an user is logged in
+	 */
+	public static function checkSession()
+	{
+		if(!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || !isset($_SESSION['identif']) || empty($_SESSION['identif']))
+		{
+			return false;
+		}
+		else
+		{
+			$idSessionUser = $_SESSION['user_id'];
+			$sessionIdendif = $_SESSION['identif'];
+			if(sha1($idSessionUser . '|' . $_SERVER['HTTP_USER_AGENT']) === $sessionIdendif)
+			{
+				// Check the server we're on
+				if($_SERVER['HTTP_HOST'] != 'localhost')
+				{
+					if($_SESSION['identif_serv'] === sha1($_SERVER['SERVER_NAME']))
+						return true;
+					else
+						return false;
+				}
+				else
+					return true;
+			}
+			else
+				return false;
 		}
 	}
 }

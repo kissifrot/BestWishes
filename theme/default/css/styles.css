@@ -1,0 +1,305 @@
+body
+{
+	/* Encore un truc pas standard qui marche que sous IE...*/
+	scrollbar-face-color: #552222;
+	scrollbar-shadow-color: #000000;
+	scrollbar-highlight-color: #333333;
+	scrollbar-3dlight-color: #333333;
+	scrollbar-darkshadow-color: #000000;
+	scrollbar-track-color: #2E2222;
+	scrollbar-arrow-color: #996666;	
+
+	font-family : Verdana,Arial;
+	font-weight : normal;
+	font-size : 14px;
+	color : #FFFFFF;
+	list-style-type: square;
+	margin-top: 1px;
+	margin-left:auto;
+	margin-right:auto;
+	padding: 0px;
+	background-color: #252525;
+	width: 950px;
+}
+
+#infobulle 
+{
+	position:absolute;
+	visibility:hidden;
+	z-index:200;
+}
+
+table {
+	font-family : Verdana,Arial;
+	font-weight : normal;
+	font-size : 0.95em;
+	color : #FFFFFF;
+}
+
+input {
+	font-family : Verdana,Arial;
+	font-weight : normal;
+	font-size : 0.95em;
+	color : #FFFFFF;
+	background-color : #2A0909;
+	text-decoration : none;
+	border : 1px solid #553333;
+	height: 1.6em;
+}
+
+select {
+	font-family : Verdana,Arial;
+	font-weight : normal;
+	font-size : 0.95em;
+	color : #FFFFFF;
+	background-color : #2A0909;
+	text-decoration : none;	
+	border : 1px solid #553333;
+	height: 1.5em;
+}
+
+textarea {
+	font-family : Verdana,Arial;
+	font-weight : normal;
+	font-size : 0.95em;
+	color : #FFFFFF;
+	background-color : #2A0909;
+	text-decoration : none;
+	border : 1px solid #553333;
+	height: 7.5em;
+	width: 100%;
+}
+
+h1
+{
+	font-family: Verdana,Arial;
+	font-weight: bold;
+	font-size: 18px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+h2
+{
+	font-family: Verdana,Arial;
+	font-weight: bold;
+	font-size: 16px;
+	margin-top: 1px;
+	margin-bottom: 2px;
+}
+
+h3
+{
+	font-family: Verdana,Arial;
+	font-weight: bold;
+	font-size: 14px;
+	margin-top: 1px;
+	margin-bottom: 2px;
+}
+
+ul
+{
+	border-left: 1px;
+	margin-left: 1px;
+}
+
+li
+{
+	border-left: 1px;
+	margin-left: 1px;
+}
+
+a {
+	color : #EDD5D5;
+	text-decoration : none;
+}
+a:hover {
+	color : #FFEEEE;
+	text-decoration : underline;
+}
+a:active {
+	color : #FFFFFF;
+}
+a:visited {
+	color : #EDD5D5;
+}
+
+
+a.glossary {
+	border-bottom: 1px dotted #FFFFFF;
+	text-decoration : none;
+}
+
+a.glossary:Hover {
+	border-bottom: 0;
+	text-decoration : none;
+}
+
+img
+{
+	border: 0px;
+}
+
+fieldset
+{
+	background-color : #553333;
+}
+
+/* Elements communs*/
+
+#en_tete
+{
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+#centre
+{
+	text-align: center;
+	width: 900px;
+}
+
+#menu
+{
+	text-align: left;
+	margin-top: 10px;
+	float: left;
+	width: 150px;
+	min-height: 500px;
+}
+
+#principal
+{
+	margin-left: 170px;
+	margin-bottom: 10px;
+	min-height: 500px;
+}
+
+#pied_page
+{
+	font-size : 10px;
+	text-align: center;
+}
+
+/* Classes */
+
+
+.sidebarTable 
+{
+	background-color : #553333;
+	border: solid 1px #775555;
+	line-height:120%;
+}
+
+.infoserreur
+{
+	font-family : Verdana, Arial;
+	font-weight : bold;
+	font-size : 14px;
+	color : #FF0000;
+}
+
+.infosajout
+{
+	font-family : Verdana, Arial;
+	font-weight : bold;
+	font-size : 14px;
+	color : #FFFF00;
+}
+
+.dernierajout
+{
+	font-family : Verdana, Arial;
+	font-weight : normal;
+	font-size : 12px;
+	font-style: italic;
+	color : #FFFF00;
+}
+
+.copyright
+{
+	font-family : Verdana, Arial;
+	font-weight : normal;
+	font-size : 10px;
+}
+
+.lignetablebis {
+	background-color : #775555;
+	line-height:120%;
+}
+
+.sidebarTablebis {
+	background-color : #775555;
+	line-height:120%;
+}
+
+.bouton_reduire
+{
+	float: right;
+}
+
+.bouton_fermer
+{
+	float: right;
+}
+
+#fen_form_achat_cadeau
+{
+	z-index: 3;
+	position:absolute;
+	background-color: #252525;
+	width: 400px;
+	height: 350px;
+	border:1px solid #775555;
+	text-align: center;
+}
+
+#titre_fen_form_achat_cadeau
+{
+	width: 400px;
+	cursor: move;
+	height: 20px;
+	text-align: center;
+	font-weight: bold;
+	background: url("http://www.k-network.info/listekdos/img/fond_barre_menu.png");
+	/*background: #775555;*/
+	color:#fff;
+}
+
+#contenu_fen_form_achat_cadeau
+{
+	height: 330px;
+	overflow:auto;
+}
+
+/*diff */
+
+#fen_form_raz_mdp
+{
+	z-index: 4;
+	position:absolute;
+	background-color: #252525;
+	width: 400px;
+	height: 250px;
+	border:1px solid #775555;
+	text-align: center;
+}
+
+#titre_fen_form_raz_mdp
+{
+	width: 400px;
+	cursor: move;
+	height: 20px;
+	text-align: center;
+	font-weight: bold;
+	background: url("http://www.k-network.info/listekdos/img/fond_barre_menu.png");
+	/*background: #775555;*/
+	color:#fff;
+}
+
+#contenu_fen_form_raz_mdp
+{
+	height: 330px;
+	overflow:auto;
+}
+

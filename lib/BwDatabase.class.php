@@ -103,7 +103,6 @@ class BwDatabase
 				if(!empty($params['queryCondition'])) {
 					$query .= ' WHERE ' . $params['queryCondition'];
 				}
-				echo $query;
 			break;
 			case 'UPDATE':
 				if(empty($params['queryValues']) || empty($params['queryFields'])) {
@@ -126,7 +125,6 @@ class BwDatabase
 				} else {
 					$query .= $params['queryCondition'];
 				}
-				echo $query;
 			break;
 			case 'INSERT':
 				if(empty($params['queryValues']) || empty($params['queryFields'])) {
@@ -139,7 +137,6 @@ class BwDatabase
 				$query .= ') VALUES ( ';
 					$query .= implode(', ', array_values($params['queryFields']));
 				$query .= ')';
-				echo $query;
 			break;
 			default:
 			return false;
