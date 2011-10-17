@@ -16,5 +16,5 @@ if(BwUser::checkSession()) {
 } else {
 	$display = new BwDisplay(BwConfig::get('theme', 'default'));
 }
-$display->header(__('Home'));
+$display->header(_('Home'));
 $display->footer();

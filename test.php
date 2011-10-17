@@ -8,7 +8,8 @@ define('BESTWISHES', true);
 
 // Load config
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.inc.php');
-
+// Load other needed files
+require_once($bwLibDir . DS . 'BwCommon.inc.php');
 require_once($bwLibDir . DS . 'BwClassAutoloader.class.php');
 
 $autoloader = BwClassAutoloader::getInstance();
@@ -39,3 +40,10 @@ var_dump(preg_match('#PDO#', $phpinfo));
 if(preg_match('#PDO#', $phpinfo) > 0) {
 	echo "Seems PDO is available<br />\n";
 }
+
+var_dump(BwEvent::getAllActiveEvents());
+
+$slug = 'foobar';
+$list = new BwList($slug);
+$list->load();
+var_dump($list->getNearestEventData());

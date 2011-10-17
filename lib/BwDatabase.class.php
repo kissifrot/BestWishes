@@ -101,7 +101,13 @@ class BwDatabase
 				}
 				$query .= ' FROM ' . $this->dbPrefix . $params['tableName'];
 				if(!empty($params['queryCondition'])) {
-					$query .= ' WHERE ' . $params['queryCondition'];
+					if(!is_array($params['queryCondition'])) {
+						$query .= ' WHERE ' . $params['queryCondition'];
+					} else {
+						$query .= ' WHERE (';
+						$query .= implode(' AND ', $params['queryCondition']);
+						$query .= ')';
+					}
 				}
 			break;
 			case 'UPDATE':

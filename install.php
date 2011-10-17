@@ -43,12 +43,12 @@ if (! function_exists('__')) {
 
 // Steps
 $installSteps = array(
-	0 => array(1, __('Welcome'), 'Welcome', 0),
-	1 => array(2, __('Writable Check'), 'CheckFilesWritable', 10),
-	2 => array(3, __('Database Settings'), 'DatabaseSettings', 15),
-	4 => array(5, __('Database Population'), 'DatabasePopulation', 15),
-	5 => array(6, __('Admin Account'), 'AdminAccount', 20),
-	6 => array(7, __('Finalize Install'), 'DeleteInstall', 0),
+	0 => array(1, _('Welcome'), 'Welcome', 0),
+	1 => array(2, _('Writable Check'), 'CheckFilesWritable', 10),
+	2 => array(3, _('Database Settings'), 'DatabaseSettings', 15),
+	4 => array(5, _('Database Population'), 'DatabasePopulation', 15),
+	5 => array(6, _('Admin Account'), 'AdminAccount', 20),
+	6 => array(7, _('Finalize Install'), 'DeleteInstall', 0),
 );
 
 var_dump($installSteps);
