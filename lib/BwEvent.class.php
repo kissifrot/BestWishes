@@ -172,7 +172,10 @@ class BwEvent
 				}
 			}
 		}
-		
+
+		// And finally sort them
+		usort($calculatedEvents, 'datesCompare');
+
 		return $calculatedEvents;
 	}
 }
