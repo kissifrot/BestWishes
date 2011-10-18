@@ -28,8 +28,8 @@ class BwDisplay extends Smarty
 		}
 
 		parent::__construct(); // Call Smarty's constructor
-		$this->setTemplateDir($bwThemeDir . DS . $this->theme . DS . 'templates' . DS);
-		$this->setCompileDir($bwThemeDir . DS . $this->theme . DS . 'templates_c' . DS);
+		$this->setTemplateDir($bwThemeDir . DS . $this->theme . DS . 'tpl' . DS);
+		$this->setCompileDir($bwThemeDir . DS . $this->theme . DS . 'tpl_c' . DS);
 		$this->setConfigDir($bwThemeDir . DS . $this->theme . DS . 'configs' . DS);
 		$this->setCacheDir($bwThemeDir . DS . $this->theme . DS . 'cache' . DS);
 		// $this->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
