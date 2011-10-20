@@ -33,12 +33,17 @@ class BwDisplay extends Smarty
 		$this->setConfigDir($bwThemeDir . DS . $this->theme . DS . 'configs' . DS);
 		$this->setCacheDir($bwThemeDir . DS . $this->theme . DS . 'cache' . DS);
 		// $this->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
-		
+
 		$this->assign('theme', $this->theme);
 		$this->assign('webDir', $bwURL);
 		$this->assign('themeWebDir', $bwURL . '/theme/' . $this->theme);
 		$this->assign('sessionOk', false);
 		$this->assign('lists', BwList::getAll());
+
+		// Translated strings
+		$this->assign('lngHomeLogin', _('Home/Login'));
+		$this->assign('lngLists', _('Lists:'));
+		$this->assign('lngDateFormat', _('m/d/Y'));
 	}
 
 	public function header($title = '', $subTitle = '')

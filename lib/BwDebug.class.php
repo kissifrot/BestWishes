@@ -58,6 +58,11 @@ class BwDebug
 		return false;
 	}
 
+	public static function getQueries() {
+		$debug = self::getInstance();
+		return $debug->sqlLogs;
+	}
+
 	protected function getMode() {
 		return $this->mode;
 	}

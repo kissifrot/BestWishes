@@ -1,10 +1,10 @@
 {foreach from=$list->getCategories() item=category}
 	{if $category->giftsCount > 0}
-		<strong>{$category->name|ucfirst} :</strong><br />
+		<b>{$category->name|ucfirst} :</b><br />
 		{foreach from=$category->getGifts() item=gift}
-			- {$gift->name|ucfirst}<br />
+			- <span id="gif_name_{$gift->getId()}" onclick="showGiftDetailsWindow({$gift|json_encode|escape})">{$gift->name|ucfirst}</span><br />
 		{/foreach}
 	{/if}
 {foreachelse}
-	<em>(This list is still empty)</em>
+	<i>{$lngInfoEmptyList}</i>
 {/foreach}

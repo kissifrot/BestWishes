@@ -14,7 +14,14 @@ require_once($bwLibDir . DS . 'BwCommon.inc.php');
 if(BwUser::checkSession()) {
 	
 } else {
-	$display = new BwDisplay(BwConfig::get('theme', 'default'));
+	$disp = new BwDisplay(BwConfig::get('theme', 'default'));
 }
-$display->header(_('Home'));
-$display->footer();
+// Translation strings
+$disp->assign('lngPasswordForgot', _('Forgot your password?'));
+$disp->assign('lngLoginLabel', _('Login:'));
+$disp->assign('lngLoginAction', _('Login'));
+$disp->assign('lngPasswordLabel', _('Password:'));
+
+$disp->header(_('Home'));
+$disp->display('home.tpl');
+$disp->footer();

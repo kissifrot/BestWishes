@@ -2,6 +2,8 @@
 class BwUser
 {
 	private $id;
+
+	public $username;
 	public function __construct($id = null)
 	{
 		if(!empty($id))
@@ -27,12 +29,16 @@ class BwUser
 		
 		$db = BwDatabase::getInstance();
 		$queryParams = array(
-			'tableName' => 'users',
+			'tableName' => 'user',
 			'queryType' => 'SELECT',
 			'queryFields' => '*',
 			'queryCondition' => 'id = :id',
 			'queryValues' => array(
-				':id' => $this->id
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				)
 			)
 		);
 		if($db->prepareQuery($queryParams)) {
@@ -45,6 +51,7 @@ class BwUser
 				return false;
 			}
 			
+			$this->username = $result['username'];
 			return true;
 		}
 	}

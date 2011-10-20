@@ -37,6 +37,11 @@ if(BwUser::checkSession()) {
 		exit;
 	}
 }
+// Translation strings
+$disp->assign('lngPossibleActions', _('Possible actions:'));
+$disp->assign('lngInfoEmptyList', _('(This list is still empty)'));
+$disp->assign('lngDetails', _('Details'));
+
 // Load and display the list
 $subTitle = '';
 $list = new BwList($slug);

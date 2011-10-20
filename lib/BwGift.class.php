@@ -3,6 +3,14 @@ class BwGift
 {
 	private $id;
 	public $name;
+	public $addedDate;
+	public $isBought;
+	public $boughtDate;
+	public $boughtBy;
+	public $boughtComment;
+	public $imageFilename;
+	public $url;
+	public $isSurprise;
 	
 	public function __construct($id = null)
 	{
@@ -10,9 +18,9 @@ class BwGift
 			$this->id = $id;
 	}
 
-	public function getGifts()
+	public function getId()
 	{
-		return $this->gifts;
+		return $this->id;
 	}
 
 	public function load($id = null)
@@ -46,8 +54,8 @@ class BwGift
 				return false;
 			}
 
-			$this->id        = $result['id'];
-			$this->name      = $result['name'];
+
+			$this->storeAttributes($this, $result);
 			return true;
 		}
 	}
@@ -91,10 +99,9 @@ class BwGift
 			
 			$allGifts = array();
 			foreach($results as $result) {
-				$gist = new self($result['id']);
-				$gist->id        = $result['id'];
-				$gist->name      = $result['name'];
-				$allGifts[] = $gist;
+				$gift = new self($result['id']);
+				$gift->storeAttributes($gift, $result);
+				$allGifts[] = $gift;
 			}
 
 			return $allGifts;
@@ -132,14 +139,34 @@ class BwGift
 			
 			$allGifts = array();
 			foreach($results as $result) {
-				$gist = new self($result['id']);
-				$gist->id        = $result['id'];
-				$gist->name      = $result['name'];
-				$allGifts[] = $gist;
+				$gift = new self($result['id']);
+				$gift->storeAttributes($gift, $result);
+				$allGifts[] = $gift;
 			}
 
 			return $allGifts;
 		}
+	}
+
+	private function storeAttributes($elem, $sqlResult)
+	{
+		$elem->id            = $sqlResult['id'];
+		$elem->name          = $sqlResult['name'];
+		$elem->addedDate     = $sqlResult['added_date'];
+		$elem->isBought      = (bool)$sqlResult['is_bought'];
+		$elem->boughtDate    = $sqlResult['bought_date'];
+		$elem->boughtBy      = null;
+		if($elem->isBought) {
+			$buyingUser = new BwUser((int)$sqlResult['bought_by']);
+			var_dump($buyingUser->load());
+			if($buyingUser->load()) {
+				$elem->boughtBy = $buyingUser->username;
+			}
+		}
+		$elem->boughtComment = $sqlResult['bought_comment'];
+		$elem->url           = $sqlResult['url'];
+		$elem->imageFilename = $sqlResult['image_filename'];
+		$elem->isSurprise    = (bool)$sqlResult['is_surprise'];
 	}
 
 	/**

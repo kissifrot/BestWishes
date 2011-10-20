@@ -53,21 +53,22 @@ a {
 /* Blocks */
 
 #global {
-	width: 900px;
+	width: 1000px;
 	margin-left: auto;
 	margin-right: auto;
 }
 
 #left_menu {
-	width: 150px;
+	width: 170px;
 	min-height: 200px;
 	float: left;
 }
 
 #right_content {
 	min-height: 200px;
-	margin-left: 170px;
+	margin-left: 190px;
 	max-width: 700px;
+	min-width: 500px;
 	float: left;
 }
 
@@ -79,6 +80,10 @@ a {
 #footer {
 	margin-top: 15px;
 	font-size : 10px;
+	text-align: center;
+}
+
+#gift_details_buy h4 {
 	text-align: center;
 }
 

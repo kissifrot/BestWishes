@@ -12,7 +12,8 @@
 
 		<script language="javascript" src="{$webDir}/js/jquery.js" type="text/javascript"></script>
 		<script language="javascript" src="{$webDir}/js/jquery-ui.js" type="text/javascript"></script>
-		<script language="javascript" src="{$webDir}/js/fonctions.js" type="text/javascript"></script>
+		<script language="javascript" src="{$webDir}/js/tools.js" type="text/javascript"></script>
+		<script language="javascript" src="{$webDir}/js/functions.js" type="text/javascript"></script>
 	</head>
 
 	<body>
@@ -23,9 +24,9 @@
 			</div>
 			<div id="content">
 				<div id="left_menu" class="ui-widget-content ui-corner-all" style="padding: 0.2em;">
-					<h2><a href="{$webDir}/index.php">Accueil/Connexion</a></h2>
+					<h2><a href="{$webDir}/index.php">{$lngHomeLogin}</a></h2>
 					{if !empty($lists) }
-						<h2>Listes :</h2>
+						<h2>{$lngLists}</h2>
 						<ul>
 						{foreach from=$lists item=list}
 							<li><a href="{$webDir}/list/{$list->slug}">{$list->name|ucfirst}</a>
