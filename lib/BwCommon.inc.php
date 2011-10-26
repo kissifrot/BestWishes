@@ -11,6 +11,7 @@ session_start();
 require_once($bwLibDir . DS . 'BwClassAutoloader.class.php');
 
 $autoloader = BwClassAutoloader::getInstance();
+BwDebug::setDebugMode(BwDebug::LOG_ALL); // TODO: remove this
 BwLang::load();
 
 /**
@@ -78,4 +79,3 @@ function boolVal($in, $strict = false) {
 	}
     return $out;
 }
-

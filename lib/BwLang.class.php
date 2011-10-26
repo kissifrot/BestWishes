@@ -10,7 +10,7 @@ class BwLang
 		if(!empty($lang))
 			$this->currentLanguage = $lang;
 		else
-			$this->currentLanguage = $bwLang;
+			$this->currentLanguage = BwConfig::get('default_langage', 'en');
 
 		require_once($bwVendorDir . DS . 'php-gettext' . DS . 'gettext.inc');
 	}
