@@ -77,7 +77,7 @@ class BwUser
 				return false;
 			}
 
-			$this->storeAttributes($this, $result);
+			$this->storeAttributes($result);
 			return true;
 		}
 	}
@@ -115,29 +115,29 @@ class BwUser
 			// Now compare the password
 			$hashedGivenPwd = sha1($result['salt'] . $password . '/' . $result['salt']);
 			if($hashedGivenPwd === $result['password']) {
-				$this->storeAttributes($this, $result);
+				$this->storeAttributes($result);
 				return true;
 			}
 			return false;
 		}
 	}
 
-	private function storeAttributes($elem, $sqlResult)
+	private function storeAttributes($sqlResult)
 	{
-		$elem->id        = $sqlResult['id'];
-		$elem->name      = $sqlResult['name'];
-		$elem->username  = $sqlResult['username'];
-		$elem->email     = $sqlResult['email'];
-		$elem->lastLogin = $sqlResult['last_login'];
+		$this->id        = $sqlResult['id'];
+		$this->name      = $sqlResult['name'];
+		$this->username  = $sqlResult['username'];
+		$this->email     = $sqlResult['email'];
+		$this->lastLogin = $sqlResult['last_login'];
 		// Load theme info
 		$theme = new BwTheme();
 		if($theme->load($sqlResult['theme_id'])) {
-			$elem->theme = $theme;
+			$this->theme = $theme;
 		} else {
 			if($theme->loadDefault()) {
-				$elem->theme = $theme;
+				$this->theme = $theme;
 			} else {
-				$elem->theme = '';
+				$this->theme = '';
 				// TODO: Theme error
 			}
 		}

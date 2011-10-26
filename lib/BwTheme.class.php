@@ -43,7 +43,7 @@ class BwTheme
 				return false;
 			}
 			
-			$this->storeAttributes($this, $result);
+			$this->storeAttributes($result);
 			return true;
 		}
 	}
@@ -69,21 +69,65 @@ class BwTheme
 			$db->closeQuery();
 			if($result === false)
 				return $result;
-			
+
 			if(empty($result)) {
 				return false;
 			}
-			
-			$this->storeAttributes($this, $result);
+
+			$this->storeAttributes($result);
 			return true;
 		}
 	}
 
-	private function storeAttributes($elem, $sqlResult)
+	/**
+	 *
+	 */
+	public function loadAll()
 	{
-		$elem->id        = $sqlResult['id'];
-		$elem->name      = $sqlResult['name'];
-		$elem->shortName = $sqlResult['short_name'];
-		$elem->isDefault = (bool)$sqlResult['is_default'];
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'theme',
+			'queryType' => 'SELECT',
+			'queryFields' => '*',
+			'queryCondition' => '',
+			'queryValues' => ''
+		);
+		if($db->prepareQuery($queryParams)) {
+			$results = $db->fetchAll();
+			$db->closeQuery();
+			if($results === false)
+				return $results;
+
+			if(empty($results)) {
+				return false;
+			}
+
+			$allThemes = array();
+			foreach($results as $result) {
+				$theme = new self($result['id']);
+				$theme->storeAttributes($sqlResult)
+				$allThemes[] = $theme;
+			}
+
+			return $allThemes;
+		}
+	}
+
+	private function storeAttributes($sqlResult)
+	{
+		$this->id          = $sqlResult['id'];
+		$this->name        = $sqlResult['name'];
+		$this->shortName   = $sqlResult['short_name'];
+		$this->description = $sqlResult['description'];
+		$this->isDefault   = (bool)$sqlResult['is_default'];
+	}
+
+	/**
+	 *
+	 */
+	public static function getAll()
+	{
+		$theme = new self();
+		return $theme->loadAll();
 	}
 }

@@ -55,7 +55,7 @@ class BwGift
 			}
 
 
-			$this->storeAttributes($this, $result);
+			$this->storeAttributes($result);
 			return true;
 		}
 	}
@@ -100,7 +100,7 @@ class BwGift
 			$allGifts = array();
 			foreach($results as $result) {
 				$gift = new self($result['id']);
-				$gift->storeAttributes($gift, $result);
+				$gift->storeAttributes($result);
 				$allGifts[] = $gift;
 			}
 
@@ -140,7 +140,7 @@ class BwGift
 			$allGifts = array();
 			foreach($results as $result) {
 				$gift = new self($result['id']);
-				$gift->storeAttributes($gift, $result);
+				$gift->storeAttributes($result);
 				$allGifts[] = $gift;
 			}
 
@@ -148,25 +148,24 @@ class BwGift
 		}
 	}
 
-	private function storeAttributes($elem, $sqlResult)
+	private function storeAttributes($sqlResult)
 	{
-		$elem->id            = $sqlResult['id'];
-		$elem->name          = $sqlResult['name'];
-		$elem->addedDate     = $sqlResult['added_date'];
-		$elem->isBought      = (bool)$sqlResult['is_bought'];
-		$elem->boughtDate    = $sqlResult['bought_date'];
-		$elem->boughtBy      = null;
-		if($elem->isBought) {
+		$this->id            = $sqlResult['id'];
+		$this->name          = $sqlResult['name'];
+		$this->addedDate     = $sqlResult['added_date'];
+		$this->isBought      = (bool)$sqlResult['is_bought'];
+		$this->boughtDate    = $sqlResult['bought_date'];
+		$this->boughtBy      = null;
+		if($this->isBought) {
 			$buyingUser = new BwUser((int)$sqlResult['bought_by']);
-			var_dump($buyingUser->load());
 			if($buyingUser->load()) {
-				$elem->boughtBy = $buyingUser->username;
+				$this->boughtBy = $buyingUser->username;
 			}
 		}
-		$elem->boughtComment = $sqlResult['bought_comment'];
-		$elem->url           = $sqlResult['url'];
-		$elem->imageFilename = $sqlResult['image_filename'];
-		$elem->isSurprise    = (bool)$sqlResult['is_surprise'];
+		$this->boughtComment = $sqlResult['bought_comment'];
+		$this->url           = $sqlResult['url'];
+		$this->imageFilename = $sqlResult['image_filename'];
+		$this->isSurprise    = (bool)$sqlResult['is_surprise'];
 	}
 
 	/**
