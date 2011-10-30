@@ -8,6 +8,7 @@ class BwUser
 	public $email;
 	public $lastLogin;
 	public $theme;
+	public $listParams;
 
 	protected static $instance;
 
@@ -49,34 +50,47 @@ class BwUser
 	public function load($id = null)
 	{
 		if(!empty($id))
-			$this->id = $id;
+			$this->id = (int)$id;
 		if(empty($this->id))
 			return false;
-		
-		$db = BwDatabase::getInstance();
-		$queryParams = array(
-			'tableName' => 'gift_list_user',
-			'queryType' => 'SELECT',
-			'queryFields' => '*',
-			'queryCondition' => 'id = :id',
-			'queryValues' => array(
-				array(
-					'parameter' => ':id',
-					'variable' => $this->id,
-					'data_type' => PDO::PARAM_INT
+
+		// Try to read from the cache
+		$result = BwCache::read('user_' . $this->id);
+		if($result === false) {
+			// Nothing in the cache
+			$db = BwDatabase::getInstance();
+			$queryParams = array(
+				'tableName' => 'gift_list_user',
+				'queryType' => 'SELECT',
+				'queryFields' => '*',
+				'queryCondition' => 'id = :id',
+				'queryValues' => array(
+					array(
+						'parameter' => ':id',
+						'variable' => $this->id,
+						'data_type' => PDO::PARAM_INT
+					)
 				)
-			)
-		);
-		if($db->prepareQuery($queryParams)) {
-			$result = $db->fetch();
-			$db->closeQuery();
-			if($result === false)
-				return $result;
-			
-			if(empty($result)) {
+			);
+			if($db->prepareQuery($queryParams)) {
+				$result = $db->fetch();
+				$db->closeQuery();
+				if($result === false)
+					return $result;
+				
+				if(empty($result)) {
+					return false;
+				}
+
+				$this->storeAttributes($result);
+				// Store this in the cache
+				BwCache::write('user_' . $this->id, $result);
+				return true;
+			} else {
 				return false;
 			}
-
+		} else {
+			// Use cache data
 			$this->storeAttributes($result);
 			return true;
 		}
@@ -119,6 +133,8 @@ class BwUser
 				return true;
 			}
 			return false;
+		} else {
+			return false;
 		}
 	}
 
@@ -141,6 +157,7 @@ class BwUser
 				// TODO: Theme error
 			}
 		}
+		$this->listParams = array();
 	}
 
 	private function setupSession()
@@ -155,12 +172,9 @@ class BwUser
 	 */
 	public static function checkSession()
 	{
-		if(!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || !isset($_SESSION['identif']) || empty($_SESSION['identif']))
-		{
+		if(!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || !isset($_SESSION['identif']) || empty($_SESSION['identif'])) {
 			return false;
-		}
-		else
-		{
+		} else {
 			$idSessionUser = $_SESSION['user_id'];
 			$sessionIdendif = $_SESSION['identif'];
 			if(sha1($idSessionUser . '|' . $_SERVER['HTTP_USER_AGENT']) === $sessionIdendif)
@@ -184,5 +198,28 @@ class BwUser
 	public function getTheme()
 	{
 		return $this->theme;
+	}
+
+	public function loadParams()
+	{
+		$this->listParams = BwUserParams::getAllByUserId($this->id);
+	}
+
+	public function getParamsByListId($listId = null)
+	{
+		if(empty($listId))
+			return false;
+
+		$listId = (int)$listId;
+
+		if(!isset($this->listParams) || empty($this->listParams)) {
+			$this->loadParams();
+		}
+
+		if(!isset($this->listParams[$listId]) || empty($this->listParams[$listId])) {
+			return false;
+		}
+
+		return $this->listParams[$listId];
 	}
 }

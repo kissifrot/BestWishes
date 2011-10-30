@@ -12,47 +12,52 @@ class BwEvent
 	public function __construct($id = null)
 	{
 		if(!empty($id))
-			$this->id = $id;
+			$this->id = (int)$id;
 	}
 
 	public function load($id = null)
 	{
 		if(!empty($id))
-			$this->id = $id;
+			$this->id = (int)$id;
 		if(empty($this->id))
 			return false;
-		
-		$db = BwDatabase::getInstance();
-		$queryParams = array(
-			'tableName' => 'event',
-			'queryType' => 'SELECT',
-			'queryFields' => '*',
-			'queryCondition' => 'id = :id',
-			'queryValues' => array(
-				array(
-					'parameter' => ':id',
-					'variable' => $this->id,
-					'data_type' => PDO::PARAM_INT
+
+		// Try to read from the cache
+		$result = BwCache::read('event_' . $this->id);
+		if($result === false) {
+			// Nothing in the cache
+			$db = BwDatabase::getInstance();
+			$queryParams = array(
+				'tableName' => 'event',
+				'queryType' => 'SELECT',
+				'queryFields' => '*',
+				'queryCondition' => 'id = :id',
+				'queryValues' => array(
+					array(
+						'parameter' => ':id',
+						'variable' => $this->id,
+						'data_type' => PDO::PARAM_INT
+					)
 				)
-			)
-		);
-		if($db->prepareQuery($queryParams)) {
-			$result = $db->fetch();
-			$db->closeQuery();
-			if($result === false)
-				return $result;
-			
-			if(empty($result)) {
+			);
+			if($db->prepareQuery($queryParams)) {
+				$result = $db->fetch();
+				$db->closeQuery();
+				if($result === false)
+					return $result;
+				
+				if(empty($result)) {
+					return false;
+				}
+				$this->storeAttributes($result);
+				// Store this in the cache
+				BwCache::write('event_' . $this->id, $result);
+				return true;
+			} else {
 				return false;
 			}
-			
-			$this->id          = $result['id'];
-			$this->name        = $result['name'];
-			$this->type        = $result['type'];
-			$this->day         = $result['event_day'];
-			$this->month       = $result['event_month'];
-			$this->year        = $result['event_year'];
-			$this->isPermanent = (bool) $result['is_permanent'];
+		} else {
+			$this->storeAttributes($result);
 			return true;
 		}
 	}
@@ -62,48 +67,71 @@ class BwEvent
 	 */
 	public function loadAll($onlyActive = false)
 	{
-		$db = BwDatabase::getInstance();
-		$queryParams = array(
-			'tableName' => 'event',
-			'queryType' => 'SELECT',
-			'queryFields' => '*',
-			'queryCondition' => '',
-			'queryValues' => ''
-		);
-		if($onlyActive) {
-			$queryParams['queryValues'] = array(
-				array(
-					'parameter' => ':id',
-					'variable' => $this->id,
-					'data_type' => PDO::PARAM_INT
-				)
+		// Try to read from the cache
+		$results = BwCache::read('event_all');
+		if($results === false) {
+			// Nothing in the cache
+			$db = BwDatabase::getInstance();
+			$queryParams = array(
+				'tableName' => 'event',
+				'queryType' => 'SELECT',
+				'queryFields' => '*',
+				'queryCondition' => '',
+				'queryValues' => ''
 			);
-		}
-		if($db->prepareQuery($queryParams)) {
-			$results = $db->fetchAll();
-			$db->closeQuery();
-			if($results === false)
-				return $results;
+			if($onlyActive) {
+				$queryParams['queryValues'] = array(
+					array(
+						'parameter' => ':id',
+						'variable' => $this->id,
+						'data_type' => PDO::PARAM_INT
+					)
+				);
+			}
+			if($db->prepareQuery($queryParams)) {
+				$results = $db->fetchAll();
+				$db->closeQuery();
+				if($results === false)
+					return $results;
 
-			if(empty($results)) {
+				if(empty($results)) {
+					return false;
+				}
+
+				$allEvents = array();
+				foreach($results as $result) {
+					$event = new self($result['id']);
+					$event->storeAttributes($result);
+					$allEvents[] = $event;
+				}
+
+				// Store this in the cache
+				BwCache::write('event_all', $results);
+				return $allEvents;
+			} else {
 				return false;
 			}
-
+		} else {
+			// Use cache data
 			$allEvents = array();
 			foreach($results as $result) {
 				$event = new self($result['id']);
-				$event->id          = $result['id'];
-				$event->name        = $result['name'];
-				$event->type        = $result['type'];
-				$event->day         = $result['event_day'];
-				$event->month       = $result['event_month'];
-				$event->year        = $result['event_year'];
-				$event->isPermanent = (bool) $result['is_permanent'];
+				$event->storeAttributes($result);
 				$allEvents[] = $event;
 			}
-
 			return $allEvents;
 		}
+	}
+
+	private function storeAttributes($sqlResult)
+	{
+		$this->id          = $sqlResult['id'];
+		$this->name        = $sqlResult['name'];
+		$this->type        = $sqlResult['type'];
+		$this->day         = $sqlResult['event_day'];
+		$this->month       = $sqlResult['event_month'];
+		$this->year        = $sqlResult['event_year'];
+		$this->isPermanent = (bool) $sqlResult['is_permanent'];
 	}
 
 	/**

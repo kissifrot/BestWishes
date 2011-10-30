@@ -52,7 +52,7 @@ class BwFileCache extends BwAbstractCache {
 		
 		parent::init(array_merge(
 			array(
-				'engine' => 'File', 'path' => $bwCacheDir, 'prefix'=> 'cake_', 'lock'=> true,
+				'engine' => 'File', 'path' => $bwCacheDir, 'prefix'=> 'bw_', 'lock'=> true,
 				'serialize'=> true, 'isWindows' => false, 'mask' => 0664
 			),
 			$settings

@@ -16,6 +16,11 @@ class BwList
 			$this->slug = $slug;
 	}
 
+	public function getId()
+	{
+		return $this->id;
+	}
+
 	public function getCategories()
 	{
 		return $this->categories;
@@ -52,17 +57,10 @@ class BwList
 				return false;
 			}
 
-			$this->id           = $result['id'];
-			$this->name         = $result['name'];
-			$this->birthdate    = $result['birthdate'];
-			$this->lastUpdate   = $result['last_update'];
-
-			$this->categoriesCount = 0;
-			$this->categories = BwCategory::getAllByListId($result['id']);
-			if(!empty($this->categories)) {
-				$this->categoriesCount = count($this->categories);
-			}
+			$this->storeAttributes($result);
 			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -71,41 +69,63 @@ class BwList
 	 */
 	public function loadAll()
 	{
-		$db = BwDatabase::getInstance();
-		$queryParams = array(
-			'tableName' => 'gift_list',
-			'queryType' => 'SELECT',
-			'queryFields' => '*',
-			'queryCondition' => '',
-			'queryValues' => ''
-		);
-		if($db->prepareQuery($queryParams)) {
-			$results = $db->fetchAll();
-			$db->closeQuery();
-			if($results === false)
-				return $results;
+		// Try to read from the cache
+		$results = BwCache::read('list_all');
+		if($results === false) {
+			$db = BwDatabase::getInstance();
+			$queryParams = array(
+				'tableName' => 'gift_list',
+				'queryType' => 'SELECT',
+				'queryFields' => '*',
+				'queryCondition' => '',
+				'queryValues' => ''
+			);
+			if($db->prepareQuery($queryParams)) {
+				$results = $db->fetchAll();
+				$db->closeQuery();
+				if($results === false)
+					return $results;
 
-			if(empty($results)) {
+				if(empty($results)) {
+					return false;
+				}
+
+				$allLists = array();
+				foreach($results as $result) {
+					$list = new self($result['slug']);
+					$list->storeAttributes($result);
+					$allLists[] = $list;
+				}
+
+				// Store this in the cache
+				BwCache::write('list_all', $results);
+				return $allLists;
+			} else {
 				return false;
 			}
-			
+		} else {
+			// Use cache data
 			$allLists = array();
 			foreach($results as $result) {
 				$list = new self($result['slug']);
-				$list->id         = $result['id'];
-				$list->name       = $result['name'];
-				$list->birthdate  = $result['birthdate'];
-				$list->lastUpdate = $result['last_update'];
-
-				$list->categoriesCount = 0;
-				$list->categories = BwCategory::getAllByListId($result['id']);
-				if(!empty($list->categories)) {
-					$list->categoriesCount = count($list->categories);
-				}
+				$list->storeAttributes($result);
 				$allLists[] = $list;
 			}
-
 			return $allLists;
+		}
+	}
+
+	private function storeAttributes($sqlResult)
+	{
+		$this->id         = $sqlResult['id'];
+		$this->name       = $sqlResult['name'];
+		$this->birthdate  = $sqlResult['birthdate'];
+		$this->lastUpdate = $sqlResult['last_update'];
+
+		$this->categoriesCount = 0;
+		$this->categories = BwCategory::getAllByListId($sqlResult['id']);
+		if(!empty($this->categories)) {
+			$this->categoriesCount = count($this->categories);
 		}
 	}
 
