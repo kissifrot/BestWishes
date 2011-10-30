@@ -14,6 +14,11 @@ $autoloader = BwClassAutoloader::getInstance();
 BwDebug::setDebugMode(BwDebug::LOG_ALL); // TODO: remove this
 BwLang::load();
 
+BwCache::configure('default', array(
+	'engine' => 'File',
+	'duration'=> 3600
+));
+
 /**
  * Cleans up a variable depending on its type
  */
@@ -23,6 +28,9 @@ function cleanupVariable($type = 'theme', $variable = '') {
 		case 'theme':
 			// Theme name
 			$variableCleaned = preg_replace('#[^a-z0-9_-]#i', '', $variable);
+		break;
+		case 'classname':
+			$variableCleaned = preg_replace('#[^A-za-z0-9]#i', '', $variable);
 		break;
 		case 'default':
 			$variableCleaned = preg_replace('#[^a-z0-9_-]#i', '_', $variable);
