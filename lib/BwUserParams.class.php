@@ -117,8 +117,8 @@ class BwUserParams
 
 	private function storeAttributes($sqlResult)
 	{
-		$this->listId        = $sqlResult['gift_list_id'];
-		$this->userId        = $sqlResult['gift_list_user_id'];
+		$this->listId        = (int)$sqlResult['gift_list_id'];
+		$this->userId        = (int)$sqlResult['gift_list_user_id'];
 		$this->canView       = (bool)$sqlResult['can_view'];
 		$this->canEdit       = (bool)$sqlResult['can_edit'];
 		$this->canMark       = (bool)$sqlResult['can_mark'];

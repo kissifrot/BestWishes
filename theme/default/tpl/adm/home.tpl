@@ -1,0 +1,1 @@
+Welcome on BestWishes admin.<br />Use the menu to the left to manage BestWishes

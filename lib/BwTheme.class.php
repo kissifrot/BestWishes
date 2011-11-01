@@ -155,7 +155,7 @@ class BwTheme
 
 	private function storeAttributes($sqlResult)
 	{
-		$this->id          = $sqlResult['id'];
+		$this->id          = (int)$sqlResult['id'];
 		$this->name        = $sqlResult['name'];
 		$this->shortName   = $sqlResult['short_name'];
 		$this->description = $sqlResult['description'];

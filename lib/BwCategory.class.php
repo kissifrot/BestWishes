@@ -77,13 +77,13 @@ class BwCategory
 
 	private function storeAttributes($sqlResult)
 	{
-		$this->id         = $sqlResult['id'];
+		$this->id         = (int)$sqlResult['id'];
 		$this->name       = $sqlResult['name'];
 		$this->giftListId = $sqlResult['gift_list_id'];
 		$this->isVisible  = (bool) $sqlResult['is_visible'];
 
 		$this->giftsCount = 0;
-		$this->gifts = BwGift::getAllByCategoryId($sqlResult['id']);
+		$this->gifts = BwGift::getAllByCategoryId((int)$sqlResult['id']);
 		if(!empty($this->gifts)) {
 			$this->giftsCount = count($this->gifts);
 		}

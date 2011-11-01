@@ -109,7 +109,7 @@ class BwGift
 				
 				$allGifts = array();
 				foreach($results as $result) {
-					$gift = new self($result['id']);
+					$gift = new self((int)$result['id']);
 					$gift->storeAttributes($result);
 					$allGifts[] = $gift;
 				}
@@ -124,7 +124,7 @@ class BwGift
 			// Use cache data
 			$allGifts = array();
 			foreach($results as $result) {
-				$gift = new self($result['id']);
+				$gift = new self((int)$result['id']);
 				$gift->storeAttributes($result);
 				$allGifts[] = $gift;
 			}
@@ -170,7 +170,7 @@ class BwGift
 				
 				$allGifts = array();
 				foreach($results as $result) {
-					$gift = new self($result['id']);
+					$gift = new self((int)$result['id']);
 					$gift->storeAttributes($result);
 					$allGifts[] = $gift;
 				}
@@ -185,7 +185,7 @@ class BwGift
 			// Use cache data
 			$allGifts = array();
 			foreach($results as $result) {
-				$gift = new self($result['id']);
+				$gift = new self((int)$result['id']);
 				$gift->storeAttributes($result);
 				$allGifts[] = $gift;
 			}
@@ -195,7 +195,7 @@ class BwGift
 
 	private function storeAttributes($sqlResult)
 	{
-		$this->id            = $sqlResult['id'];
+		$this->id            = (int)$sqlResult['id'];
 		$this->name          = $sqlResult['name'];
 		$this->addedDate     = $sqlResult['added_date'];
 		$this->isBought      = (bool)$sqlResult['is_bought'];

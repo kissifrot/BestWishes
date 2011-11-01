@@ -140,7 +140,7 @@ class BwUser
 
 	private function storeAttributes($sqlResult)
 	{
-		$this->id        = $sqlResult['id'];
+		$this->id        = (int)$sqlResult['id'];
 		$this->name      = $sqlResult['name'];
 		$this->username  = $sqlResult['username'];
 		$this->email     = $sqlResult['email'];
@@ -162,8 +162,8 @@ class BwUser
 
 	private function setupSession()
 	{
-		$_SESSION['user_id']      = $this->id;
-		$_SESSION['identif']      = sha1($this->id . '|' . $_SERVER['HTTP_USER_AGENT']);
+		$_SESSION['user_id']      = (int)$this->id;
+		$_SESSION['identif']      = sha1((int)$this->id . '|' . $_SERVER['HTTP_USER_AGENT']);
 		$_SESSION['identif_serv'] = sha1($_SERVER['SERVER_NAME']);
 	}
 

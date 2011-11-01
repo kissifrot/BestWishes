@@ -83,9 +83,7 @@ a {
 	text-align: center;
 }
 
-#gift_details_buy h4 {
-	text-align: center;
-}
+
 
 /* Classes */
 
@@ -94,18 +92,25 @@ a {
 	font-size : 10px;
 }
 
-.errorinfo
-{
+.errorinfo {
 	font-weight : bold;
 	color: #FF0000;
 }
 
-.addinfo
-{
+.addinfo {
 	font-weight : bold;
 	color: #FFFF00;
 }
 
+/* List */
+
+#gift_details_buy h4 {
+	text-align: center;
+}
+
+.gift_name {
+	cursor: pointer;
+}
 
 /* Specific elements */
 

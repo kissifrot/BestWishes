@@ -24,16 +24,15 @@
 			</div>
 			<div id="content">
 				<div id="left_menu" class="ui-widget-content ui-corner-all" style="padding: 0.2em;">
-					<h2><a href="{$webDir}/index.php">{$lngHomeLogin}</a></h2>
-					{if !empty($lists) }
-						<h2>{$lngLists}</h2>
-						<ul>
-						{foreach from=$lists item=list}
-							<li><a href="{$webDir}/list/{$list->slug}">{$list->name|ucfirst}</a>
-							</li>
-						{/foreach}
-						<ul>
+					{if $sessionOk}
+					<h2><a href="#">Manage lists</a></h2>
+					<h2><a href="#">Manage users</a></h2>
+					<h2><a href="#">Manage events</a></h2>
+					<h2><a href="#">Manage options</a></h2>
+					<h2><a href="#">Manage cache</a></h2>
+					<a id="" href="#"><i>Show advanced</i></a>
 					{/if}
+					<h3><a href="{$webDir}">Back to main</a></h3>
 				</div>
 				{include file='floating_menu.tpl'}
 				<div id="right_content" class="ui-widget-content ui-corner-all" style="padding: 0.2em 6px;">

@@ -64,6 +64,44 @@ class BwList
 		}
 	}
 
+	public function loadById($id = null)
+	{
+		if(!empty($id))
+			$this->id = (int)$id;
+		if(empty($this->id))
+			return false;
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list',
+			'queryType' => 'SELECT',
+			'queryFields' => '*',
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result = $db->fetch();
+			$db->closeQuery();
+			if($result === false)
+				return $result;
+
+			if(empty($result)) {
+				return false;
+			}
+
+			$this->storeAttributes($result);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 *
 	 */
