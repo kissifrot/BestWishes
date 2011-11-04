@@ -32,13 +32,30 @@ class BwDebug
 	}
 
 	public function store($type = 'query', $toStore = '') {
-		if($type = 'query') {
-			$this->sqlLogs[] = $toStore;
-			$this->sqlQueriesCount++;
-		} else {
-			$this->sqlLogs[] = $toStore;
+		switch($type) {
+			case 'query':
+				$this->sqlLogs[] = $toStore;
+				$this->sqlQueriesCount++;
+			break;
+			case 'queryCount':
+				$this->sqlQueriesCount++;
+			break;
+			case 'error':
+				$this->sqlLogs[] = $toStore;
+				$this->sqlQueriesCount++;
+			break;
 		}
 	}
+
+	public static function incrementQueriesCount() {
+		if(!empty($query)) {
+			$debug = self::getInstance();
+			$debug->store('queryCount');
+			return true;
+		}
+		return false;
+	}
+
 
 	public static function storeQuery($query = '') {
 		if(!empty($query)) {

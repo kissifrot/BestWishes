@@ -85,7 +85,8 @@ class BwDatabase
 			'queryType' => 'SELECT',
 			'queryFields' => '',
 			'queryCondition' => '',
-			'queryValues' => ''
+			'queryValues' => '',
+			'queryOrderBy' => ''
         );
         $params = array_merge($defaults, $queryParams);
 		if(!isset($params['tableName']))
@@ -108,6 +109,9 @@ class BwDatabase
 						$query .= implode(' AND ', $params['queryCondition']);
 						$query .= ')';
 					}
+				}
+				if(!empty($params['queryOrderBy'])) {
+					$query .= ' ORDER BY ' . $params['queryOrderBy'];
 				}
 			break;
 			case 'UPDATE':
@@ -210,6 +214,10 @@ class BwDatabase
 			$this->currentStatement->execute();
 			if($this->debugMode == BwDebug::LOG_ALL) {
 				BwDebug::storeQuery($this->currentStatement->queryString);
+			} else {
+				if($this->debugMode > 0) {
+					BwDebug::incrementQueriesCount();
+				}
 			}
 			return true;
 		} 
