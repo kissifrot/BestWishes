@@ -13,6 +13,7 @@ class BwDebug
 	private $mode;
 
 	private $sqlLogs;
+	private $errorLogs;
 	private $sqlQueriesCount;
 
 	public function __construct($mode = self::NO_DEBUG)
@@ -20,6 +21,7 @@ class BwDebug
 		$this->mode = $mode;
 		
 		$this->sqlLogs         = array();
+		$this->errorLogs       = array();
 		$this->sqlQueriesCount = 0;
 	}
 
@@ -41,7 +43,7 @@ class BwDebug
 				$this->sqlQueriesCount++;
 			break;
 			case 'error':
-				$this->sqlLogs[] = $toStore;
+				$this->errorLogs[] = $toStore;
 				$this->sqlQueriesCount++;
 			break;
 		}
@@ -55,7 +57,6 @@ class BwDebug
 		}
 		return false;
 	}
-
 
 	public static function storeQuery($query = '') {
 		if(!empty($query)) {

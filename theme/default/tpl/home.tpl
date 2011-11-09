@@ -19,7 +19,9 @@
 	</form>
 	<br /><a href="/" onclick="alert('TODO: password reset'); return false">{$lngPasswordForgot}</a>
 	<script type="text/javascript">
-	$('input[type="submit"]').button();
+	$(document).ready(function() {
+		$('input[type="submit"]').button();
+	});
 	</script>
 	<!-- Images preloading -->
 	<img src="{$themeWebDir}/img/add.png" style="display:none" alt="">

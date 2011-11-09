@@ -10,7 +10,8 @@ if (version_compare(PHP_VERSION, '5.2.0', '<')) {
 /* BESTWISHES INFO */
 $bwName = 'BestWishes';
 $bwLang = 'en';
-$bwURL  = 'http://bestwishes.localhost';
+// Application URL without the ending "/", leave empty for auto-detection
+$bwURL  = '';
 
 /* DATABASE INFO */
 $confDBType    = 'mysql';

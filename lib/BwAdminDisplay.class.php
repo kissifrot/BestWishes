@@ -12,5 +12,6 @@ class BwAdminDisplay extends BwDisplay
 		$this->setTemplateDir($bwThemeDir . DS . $this->theme . DS . 'tpl' . DS . 'adm' . DS);
 		
 		$this->siteName .= ' Admin';
+		$this->assign('sessionOk', true);
 	}
 }

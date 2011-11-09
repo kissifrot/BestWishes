@@ -8,6 +8,12 @@ if (! defined('BESTWISHES')) {
 
 session_start();
 
+// Guess the current URL if not set
+if(empty($bwURL)) {
+	$bwURL = 'http' . (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '') . '://' . (empty($_SERVER['HTTP_HOST']) ? $_SERVER['SERVER_NAME'] . (empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':' . $_SERVER['SERVER_PORT']) : $_SERVER['HTTP_HOST']) . (strtr(dirname($_SERVER['PHP_SELF']), '\\', '/') == '/' ? '' : strtr(dirname($_SERVER['PHP_SELF']), '\\', '/'));
+	$bwURL = preg_replace('#/admin$#i', '', $bwURL);
+}
+
 require_once($bwLibDir . DS . 'BwClassAutoloader.class.php');
 
 $autoloader = BwClassAutoloader::getInstance();

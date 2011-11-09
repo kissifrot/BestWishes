@@ -19,6 +19,11 @@ class BwUser
 			$this->load($this->id);
 		}
 	}
+	
+	public function __toString()
+	{
+		return $this->name;
+	}
 
 	public static function getInstance()
 	{
@@ -138,6 +143,58 @@ class BwUser
 		}
 	}
 
+	/**
+	 *
+	 */
+	private function loadAll()
+	{
+		// Try to read from the cache
+		$results = BwCache::read('user_all');
+		if($results === false) {
+			$db = BwDatabase::getInstance();
+			$queryParams = array(
+				'tableName' => 'gift_list_user',
+				'queryType' => 'SELECT',
+				'queryFields' => '*',
+				'queryCondition' => '',
+				'queryValues' => '',
+				'queryOrderBy' => 'username ASC',
+			);
+			if($db->prepareQuery($queryParams)) {
+				$results = $db->fetchAll();
+				$db->closeQuery();
+				if($results === false)
+					return $results;
+
+				if(empty($results)) {
+					return false;
+				}
+
+				$allUsers = array();
+				foreach($results as $result) {
+					$user = new self((int)$result['id']);
+					$user->storeAttributes($result);
+					$allUsers[] = $user;
+				}
+
+				// Store this in the cache
+				BwCache::write('user_all', $results);
+				return $allUsers;
+			} else {
+				return false;
+			}
+		} else {
+			// Use cache data
+			$allUsers = array();
+			foreach($results as $result) {
+				$user = new self((int)$result['id']);
+				$user->storeAttributes($result);
+				$allUsers[] = $user;
+			}
+			return $allUsers;
+		}
+	}
+
 	private function storeAttributes($sqlResult)
 	{
 		$this->id        = (int)$sqlResult['id'];
@@ -198,6 +255,15 @@ class BwUser
 	public function getTheme()
 	{
 		return $this->theme;
+	}
+
+	/**
+	 *
+	 */
+	public static function getAll()
+	{
+		$user = new self();
+		return $user->loadAll();
 	}
 
 	public function loadParams()
