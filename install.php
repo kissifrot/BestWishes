@@ -38,7 +38,7 @@ var_dump($lang->getLangList());
 var_dump($lang->setupLocale());
 
 if (! function_exists('__')) {
-    die('Bad invocation!');
+    exit('Bad invocation!');
 }
 
 // Steps

@@ -86,9 +86,10 @@ class BwDatabase
 			'queryFields' => '',
 			'queryCondition' => '',
 			'queryValues' => '',
-			'queryOrderBy' => ''
-        );
-        $params = array_merge($defaults, $queryParams);
+			'queryOrderBy' => '',
+			'queryLimit' => ''
+		);
+		$params = array_merge($defaults, $queryParams);
 		if(!isset($params['tableName']))
 			return false;
 		
@@ -98,7 +99,11 @@ class BwDatabase
 				if(is_array($params['queryFields'])) {
 					$query .= implode(', ', $params['queryFields']);
 				} else {
-					$query .= '*';
+					if(!empty($params['queryFields'])) {
+						$query .= $params['queryFields'];
+					} else {
+						$query .= '*';
+					}
 				}
 				$query .= ' FROM ' . $this->dbPrefix . $params['tableName'];
 				if(!empty($params['queryCondition'])) {
@@ -112,6 +117,9 @@ class BwDatabase
 				}
 				if(!empty($params['queryOrderBy'])) {
 					$query .= ' ORDER BY ' . $params['queryOrderBy'];
+				}
+				if(!empty($params['queryLimit'])) {
+					$query .= ' LIMIT ' . $params['queryLimit'];
 				}
 			break;
 			case 'UPDATE':

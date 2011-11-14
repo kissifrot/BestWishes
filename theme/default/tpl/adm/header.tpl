@@ -17,6 +17,11 @@
 	</head>
 
 	<body>
+		<div id="flash_message" class="ui-widget">
+			<div class="ui-state-error ui-corner-all" style="padding: 0pt 0.7em;"> 
+				<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span></p>
+			</div>
+		</div>
 		<div id="global" class="ui-widget">
 			<div id="header">
 				<h1>{$siteName}</h1>
@@ -25,10 +30,10 @@
 			<div id="content">
 				<div id="left_menu" class="ui-widget-content ui-corner-all" style="padding: 0.2em;">
 					{if $sessionOk}
-					<h2><a href="#">Manage lists</a></h2>
-					<h2><a href="#">Manage users</a></h2>
+					<h2><a href="adm_lists.php">Manage lists</a></h2>
+					<h2><a href="adm_users.php">Manage users</a></h2>
 					<h2><a href="#">Manage events</a></h2>
-					<h2><a href="#">Manage options</a></h2>
+					<h2><a href="adm_options.php">Manage options</a></h2>
 					<h2><a href="#">Manage cache</a></h2>
 					<a id="" href="#"><i>Show advanced</i></a>
 					{/if}

@@ -2,8 +2,6 @@
 /**
  * Show a list
  */
-if (version_compare(PHP_VERSION, '5.2.0', '<')) exit("Sorry, BestWishes will only run on PHP version 5.2.0 or greater!\n");
-
 define('BESTWISHES', true);
 
 // Load config
@@ -15,16 +13,22 @@ require_once($bwLibDir . DS . 'BwClassAutoloader.class.php');
 $autoloader = BwClassAutoloader::getInstance();
 
 if(isset($_GET['slug']) && !empty($_GET['slug'])) {
-	$slug = $_GET['slug'];
+//éè
+	$slug = BwInflector::slug($_GET['slug']);
 } else {
 	exit('List not specified');
 }
-BwDebug::setDebugMode(2);
 $db = BwDatabase::getInstance();
 
 
+$user = new BwUser();
+$password = 'foobar';
+$user->login('Kissifrot', $password);
+
+
 if(BwUser::checkSession()) {
-	
+	$disp = new BwSessionDisplay($user->getTheme()->shortName, $user);
+	$user->loadParams();
 } else {
 	$publicLists = BwConfig::get('public_lists', 'true');
 	$disp = new BwDisplay(BwConfig::get('theme', 'default'));
@@ -66,3 +70,5 @@ if($list->load()) {
 	$disp->display('list_page.tpl');
 	$disp->footer();
 }
+
+var_dump(BwDebug::getInstance());

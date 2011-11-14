@@ -102,6 +102,17 @@ a {
 	color: #FFFF00;
 }
 
+.clickable {
+	cursor: pointer;
+}
+
+/* Admin */
+
+#tab-add-list label {
+	width:150px;
+	float: left;
+}
+
 /* List */
 
 #gift_details_buy h4 {
@@ -116,4 +127,14 @@ a {
 
 #comment {
 	border:1px solid #2e6e9e;
+}
+
+#flash_message {
+	z-index: 20;
+	width: 100%;
+	height: 20px;
+	position: fixed;
+	display: none;
+	top: 0px;
+	left: 0px;
 }
