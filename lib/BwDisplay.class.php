@@ -42,7 +42,10 @@ class BwDisplay extends Smarty
 
 		// Translated strings
 		$this->assign('lngHomeLogin', _('Home/Login'));
+		$this->assign('lngHome', _('Home'));
 		$this->assign('lngLists', _('Lists:'));
+		$this->assign('lngOptions', _('Options'));
+		$this->assign('lngLogout', _('Logout'));
 		$this->assign('lngDateFormat', _('m/d/Y'));
 	}
 

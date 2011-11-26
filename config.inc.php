@@ -10,7 +10,7 @@ if (version_compare(PHP_VERSION, '5.2.0', '<')) {
 /* BESTWISHES INFO */
 $bwName = 'BestWishes';
 $bwLang = 'en';
-// Application URL without the ending "/", leave empty for auto-detection
+// Application URL ( http://domain.tld/path/to/your/application ) without the ending "/", leave empty for auto-detection
 $bwURL  = '';
 
 /* DATABASE INFO */

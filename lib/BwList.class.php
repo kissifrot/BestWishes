@@ -4,6 +4,7 @@ class BwList
 	private $id;
 	public $slug;
 	public $name;
+	public $ownerId;
 	public $birthdate;
 	public $lastUpdate;
 	public $categoriesCount = 0;
@@ -247,6 +248,7 @@ class BwList
 	{
 		$this->id         = (int)$sqlResult['id'];
 		$this->name       = $sqlResult['name'];
+		$this->ownerId    = (int)$sqlResult['user_id'];
 		$this->birthdate  = $sqlResult['birthdate'];
 		$this->lastUpdate = $sqlResult['last_update'];
 

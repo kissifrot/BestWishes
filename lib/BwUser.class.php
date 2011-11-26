@@ -52,6 +52,11 @@ class BwUser
 		return false;
 	}
 
+	public function logout()
+	{
+		$this->deleteSession();
+	}
+
 	public function load($id = null)
 	{
 		if(!empty($id))
@@ -222,6 +227,40 @@ class BwUser
 		$_SESSION['user_id']      = (int)$this->id;
 		$_SESSION['identif']      = sha1((int)$this->id . '|' . $_SERVER['HTTP_USER_AGENT']);
 		$_SESSION['identif_serv'] = sha1($_SERVER['SERVER_NAME']);
+		$_SESSION['last_login']   = $this->lastLogin;
+	}
+
+	public function updateLastLogin()
+	{
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list_user',
+			'queryType' => 'UPDATE',
+			'queryFields' => array(
+				'last_login' => ':last_login'
+			),
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':last_login',
+					'variable' => date('Y-m-d H:i:s'),
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$resultExec = $db->exec();
+			if($resultExec === false)
+				return $resultExec;
+			
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -250,6 +289,15 @@ class BwUser
 			else
 				return false;
 		}
+	}
+
+	private function deleteSession()
+	{
+		$_SESSION['user_id']      = null;
+		$_SESSION['identif']      = null;
+		$_SESSION['identif_serv'] = null;
+		$_SESSION['last_login']   = null;
+		unset($_SESSION['user_id'], $_SESSION['identif'], $_SESSION['identif_serv'], $_SESSION['last_login']);
 	}
 
 	public function getTheme()

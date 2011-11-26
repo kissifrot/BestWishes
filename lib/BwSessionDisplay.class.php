@@ -12,5 +12,6 @@ class BwSessionDisplay extends BwDisplay
 		
 		$this->assign('sessionOk', true);
 		$this->assign('user', $user);
+		$this->assign('userLastLogin', $_SESSION['last_login']);
 	}
 }

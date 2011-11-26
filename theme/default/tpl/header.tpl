@@ -29,7 +29,11 @@
 			</div>
 			<div id="content">
 				<div id="left_menu" class="ui-widget-content ui-corner-all" style="padding: 0.2em;">
+					{if $sessionOk}
+					<h2><a href="{$webDir}/index.php">{$lngHome}</a></h2>
+					{else}
 					<h2><a href="{$webDir}/index.php">{$lngHomeLogin}</a></h2>
+					{/if}
 					{if !empty($lists) }
 						<h2>{$lngLists}</h2>
 						<ul>
@@ -37,7 +41,11 @@
 							<li><a href="{$webDir}/list/{$list->slug}">{$list->name|ucfirst}</a>
 							</li>
 						{/foreach}
-						<ul>
+						</ul>
+					{/if}
+					{if $sessionOk}
+					<h2><a href="{$webDir}/options.php">{$lngOptions}</a></h2>
+					<h2><a href="{$webDir}/logout.php">{$lngLogout}</a></h2>
 					{/if}
 				</div>
 				{include file='floating_menu.tpl'}
