@@ -25,6 +25,11 @@ class BwUser
 		return $this->name;
 	}
 
+	public function getId()
+	{
+		return $this->id;
+	}
+
 	public static function getInstance()
 	{
 		if (!isset(self::$instance))
@@ -319,7 +324,34 @@ class BwUser
 		$this->listParams = BwUserParams::getAllByUserId($this->id);
 	}
 
-	public function getParamsByListId($listId = null)
+	public function canDoActionForList($listId = null, $action = 'view')
+	{
+		if(empty($listId))
+			return false;
+		
+
+		$listParams = $this->getParamsByListId($listId);
+		if(!$listParams) {
+			return false;
+		}
+		
+		switch($action) {
+			case 'view':
+				return $listParams->canView;
+			break;
+			case 'mark':
+				return $listParams->canMark;
+			break;
+			case 'edit':
+				return $listParams->canEdit;
+			break;
+			default:
+				return $listParams->canView;
+			break;
+		}
+	}
+
+	private function getParamsByListId($listId = null)
 	{
 		if(empty($listId))
 			return false;

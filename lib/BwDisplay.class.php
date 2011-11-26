@@ -46,6 +46,8 @@ class BwDisplay extends Smarty
 		$this->assign('lngLists', _('Lists:'));
 		$this->assign('lngOptions', _('Options'));
 		$this->assign('lngLogout', _('Logout'));
+		$this->assign('lngLogout', _('Logout'));
+		$this->assign('lngChangeOptions', _('Change your options'));
 		$this->assign('lngDateFormat', _('m/d/Y'));
 	}
 

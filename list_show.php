@@ -20,16 +20,15 @@ if(isset($_GET['slug']) && !empty($_GET['slug'])) {
 }
 $db = BwDatabase::getInstance();
 
-
-$user = new BwUser();
-$password = 'foobar';
-$user->login('Kissifrot', $password);
-
-
 if(BwUser::checkSession()) {
+	$sessionOk = true;
+	$user = BwUser::getInstance();
 	$disp = new BwSessionDisplay($user->getTheme()->shortName, $user);
 	$user->loadParams();
 } else {
+	// Nobody logged
+	$sessionOk = false;
+	$user = null;
 	$publicLists = BwConfig::get('public_lists', 'true');
 	$disp = new BwDisplay(BwConfig::get('theme', 'default'));
 	// Stop if not public
@@ -45,11 +44,16 @@ if(BwUser::checkSession()) {
 $disp->assign('lngPossibleActions', _('Possible actions:'));
 $disp->assign('lngInfoEmptyList', _('(This list is still empty)'));
 $disp->assign('lngDetails', _('Details'));
+$disp->assign('lngDelete', _('Delete'));
+$disp->assign('lngAdd', _('Add'));
+$disp->assign('lngEdit', _('Edit'));
 
 // Load and display the list
 $subTitle = '';
 $list = new BwList($slug);
 if($list->load()) {
+	// Remove some categories/gifts depending on the situation
+	$list->filterContent($sessionOk, $user);
 	$listTitle = sprintf(_('List display: %s\'s list'), $list->name);
 	$nextEventData = $list->getNearestEventData();
 	$daysLeft = intval($nextEventData['daysLeft']);

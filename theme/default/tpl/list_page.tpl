@@ -47,8 +47,8 @@
 <br /><br />
 <h3><img alt="Informations" src="{$themeWebDir}/img/information.png" />&nbsp;<i>{$lngPossibleActions}</i></h3>
 {if $sessionOk}
-	{if $user->getParamsByListId($list->getId())->canEdit}
-		-&nbsp;<a href="/" onclick="$('#frm_add_cat').toggle(); return false"><img alt="Add" src="{$themeWebDir}/img/add.png" />&nbsp;Add a category to the list</a><br />
+	{if $user->canDoActionForList($list->getId(), 'edit')}
+		-&nbsp;<a href="/" onclick="$('#frm_add_cat').toggle(); return false"><img alt="{$lngAdd}" src="{$themeWebDir}/img/add.png" />&nbsp;Add a category to the list</a><br />
 		<div id="frm_add_cat" style="visibility: visible; display: none;">
 			<form id="frm_add_cat" name="frm_add_cat" method="POST" onsubmit="ajouterCategorie({$list->getId()}); return false">
 			<table border="0" width="550" cellpadding="5">
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 		
-		-&nbsp;<a href="/" onclick="$('#form_cadeau').toggle(); return false"><img alt="Afficher" src="{$themeWebDir}/img/add.png" />&nbsp;Ajouter un cadeau (dans une catégorie préexistante) à la liste</a>
+		-&nbsp;<a href="/" onclick="$('#form_cadeau').toggle(); return false"><img alt="{$lngAdd}" src="{$themeWebDir}/img/add.png" />&nbsp;Ajouter un cadeau (dans une catégorie préexistante) à la liste</a>
 		<div id="form_cadeau" style="visibility: visible; display: none;">
 			<form id="frm_ajout_cadeau" name="frm_ajout_cadeau" method="POST" onsubmit="ajouterCadeau({$list->getId()}); return false">
 				<table border="0" width="550" cellpadding="5">
@@ -99,7 +99,7 @@
 		</div>
 		
 		{if $list->categoriesCount > 0}
-			<br />-&nbsp;<a href="/" onclick="$('#form_modif_cadeau').toggle(); return false"><img alt="Edit" src="{$themeWebDir}/img/edit_big.png" />&nbsp;Modifier le nom d'un cadeau</a>
+			<br />-&nbsp;<a href="/" onclick="$('#form_modif_cadeau').toggle(); return false"><img alt="{$lngEdit}" src="{$themeWebDir}/img/edit_big.png" />&nbsp;Modifier le nom d'un cadeau</a>
 			<div id="form_modif_cadeau" style="visibility: visible; display: none;">
 				<table border="0" width="550" cellpadding="5">
 					<tr>
@@ -110,7 +110,7 @@
 				</table>
 			</div>
 			
-			<br />-&nbsp;<a href="/" onclick="$('#form_suppr_cadeau').toggle(); return false"><img alt="Delete" src="{$themeWebDir}/img/delete.png" />&nbsp;Supprimer un cadeau</a>
+			<br />-&nbsp;<a href="/" onclick="$('#form_suppr_cadeau').toggle(); return false"><img alt="{$lngDelete}" src="{$themeWebDir}/img/delete.png" />&nbsp;Supprimer un cadeau</a>
 			<div id="form_suppr_cadeau" style="visibility: visible; display: none;">
 				<table border="0" width="550" cellpadding="5">
 					<tr>
@@ -119,7 +119,7 @@
 				</table>
 			</div>
 			
-			<br />-&nbsp;<a href="/" onclick="$('#form_suppr_cat').toggle(); return false"><img alt="Delete" src="{$themeWebDir}/img/delete.png" />&nbsp;Supprimer une catégorie</a>
+			<br />-&nbsp;<a href="/" onclick="$('#form_suppr_cat').toggle(); return false"><img alt="{$lngDelete}" src="{$themeWebDir}/img/delete.png" />&nbsp;Supprimer une catégorie</a>
 			<div id="form_suppr_cat" style="visibility: visible; display: none;">
 				<table border="0" width="550" cellpadding="5">
 					<tr>
@@ -129,7 +129,7 @@
 			</div>
 		{/if}
 	{else}
-		-&nbsp;<a href="/" onclick="$('#form_cadeau').toggle(); return false"><img alt="Ajouter" src="{$themeWebDir}/img/add.png" />&nbsp;Ajouter un cadeau surprise (dans une catégorie préexistante) à la liste</a>
+		-&nbsp;<a href="/" onclick="$('#form_cadeau').toggle(); return false"><img alt="{$lngAdd}" src="{$themeWebDir}/img/add.png" />&nbsp;Ajouter un cadeau surprise (dans une catégorie préexistante) à la liste</a>
 		<div id="form_cadeau" style="visibility: visible; display: none;">
 			<form id="frm_ajout_cadeau_surprise" name="frm_ajout_cadeau_surprise" method="POST" onsubmit="ajouterCadeauSurprise({$liste->idListe}); return false">
 				<table border="0" width="550" cellpadding="5">

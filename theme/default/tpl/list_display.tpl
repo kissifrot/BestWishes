@@ -1,8 +1,8 @@
 {foreach from=$list->getCategories() item=category}
 	{if $category->giftsCount > 0}
 			<div id="cat_{$category->getId()}">
-			{if $sessionOk && $user->getParamsByListId($list->getId())->canEdit}
-			<a href="/" onclick="supprimerCat({$category->giftsCount}, {$category->getId()}, {$list->getid()}); return false" title="Supprimer"><img alt="Supprimer" src="{$themeWebDir}/img/delete.png" /></a> 
+			{if $sessionOk && $user->canDoActionForList($list->getId(), 'edit')}
+			<a href="/" onclick="supprimerCat({$category->giftsCount}, {$category->getId()}, {$list->getid()}); return false" title="{$lngDelete}"><img alt="{$lngDelete}" src="{$themeWebDir}/img/delete.png" /></a> 
 			{/if}
 			{$category->name|ucfirst} :
 			</div>
@@ -16,9 +16,11 @@
 			</div>
 		{/foreach}
 	{else}
-		{if $sessionOk && $user->getParamsByListId($list->getId())->canEdit}
-			<a href="/" onclick="supprimerCat({$category->giftsCount}, {$category->getId()}, {$list->getid()}); return false" title="Supprimer"><img alt="Supprimer" src="{$themeWebDir}/img/delete.png" /></a> 
+		{if $sessionOk && $user->canDoActionForList($list->getId(), 'edit')}
+			<div id="cat_{$category->getId()}">
+			<a href="/" onclick="supprimerCat({$category->giftsCount}, {$category->getId()}, {$list->getid()}); return false" title="{$lngDelete}"><img alt="{$lngDelete}" src="{$themeWebDir}/img/delete.png" /></a> 
 			{$category->name|ucfirst} :
+			</div>
 		{/if}
 	{/if}
 {foreachelse}

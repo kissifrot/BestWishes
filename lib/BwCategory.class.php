@@ -8,7 +8,7 @@ class BwCategory
 	public $giftsCount = 0;
 	private $giftListId;
 	
-	private $gifts;
+	public $gifts;
 	
 	public function __construct($id = null)
 	{

@@ -267,6 +267,52 @@ class BwList
 		$list = new self();
 		return $list->loadAll();
 	}
+	
+	/**
+	 * This function will flter the categories and gifts which will then be displayed
+	 */
+	public function filterContent($isConnected = false, $connectedUser = null)
+	{
+		if(!$isConnected) {
+			// Standard view, delete the surprise gifts, received gifts and the empty categories
+			foreach($this->categories as $category) {
+				if($category->giftsCount > 0) {
+					foreach($category->gifts as $index => $gift) {
+						if($gift->isSurprise) {
+							unset($category->gifts[$index]);
+						}
+						if($gift->isReceived) {
+							unset($category->gifts[$index]);
+						}
+					}
+				}
+			}
+		} else {
+			// Connected view
+			if(!empty($connectedUser)) {
+				if($connectedUser->getId() == $this->ownerId) {
+					// The user is viewing his/her list, delete the surprise and received gifts
+					foreach($this->categories as $category) {
+						if($category->giftsCount > 0) {
+							foreach($category->gifts as $index => $gift) {
+								if($gift->isSurprise) {
+									unset($category->gifts[$index]);
+								}
+								if($gift->isReceived) {
+									unset($category->gifts[$index]);
+								}
+							}
+						}
+					}
+				} else {
+					// The user is viewing someone else's list, delete the receidev gifts
+					if($gift->isReceived) {
+						unset($category->gifts[$index]);
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 *

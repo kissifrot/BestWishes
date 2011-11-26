@@ -5,12 +5,13 @@ class BwGift
 	public $name;
 	public $addedDate;
 	public $isBought;
+	public $isReceived;
 	public $boughtDate;
 	public $boughtBy;
+	public $isSurprise;
 	public $boughtComment;
 	public $imageFilename;
 	public $url;
-	public $isSurprise;
 	
 	public function __construct($id = null)
 	{
@@ -104,6 +105,8 @@ class BwGift
 					return $results;
 
 				if(empty($results)) {
+					// Store this in the cache even if empty
+					BwCache::write('gift_all_cat_' . $categoryId, $results);
 					return false;
 				}
 				
@@ -199,6 +202,7 @@ class BwGift
 		$this->name          = $sqlResult['name'];
 		$this->addedDate     = $sqlResult['added_date'];
 		$this->isBought      = (bool)$sqlResult['is_bought'];
+		$this->isReceived    = (bool)$sqlResult['is_received'];
 		$this->boughtDate    = $sqlResult['bought_date'];
 		$this->boughtBy      = null;
 		if($this->isBought) {
@@ -208,9 +212,9 @@ class BwGift
 			}
 		}
 		$this->boughtComment = $sqlResult['bought_comment'];
+		$this->isSurprise    = (bool)$sqlResult['is_surprise'];
 		$this->url           = $sqlResult['url'];
 		$this->imageFilename = $sqlResult['image_filename'];
-		$this->isSurprise    = (bool)$sqlResult['is_surprise'];
 	}
 
 	/**
