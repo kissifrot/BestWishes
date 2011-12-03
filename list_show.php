@@ -47,6 +47,8 @@ $disp->assign('lngDetails', _('Details'));
 $disp->assign('lngDelete', _('Delete'));
 $disp->assign('lngAdd', _('Add'));
 $disp->assign('lngEdit', _('Edit'));
+$disp->assign('lngMarkAsBought', _('Mark as bought'));
+$disp->assign('lngMarkAsReceived', _('Mark as received'));
 
 // Load and display the list
 $subTitle = '';

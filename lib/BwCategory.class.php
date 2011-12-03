@@ -79,8 +79,8 @@ class BwCategory
 	{
 		$this->id         = (int)$sqlResult['id'];
 		$this->name       = $sqlResult['name'];
-		$this->giftListId = $sqlResult['gift_list_id'];
-		$this->isVisible  = (bool) $sqlResult['is_visible'];
+		$this->giftListId = (int)$sqlResult['gift_list_id'];
+		$this->isVisible  = (bool)$sqlResult['is_visible'];
 
 		$this->giftsCount = 0;
 		$this->gifts = BwGift::getAllByCategoryId((int)$sqlResult['id']);

@@ -50,6 +50,26 @@ function fadeOutMessage()
 	$('#flash_message').effect('fade', null, 500);
 }
 
+function deleteCat()
+{
+	alert('TODO: deleteCat');
+}
+
+function deleteGift()
+{
+	alert('TODO: deleteGift');
+}
+
+function margGiftAsBought()
+{
+	alert('TODO: margGiftAsBought');
+}
+
+function margGiftAsReceived()
+{
+	alert('TODO: margGiftAsReceived');
+}
+
 /* Admin */
 function editListName(id)
 {

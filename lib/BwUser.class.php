@@ -328,7 +328,6 @@ class BwUser
 	{
 		if(empty($listId))
 			return false;
-		
 
 		$listParams = $this->getParamsByListId($listId);
 		if(!$listParams) {
@@ -349,6 +348,13 @@ class BwUser
 				return $listParams->canView;
 			break;
 		}
+	}
+
+	public function isListOwner($list = null) {
+		if(empty($list))
+			return false;
+		
+		return ($list->ownerId === $this->id);
 	}
 
 	private function getParamsByListId($listId = null)

@@ -123,6 +123,24 @@ a {
 	cursor: pointer;
 }
 
+.category_list_element {
+	font-weight: bold;
+	height: 25px;
+	line-height: 25px;
+}
+
+.gift_list_element {
+	height: 25px;
+	line-height: 25px;
+}
+
+.bought_gift {
+	background-color: #
+}
+
+.received_gift {
+}
+
 /* Specific elements */
 
 #comment {

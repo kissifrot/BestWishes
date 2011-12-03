@@ -281,9 +281,6 @@ class BwList
 						if($gift->isSurprise) {
 							unset($category->gifts[$index]);
 						}
-						if($gift->isReceived) {
-							unset($category->gifts[$index]);
-						}
 					}
 				}
 			}
@@ -298,16 +295,8 @@ class BwList
 								if($gift->isSurprise) {
 									unset($category->gifts[$index]);
 								}
-								if($gift->isReceived) {
-									unset($category->gifts[$index]);
-								}
 							}
 						}
-					}
-				} else {
-					// The user is viewing someone else's list, delete the receidev gifts
-					if($gift->isReceived) {
-						unset($category->gifts[$index]);
 					}
 				}
 			}

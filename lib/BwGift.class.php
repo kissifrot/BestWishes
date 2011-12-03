@@ -75,7 +75,7 @@ class BwGift
 	/**
 	 *
 	 */
-	private function loadAllByCategoryId($categoryId = null)
+	private function loadAllByCategoryId($categoryId = null, $includeReceived = false)
 	{
 		if(empty($categoryId))
 			return false;
@@ -89,7 +89,6 @@ class BwGift
 				'tableName' => 'gift',
 				'queryType' => 'SELECT',
 				'queryFields' => '*',
-				'queryCondition' => 'category_id = :category_id',
 				'queryValues' => array(
 					array(
 						'parameter' => ':category_id',
@@ -98,6 +97,16 @@ class BwGift
 					)
 				)
 			);
+			// Filter the received gifts
+			if($includeReceived) {
+				$queryParams['queryCondition'] = 'category_id = :category_id';
+			} else {
+				$queryParams['queryCondition'] = array(
+					'category_id = :category_id',
+					'is_received != 1'
+				);
+			}
+			
 			if($db->prepareQuery($queryParams)) {
 				$results = $db->fetchAll();
 				$db->closeQuery();
@@ -220,13 +229,13 @@ class BwGift
 	/**
 	 *
 	 */
-	public static function getAllByCategoryId($categoryId = null)
+	public static function getAllByCategoryId($categoryId = null, $includeReceived = false)
 	{
 		if( empty($categoryId))
 			return false;
 
 		$gift = new self();
-		return $gift->loadAllByCategoryId((int)$categoryId);
+		return $gift->loadAllByCategoryId((int)$categoryId, $includeReceived);
 	}
 
 	/**
