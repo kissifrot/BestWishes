@@ -60,14 +60,14 @@ function deleteGift()
 	alert('TODO: deleteGift');
 }
 
-function margGiftAsBought()
+function markGiftAsBought()
 {
-	alert('TODO: margGiftAsBought');
+	alert('TODO: markGiftAsBought');
 }
 
-function margGiftAsReceived()
+function markGiftAsReceived()
 {
-	alert('TODO: margGiftAsReceived');
+	alert('TODO: markGiftAsReceived');
 }
 
 /* Admin */

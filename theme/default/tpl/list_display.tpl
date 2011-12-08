@@ -14,10 +14,10 @@
 					{/if}
 					<span id="gif_name_{$gift->getId()}" class="gift_name" onclick="showGiftDetailsWindow({$gift|json_encode|escape})">{$gift->name|ucfirst}</span>
 					{if $user->canDoActionForList($list->getId(), 'mark') && !$gift->isBought}
-					&nbsp;<a href="/" onclick="margGiftAsBought(); return false" title="{$lngMarkAsBought}"><img alt="{$lngMarkAsBought}" src="{$themeWebDir}/img/money.png" /></a> 
+					&nbsp;<a href="/" onclick="markGiftAsBought(); return false" title="{$lngMarkAsBought}"><img alt="{$lngMarkAsBought}" src="{$themeWebDir}/img/gift_buy.png" /></a> 
 					{/if}
 					{if $user->isListOwner($list) && !$gift->isReceived}
-					&nbsp;<a href="/" onclick="margGiftAsReceived(); return false" title="{$lngMarkAsReceived}"><img alt="{$lngMarkAsReceived}" src="{$themeWebDir}/img/gift.png" /></a> 
+					&nbsp;<a href="/" onclick="markGiftAsReceived(); return false" title="{$lngMarkAsReceived}"><img alt="{$lngMarkAsReceived}" src="{$themeWebDir}/img/gift_received.png" /></a> 
 					{/if}
 				{else}
 					<span id="gif_name_{$gift->getId()}" class="gift_name" onclick="showGiftDetailsWindow({$gift|json_encode|escape})">{$gift->name|ucfirst}</span>
