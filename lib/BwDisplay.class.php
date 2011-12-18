@@ -51,6 +51,34 @@ class BwDisplay extends Smarty
 		$this->assign('lngDateFormat', _('m/d/Y'));
 	}
 
+	public function assignListStrings()
+	{
+		$this->assign('lngPossibleActions', _('Possible actions:'));
+		$this->assign('lngInfoEmptyList', _('(This list is still empty)'));
+		$this->assign('lngDetails', _('Details'));
+		$this->assign('lngDelete', _('Delete'));
+		$this->assign('lngAdd', _('Add'));
+		$this->assign('lngEdit', _('Edit'));
+		$this->assign('lngMarkAsBought', _('Mark as bought'));
+		$this->assign('lngMarkAsReceived', _('Mark as received'));
+		$this->assign('lngCannotEdit', _('You cannot edit this gift name'));
+		$this->assign('lngMaxEditsReached', _('The max edits count was reached for this gift, you cannot edit it anymore'));
+		$this->assign('lngCatNameTooShort', _('The category name is too short'));
+	}
+
+	public function showJSONStatus($success = false, $message = '')
+	{
+		$this->assign('success', $success);
+		$this->assign('message', $message);
+		$this->display('json_message.tpl');
+	}
+
+	public function showJSONData($data = null)
+	{
+		$this->assign('data', $data);
+		$this->display('json_data.tpl');
+	}
+
 	public function header($title = '', $subTitle = '')
 	{
 		if(empty($title)) {

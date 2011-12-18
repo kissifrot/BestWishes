@@ -4,10 +4,12 @@ class BwGift
 	private $id;
 	public $name;
 	public $addedDate;
+	public $editsCount;
 	public $isBought;
 	public $isReceived;
 	public $boughtDate;
 	public $boughtBy;
+	public $boughtByName;
 	public $isSurprise;
 	public $boughtComment;
 	public $imageFilename;
@@ -210,20 +212,36 @@ class BwGift
 		$this->id            = (int)$sqlResult['id'];
 		$this->name          = $sqlResult['name'];
 		$this->addedDate     = $sqlResult['added_date'];
+		$this->editsCount    = (int)$sqlResult['edits_count'];
 		$this->isBought      = (bool)$sqlResult['is_bought'];
 		$this->isReceived    = (bool)$sqlResult['is_received'];
 		$this->boughtDate    = $sqlResult['bought_date'];
 		$this->boughtBy      = null;
+		$this->boughtByName  = null;
+		$this->boughtComment = null;
 		if($this->isBought) {
 			$buyingUser = new BwUser((int)$sqlResult['bought_by']);
 			if($buyingUser->load()) {
-				$this->boughtBy = $buyingUser->username;
+				$this->boughtBy      = (int)$sqlResult['bought_by'];
+				$this->boughtByName  = $buyingUser->username;
+				$this->boughtComment = $sqlResult['bought_comment'];
 			}
 		}
-		$this->boughtComment = $sqlResult['bought_comment'];
 		$this->isSurprise    = (bool)$sqlResult['is_surprise'];
 		$this->url           = $sqlResult['url'];
 		$this->imageFilename = $sqlResult['image_filename'];
+	}
+
+	/*
+	 *
+	 */
+	public function filterContent()
+	{
+		$this->isBought      = false;
+		$this->boughtDate    = null;
+		$this->boughtBy      = null;
+		$this->boughtByName  = null;
+		$this->boughtComment = null;
 	}
 
 	/**

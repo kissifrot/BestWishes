@@ -150,6 +150,94 @@ class BwCategory
 		}
 	}
 
+	public static function add($listId = null, $name = '') {
+
+		if(empty($listId) || empty($name)) {
+			return false;
+		}
+
+		if(self::checkExisting($listId, $name)) {
+			return false;
+		}
+		
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'category',
+			'queryType' => 'INSERT',
+			'queryFields' => array(
+				'gift_list_id' => ':gift_list_id',
+				'name' => ':name',
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':gift_list_id',
+					'variable' => $listId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':name',
+					'variable' => $name,
+					'data_type' => PDO::PARAM_INT
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('category_all_list_' . $listId);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public static function checkExisting($listId = null, $name = '') {
+
+		if(empty($listId) || empty($name))
+			return false;
+
+		$queryParams = array(
+			'tableName' => 'category',
+			'queryType' => 'SELECT',
+			'queryFields' => 'COUNT(id) as count_existing',
+			'queryCondition' => array(
+				'gift_list_id = :gift_list_id',
+				'name = :name'
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':gift_list_id',
+					'variable' => $listId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':name',
+					'variable' => $name,
+					'data_type' => PDO::PARAM_STR
+				)
+			),
+			'queryLimit' => 1
+		);
+		$db = BwDatabase::getInstance();
+		if($db->prepareQuery($queryParams)) {
+			$result = $db->fetch();
+			$db->closeQuery();
+			if($result === false)
+				return $result;
+
+			if(empty($result)) {
+				return false;
+			}
+			return (intval($result['count_existing']) != 0);
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 *
 	 */

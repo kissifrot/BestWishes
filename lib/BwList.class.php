@@ -292,6 +292,9 @@ class BwList
 					foreach($this->categories as $category) {
 						if($category->giftsCount > 0) {
 							foreach($category->gifts as $index => $gift) {
+								if($gift->isBought) {
+									$category->gifts[$index]->filterContent();
+								}
 								if($gift->isSurprise) {
 									unset($category->gifts[$index]);
 								}

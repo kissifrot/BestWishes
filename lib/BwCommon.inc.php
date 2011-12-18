@@ -93,3 +93,14 @@ function boolVal($in, $strict = false) {
 	}
     return $out;
 }
+
+/**
+ * Returns a message depending on the status
+ */
+function getStatusMessage($success = false, $successMessage = '', $errorMessage = '') {
+	if($success) {
+		return $successMessage;
+	} else {
+		return $errorMessage;
+	}
+}
