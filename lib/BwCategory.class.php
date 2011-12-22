@@ -1,8 +1,7 @@
 <?php
 class BwCategory
 {
-	private $id;
-	public $slug;
+	public $id;
 	public $name;
 	public $isVisible;
 	public $giftsCount = 0;
@@ -113,7 +112,8 @@ class BwCategory
 						'variable' => $listId,
 						'data_type' => PDO::PARAM_INT
 					)
-				)
+				),
+				'queryOrderBy' => 'name ASC'
 			);
 			if($db->prepareQuery($queryParams)) {
 				$results = $db->fetchAll();
@@ -186,6 +186,60 @@ class BwCategory
 			if($result) {
 				// Empty cache
 				BwCache::delete('category_all_list_' . $listId);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public static function delete($listId = null, $catId = null) {
+
+		if(empty($listId) || empty($catId)) {
+			return false;
+		}
+
+		$category = new self($catId);
+		if(!$category->load()) {
+			return false;
+		}
+
+		if(!$category->giftListId == $listId) {
+			return false;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'category',
+			'queryType' => 'DELETE',
+			'queryFields' => '',
+			'queryCondition' => array(
+				'gift_list_id = :gift_list_id',
+				'id = :id'
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':id',
+					'variable' => $catId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':gift_list_id',
+					'variable' => $listId,
+					'data_type' => PDO::PARAM_INT
+				)
+			),
+			
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('category_all_list_' . $listId);
+				// TODO: delete the gifts too
+				BwCache::delete('gift_all_list_' . $listId);
 				return true;
 			} else {
 				return false;

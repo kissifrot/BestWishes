@@ -1,4 +1,5 @@
-	<script type="text/javascript">
+<script type="text/javascript">
+// <![CDATA[
 	$(document).ready(function() {
 		posTopMenu = $("#left_menu").offset();
 		$("#left_menu").css("position", "absolute");
@@ -14,4 +15,5 @@
 		else
 			$('#left_menu').css('top', $(this).scrollTop() + "px");
 	});
-	</script>
+// ]]>
+</script>

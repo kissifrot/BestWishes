@@ -156,6 +156,20 @@ class BwDatabase
 					$query .= implode(', ', array_values($params['queryFields']));
 				$query .= ')';
 			break;
+			case 'DELETE':
+				if(empty($params['queryValues'])) {
+					return false;
+				}
+				$query = 'DELETE FROM ' . $this->dbPrefix . $params['tableName'];
+				$query .= ' WHERE ';
+				if(is_array($params['queryCondition'])) {
+					$query .= '(';
+					$query .= implode(' AND ', $params['queryCondition']);
+					$query .= ')';
+				} else {
+					$query .= $params['queryCondition'];
+				}
+			break;
 			default:
 			return false;
 		}

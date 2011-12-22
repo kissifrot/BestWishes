@@ -25,6 +25,8 @@ if(BwUser::checkSession()) {
 	$user = BwUser::getInstance();
 	$disp = new BwSessionDisplay($user->getTheme()->shortName, $user);
 	$user->loadParams();
+	$tipsText = BwConfig::get('list_tips_text', false);
+	$disp->assign('tipsText', $tipsText);
 } else {
 	// Nobody logged
 	$sessionOk = false;
@@ -40,15 +42,9 @@ if(BwUser::checkSession()) {
 		exit;
 	}
 }
+$disp->assign('cfgMaxEdits', BwConfig::get('max_gift_name_edits', false));
 // Translation strings
-$disp->assign('lngPossibleActions', _('Possible actions:'));
-$disp->assign('lngInfoEmptyList', _('(This list is still empty)'));
-$disp->assign('lngDetails', _('Details'));
-$disp->assign('lngDelete', _('Delete'));
-$disp->assign('lngAdd', _('Add'));
-$disp->assign('lngEdit', _('Edit'));
-$disp->assign('lngMarkAsBought', _('Mark as bought'));
-$disp->assign('lngMarkAsReceived', _('Mark as received'));
+$disp->assignListStrings();
 
 // Load and display the list
 $subTitle = '';
@@ -76,5 +72,3 @@ if($list->load()) {
 	$disp->display('list_page.tpl');
 	$disp->footer();
 }
-
-var_dump(BwDebug::getInstance());

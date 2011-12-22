@@ -26,7 +26,7 @@ h2 {
 
 h3 {
 	font-weight: bold;
-	font-size: 14px;
+	font-size: 18px;
 	margin-top: 1px;
 	margin-bottom: 2px;
 }
@@ -123,25 +123,55 @@ a {
 	cursor: pointer;
 }
 
-.category_list_element {
+.category_name {
+	font-size: 105%;
 	font-weight: bold;
-	height: 25px;
-	line-height: 25px;
+	height: 24px;
+	line-height: 24px;
 }
 
 .gift_list_element {
-	height: 25px;
-	line-height: 25px;
+	font-size: 105%;
+	height: 24px;
+	line-height: 24px;
+	margin: 2px;
 }
 
+/*
 .bought_gift {
 	background-color: #
-}
+}*/
 
 .received_gift {
 }
 
+.list_action_link {
+	font-size: 105%;
+	height: 24px;
+	line-height: 24px;
+}
+
+
+.gift_status {
+	float: right;
+	margin-left: 0.3em;
+}
+
+.bought_gift {
+	text-decoration:line-through;
+	font-style: italic;
+}
+
+#possible_actions div.action_element{
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+
 /* Specific elements */
+
+img.icon_text {
+	vertical-align: middle;
+}
 
 #comment {
 	border:1px solid #2e6e9e;
