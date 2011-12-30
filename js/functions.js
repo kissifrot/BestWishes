@@ -88,8 +88,27 @@ function addCat(listId)
 				}
 			}
 		});
-		
 	}
+}
+
+function confirmDeleteCat(listId, catId)
+{
+	listId = parseInt(listId);
+	catId = parseInt(catId);
+	$( "#cat_confirm_delete_dialog" ).dialog( "open" );
+	$( "#cat_confirm_delete_dialog" ).dialog({
+		resizable: false,
+		modal: true,
+		buttons: {
+			"Delete category": function() {
+				deleteCat(listId, catId);
+				$( this ).dialog( "close" );
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
 }
 
 function deleteCat(listId, catId)
@@ -124,10 +143,71 @@ function deleteGift()
 function editGift(canEdit)
 {
 	if(!canEdit) {
-		showFlashMessage('error', lbwLng.maxEditsReached);
+		showFlashMessage('error', bwLng.maxEditsReached);
 		return false;
 	}
 	alert('TODO: editGift');
+}
+
+function addGift(listId, detailedAdd, force) {
+
+	catId = $('#gift_cat').val();
+	giftData = null;
+	detailedAdd = detailedAdd;
+	if(catId.length > 0) {
+		listId = parseInt(listId);
+		catId = parseInt(catId);
+		if(detailedAdd) {
+			//giftName =  
+		} else {
+			giftName = $('#gift_name').val();
+			if(giftName.length < 2) {
+				showFlashMessage('error', bwLng.giftNameTooShort);
+			} else {
+				if(force) {
+					giftData = {type: 'gift', catId: catId, name: giftName, force: '1'}
+				} else {
+					giftData = {type: 'gift', catId: catId, name: giftName, force: '0'}
+				}
+				$.ajax({
+					type: 'POST',
+					url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=add',
+					data: giftData,
+					dataType: 'json',
+					error: function(jqXHR, textStatus, errorThrown) {
+						showFlashMessage('error', 'An error occured: ' + errorThrown);
+					},
+					success: function(returnedData, textStatus, jqXHR) {
+						if(returnedData.status == 'success') {
+							showFlashMessage('info', returnedData.message);
+							$('#gift_name').val('');
+							$('#section_add_gift').hide();
+							reloadList(listId);
+						} else {
+							if(returnedData.status == 'confirm') {
+								$('<div></div>')
+								.html(returnedData.message)
+								.dialog({
+									title: 'Confirmation',
+									buttons: {
+										"Add it": function() {
+											addGift(listId, detailedAdd, true);
+											$( this ).dialog( "close" );
+										},
+										Cancel: function() {
+											$( this ).dialog( "close" );
+										}
+									}
+								});
+							} else {
+								showFlashMessage('error', returnedData.message);
+							}
+						}
+					}
+				});
+			}
+		}
+	}
 }
 
 function markGiftAsBought()
@@ -183,11 +263,52 @@ function reloadCatsList(listId) {
 	});
 }
 
+/* Options */
+
+function updatePwd() {
+	currentPwd = $('#pass').val();
+	newPwd = $('#new_pwd').val();
+	newPwdRepeat = $('#new_pwd_repeat').val();
+	if(currentPwd.length < 6) {
+		showFlashMessage('error', bwLng.currentPwdNotSpecified);
+	} else {
+		if(newPwd.length < 6 || newPwd != newPwdRepeat) {
+			showFlashMessage('error', bwLng.bothRepeatPwdNotMatch);
+		} else {
+			if(currentPwd == newPwd) {
+				showFlashMessage('error', bwLng.nothingChange);
+			} else {
+				// Let the server handle the rest
+				$.ajax({
+					type: 'POST',
+					url: bwURL + '/a_opts_mgmt.php?action=editpwd',
+					data: {currentPasswd: currentPwd, newPasswd: newPwd, newPasswdRepeat: newPwdRepeat},
+					dataType: 'json',
+					error: function(jqXHR, textStatus, errorThrown) {
+						showFlashMessage('error', 'An error occured: ' + errorThrown);
+					},
+					success: function(returnedData, textStatus, jqXHR) {
+						if(returnedData.status == 'success') {
+							showFlashMessage('info', returnedData.message);
+							$('#pass').val('');
+							$('#new_pwd').val('');
+							$('#new_pwd_repeat').val('');
+						} else {
+							showFlashMessage('error', returnedData.message);
+							$('#pass').val('');
+							$('#new_pwd').val('');
+							$('#new_pwd_repeat').val('');
+						}
+					}
+				});
+			}
+		}
+	}
+}
+
 /* Admin */
 function editListName(id)
 {
-	console.log($('#edit_list_' + id));
-	console.log(id);
 	if($('#edit_list_' + id).length > 0) {
 		var newListName = $('#edit_list_' + id).val();
 		if(newListName.length > 5) {

@@ -5,7 +5,7 @@ class BwCategory
 	public $name;
 	public $isVisible;
 	public $giftsCount = 0;
-	private $giftListId;
+	public $giftListId;
 	
 	public $gifts;
 	

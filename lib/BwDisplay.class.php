@@ -64,11 +64,12 @@ class BwDisplay extends Smarty
 		$this->assign('lngCannotEdit', _('You cannot edit this gift name'));
 		$this->assign('lngMaxEditsReached', _('The max edits count was reached for this gift, you cannot edit it anymore'));
 		$this->assign('lngCatNameTooShort', _('The category name is too short'));
+		$this->assign('lngGiftNameTooShort', _('The gift name is too short'));
 	}
 
-	public function showJSONStatus($success = false, $message = '')
+	public function showJSONStatus($status = 'success', $message = '')
 	{
-		$this->assign('success', $success);
+		$this->assign('status', $status);
 		$this->assign('message', $message);
 		$this->display('json_message.tpl');
 	}

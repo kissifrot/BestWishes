@@ -153,6 +153,67 @@ class BwUser
 		}
 	}
 
+	public function updatePassword($password = '', $newPassword = '')
+	{
+		$resultCode = 99;
+		if(empty($password) || empty($newPassword)) {
+			return $resultCode;
+		}
+		
+		$minPasswordSize = BwConfig::get('min_password_size', 6);
+		if(mb_strlen($password) < $minPasswordSize) {
+			$resultCode = 1;
+			return $resultCode;
+		}
+		
+		// Ceck if we have the user/password in the db
+		if(!$this->loadByUsernamePassword($this->username, $password)) {
+			$resultCode = 2;
+			return $resultCode;
+		}
+		
+		// All seems ok, continue
+		$newSalt = sha1(uniqid());
+		$hashedPwd = sha1($newSalt . $newPassword . '/' . $newSalt);
+		
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list_user',
+			'queryType' => 'UPDATE',
+			'queryFields' => array(
+				'salt' => ':salt',
+				'password' => ':password'
+			),
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':salt',
+					'variable' => $newSalt,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':password',
+					'variable' => $hashedPwd,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$resultExec = $db->exec();
+			if($resultExec === false)
+				return $resultCode;
+			
+			// All OK
+			$resultCode = 0;
+		}
+		return $resultCode;
+	}
+
 	/**
 	 *
 	 */

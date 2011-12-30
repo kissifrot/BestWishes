@@ -247,6 +247,122 @@ class BwGift
 	/**
 	 *
 	 */
+	public static function add($listId = null, $catId = null, $name = '', $forceAdd = false) {
+
+		$resultValue = 99;
+		if(empty($listId) || empty($catId) || empty($name)) {
+			return $resultValue;
+		}
+
+		if(!$forceAdd) {
+			if(self::checkExisting($listId, $name)) {
+				$resultValue = 1;
+				return $resultValue;
+			}
+		}
+		
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift',
+			'queryType' => 'INSERT',
+			'queryFields' => array(
+				'gift_list_id' => ':gift_list_id',
+				'category_id' => ':category_id',
+				'name' => ':name',
+				'added_date' => ':added_date',
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':gift_list_id',
+					'variable' => $listId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':category_id',
+					'variable' => $catId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':name',
+					'variable' => $name,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':added_date',
+					'variable' => date('Y-m-d H:i:s'),
+					'data_type' => PDO::PARAM_STR
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('category_all_list_' . $listId);
+				BwCache::delete('gift_all_cat_' . $catId);
+				// All OK
+				$resultValue = 0;
+			}
+		}
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
+	public static function checkExisting($listId = null, $name = '') {
+
+		if(empty($listId) ||  empty($name)) {
+			return false;
+		}
+
+		$queryParams = array(
+			'tableName' => 'gift',
+			'queryType' => 'SELECT',
+			'queryFields' => 'COUNT(*) as count_existing',
+			'queryCondition' => array(
+				'gift_list_id = :gift_list_id',
+				'name = :name',
+				'is_received = :is_received'
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':gift_list_id',
+					'variable' => $listId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':name',
+					'variable' => $name,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':is_received',
+					'variable' => 1,
+					'data_type' => PDO::PARAM_INT
+				)
+			),
+			'queryLimit' => 1
+		);
+		$db = BwDatabase::getInstance();
+		if($db->prepareQuery($queryParams)) {
+			$result = $db->fetch();
+			$db->closeQuery();
+			if($result === false)
+				return $result;
+
+			if(empty($result)) {
+				return false;
+			}
+			return (intval($result['count_existing']) != 0);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 *
+	 */
 	public static function getAllByCategoryId($categoryId = null, $includeReceived = false)
 	{
 		if( empty($categoryId))

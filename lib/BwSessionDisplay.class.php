@@ -14,4 +14,11 @@ class BwSessionDisplay extends BwDisplay
 		$this->assign('user', $user);
 		$this->assign('userLastLogin', $_SESSION['last_login']);
 	}
+
+	public function assignOptionsStrings()
+	{
+		$this->assign('lngCurrentPwdNotSpecified', _('You must specify the current password'));
+		$this->assign('lngBothRepeatPwdNotMatch', _('You must repeat the password'));
+		$this->assign('lngNothingChange', _('Nothing to change !'));
+	}
 }

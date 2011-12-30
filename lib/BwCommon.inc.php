@@ -95,12 +95,12 @@ function boolVal($in, $strict = false) {
 }
 
 /**
- * Returns a message depending on the status
+ * Returns a message depending on a status code in a predefined list
  */
-function getStatusMessage($success = false, $successMessage = '', $errorMessage = '') {
-	if($success) {
-		return $successMessage;
-	} else {
-		return $errorMessage;
+function getStatusMessage($stautusCode = 0, $messagesList = array()) {
+	$message = '';
+	if(!empty($messagesList) && isset($messagesList[$stautusCode])) {
+		$message = $messagesList[$stautusCode];
 	}
+	return $message;
 }

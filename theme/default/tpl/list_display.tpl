@@ -2,7 +2,7 @@
 	{if $category->giftsCount > 0}
 			<div id="cat_{$category->getId()}" class="category_list_element">
 				{if $sessionOk && $user->canDoActionForList($list->getId(), 'edit')}
-					<a href="/" onclick="deleteCat({$list->getId()}, {$category->getId()}); return false" title="{$lngDelete}"><img alt="{$lngDelete}" class="icon_text" src="{$themeWebDir}/img/delete.png" /></a> 
+					<a href="/" onclick="confirmDeleteCat({$list->getId()}, {$category->getId()}); return false" title="{$lngDelete}"><img alt="{$lngDelete}" class="icon_text" src="{$themeWebDir}/img/delete.png" /></a> 
 				{/if}
 				<span class="category_name">{$category->name|ucfirst} :</span>
 				{foreach from=$category->getGifts() item=gift}

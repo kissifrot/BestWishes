@@ -23,6 +23,10 @@
 	{include file='gift_details.tpl'}
 </div>
 
+<div id="cat_confirm_delete_dialog" title="Delete this category?">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deleting this category will delete the gifts too. Are you sure?</p>
+</div>
+
 <br />
 {if $sessionOk && $tipsText}
 <h3><img src="{$themeWebDir}/img/information.png" alt="info" class="icon_text"><i>&nbsp;Tips :</i></h3>
@@ -58,18 +62,18 @@
 			<div class="action_element">
 				-&nbsp;<a href="/" class="list_action_link" onclick="$('#section_add_gift').toggle(); return false"><img alt="{$lngAdd}" class="icon_text" src="{$themeWebDir}/img/add.png" />&nbsp;Add a gift (in an already existing category) to the list</a>
 				<div id="section_add_gift" style="visibility: visible; display: none;">
-					<form id="frm_ajout_cadeau" name="frm_ajout_cadeau" method="post" action="" onsubmit="addGift({$list->getId()}); return false">
+					<form id="frm_ajout_cadeau" name="frm_ajout_cadeau" method="post" action="" onsubmit="addGift({$list->getId()}, false, false); return false">
 						<table border="0" width="550" cellpadding="5">
 							<tr>
-								<td align="left" colspan="2"><em><span class="copyright">Pour ajouter un cadeau :<br />-&nbsp;Remplissez son nom<br />-&nbsp;Choisissez sa catégorie<br />-&nbsp;Si elle n'existe pas, créez-la en utilisant &#8220;Ajouter une catégorie à la liste&#8221; ci-dessus<br />-&nbsp;Cliquez sur le bouton &#8220;Ajouter le cadeau&#8221; situé juste en-dessous</span></em></td>
+								<td align="left" colspan="2"><em><span class="copyright">To add a gift:<br />-&nbsp;Fill its name<br />-&nbsp;Choose its category<br />-&nbsp;If it does not exist, create it using &#8220;Add a category to the list&#8221; abose<br />-&nbsp;Click on the &#8220;Add the gift&#8221; just below</span></em></td>
 							</tr>
 							<tr>
-								<td>&nbsp;&nbsp;Nom du cadeau&nbsp;:&nbsp;</td><td>
+								<td>&nbsp;&nbsp;Gift name&nbsp;:&nbsp;</td><td>
 								<input type="text" id="gift_name" name="gift_name" size="60" maxlength="150" />
 								</td>
 							</tr>
 							<tr>
-								<td>&nbsp;&nbsp;Catégorie du cadeau&nbsp;:&nbsp;</td><td>
+								<td>&nbsp;&nbsp;Gift category&nbsp;:&nbsp;</td><td>
 								<select class="gift_cats_list" id="gift_cat" name="gift_cat">
 								{foreach from=$list->getCategories() item=category}
 									<option value="{$category->getId()}">{$category->name|ucfirst}</option>
@@ -157,8 +161,15 @@
 <script type="text/javascript">
 {include file='list_translation_strings.tpl'}
 bwURL = '{$webDir}';
-$(document).ready(function(){ldelim}
+{literal}
+$(document).ready(function(){
+	$( "#cat_confirm_delete_dialog" ).dialog({
+		autoOpen: false,
+		resizable: false,
+		modal: true
+	});
 	$('input[type="submit"]').button();
-	giftDetailsDialog = $('#gift_details_dialog').dialog({ldelim}autoOpen: false, title: '{$lngDetails}'{rdelim})
-{rdelim});
+	giftDetailsDialog = $('#gift_details_dialog').dialog({autoOpen: false, title: bwLng.details});
+});
+{/literal}
 </script>

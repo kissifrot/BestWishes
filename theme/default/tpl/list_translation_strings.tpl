@@ -1,5 +1,7 @@
 bwLng = {
-	dateFormat      : '{$lngDateFormat|escape}',
-	maxEditsReached : '{$lngMaxEditsReached|escape}',
-	catNameTooShort : '{$lngCatNameTooShort|escape}'
+	details          : '{$lngDetails|escape}',
+	dateFormat       : '{$lngDateFormat|escape}',
+	maxEditsReached  : '{$lngMaxEditsReached|escape}',
+	catNameTooShort  : '{$lngCatNameTooShort|escape}',
+	giftNameTooShort : '{$lngGiftNameTooShort|escape}'
 };
