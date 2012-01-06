@@ -1,6 +1,6 @@
 <?php
 /**
- * Cache mamagement class
+ * Cache mamagement class, borrowed from CakePHP 2.0 ;)
  */
 abstract class BwAbstractCache
 {
@@ -8,7 +8,7 @@ abstract class BwAbstractCache
 
 	public function init($settings = array()) {
 		$this->settings = array_merge(
-			array('duration'=> 3600, 'probability'=> 100),
+			array('prefix' => 'bw_', 'duration' => 3600, 'probability' => 100),
 			$this->settings,
 			$settings
 		);
@@ -37,6 +37,7 @@ abstract class BwAbstractCache
 		if (empty($key)) {
 			return false;
 		}
+		$key = str_replace(array(DS, '/', '.'), '_', strval($key));
 		return $key;
 	}
 }

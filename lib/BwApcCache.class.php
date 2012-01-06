@@ -90,4 +90,5 @@ class BwApcCache extends BwAbstractCache {
 		}
 		return true;
 	}
+
 }

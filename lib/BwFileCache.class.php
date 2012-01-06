@@ -70,7 +70,7 @@ class BwFileCache extends BwAbstractCache {
 /**
  * Garbage collection. Permanently remove all expired and deleted data
  *
- * @return boolean True if garbage collection was succesful, false on failure
+ * @return boolean True if garbage collection was successful, false on failure
  */
 	public function gc() {
 		return $this->clear(true);
@@ -111,14 +111,14 @@ class BwFileCache extends BwAbstractCache {
 		$contents = $expires . $lineBreak . $data . $lineBreak;
 
 		if ($this->settings['lock']) {
-		    $this->_File->flock(LOCK_EX);
+			$this->_File->flock(LOCK_EX);
 		}
 
 		$this->_File->rewind();
 		$success = $this->_File->ftruncate(0) && $this->_File->fwrite($contents) && $this->_File->fflush();
 
 		if ($this->settings['lock']) {
-		    $this->_File->flock(LOCK_UN);
+			$this->_File->flock(LOCK_UN);
 		}
 
 		return $success;
@@ -235,7 +235,7 @@ class BwFileCache extends BwAbstractCache {
 
 /**
  * Sets the current cache key this class is managing, and creates a writable SplFileObject
- * for the cache file the key is refering to.
+ * for the cache file the key is referring to.
  *
  * @param string $key The key
  * @param boolean $createKey Whether the key should be created if it doesn't exists, or not
