@@ -1,4 +1,7 @@
 <?php
+/**
+ * Categories management class
+ */
 class BwCategory
 {
 	public $id;
@@ -151,13 +154,13 @@ class BwCategory
 	}
 
 	public static function add($listId = null, $name = '') {
-
+		$resultValue = 99;
 		if(empty($listId) || empty($name)) {
-			return false;
+			return $resultValue;
 		}
 
 		if(self::checkExisting($listId, $name)) {
-			return false;
+			return $resultValue;
 		}
 		
 		$db = BwDatabase::getInstance();
@@ -186,28 +189,23 @@ class BwCategory
 			if($result) {
 				// Empty cache
 				BwCache::delete('category_all_list_' . $listId);
-				return true;
+				// All OK
+				$resultValue = 0;
 			} else {
-				return false;
+				$resultValue = 1;
 			}
-		} else {
-			return false;
 		}
+		return $resultValue;
 	}
 
-	public static function delete($listId = null, $catId = null) {
-
-		if(empty($listId) || empty($catId)) {
-			return false;
+	public function delete($listId = null) {
+		$resultValue = 99;
+		if(empty($listId)) {
+			return $resultValue;
 		}
 
-		$category = new self($catId);
-		if(!$category->load()) {
-			return false;
-		}
-
-		if(!$category->giftListId == $listId) {
-			return false;
+		if(!$this->giftListId == $listId) {
+			return $resultValue;
 		}
 
 		$db = BwDatabase::getInstance();
@@ -222,7 +220,7 @@ class BwCategory
 			'queryValues' => array(
 				array(
 					'parameter' => ':id',
-					'variable' => $catId,
+					'variable' => $this->id,
 					'data_type' => PDO::PARAM_INT
 				),
 				array(
@@ -238,15 +236,15 @@ class BwCategory
 			if($result) {
 				// Empty cache
 				BwCache::delete('category_all_list_' . $listId);
+				BwCache::delete('category_' . $this->id);
 				// TODO: delete the gifts too
 				BwCache::delete('gift_all_list_' . $listId);
-				return true;
+				$resultValue = 0;
 			} else {
-				return false;
+				$resultValue = 1;
 			}
-		} else {
-			return false;
 		}
+		return $resultValue;
 	}
 
 	public static function checkExisting($listId = null, $name = '') {

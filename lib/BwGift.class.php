@@ -1,7 +1,11 @@
 <?php
+/**
+ * Gifts management class
+ */
 class BwGift
 {
 	private $id;
+	private $categoryId;
 	public $name;
 	public $addedDate;
 	public $editsCount;
@@ -210,6 +214,7 @@ class BwGift
 	private function storeAttributes($sqlResult)
 	{
 		$this->id            = (int)$sqlResult['id'];
+		$this->categoryId    = (int)$sqlResult['category_id'];
 		$this->name          = $sqlResult['name'];
 		$this->addedDate     = $sqlResult['added_date'];
 		$this->editsCount    = (int)$sqlResult['edits_count'];
@@ -302,6 +307,51 @@ class BwGift
 				BwCache::delete('gift_all_cat_' . $catId);
 				// All OK
 				$resultValue = 0;
+			}
+		}
+		return $resultValue;
+	}
+
+	public function delete($listId = null) {
+		$resultValue = 99;
+		if(empty($listId)) {
+			return $resultValue;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift',
+			'queryType' => 'DELETE',
+			'queryFields' => '',
+			'queryCondition' => array(
+				'gift_list_id = :gift_list_id',
+				'id = :id'
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':gift_list_id',
+					'variable' => $listId,
+					'data_type' => PDO::PARAM_INT
+				)
+			),
+			
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('category_all_list_' . $listId);
+				BwCache::delete('category_' . $this->categoryId);
+				BwCache::delete('gift_all_list_' . $listId);
+				BwCache::delete('gift_all_cat_' . $this->categoryId);
+				$resultValue = 0;
+			} else {
+				$resultValue = 1;
 			}
 		}
 		return $resultValue;

@@ -77,7 +77,7 @@ function addCat(listId)
 				showFlashMessage('error', 'An error occured: ' + errorThrown);
 			},
 			success: function(returnedData, textStatus, jqXHR) {
-				if(returnedData.success) {
+				if(returnedData.status == 'success') {
 					showFlashMessage('info', returnedData.message);
 					$('#cat_name').val('');
 					$('#section_add_cat').hide();
@@ -124,7 +124,7 @@ function deleteCat(listId, catId)
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
 		},
 		success: function(returnedData, textStatus, jqXHR) {
-			if(returnedData.success) {
+			if(returnedData.status == 'success') {
 				showFlashMessage('info', returnedData.message);
 				$('#cat_' + catId).remove();
 				reloadCatsList(listId);
@@ -135,9 +135,51 @@ function deleteCat(listId, catId)
 	});
 }
 
-function deleteGift()
+function confirmDeleteGift(giftId, catId, listId) {
+	giftId = parseInt(giftId);
+	listId = parseInt(listId);
+	catId = parseInt(catId);
+	$('<div></div>')
+	.html(bwLng.confirmGiftDeletion)
+	.dialog({
+		title: bwLng.confirmation,
+		buttons: [
+			{
+				text: bwLng.deleteIt,
+				click: function() { 
+					deleteGift(giftId, catId, listId);
+					$(this).dialog('close');
+				}
+			},
+			{
+				text: bwLng.cancel,
+				click: function() { 
+					$(this).dialog('close');
+				}
+			}
+		]
+	});
+}
+
+function deleteGift(giftId, catId, listId)
 {
-	alert('TODO: deleteGift');
+	$.ajax({
+		type: 'POST',
+		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=del',
+		data: {type: 'gift', catId: catId, id: giftId},
+		dataType: 'json',
+		error: function(jqXHR, textStatus, errorThrown) {
+			showFlashMessage('error', 'An error occured: ' + errorThrown);
+		},
+		success: function(returnedData, textStatus, jqXHR) {
+			if(returnedData.status == 'success') {
+				showFlashMessage('info', returnedData.message);
+				reloadList(listId);
+			} else {
+				showFlashMessage('error', returnedData.message);
+			}
+		}
+	});
 }
 
 function editGift(canEdit)
@@ -185,19 +227,26 @@ function addGift(listId, detailedAdd, force) {
 							reloadList(listId);
 						} else {
 							if(returnedData.status == 'confirm') {
+								// Show a confirmation dialog
 								$('<div></div>')
 								.html(returnedData.message)
 								.dialog({
-									title: 'Confirmation',
-									buttons: {
-										"Add it": function() {
-											addGift(listId, detailedAdd, true);
-											$( this ).dialog( "close" );
+									title: bwLng.confirmation,
+									buttons: [
+										{
+											text: bwLng.addAnyway,
+											click: function() { 
+												addGift(listId, detailedAdd, true);
+												$(this).dialog('close');
+											}
 										},
-										Cancel: function() {
-											$( this ).dialog( "close" );
+										{
+											text: bwLng.cancel,
+											click: function() { 
+												$(this).dialog('close');
+											}
 										}
-									}
+									]
 								});
 							} else {
 								showFlashMessage('error', returnedData.message);
@@ -255,7 +304,7 @@ function reloadCatsList(listId) {
 				giftCat.find('option').remove();
 				for(var i = 0; i < returnedData.length; i++)
 				{
-					giftCat.append('<option value="' + returnedData[i].id + '">' + returnedData[i].name + '</option>')
+					giftCat.append('<option value="' + returnedData[i].id + '">' + returnedData[i].name + '</option>');
 				}
 				giftCat.val(returnedData[0].id);
 			}

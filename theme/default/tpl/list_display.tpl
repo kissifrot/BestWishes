@@ -9,7 +9,7 @@
 					<div id="gift_list_elem_{$gift->getId()}" class="gift_list_element">
 						{if $sessionOk}
 							{if $user->canDoActionForList($list->getId(), 'edit')}
-							<a href="/" onclick="deleteGift(); return false" title="{$lngDelete}"><img alt="{$lngDelete}" class="icon_text" src="{$themeWebDir}/img/delete.png" /></a>&nbsp;
+							<a href="/" onclick="confirmDeleteGift({$gift->getId()}, {$category->getId()}, {$list->getId()}); return false" title="{$lngDelete}"><img alt="{$lngDelete}" class="icon_text" src="{$themeWebDir}/img/delete.png" /></a>&nbsp;
 								{if $cfgMaxEdits && $gift->editsCount == $cfgMaxEdits}
 									<a href="/" onclick="editGift(false); return false" title="{$lngCannotEdit}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit_not.png" /></a>&nbsp;
 								{else}

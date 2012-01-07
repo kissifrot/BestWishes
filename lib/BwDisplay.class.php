@@ -65,6 +65,11 @@ class BwDisplay extends Smarty
 		$this->assign('lngMaxEditsReached', _('The max edits count was reached for this gift, you cannot edit it anymore'));
 		$this->assign('lngCatNameTooShort', _('The category name is too short'));
 		$this->assign('lngGiftNameTooShort', _('The gift name is too short'));
+		$this->assign('lngConfirmGiftDeletion', _('Are you sure you want to delete this gift? It cannot be undone'));
+		$this->assign('lngAddAnyway', _('Add anyway'));
+		$this->assign('lngDeleteIt', _('Delete it'));
+		$this->assign('lngCancel', _('Cancel'));
+		$this->assign('lngConfirmation', _('Confirmation'));
 	}
 
 	public function showJSONStatus($status = 'success', $message = '')

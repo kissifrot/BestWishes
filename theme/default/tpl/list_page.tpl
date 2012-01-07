@@ -65,7 +65,7 @@
 					<form id="frm_ajout_cadeau" name="frm_ajout_cadeau" method="post" action="" onsubmit="addGift({$list->getId()}, false, false); return false">
 						<table border="0" width="550" cellpadding="5">
 							<tr>
-								<td align="left" colspan="2"><em><span class="copyright">To add a gift:<br />-&nbsp;Fill its name<br />-&nbsp;Choose its category<br />-&nbsp;If it does not exist, create it using &#8220;Add a category to the list&#8221; abose<br />-&nbsp;Click on the &#8220;Add the gift&#8221; just below</span></em></td>
+								<td align="left" colspan="2"><em><span class="copyright">To add a gift:<br />-&nbsp;Fill its name<br />-&nbsp;Choose its category<br />-&nbsp;If it does not exist, create it using &#8220;Add a category to the list&#8221; above<br />-&nbsp;Click on the &#8220;Add the gift&#8221; just below</span></em></td>
 							</tr>
 							<tr>
 								<td>&nbsp;&nbsp;Gift name&nbsp;:&nbsp;</td><td>
@@ -106,7 +106,7 @@
 					<div id="section_delete_gift" style="visibility: visible; display: none;">
 						<table border="0" width="550" cellpadding="5">
 							<tr>
-								<td><em><span class="copyright">Pour supprimer un cadeau, cliquez sur l'icône <img class="icon_text" src="{$themeWebDir}/img/delete.png" alt="Del" /> à droite de celui-ci.</span></em></td>
+								<td><em><span class="copyright">To delete a gift, click on the <img class="icon_text" src="{$themeWebDir}/img/delete.png" alt="Del" /> icon next to it.</span></em></td>
 							</tr>
 						</table>
 					</div>
@@ -117,7 +117,7 @@
 					<div id="section_delete_cat" style="visibility: visible; display: none;">
 						<table border="0" width="550" cellpadding="5">
 							<tr>
-								<td><em><span class="copyright">Pour supprimer une catégorie, cliquez sur l'icône <img class="icon_text" src="{$themeWebDir}/img/delete.png" alt="Del" /> à gauche de celle-ci.</span></em></td>
+								<td><em><span class="copyright">To delete a category, click on the <img class="icon_text" src="{$themeWebDir}/img/delete.png" alt="Del" /> icon next to it.</span></em></td>
 							</tr>
 						</table>
 					</div>
@@ -129,7 +129,7 @@
 					<form id="frm_ajout_cadeau_surprise" name="frm_ajout_cadeau_surprise" method="post" action="" onsubmit="ajouterCadeauSurprise({$list->getId()}); return false">
 						<table border="0" width="550" cellpadding="5">
 							<tr>
-								<td align="left" colspan="2"><em><span class="copyright">Pour ajouter un cadeau :<br />-&nbsp;Remplissez son nom<br />-&nbsp;Choisissez sa catégorie<br />-&nbsp;Cliquez sur le bouton &#8220;Ajouter le cadeau&#8221; situé juste en-dessous</span></em></td>
+								<td align="left" colspan="2"><em><span class="copyright">To add a surprise gift:<br />-&nbsp;Fill its name<br />-&nbsp;Choose its category<br />-&nbsp;Click on the &#8220;Add the gift&#8221; just below</span></em></td>
 							</tr>
 							<tr>
 								<td>&nbsp;&nbsp;Nom du cadeau&nbsp;:&nbsp;</td><td>
@@ -148,7 +148,7 @@
 								</td>
 							</tr>
 						</table>
-						<input type="submit" name="submit" value="Ajouter le cadeau" />
+						<input type="submit" name="submit" value="Add the gift" />
 					</form>
 				</div>
 			</div>

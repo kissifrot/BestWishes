@@ -49,7 +49,18 @@ switch($action) {
 				}
 				$catName = trim($_POST['name']);
 				$result = BwCategory::add($listId, $catName);
-				$disp->showJSONStatus($result, getStatusMessage($result, sprintf(_('Category %s added'), $catName), sprintf(_('Could not add category %s'), $catName)));
+				$statusMessages = array(
+					0 => sprintf(_('Category %s added'), $catName),
+					1 => sprintf(_('Could not add category %s'), $catName),
+					99 => _('Internal error'),
+				);
+				$statusCode = 99;
+				$status = 'error';
+				$statusCode = BwCategory::add($listId, $catName);
+				if($statusCode == 0) {
+					$status = 'success';
+				}
+				$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 			break;
 			case 'gift':
 				// Adding a gift
@@ -100,8 +111,58 @@ switch($action) {
 						exit;
 					}
 					$catId = intval($_POST['id']);
-					$result = BwCategory::delete($listId, $catId);
-					$disp->showJSONStatus($result, getStatusMessage($result, _('Category deleted'), _('Could not delete category')));
+					$category = new BwCategory($catId);
+					
+					$statusMessages = array(
+						0 => _('Category deleted'),
+						1 => _('Could not delete category'),
+						99 => _('Internal error'),
+					);
+					$statusCode = 99;
+					$status = 'error';
+					if(!$category->load()) {
+						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+						exit;
+					}
+					$statusCode = $category->delete($listId);
+					if($statusCode == 0) {
+						$status = 'success';
+					}
+					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+				break;
+				case 'gift':
+					// Deleting a gift
+					if(!isset($_POST['id']) || empty($_POST['id'])) {
+						exit;
+					}
+					if(!isset($_POST['catId']) || empty($_POST['catId'])) {
+						exit;
+					}
+					$catId = intval($_POST['catId']);
+					$giftId = intval($_POST['id']);
+					$gift = new BwGift($giftId);
+					$category = new BwCategory($catId);
+					
+					$statusMessages = array(
+						0 => _('Gift deleted'),
+						1 => _('Could not delete gift'),
+						99 => _('Internal error'),
+					);
+					$statusCode = 99;
+					$status = 'error';
+					if(!$category->load() || !$gift->load()) {
+						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+						exit;
+					}
+					if(!$category->giftListId == $listId) {
+						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+						exit;
+					}
+					$statusCode = $gift->delete($listId);
+					if($statusCode == 0) {
+						$status = 'success';
+					}
+					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 				break;
 			}
 		}
