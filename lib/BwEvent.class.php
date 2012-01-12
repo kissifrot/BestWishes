@@ -127,7 +127,7 @@ class BwEvent
 	{
 		$this->id          = $sqlResult['id'];
 		$this->name        = $sqlResult['name'];
-		$this->type        = $sqlResult['type'];
+		$this->type        = $sqlResult['e_type'];
 		$this->day         = $sqlResult['event_day'];
 		$this->month       = $sqlResult['event_month'];
 		$this->year        = $sqlResult['event_year'];
