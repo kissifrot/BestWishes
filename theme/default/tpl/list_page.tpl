@@ -26,8 +26,8 @@
 {* Gift purchase indocation form *}
 {include file='form_purchase_gift.tpl'}
 
-<div id="cat_confirm_delete_dialog" title="Delete this category?">
-	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deleting this category will delete the gifts too. Are you sure?</p>
+<div id="cat_confirm_delete_dialog">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>{$lngConfirmCategoryDeletion}</p>
 </div>
 
 <br />
@@ -65,7 +65,7 @@
 			<div class="action_element">
 				-&nbsp;<a href="/" class="list_action_link" onclick="$('#section_add_gift').toggle(); return false"><img alt="{$lngAdd}" class="icon_text" src="{$themeWebDir}/img/add.png" />&nbsp;Add a gift (in an already existing category) to the list</a>
 				<div id="section_add_gift" style="visibility: visible; display: none;">
-					<form id="frm_ajout_cadeau" name="frm_ajout_cadeau" method="post" action="" onsubmit="addGift({$list->getId()}, false, false); return false">
+					<form id="frm_ajout_cadeau" name="frm_ajout_cadeau" method="post" action="" onsubmit="addGift({$list->getId()}, false, false, false); return false">
 						<table border="0" width="550" cellpadding="5">
 							<tr>
 								<td align="left" colspan="2"><em><span class="copyright">To add a gift:<br />-&nbsp;Fill its name<br />-&nbsp;Choose its category<br />-&nbsp;If it does not exist, create it using &#8220;Add a category to the list&#8221; above<br />-&nbsp;Click on the &#8220;Add the gift&#8221; just below</span></em></td>
@@ -129,25 +129,23 @@
 		{else}
 			<div class="action_element">-&nbsp;<a href="/" class="list_action_link" onclick="$('#section_add_surprise_gift').toggle(); return false"><img alt="{$lngAdd}" class="icon_text" src="{$themeWebDir}/img/add.png" />&nbsp;Add a surprise gift (in an already existing category) to the list</a>
 				<div id="section_add_surprise_gift" style="visibility: visible; display: none;">
-					<form id="frm_ajout_cadeau_surprise" name="frm_ajout_cadeau_surprise" method="post" action="" onsubmit="ajouterCadeauSurprise({$list->getId()}); return false">
+					<form id="frm_add_surprise_gift" name="frm_add_surprise_gift" method="post" action="" onsubmit="addSurpriseGift({$list->getId()}, false); return false">
 						<table border="0" width="550" cellpadding="5">
 							<tr>
 								<td align="left" colspan="2"><em><span class="copyright">To add a surprise gift:<br />-&nbsp;Fill its name<br />-&nbsp;Choose its category<br />-&nbsp;Click on the &#8220;Add the gift&#8221; just below</span></em></td>
 							</tr>
 							<tr>
-								<td>&nbsp;&nbsp;Nom du cadeau&nbsp;:&nbsp;</td><td>
+								<td>&nbsp;&nbsp;Gift name&nbsp;:&nbsp;</td><td>
 								<input type="text" id="surprise_gift_name" name="surprise_gift_name" size="60" maxlength="150" />
 								</td>
 							</tr>
 							<tr>
-								<td>&nbsp;&nbsp;Catégorie du cadeau&nbsp;:&nbsp;</td><td>
-								<div id="div_select_surpise_cat">
-									<select class="gift_cats_list" id="surprise_gift_cat" name="surprise_gift_cat">
-									{foreach from=$list->getCategories() item=category}
-										<option value="{$category->getId()}">{$category->name|ucfirst}</option>
-									{/foreach}
-									</select>
-								</div>
+								<td>&nbsp;&nbsp;Gift category&nbsp;:&nbsp;</td><td>
+								<select class="gift_cats_list" id="surprise_gift_cat" name="surprise_gift_cat">
+								{foreach from=$list->getCategories() item=category}
+									<option value="{$category->getId()}">{$category->name|ucfirst}</option>
+								{/foreach}
+								</select>
 								</td>
 							</tr>
 						</table>

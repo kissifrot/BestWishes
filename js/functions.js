@@ -100,6 +100,7 @@ function confirmDeleteCat(listId, catId)
 	$( '#cat_confirm_delete_dialog' ).dialog({
 		resizable: false,
 		modal: true,
+		title: bwLng.confirmation,
 		buttons: [
 			{
 				text: bwLng.deleteCategory,
@@ -214,9 +215,9 @@ function addGift(listId, detailedAdd, force) {
 				showFlashMessage('error', bwLng.giftNameTooShort);
 			} else {
 				if(force) {
-					giftData = {type: 'gift', catId: catId, name: giftName, force: '1'}
+					giftData = {type: 'gift', catId: catId, name: giftName, force: '1'};
 				} else {
-					giftData = {type: 'gift', catId: catId, name: giftName, force: '0'}
+					giftData = {type: 'gift', catId: catId, name: giftName, force: '0'};
 				}
 				$.ajax({
 					type: 'POST',
@@ -262,6 +263,69 @@ function addGift(listId, detailedAdd, force) {
 					}
 				});
 			}
+		}
+	}
+}
+
+function addSurpriseGift(listId, force) {
+
+	catId = $('#surprise_gift_cat').val();
+	giftData = null;
+	if(catId.length > 0) {
+		listId = parseInt(listId);
+		catId = parseInt(catId);
+		giftName = $('#surprise_gift_name').val();
+		if(giftName.length < 2) {
+			showFlashMessage('error', bwLng.giftNameTooShort);
+		} else {
+			if(force) {
+				giftData = {type: 'sgift', catId: catId, name: giftName, force: '1'};
+			} else {
+				giftData = {type: 'sgift', catId: catId, name: giftName, force: '0'};
+			}
+			$.ajax({
+				type: 'POST',
+				url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=add',
+				data: giftData,
+				dataType: 'json',
+				error: function(jqXHR, textStatus, errorThrown) {
+					showFlashMessage('error', 'An error occured: ' + errorThrown);
+				},
+				success: function(returnedData, textStatus, jqXHR) {
+					if(returnedData.status == 'success') {
+						showFlashMessage('info', returnedData.message);
+						$('#surprise_gift_name').val('');
+						$('#section_add_surprise_gift').hide();
+						reloadList(listId);
+					} else {
+						if(returnedData.status == 'confirm') {
+							// Show a confirmation dialog
+							$('<div></div>')
+							.html(returnedData.message)
+							.dialog({
+								title: bwLng.confirmation,
+								buttons: [
+									{
+										text: bwLng.addAnyway,
+										click: function() { 
+											addSurpriseGift(listId, true);
+											$(this).dialog('close');
+										}
+									},
+									{
+										text: bwLng.cancel,
+										click: function() { 
+											$(this).dialog('close');
+										}
+									}
+								]
+							});
+						} else {
+							showFlashMessage('error', returnedData.message);
+						}
+					}
+				}
+			});
 		}
 	}
 }

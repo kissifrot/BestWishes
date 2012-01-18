@@ -56,6 +56,10 @@ switch($action) {
 				);
 				$statusCode = 99;
 				$status = 'error';
+				if(!$user->canEditList($listId)) {
+					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+					exit;
+				}
 				$statusCode = BwCategory::add($listId, $catName);
 				if($statusCode == 0) {
 					$status = 'success';
@@ -78,6 +82,10 @@ switch($action) {
 				);
 				$statusCode = 99;
 				$status = 'error';
+				if(!$user->canEditList($listId)) {
+					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+					exit;
+				}
 				if(!$category->load()) {
 					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 					exit;
@@ -100,11 +108,55 @@ switch($action) {
 				}
 				$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 			break;
+			case 'sgift':
+				// Adding a surprise gift
+				if(!isset($_POST['name']) || empty($_POST['name'])) {
+					exit;
+				}
+				$giftName = trim($_POST['name']);
+				$catId = intval($_POST['catId']);
+				$force = (bool)($_POST['force']);
+				$category = new BwCategory($catId);
+				$statusMessages = array(
+					0 => sprintf(_('Surprise gift %s added'), $giftName),
+					1 => sprintf(_('A gift named %s already exists and is indicated as bought, do you want to add it anyway?'), $giftName),
+					99 => _('Internal error'),
+				);
+				$statusCode = 99;
+				$status = 'error';
+				if($user->isListOwner($list)) {
+					// The owner can't add durprise gifts to his/her own list
+					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+					exit;
+				}
+				if(!$category->load()) {
+					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+					exit;
+				}
+				if($category->giftListId !== $listId) {
+					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+					exit;
+				}
+				$statusCode = BwGift::addSurprise($listId, $catId, $giftName, $force);
+				if($statusCode == 0) {
+					$status = 'success';
+					// Send an e-mail if configured
+					$transport = BwConfig::get('mail_transport_type', 'none');
+					if($transport != 'none') {
+						BwMailer::sendSurpriseAddAlert($user, $list, $category->name, $giftName);
+					}
+				}
+				if($statusCode == 1) {
+					$status = 'confirm';
+				}
+				$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+				//var_dump(BwDebug::getInstance());
+			break;
 		}
 	break;
 	case 'del':
 		// Deleting an element
-		if($user->canDoActionForList($listId, 'edit') || $user->isListOwner($list)) {
+		if($user->canEditList($listId) || $user->isListOwner($list)) {
 			if(!isset($_POST['type']) || empty($_POST['type'])) {
 				exit;
 			}

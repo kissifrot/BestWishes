@@ -96,6 +96,62 @@ class BwMailer
 	/**
 	 *
 	 */
+	public static function sendSurpriseAddAlert($addingUser, $addingList, $categoryName, $giftName)
+	{
+		global $bwLang, $bwURL;
+
+		try {
+			$bwMailer = new self();
+			if(empty($bwMailer->mailFrom)) {
+				return false;
+			}
+		} catch(Exception $e) {
+			// TODO: log this
+			return false;
+		}
+
+		if(!$bwMailer->setTemplate('alert_sadd_' . $bwLang)) {
+			return false;
+		}
+
+		// Now cycle through all users to send them an alert
+		$allUsers = BwUser::getAll();
+		$messagesToSend = array();
+
+		$variables = array(
+			'__CATEGORY_NAME__' => $categoryName,
+			'__LIST_NAME__' => $addingList->name,
+			'__BW_URL__' => $bwURL,
+			'__BW_LIST_URL__' => $bwURL . '/list/' . $addingList->slug,
+			'__GIFT_NAME__' => $giftName,
+			'__ADDING_USER_NAME__' => $addingUser->name
+		);
+		foreach($allUsers as $anUser) {
+			if(!$anUser->isListOwner($addingList) && $anUser->hasAddAlertForList($addingList->getId())) {
+				$variables['__USER_NAME__'] = $anUser->name;
+
+				// Prepare the mail data
+				$mailSubject = sprintf(_('Addition of a surprise gift to the list %s'), $addingList->name)
+				$mailHtmlContent = $bwMailer->populateTemplate($variables);
+				$mailTextContent = strip_tags($mailHtmlContent);
+
+				$messagesToSend[] = Swift_Message::newInstance()
+				->setSubject($mailSubject)
+				->setFrom($bwMailer->mailFrom)
+				->setTo($anUser->email)
+				->setBody($mailHtmlContent, 'text/html');
+				->addPart($mailTextContent, 'text/plain');
+			}
+		}
+		
+		$nbMessages = $mailer->send($message);
+		
+		return ($nbMessages == count($messagesToSend));
+	}
+
+	/**
+	 *
+	 */
 	public static function sendAddAlert($addingUser, $addingList, $categoryName, $giftName)
 	{
 		global $bwLang, $bwURL;

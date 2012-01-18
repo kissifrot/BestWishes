@@ -70,6 +70,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngCatNameTooShort', _('The category name is too short'));
 		$this->assign('lngGiftNameTooShort', _('The gift name is too short'));
 		$this->assign('lngConfirmGiftDeletion', _('Are you sure you want to delete this gift? It cannot be undone'));
+		$this->assign('lngConfirmCategoryDeletion', _('Deleting this category will delete all its gifts too. Are you sure?'));
 		$this->assign('lngAddAnyway', _('Add anyway'));
 		$this->assign('lngDeleteIt', _('Delete it'));
 		$this->assign('lngCancel', _('Cancel'));
