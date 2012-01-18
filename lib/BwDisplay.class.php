@@ -76,11 +76,16 @@ class BwDisplay extends Smarty
 		$this->assign('lngConfirmation', _('Confirmation'));
 		$this->assign('lngPurchaseConfirmation', _('Purchase confirmation'));
 		$this->assign('lngConfirmPurchase', _('Confirm purchase'));
-		$this->assign('lngGift', _('Gift'));
-		$this->assign('lngPurchaseDate', _('Purchase date'));
-		$this->assign('lngComment', _('Comment'));
-		$this->assign('lngPurchaseInformation', _('<strong>Purchase information</strong>&nbsp;<em>(optional)</em>'));
+		$this->assign('lngCommentOptionalP', _('Comment <em>(optional)</em>:'));
+		$this->assign('lngGiftP', _('Gift:'));
+		$this->assign('lngPurchaseInformation', _('Purchase information'));
 		$this->assign('lngConfirmGiftReceive', _('Are you sure you want to mark this gift as received? The gift won\'t be visible after'));
+		$this->assign('lngAddedOnP', _('Added on:'));
+		$this->assign('lngPurchaseDateP', _('Purchase date:'));
+		$this->assign('lngPurchaseInfo', _('Purchase info'));
+		$this->assign('lngBoughtByP', _('Bought by:'));
+		$this->assign('lngOnP', _('On:'));
+		$this->assign('lngCommentP', _('Comment:'));
 	}
 
 	public function showJSONStatus($status = 'success', $message = '')

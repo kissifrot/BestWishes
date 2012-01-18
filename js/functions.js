@@ -306,6 +306,7 @@ function markGiftAsBought(giftId, catId, listId)
 		},
 		success: function(returnedData, textStatus, jqXHR) {
 			if(returnedData.status == 'success') {
+				$('#purchase_comment').val('');
 				$('#gift_purchase_dialog').dialog('close');
 				showFlashMessage('info', returnedData.message);
 				reloadList(listId);

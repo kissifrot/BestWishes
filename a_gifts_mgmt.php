@@ -181,7 +181,11 @@ switch($action) {
 		}
 		$giftId = intval($_POST['id']);
 		$catId = intval($_POST['catId']);
+		// Little cleanup of purchase comment
 		$purchaseComment = trim($_POST['purchaseComment']);
+		if(!empty($purchaseComment)) {
+			$purchaseComment = strip_tags($purchaseComment);
+		}
 		$gift = new BwGift($giftId);
 		$category = new BwCategory($catId);
 		$statusMessages = array(
