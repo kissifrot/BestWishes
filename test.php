@@ -14,8 +14,10 @@ require_once($bwLibDir . DS . 'BwClassAutoloader.class.php');
 
 $autoloader = BwClassAutoloader::getInstance();
 
+$httpPath = 'http' . (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '') . '://' . (empty($_SERVER['HTTP_HOST']) ? $_SERVER['SERVER_NAME'] . (empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':' . $_SERVER['SERVER_PORT']) : $_SERVER['HTTP_HOST']) . (strtr(dirname($_SERVER['PHP_SELF']), '\\', '/') == '/' ? '' : strtr(dirname($_SERVER['PHP_SELF']), '\\', '/')) . '/install.php';
+echo $httpPath;
+
 var_dump(BwDebug::getDebugMode());
-var_dump(BwDebug::setDebugMode(BwDebug::LOG_ALL));
 
 $db = BwDatabase::getInstance();
 var_dump($db);
@@ -23,12 +25,6 @@ $lang = new BwLang();
 var_dump($lang);
 var_dump($lang->getLangList());
 
-$config = BwConfig::get('foo');
-
-var_dump($config);
-
-var_dump(BwConfig::set('foo', 'bar', true));
-var_dump(BwConfig::set('foo', 'bar'));
 var_dump(BwDebug::getInstance());
 
 ob_start();
@@ -43,7 +39,11 @@ if(preg_match('#PDO#', $phpinfo) > 0) {
 
 var_dump(BwEvent::getAllActiveEvents());
 
-$slug = 'foobar';
-$list = new BwList($slug);
-$list->load();
-var_dump($list->getNearestEventData());
+
+$user = new BwUser();
+$password = 'v8aLTIZd';
+$user->login('Kissifrot', $password);
+
+var_dump(BwInflector::slug('Ceci est un .2...'));
+
+var_dump(BwDebug::getInstance());

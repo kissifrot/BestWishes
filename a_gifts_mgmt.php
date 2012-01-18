@@ -82,13 +82,18 @@ switch($action) {
 					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 					exit;
 				}
-				if($category->giftListId != $listId) {
+				if($category->giftListId !== $listId) {
 					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 					exit;
 				}
 				$statusCode = BwGift::add($listId, $catId, $giftName, $force);
 				if($statusCode == 0) {
 					$status = 'success';
+					// Send an e-mail if configured
+					$transport = BwConfig::get('mail_transport_type', 'none');
+					if($transport != 'none') {
+						BwMailer::sendAddAlert($user, $list, $category->name, $giftName);
+					}
 				}
 				if($statusCode == 1) {
 					$status = 'confirm';
@@ -154,7 +159,7 @@ switch($action) {
 						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 						exit;
 					}
-					if(!$category->giftListId == $listId) {
+					if($category->giftListId !== $listId) {
 						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 						exit;
 					}
@@ -166,6 +171,87 @@ switch($action) {
 				break;
 			}
 		}
+	break;
+	case 'mark_bought':
+		// Mark a gift as bought
+		if(!isset($_POST['id']) || empty($_POST['id'])) {
+			exit;
+		}if(!isset($_POST['catId']) || empty($_POST['catId'])) {
+			exit;
+		}
+		$giftId = intval($_POST['id']);
+		$catId = intval($_POST['catId']);
+		$purchaseComment = trim($_POST['purchaseComment']);
+		$gift = new BwGift($giftId);
+		$category = new BwCategory($catId);
+		$statusMessages = array(
+			0 => _('Gift marked as bought'),
+			1 => _('Could not mark the gift as bought'),
+			2 => _('Gift is already marked as bought'),
+			99 => _('Internal error'),
+		);
+		$statusCode = 99;
+		$status = 'error';
+		if(!$user->canMarkGiftsForList($listId)) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		if(!$category->load() || !$gift->load()) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		if($category->giftListId !== $listId) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		$statusCode = $gift->markAsBought($listId, $user->getId(), $purchaseComment);
+		if($statusCode == 0) {
+			$status = 'success';
+			// Send an e-mail if configured
+			$transport = BwConfig::get('mail_transport_type', 'none');
+			if($transport != 'none') {
+				BwMailer::sendPurchaseAlert($user, $list, $gift->name, $purchaseComment);
+			}
+		}
+		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+	break;
+
+	case 'mark_received':
+		// Mark a gift as received
+		if(!isset($_POST['id']) || empty($_POST['id'])) {
+			exit;
+		}if(!isset($_POST['catId']) || empty($_POST['catId'])) {
+			exit;
+		}
+		$giftId = intval($_POST['id']);
+		$catId = intval($_POST['catId']);
+		$gift = new BwGift($giftId);
+		$category = new BwCategory($catId);
+		$statusMessages = array(
+			0 => _('Gift marked as received'),
+			1 => _('Could not mark the gift as received'),
+			2 => _('Gift is already marked as received'),
+			99 => _('Internal error'),
+		);
+		$statusCode = 99;
+		$status = 'error';
+		if(!$user->isListOwner($list)) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		if(!$category->load() || !$gift->load()) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		if($category->giftListId !== $listId) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		$statusCode = $gift->markAsReceived($listId);
+		if($statusCode == 0) {
+			$status = 'success';
+		}
+		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 	break;
 }
 

@@ -19,7 +19,7 @@ class BwUser
 			$this->load($this->id);
 		}
 	}
-	
+
 	public function __toString()
 	{
 		return $this->name;
@@ -385,7 +385,7 @@ class BwUser
 		$this->listParams = BwUserParams::getAllByUserId($this->id);
 	}
 
-	public function canDoActionForList($listId = null, $action = 'view')
+	private function canDoActionForList($listId = null, $action = 'view')
 	{
 		if(empty($listId))
 			return false;
@@ -405,10 +405,56 @@ class BwUser
 			case 'edit':
 				return $listParams->canEdit;
 			break;
+			case 'a_add':
+				return $listParams->alertAddition;
+			break;
+			case 'a_buy':
+				return $listParams->alertBuy;
+			break;
 			default:
 				return $listParams->canView;
 			break;
 		}
+	}
+
+	public function canViewList($listId = null)
+	{
+		if(empty($listId))
+			return false;
+
+		return $this->canDoActionForList($listId, 'view');
+	}
+
+	public function canEditList($listId = null)
+	{
+		if(empty($listId))
+			return false;
+
+		return $this->canDoActionForList($listId, 'edit');
+	}
+
+	public function canMarkGiftsForList($listId = null)
+	{
+		if(empty($listId))
+			return false;
+
+		return $this->canDoActionForList($listId, 'mark');
+	}
+
+	public function hasAddAlertForList($listId = null)
+	{
+		if(empty($listId))
+			return false;
+
+		return $this->canDoActionForList($listId, 'a_add');
+	}
+
+	public function hasBuyAlertForList($listId = null)
+	{
+		if(empty($listId))
+			return false;
+
+		return $this->canDoActionForList($listId, 'a_buy');
 	}
 
 	public function isListOwner($list = null) {

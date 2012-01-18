@@ -23,6 +23,9 @@
 	{include file='gift_details.tpl'}
 </div>
 
+{* Gift purchase indocation form *}
+{include file='form_purchase_gift.tpl'}
+
 <div id="cat_confirm_delete_dialog" title="Delete this category?">
 	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deleting this category will delete the gifts too. Are you sure?</p>
 </div>
@@ -38,7 +41,7 @@
 <div id="possible_actions">
 	<h3><img alt="Informations" src="{$themeWebDir}/img/information.png" class="icon_text" />&nbsp;<i>{$lngPossibleActions}</i></h3>
 	{if $sessionOk}
-		{if $user->canDoActionForList($list->getId(), 'edit')}
+		{if $user->canEditList($list->getId())}
 			<div class="action_element">
 				-&nbsp;<a href="/" class="list_action_link" onclick="$('#section_add_cat').toggle(); reloadCatsList({$list->getId()}); return false"><img alt="{$lngAdd}" class="icon_text" src="{$themeWebDir}/img/add.png" />&nbsp;Add a category to the list</a><br />
 				<div id="section_add_cat" style="visibility: visible; display: none;">

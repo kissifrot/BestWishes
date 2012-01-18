@@ -25,11 +25,10 @@
 bwURL = '{$webDir}';
 {literal}
 $(document).ready(function() {
-	var tabsList = $( "#options-tabs" ).tabs({
+	var tabsList = $( '#options-tabs' ).tabs({
 		ajaxOptions: {
 			error: function( xhr, status, index, anchor ) {
-				$( anchor.hash ).html(
-					"Could not load this tab" );
+				$( anchor.hash ).html( bwLng.couldNotLoadTab );
 			}
 		}
 	});

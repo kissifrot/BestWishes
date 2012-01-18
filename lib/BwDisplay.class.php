@@ -49,6 +49,9 @@ class BwDisplay extends Smarty
 		$this->assign('lngLogout', _('Logout'));
 		$this->assign('lngChangeOptions', _('Change your options'));
 		$this->assign('lngDateFormat', _('m/d/Y'));
+		$this->assign('lngPleaseWait', _('Please wait...'));
+		$this->assign('lngConfirm', _('Confirm'));
+		$this->assign('lngCouldNotLoadTab', _('Could not load this tab'));
 	}
 
 	public function assignListStrings()
@@ -59,6 +62,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngDelete', _('Delete'));
 		$this->assign('lngAdd', _('Add'));
 		$this->assign('lngEdit', _('Edit'));
+		$this->assign('lngDeleteCategory', _('Delete category'));
 		$this->assign('lngMarkAsBought', _('Mark as bought'));
 		$this->assign('lngMarkAsReceived', _('Mark as received'));
 		$this->assign('lngCannotEdit', _('You cannot edit this gift name'));
@@ -70,6 +74,13 @@ class BwDisplay extends Smarty
 		$this->assign('lngDeleteIt', _('Delete it'));
 		$this->assign('lngCancel', _('Cancel'));
 		$this->assign('lngConfirmation', _('Confirmation'));
+		$this->assign('lngPurchaseConfirmation', _('Purchase confirmation'));
+		$this->assign('lngConfirmPurchase', _('Confirm purchase'));
+		$this->assign('lngGift', _('Gift'));
+		$this->assign('lngPurchaseDate', _('Purchase date'));
+		$this->assign('lngComment', _('Comment'));
+		$this->assign('lngPurchaseInformation', _('<strong>Purchase information</strong>&nbsp;<em>(optional)</em>'));
+		$this->assign('lngConfirmGiftReceive', _('Are you sure you want to mark this gift as received? The gift won\'t be visible after'));
 	}
 
 	public function showJSONStatus($status = 'success', $message = '')

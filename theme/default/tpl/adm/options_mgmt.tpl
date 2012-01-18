@@ -24,11 +24,11 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	var tabsList = $( "#list-tabs" ).tabs({
+	var tabsList = $( '#list-tabs' ).tabs({
 		ajaxOptions: {
 			error: function( xhr, status, index, anchor ) {
 				$( anchor.hash ).html(
-					"Could not load this tab" );
+					'Could not load this tab' );
 			}
 		}
 	});

@@ -10,6 +10,7 @@ function showGiftDetailsWindow(giftDetails)
 				$('#gift_details_buy_date').text(date(bwLng.dateFormat, strtotime(giftDetails.boughtDate)));
 			}
 			if(typeof giftDetails.boughtComment !== 'undefined' && giftDetails.boughtComment != null && giftDetails.boughtComment.length > 0) {
+				$('#gift_details_buy_comment').show();
 				$('#gift_details_buy_comment_text').text(giftDetails.boughtComment);
 			} else {
 				$('#gift_details_buy_comment').hide();
@@ -95,19 +96,25 @@ function confirmDeleteCat(listId, catId)
 {
 	listId = parseInt(listId);
 	catId = parseInt(catId);
-	$( "#cat_confirm_delete_dialog" ).dialog( "open" );
-	$( "#cat_confirm_delete_dialog" ).dialog({
+	$( '#cat_confirm_delete_dialog' ).dialog( 'open' );
+	$( '#cat_confirm_delete_dialog' ).dialog({
 		resizable: false,
 		modal: true,
-		buttons: {
-			"Delete category": function() {
-				deleteCat(listId, catId);
-				$( this ).dialog( "close" );
+		buttons: [
+			{
+				text: bwLng.deleteCategory,
+				click: function() { 
+					deleteCat(listId, catId);
+					$(this).dialog('close');
+				}
 			},
-			Cancel: function() {
-				$( this ).dialog( "close" );
+			{
+				text: bwLng.cancel,
+				click: function() { 
+					$(this).dialog('close');
+				}
 			}
-		}
+		]
 	});
 }
 
@@ -259,14 +266,104 @@ function addGift(listId, detailedAdd, force) {
 	}
 }
 
-function markGiftAsBought()
+function showBuyWindow(giftName, giftId, catId, listId)
 {
-	alert('TODO: markGiftAsBought');
+	giftId = parseInt(giftId);
+	listId = parseInt(listId);
+	catId = parseInt(catId);
+	$('#bought_gift_name').text(giftName);
+	$('#gift_purchase_dialog').dialog( 'option', 'buttons', 
+	[
+		{
+			text: bwLng.confirmPurchase,
+			id: 'btn-confirm-purchase',
+			click: function() { 
+				$('#btn-confirm-purchase').button( 'disable' );
+				$('#btn-confirm-purchase').button( 'option', 'label', bwLng.pleaseWait );
+				markGiftAsBought(giftId, catId, listId);
+			}
+		},
+		{
+			text: bwLng.cancel,
+			click: function() {
+				$('#gift_purchase_dialog').dialog('close');
+			}
+		}
+	]
+	);
+	$('#gift_purchase_dialog').dialog( 'open' );
 }
 
-function markGiftAsReceived()
+function markGiftAsBought(giftId, catId, listId)
 {
-	alert('TODO: markGiftAsReceived');
+	$.ajax({
+		type: 'POST',
+		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=mark_bought',
+		data: {type: 'gift', catId: catId, id: giftId, purchaseComment: $('#purchase_comment').val()},
+		dataType: 'json',
+		error: function(jqXHR, textStatus, errorThrown) {
+			showFlashMessage('error', 'An error occured: ' + errorThrown);
+		},
+		success: function(returnedData, textStatus, jqXHR) {
+			if(returnedData.status == 'success') {
+				$('#gift_purchase_dialog').dialog('close');
+				showFlashMessage('info', returnedData.message);
+				reloadList(listId);
+			} else {
+				// Reenable the button
+				$('#btn-confirm-purchase').button( 'enable' );
+				$('#btn-confirm-purchase').button( 'option', 'label', bwLng.confirmPurchase );
+				showFlashMessage('error', returnedData.message);
+			}
+		}
+	});
+}
+
+function confirmMarkGiftAsReceived(giftId, catId, listId) {
+	giftId = parseInt(giftId);
+	listId = parseInt(listId);
+	catId = parseInt(catId);
+	$('<div></div>')
+	.html(bwLng.confirmGiftReceive)
+	.dialog({
+		title: bwLng.confirmation,
+		buttons: [
+			{
+				text: bwLng.confirm,
+				click: function() { 
+					markGiftAsReceived(giftId, catId, listId);
+					$(this).dialog('close');
+				}
+			},
+			{
+				text: bwLng.cancel,
+				click: function() { 
+					$(this).dialog('close');
+				}
+			}
+		]
+	});
+}
+
+function markGiftAsReceived(giftId, catId, listId)
+{
+	$.ajax({
+		type: 'POST',
+		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=mark_received',
+		data: {type: 'gift', catId: catId, id: giftId},
+		dataType: 'json',
+		error: function(jqXHR, textStatus, errorThrown) {
+			showFlashMessage('error', 'An error occured: ' + errorThrown);
+		},
+		success: function(returnedData, textStatus, jqXHR) {
+			if(returnedData.status == 'success') {
+				showFlashMessage('info', returnedData.message);
+				reloadList(listId);
+			} else {
+				showFlashMessage('error', returnedData.message);
+			}
+		}
+	});
 }
 
 function reloadList(listId) {
@@ -280,7 +377,7 @@ function reloadList(listId) {
 		},
 		success: function(returnedData, textStatus, jqXHR) {
 			$('#div_complete_list').effect('fade', 200, function() {setTimeout(function() {
-				$( "#div_complete_list" ).removeAttr( "style" ).hide().fadeIn();
+				$( '#div_complete_list' ).removeAttr( 'style' ).hide().fadeIn();
 			}, 200 );});
 			$('#div_complete_list').html(returnedData);
 		}
@@ -298,7 +395,7 @@ function reloadCatsList(listId) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
 		},
 		success: function(returnedData, textStatus, jqXHR) {
-			if (typeof returnedData !== "undefined" && returnedData != null) {
+			if (typeof returnedData !== 'undefined' && returnedData != null) {
 				// Replace the categories list content
 				var giftCat = $('.gift_cats_list');
 				giftCat.find('option').remove();

@@ -15,7 +15,7 @@ class BwGift
 	public $boughtBy;
 	public $boughtByName;
 	public $isSurprise;
-	public $boughtComment;
+	public $purchaseComment;
 	public $imageFilename;
 	public $url;
 	
@@ -213,23 +213,23 @@ class BwGift
 
 	private function storeAttributes($sqlResult)
 	{
-		$this->id            = (int)$sqlResult['id'];
-		$this->categoryId    = (int)$sqlResult['category_id'];
-		$this->name          = $sqlResult['name'];
-		$this->addedDate     = $sqlResult['added_date'];
-		$this->editsCount    = (int)$sqlResult['edits_count'];
-		$this->isBought      = (bool)$sqlResult['is_bought'];
-		$this->isReceived    = (bool)$sqlResult['is_received'];
-		$this->boughtDate    = $sqlResult['bought_date'];
-		$this->boughtBy      = null;
-		$this->boughtByName  = null;
-		$this->boughtComment = null;
+		$this->id              = (int)$sqlResult['id'];
+		$this->categoryId      = (int)$sqlResult['category_id'];
+		$this->name            = $sqlResult['name'];
+		$this->addedDate       = $sqlResult['added_date'];
+		$this->editsCount      = (int)$sqlResult['edits_count'];
+		$this->isBought        = (bool)$sqlResult['is_bought'];
+		$this->isReceived      = (bool)$sqlResult['is_received'];
+		$this->boughtDate      = $sqlResult['bought_date'];
+		$this->boughtBy        = null;
+		$this->boughtByName    = null;
+		$this->purchaseComment = null;
 		if($this->isBought) {
 			$buyingUser = new BwUser((int)$sqlResult['bought_by']);
 			if($buyingUser->load()) {
-				$this->boughtBy      = (int)$sqlResult['bought_by'];
-				$this->boughtByName  = $buyingUser->username;
-				$this->boughtComment = $sqlResult['bought_comment'];
+				$this->boughtBy        = (int)$sqlResult['bought_by'];
+				$this->boughtByName    = $buyingUser->username;
+				$this->purchaseComment = $sqlResult['purchase_comment'];
 			}
 		}
 		$this->isSurprise    = (bool)$sqlResult['is_surprise'];
@@ -242,11 +242,11 @@ class BwGift
 	 */
 	public function filterContent()
 	{
-		$this->isBought      = false;
-		$this->boughtDate    = null;
-		$this->boughtBy      = null;
-		$this->boughtByName  = null;
-		$this->boughtComment = null;
+		$this->isBought        = false;
+		$this->boughtDate      = null;
+		$this->boughtBy        = null;
+		$this->boughtByName    = null;
+		$this->purchaseComment = null;
 	}
 
 	/**
@@ -336,6 +336,131 @@ class BwGift
 				array(
 					'parameter' => ':gift_list_id',
 					'variable' => $listId,
+					'data_type' => PDO::PARAM_INT
+				)
+			),
+			
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('category_all_list_' . $listId);
+				BwCache::delete('category_' . $this->categoryId);
+				BwCache::delete('gift_all_list_' . $listId);
+				BwCache::delete('gift_all_cat_' . $this->categoryId);
+				$resultValue = 0;
+			} else {
+				$resultValue = 1;
+			}
+		}
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
+	public function markAsBought($listId = null, $userId = null, $purchaseComment = '') {
+		$resultValue = 99;
+		if(empty($listId) || empty($userId)) {
+			return $resultValue;
+		}
+		
+		if($this->isBought) {
+			// Already bought, stop
+			$resultValue = 2;
+			return $resultValue;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift',
+			'queryType' => 'UPDATE',
+			'queryFields' => array(
+				'is_bought' => ':is_bought',
+				'bought_date' => ':bought_date',
+				'bought_by' => ':bought_by',
+				'purchase_comment' => ':purchase_comment'
+			),
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':is_bought',
+					'variable' => 1,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':bought_date',
+					'variable' => date('Y-m-d'),
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':bought_by',
+					'variable' => $userId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':purchase_comment',
+					'variable' => $purchaseComment,
+					'data_type' => PDO::PARAM_STR
+				)
+			),
+			
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('category_all_list_' . $listId);
+				BwCache::delete('category_' . $this->categoryId);
+				BwCache::delete('gift_all_list_' . $listId);
+				BwCache::delete('gift_all_cat_' . $this->categoryId);
+				$resultValue = 0;
+			} else {
+				$resultValue = 1;
+			}
+		}
+		return $resultValue;
+	}
+
+
+	/**
+	 *
+	 */
+	public function markAsReceived($listId = null) {
+		$resultValue = 99;
+		if(empty($listId)) {
+			return $resultValue;
+		}
+		
+		if($this->isReceived) {
+			// Already received, stop
+			$resultValue = 2;
+			return $resultValue;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift',
+			'queryType' => 'UPDATE',
+			'queryFields' => array(
+				'is_received' => ':is_received'
+			),
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':is_received',
+					'variable' => 1,
 					'data_type' => PDO::PARAM_INT
 				)
 			),

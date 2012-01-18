@@ -11,9 +11,9 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATO
 require_once($bwLibDir . DS . 'BwCommon.inc.php');
 
 
-$admUser = new BwAdminUser();
-$password = 'v8aLTIZd';
-var_dump($admUser->login('Kissifrot', $password));
+// $admUser = new BwAdminUser();
+// $password = 'v8aLTIZd';
+// var_dump($admUser->login('Kissifrot', $password));
 
 if(!BwAdminUser::checkSession()) {
 	header('Location: login.php');
