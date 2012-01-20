@@ -4,11 +4,8 @@
  */
 define('BESTWISHES', true);
 
-// Load config
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.inc.php');
-// Load other needed files
-require_once($bwLibDir . DS . 'BwCommon.inc.php');
-require_once($bwLibDir . DS . 'BwClassAutoloader.class.php');
+// Load common
+require_once(dirname(__FILE__). DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'BwCommon.inc.php');
 
 $autoloader = BwClassAutoloader::getInstance();
 

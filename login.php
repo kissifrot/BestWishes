@@ -5,10 +5,8 @@
 
 define('BESTWISHES', true);
 
-// Load config
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.inc.php');
-// Load other needed files
-require_once($bwLibDir . DS . 'BwCommon.inc.php');
+// Load common
+require_once(dirname(__FILE__). DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'BwCommon.inc.php');
 
 $errorMessage = false;
 if(isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['pass']) && !empty($_POST['pass'])) {

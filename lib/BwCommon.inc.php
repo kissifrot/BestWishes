@@ -6,6 +6,34 @@ if (! defined('BESTWISHES')) {
 	exit;
 }
 
+if (version_compare(PHP_VERSION, '5.2.0', '<')) {
+	exit("Sorry, BestWishes will only run on PHP version 5.2.0 or greater!\n");
+}
+
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
+
+// Load config file
+if(!is_file(dirname(__FILE__) . DS . '..' . DS . 'config.inc.php')) {
+	if(!defined('INSTALL_MODE')) {
+		header('Location: http' . (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '') . '://' . (empty($_SERVER['HTTP_HOST']) ? $_SERVER['SERVER_NAME'] . (empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':' . $_SERVER['SERVER_PORT']) : $_SERVER['HTTP_HOST']) . (strtr(dirname($_SERVER['PHP_SELF']), '\\', '/') == '/' ? '' : strtr(dirname($_SERVER['PHP_SELF']), '\\', '/')) . '/install.php');
+		exit;
+	}
+}
+if(!defined('INSTALL_MODE')) {
+	require_once(dirname(__FILE__) . DS . '..' . DS . 'config.inc.php');
+}
+
+// Directories info
+
+$bwLibDir    = dirname(__FILE__);
+$bwMainDir   = dirname(__FILE__) . DS . '..';
+$bwVendorDir = $bwLibDir . DS . 'vendor';
+$bwCacheDir  = $bwMainDir . DS . 'cache';
+$bwLocaleDir = $bwMainDir . DS . 'locale';
+$bwThemeDir  = $bwMainDir . DS . 'theme';
+
 session_start();
 
 // Guess the current URL if not set
@@ -17,7 +45,9 @@ if(empty($bwURL)) {
 require_once($bwLibDir . DS . 'BwClassAutoloader.class.php');
 
 $autoloader = BwClassAutoloader::getInstance();
-BwDebug::setDebugMode(BwDebug::LOG_ALL); // TODO: remove this
+if(!defined('INSTALL_MODE')) {
+	BwDebug::setDebugMode(BwDebug::LOG_ALL); // TODO: remove this
+}
 BwLang::load();
 
 BwCache::configure('default', array(

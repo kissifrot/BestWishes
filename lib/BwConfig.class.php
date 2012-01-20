@@ -10,7 +10,9 @@ class BwConfig
 
 	public function __construct()
 	{
-		$this->load();
+		if(!defined('INSTALL_MODE')) {
+			$this->load();
+		}
 	}
 
 	private function load()

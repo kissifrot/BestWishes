@@ -5,15 +5,8 @@
 
 define('BESTWISHES', true);
 
-// Load config
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config.inc.php');
-// Load other needed files
-require_once($bwLibDir . DS . 'BwCommon.inc.php');
-
-
-// $admUser = new BwAdminUser();
-// $password = 'v8aLTIZd';
-// var_dump($admUser->login('Kissifrot', $password));
+// Load common
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'BwCommon.inc.php');
 
 if(!BwAdminUser::checkSession()) {
 	header('Location: login.php');

@@ -2,8 +2,7 @@
 if (version_compare(PHP_VERSION, '5.2.0', '<')) exit("Sorry, BestWishes will only run on PHP version 5.2.0 or greater!\n");
 
 define('BESTWISHES', true);
-define('NO_INSTALL_CHECK', true);
-
+define('INSTALL_MODE', true);
 
 $availableDatabasesInfo = array(
 	'mysql' => array(
@@ -25,10 +24,7 @@ $availableDatabasesInfo = array(
 // This is what we are.
 $installurl = $_SERVER['PHP_SELF'];
 
-// Load config
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.inc.php');
-
-require_once($bwLibDir . DS . 'BwClassAutoloader.class.php');
+require_once(dirname(__FILE__). DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'BwCommon.inc.php');
 
 $autoloader = BwClassAutoloader::getInstance();
 

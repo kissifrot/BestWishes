@@ -5,18 +5,14 @@
 
 define('BESTWISHES', true);
 
-// Load config
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config.inc.php');
-// Load other needed files
-require_once($bwLibDir . DS . 'BwCommon.inc.php');
+// Load common
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'BwCommon.inc.php');
 
 $errorMessage = false;
-var_dump($_POST);
 if(isset($_POST['adm_username']) && !empty($_POST['adm_username']) && isset($_POST['adm_pass']) && !empty($_POST['adm_pass'])) {
 	$username = $_POST['adm_username'];
 	$password = $_POST['adm_pass'];
 	$admUser = new BwAdminUser();
-	var_dump($admUser->login($username, $password));
 	if($admUser->login($username, $password)) {
 		header('Location: index.php');
 		exit;
