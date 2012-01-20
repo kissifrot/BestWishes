@@ -26,5 +26,7 @@ $user->loadParams();
 $disp->assignOptionsStrings();
 
 $disp->header(_('Options management'));
+$disp->assign('lists', BwList::getAll());
+$disp->assign('user', $user);
 $disp->display('options_page.tpl');
 $disp->footer();

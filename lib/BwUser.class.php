@@ -159,23 +159,23 @@ class BwUser
 		if(empty($password) || empty($newPassword)) {
 			return $resultCode;
 		}
-		
+
 		$minPasswordSize = BwConfig::get('min_password_size', 6);
 		if(mb_strlen($password) < $minPasswordSize) {
 			$resultCode = 1;
 			return $resultCode;
 		}
-		
+
 		// Ceck if we have the user/password in the db
 		if(!$this->loadByUsernamePassword($this->username, $password)) {
 			$resultCode = 2;
 			return $resultCode;
 		}
-		
+
 		// All seems ok, continue
 		$newSalt = sha1(uniqid());
 		$hashedPwd = sha1($newSalt . $newPassword . '/' . $newSalt);
-		
+
 		$db = BwDatabase::getInstance();
 		$queryParams = array(
 			'tableName' => 'gift_list_user',
@@ -385,6 +385,15 @@ class BwUser
 		$this->listParams = BwUserParams::getAllByUserId($this->id);
 	}
 
+	public function updateRight($listId =  null, $rightType = '', $enabled = false)
+	{
+		$resultCode = 99;
+		if(empty($listId) || empty($rightType)) {
+			return $resultCode;
+		}
+		return BwUserParams::updateUserRight($this->id, $listId, $rightType, $enabled);
+	}
+
 	private function canDoActionForList($listId = null, $action = 'view')
 	{
 		if(empty($listId))
@@ -408,8 +417,8 @@ class BwUser
 			case 'a_add':
 				return $listParams->alertAddition;
 			break;
-			case 'a_buy':
-				return $listParams->alertBuy;
+			case 'a_purchase':
+				return $listParams->alertPurchase;
 			break;
 			default:
 				return $listParams->canView;
@@ -449,12 +458,12 @@ class BwUser
 		return $this->canDoActionForList($listId, 'a_add');
 	}
 
-	public function hasBuyAlertForList($listId = null)
+	public function hasPurchaseAlertForList($listId = null)
 	{
 		if(empty($listId))
 			return false;
 
-		return $this->canDoActionForList($listId, 'a_buy');
+		return $this->canDoActionForList($listId, 'a_purchase');
 	}
 
 	public function isListOwner($list = null) {

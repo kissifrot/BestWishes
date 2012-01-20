@@ -248,7 +248,7 @@ class BwMailer
 		}
 
 		foreach($allUsers as $anUser) {
-			if(!$anUser->isListOwner($addingList) && $anUser->hasAddAlertForList($addingList->getId())) {
+			if(!$anUser->isListOwner($addingList) && $anUser->hasPurchaseAlertForList($addingList->getId())) {
 				if($anUser->getId() != $buyingUser->getId()) {
 					$variables['__USER_NAME__'] = $anUser->name;
 					// Prepare the mail data

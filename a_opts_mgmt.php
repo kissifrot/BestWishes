@@ -63,13 +63,36 @@ switch($action) {
 		if(!isset($_GET['listId']) || empty($_GET['listId'])) {
 			exit;
 		}
+		if(!isset($_POST['rtype']) || empty($_POST['rtype'])) {
+			exit;
+		}
 		$listId = intval($_GET['listId']);
+		$rightType = trim($_POST['rtype']);
+		$enabled = (bool)($_POST['enabled']);
 
 		$list = new BwList();
 		if(!$list->loadById($listId)) {
 			exit;
 		}
-		// TODO
+		$statusMessages = array(
+			0 => _('Alert updated successfully'),
+			1 => _('Could not update this alert'),
+			99 => _('Internal error'),
+		);
+		$statusCode = 99;
+		$status = 'error';
+		switch($rightType) {
+			case 'alert_addition':
+			case 'alert_purchase':
+				$statusCode = $user->updateRight($listId, $rightType, $enabled);
+			break;
+			default:
+			exit;
+		}
+		if($statusCode == 0) {
+			$status = 'success';
+		}
+		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 	break;
 }
 

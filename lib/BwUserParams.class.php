@@ -7,7 +7,7 @@ class BwUserParams
 	public $canEdit;
 	public $canMark;
 	public $alertAddition;
-	public $alertBuy;
+	public $alertPurchase;
 
 	public function __construct()
 	{
@@ -115,6 +115,70 @@ class BwUserParams
 		}
 	}
 
+	public function updateRight($userId = null, $listId = null, $rightType = '', $enabled = false)
+	{
+		$resultCode = 99;
+		if(empty($userId) || empty($listId) || empty($rightType)) {
+			return $resultCode;
+		}
+		$rightValue = 0;
+		if($enabled) {
+			$rightValue = 1;
+		}
+		$paramFieldData = array(
+			'variable' => $rightValue,
+			'data_type' => PDO::PARAM_INT
+		);
+		switch($rightType) {
+			case 'can_view':
+			case 'can_edit':
+			case 'can_mark':
+			case 'alert_addition':
+			case 'alert_purchase':
+				$paramFieldData['parameter'] = ':' . $rightType;
+			break;
+			default:
+				return $resultCode;
+		}
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'list_user_params',
+			'queryType' => 'UPDATE',
+			'queryFields' => array(
+				$rightType => ':' . $rightType
+			),
+			'queryCondition' => array(
+				'gift_list_user_id = :gift_list_user_id',
+				'gift_list_id = :gift_list_id',
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':gift_list_user_id',
+					'variable' => $userId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':gift_list_id',
+					'variable' => $listId,
+					'data_type' => PDO::PARAM_INT
+				),
+				$paramFieldData
+			),
+			
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('user_param_' . $userId);
+				$resultCode = 0;
+			} else {
+				$resultCode = 1;
+			}
+		}
+		return $resultCode;
+	}
+
 	private function storeAttributes($sqlResult)
 	{
 		$this->listId        = (int)$sqlResult['gift_list_id'];
@@ -123,7 +187,7 @@ class BwUserParams
 		$this->canEdit       = (bool)$sqlResult['can_edit'];
 		$this->canMark       = (bool)$sqlResult['can_mark'];
 		$this->alertAddition = (bool)$sqlResult['alert_addition'];
-		$this->alertBuy      = (bool)$sqlResult['alert_buy'];
+		$this->alertPurchase = (bool)$sqlResult['alert_purchase'];
 	}
 
 	/**
@@ -133,5 +197,11 @@ class BwUserParams
 	{
 		$param = new self();
 		return $param->loadByUserId($userId);
+	}
+
+	public static function updateUserRight($userId = null, $listId = null, $rightType = '', $enabled = false)
+	{
+		$param = new self();
+		return $param->updateRight($userId, $listId, $rightType, $enabled);
 	}
 }
