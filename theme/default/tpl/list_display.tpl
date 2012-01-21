@@ -10,10 +10,10 @@
 						{if $sessionOk}
 							{if $user->canEditList($list->getId())}
 							<a href="/" onclick="confirmDeleteGift({$gift->getId()}, {$category->getId()}, {$list->getId()}); return false" title="{$lngDelete}"><img alt="{$lngDelete}" class="icon_text" src="{$themeWebDir}/img/delete.png" /></a>&nbsp;
-								{if $cfgMaxEdits && $gift->editsCount == $cfgMaxEdits}
-									<a href="/" onclick="editGift(false); return false" title="{$lngCannotEdit}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit_not.png" /></a>&nbsp;
+								{if $cfgMaxEdits && $gift->editsCount >= $cfgMaxEdits}
+									<a href="/" onclick="startEditGift(false); return false" title="{$lngCannotEditGift}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit_not.png" /></a>&nbsp;
 								{else}
-									<a href="/" onclick="editGift(true); return false" title="{$lngCannotEdit}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit.png" /></a>&nbsp;
+									<a id="actn_edit_gift_{$gift->getId()}" href="/" onclick="startEditGift(true, '{$gift->name|escape:'javascript'}', {$gift->getId()}, {$category->getId()}, {$list->getId()}); return false" title="{$lngEditGift}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit.png" /></a>&nbsp;
 								{/if}
 							{/if}
 							<span id="gif_name_{$gift->getId()}" class="gift_name{if $gift->isBought && !$user->isListOwner($list)} bought_gift{/if}" onclick="showGiftDetailsWindow({$gift|json_encode|escape})">{$gift->name|ucfirst}</span>

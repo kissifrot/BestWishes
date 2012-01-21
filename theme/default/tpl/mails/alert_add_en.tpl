@@ -15,6 +15,9 @@ a:hover {
 	color : #2e6e9e;
 	text-decoration : underline;
 }
+.smaller {
+	font-size: 90%;
+}
 </style>
 <br />
 Hello __USER_NAME__,<br />
@@ -24,7 +27,7 @@ This is a message to inform you that <b>__ADDING_USER_NAME__</b> added a gift to
 You can see the list by clicking on the following link: <a href="__BW_LIST_URL__">__BW_LIST_URL__</a>
 <hr style="border: 0; width: 90%; color: #fff; background-color: #fff; height: 1px;" />
 <br /><br />
-Regards,<br />
+<span class="smaller">Regards,<br />
 The Admin<br />
-<a href="__BW_URL__">__BW_URL__</a>
+<a href="__BW_URL__">__BW_URL__</a></span>
 <br />

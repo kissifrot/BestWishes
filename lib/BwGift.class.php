@@ -385,6 +385,104 @@ class BwGift
 		return $resultValue;
 	}
 
+	/**
+	 *
+	 */
+	public function edit($listId = null, $newName = '') {
+		$resultValue = 99;
+		if(empty($listId) || empty($newName)) {
+			return $resultValue;
+		}
+
+		$db = BwDatabase::getInstance();
+		
+		$maxEditsConfig = BwConfig::get('max_gift_name_edits', false);
+		if(empty($maxEditsConfig)) {
+			// There is no edit limit
+			$queryParams = array(
+				'tableName' => 'gift',
+				'queryType' => 'UPDATE',
+				'queryFields' => array(
+					'name' => ':name'
+				),
+				'queryCondition' => 'id = :id',
+				'queryValues' => array(
+					array(
+						'parameter' => ':id',
+						'variable' => $this->id,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':name',
+						'variable' => $newName,
+						'data_type' => PDO::PARAM_STR
+					)
+				),
+			);
+		} else {
+			// An edit limit is configured
+			if($this->editsCount <= $maxEditsConfig) {
+				$levenDistance = BwConfig::get('max_gift_name_edits_diff', false);
+				if(!empty($levenDistance)) {
+					// Calculate Levenshtein distance
+					if(levenshtein($input, $word) >= $levenDistance) {
+						// Max distance reached, stop
+						$resultValue = 3;
+						return $resultValue;
+					}
+				}
+				// We'll have to update the edits count
+				$queryParams = array(
+					'tableName' => 'gift',
+					'queryType' => 'UPDATE',
+					'queryFields' => array(
+						'name' => ':name',
+						'edits_count' => ':edits_count'
+					),
+					'queryCondition' => 'id = :id',
+					'queryValues' => array(
+						array(
+							'parameter' => ':id',
+							'variable' => $this->id,
+							'data_type' => PDO::PARAM_INT
+						),
+						array(
+							'parameter' => ':name',
+							'variable' => $newName,
+							'data_type' => PDO::PARAM_STR
+						),
+						array(
+							'parameter' => ':edits_count',
+							'variable' => ($this->editsCount + 1),
+							'data_type' => PDO::PARAM_INT
+						)
+					),
+				);
+			} else {
+				// Max limit reached, stop
+				$resultValue = 2;
+				return $resultValue;
+			}
+		}
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('category_all_list_' . $listId);
+				BwCache::delete('category_' . $this->categoryId);
+				BwCache::delete('gift_all_list_' . $listId);
+				BwCache::delete('gift_all_cat_' . $this->categoryId);
+				$resultValue = 0;
+			} else {
+				$resultValue = 1;
+			}
+		}
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
 	public function delete($listId = null) {
 		$resultValue = 99;
 		if(empty($listId)) {

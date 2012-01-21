@@ -63,16 +63,16 @@ function fadeOutMessage()
 
 function addCat(listId)
 {
-	listId = parseInt(listId);
-	catName = $('#cat_name').val();
-	if(catName.length < 2) {
+	currentListId = parseInt(listId);
+	currentCatName = $('#cat_name').val();
+	if(currentCatName.length < 2) {
 		// Category name too short
 		showFlashMessage('error', bwLng.catNameTooShort);
 	} else {
 		$.ajax({
 			type: 'POST',
-			url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=add',
-			data: {type: 'cat', name: catName},
+			url: bwURL + '/a_gifts_mgmt.php?listId=' + currentListId + '&action=add',
+			data: {type: 'cat', name: currentCatName},
 			dataType: 'json',
 			error: function(jqXHR, textStatus, errorThrown) {
 				showFlashMessage('error', 'An error occured: ' + errorThrown);
@@ -82,8 +82,8 @@ function addCat(listId)
 					showFlashMessage('info', returnedData.message);
 					$('#cat_name').val('');
 					$('#section_add_cat').hide();
-					reloadList(listId);
-					reloadCatsList(listId);
+					reloadList(currentListId);
+					reloadCatsList(currentListId);
 				} else {
 					showFlashMessage('error', returnedData.message);
 				}
@@ -94,8 +94,8 @@ function addCat(listId)
 
 function confirmDeleteCat(listId, catId)
 {
-	listId = parseInt(listId);
-	catId = parseInt(catId);
+	currentListId = parseInt(listId);
+	currentCatId = parseInt(catId);
 	$( '#cat_confirm_delete_dialog' ).dialog( 'open' );
 	$( '#cat_confirm_delete_dialog' ).dialog({
 		resizable: false,
@@ -105,7 +105,7 @@ function confirmDeleteCat(listId, catId)
 			{
 				text: bwLng.deleteCategory,
 				click: function() { 
-					deleteCat(listId, catId);
+					deleteCat(currentListId, currentCatId);
 					$(this).dialog('close');
 				}
 			},
@@ -121,12 +121,12 @@ function confirmDeleteCat(listId, catId)
 
 function deleteCat(listId, catId)
 {
-	listId = parseInt(listId);
-	catId = parseInt(catId);
+	currentListId = parseInt(listId);
+	currentCatId = parseInt(catId);
 	$.ajax({
 		type: 'POST',
-		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=del',
-		data: {type: 'cat', id: catId},
+		url: bwURL + '/a_gifts_mgmt.php?listId=' + currentListId + '&action=del',
+		data: {type: 'cat', id: currentCatId},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
@@ -134,8 +134,8 @@ function deleteCat(listId, catId)
 		success: function(returnedData, textStatus, jqXHR) {
 			if(returnedData.status == 'success') {
 				showFlashMessage('info', returnedData.message);
-				$('#cat_' + catId).remove();
-				reloadCatsList(listId);
+				$('#cat_' + currentCatId).remove();
+				reloadCatsList(currentListId);
 			} else {
 				showFlashMessage('error', returnedData.message);
 			}
@@ -144,9 +144,9 @@ function deleteCat(listId, catId)
 }
 
 function confirmDeleteGift(giftId, catId, listId) {
-	giftId = parseInt(giftId);
-	listId = parseInt(listId);
-	catId = parseInt(catId);
+	currentGiftId = parseInt(giftId);
+	currentCatId = parseInt(catId);
+	currentListId = parseInt(listId);
 	$('<div></div>')
 	.html(bwLng.confirmGiftDeletion)
 	.dialog({
@@ -155,7 +155,7 @@ function confirmDeleteGift(giftId, catId, listId) {
 			{
 				text: bwLng.deleteIt,
 				click: function() { 
-					deleteGift(giftId, catId, listId);
+					deleteGift(currentGiftId, currentCatId, currentListId);
 					$(this).dialog('close');
 				}
 			},
@@ -190,13 +190,76 @@ function deleteGift(giftId, catId, listId)
 	});
 }
 
-function editGift(canEdit)
+function startEditGift(canEdit, giftName, giftId, catId, listId)
 {
 	if(!canEdit) {
 		showFlashMessage('error', bwLng.maxEditsReached);
 		return false;
 	}
-	alert('TODO: editGift');
+	if(currentGiftId != giftId) {
+		currentGiftName = giftName;
+	}
+	currentGiftId = parseInt(giftId);
+	currentCatId = parseInt(catId);
+	currentListId = parseInt(listId);
+	$('<input type="text" id="gift_edit_name" />')
+	.insertAfter('#gif_name_' + currentGiftId)
+	.val(currentGiftName)
+	.focus()
+	.blur(function(evt) {
+		endEditGift();
+	})
+	.keyup(function(evt) {
+		if(evt.which == 13) {
+			endEditGift();
+		}
+	});
+	$('#gif_name_' + currentGiftId).hide();
+	$('#actn_edit_gift_' + currentGiftId).hide();
+}
+
+function endEditGift()
+{
+	if(currentGiftId != null) {
+		giftName = $('#gift_edit_name').val();
+		if(giftName.length < 2) {
+			showFlashMessage('error', bwLng.giftNameTooShort);
+		} else {
+			if(currentGiftName == giftName) {
+				// Nothing to change
+				$('#gift_edit_name').remove();
+				$('#gif_name_' + currentGiftId).show();
+				$('#actn_edit_gift_' + currentGiftId).show();
+				isEditing = false;
+			} else {
+				$.ajax({
+					type: 'POST',
+					url: bwURL + '/a_gifts_mgmt.php?listId=' + currentListId + '&action=edit',
+					data: {type: 'gift', catId: currentCatId, id: currentGiftId, newName: giftName},
+					dataType: 'json',
+					error: function(jqXHR, textStatus, errorThrown) {
+						showFlashMessage('error', 'An error occured: ' + errorThrown);
+					},
+					success: function(returnedData, textStatus, jqXHR) {
+						if(returnedData.status == 'success') {
+							showFlashMessage('info', returnedData.message);
+							$('#gift_edit_name').remove();
+							$('#gif_name_' + currentGiftId).text(giftName);
+							currentGiftName = giftName;
+							$('#gif_name_' + currentGiftId).show();
+							$('#actn_edit_gift_' + currentGiftId).show();
+						} else {
+							showFlashMessage('error', returnedData.message);
+							// Nothing to change
+							$('#gift_edit_name').remove();
+							$('#gif_name_' + currentGiftId).show();
+							$('#actn_edit_gift_' + currentGiftId).show();
+						}
+					}
+				});
+			}
+		}
+	}
 }
 
 function addGift(listId, detailedAdd, force) {
@@ -205,8 +268,8 @@ function addGift(listId, detailedAdd, force) {
 	giftData = null;
 	detailedAdd = detailedAdd;
 	if(catId.length > 0) {
-		listId = parseInt(listId);
-		catId = parseInt(catId);
+		currentListId = parseInt(listId);
+		currentCatId = parseInt(catId);
 		if(detailedAdd) {
 			//giftName =  
 		} else {
@@ -215,13 +278,13 @@ function addGift(listId, detailedAdd, force) {
 				showFlashMessage('error', bwLng.giftNameTooShort);
 			} else {
 				if(force) {
-					giftData = {type: 'gift', catId: catId, name: giftName, force: '1'};
+					giftData = {type: 'gift', catId: currentCatId, name: giftName, force: '1'};
 				} else {
-					giftData = {type: 'gift', catId: catId, name: giftName, force: '0'};
+					giftData = {type: 'gift', catId: currentCatId, name: giftName, force: '0'};
 				}
 				$.ajax({
 					type: 'POST',
-					url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=add',
+					url: bwURL + '/a_gifts_mgmt.php?listId=' + currentListId + '&action=add',
 					data: giftData,
 					dataType: 'json',
 					error: function(jqXHR, textStatus, errorThrown) {
@@ -232,7 +295,7 @@ function addGift(listId, detailedAdd, force) {
 							showFlashMessage('info', returnedData.message);
 							$('#gift_name').val('');
 							$('#section_add_gift').hide();
-							reloadList(listId);
+							reloadList(currentListId);
 						} else {
 							if(returnedData.status == 'confirm') {
 								// Show a confirmation dialog
@@ -244,7 +307,7 @@ function addGift(listId, detailedAdd, force) {
 										{
 											text: bwLng.addAnyway,
 											click: function() { 
-												addGift(listId, detailedAdd, true);
+												addGift(currentListId, detailedAdd, true);
 												$(this).dialog('close');
 											}
 										},
@@ -272,20 +335,20 @@ function addSurpriseGift(listId, force) {
 	catId = $('#surprise_gift_cat').val();
 	giftData = null;
 	if(catId.length > 0) {
-		listId = parseInt(listId);
-		catId = parseInt(catId);
+		currentListId = parseInt(listId);
+		currentCatId = parseInt(catId);
 		giftName = $('#surprise_gift_name').val();
 		if(giftName.length < 2) {
 			showFlashMessage('error', bwLng.giftNameTooShort);
 		} else {
 			if(force) {
-				giftData = {type: 'sgift', catId: catId, name: giftName, force: '1'};
+				giftData = {type: 'sgift', catId: currentCatId, name: giftName, force: '1'};
 			} else {
-				giftData = {type: 'sgift', catId: catId, name: giftName, force: '0'};
+				giftData = {type: 'sgift', catId: currentCatId, name: giftName, force: '0'};
 			}
 			$.ajax({
 				type: 'POST',
-				url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=add',
+				url: bwURL + '/a_gifts_mgmt.php?listId=' + currentListId + '&action=add',
 				data: giftData,
 				dataType: 'json',
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -296,7 +359,7 @@ function addSurpriseGift(listId, force) {
 						showFlashMessage('info', returnedData.message);
 						$('#surprise_gift_name').val('');
 						$('#section_add_surprise_gift').hide();
-						reloadList(listId);
+						reloadList(currentListId);
 					} else {
 						if(returnedData.status == 'confirm') {
 							// Show a confirmation dialog
@@ -308,7 +371,7 @@ function addSurpriseGift(listId, force) {
 									{
 										text: bwLng.addAnyway,
 										click: function() { 
-											addSurpriseGift(listId, true);
+											addSurpriseGift(currentListId, true);
 											$(this).dialog('close');
 										}
 									},
@@ -332,9 +395,9 @@ function addSurpriseGift(listId, force) {
 
 function showBuyWindow(giftName, giftId, catId, listId)
 {
-	giftId = parseInt(giftId);
-	listId = parseInt(listId);
-	catId = parseInt(catId);
+	currentGiftId = parseInt(giftId);
+	currentCatId = parseInt(catId);
+	currentListId = parseInt(listId);
 	$('#bought_gift_name').text(giftName);
 	$('#gift_purchase_dialog').dialog( 'option', 'buttons', 
 	[
@@ -344,7 +407,7 @@ function showBuyWindow(giftName, giftId, catId, listId)
 			click: function() { 
 				$('#btn-confirm-purchase').button( 'disable' );
 				$('#btn-confirm-purchase').button( 'option', 'label', bwLng.pleaseWait );
-				markGiftAsBought(giftId, catId, listId);
+				markGiftAsBought(currentGiftId, currentCatId, currentListId);
 			}
 		},
 		{
@@ -385,9 +448,9 @@ function markGiftAsBought(giftId, catId, listId)
 }
 
 function confirmMarkGiftAsReceived(giftId, catId, listId) {
-	giftId = parseInt(giftId);
-	listId = parseInt(listId);
-	catId = parseInt(catId);
+	currentGiftId = parseInt(giftId);
+	currentCatId = parseInt(catId);
+	currentListId = parseInt(listId);
 	$('<div></div>')
 	.html(bwLng.confirmGiftReceive)
 	.dialog({
@@ -396,7 +459,7 @@ function confirmMarkGiftAsReceived(giftId, catId, listId) {
 			{
 				text: bwLng.confirm,
 				click: function() { 
-					markGiftAsReceived(giftId, catId, listId);
+					markGiftAsReceived(currentGiftId, currentCatId, currentListId);
 					$(this).dialog('close');
 				}
 			},
@@ -432,11 +495,11 @@ function markGiftAsReceived(giftId, catId, listId)
 }
 
 function reloadList(listId) {
-	listId = parseInt(listId);
+	currentListId = parseInt(listId);
 	$.ajax({
 		type: 'GET',
 		url: bwURL + '/a_list_show.php',
-		data: {id: listId},
+		data: {id: currentListId},
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
 		},
@@ -450,11 +513,11 @@ function reloadList(listId) {
 }
 
 function reloadCatsList(listId) {
-	listId = parseInt(listId);
+	currentListId = parseInt(listId);
 	$.ajax({
 		type: 'GET',
 		url: bwURL + '/a_cats_show.php',
-		data: {id: listId},
+		data: {id: currentListId},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
@@ -518,7 +581,7 @@ function updatePwd() {
 }
 
 function updateRight(listId, rightElement, rightType) {
-	listId = parseInt(listId);
+	currentListId = parseInt(listId);
 	rightElement = rightElement;
 	if(rightElement.checked) {
 		rElementChecked = true;
@@ -529,7 +592,7 @@ function updateRight(listId, rightElement, rightType) {
 	}
 	$.ajax({
 		type: 'POST',
-		url: bwURL + '/a_opts_mgmt.php?listId=' + listId + '&action=editrights',
+		url: bwURL + '/a_opts_mgmt.php?listId=' + currentListId + '&action=editrights',
 		data: rightData,
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {

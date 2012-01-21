@@ -105,7 +105,12 @@ a {
 
 .copyright {
 	font-weight: normal;
-	font-size : 10px;
+	font-size: 10px;
+}
+
+.smaller {
+	font-weight: normal;
+	font-size: 10px;
 }
 
 .errorinfo {

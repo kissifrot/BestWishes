@@ -31,14 +31,26 @@ class BwConfig
 				return $results;
 			
 			if(!empty($results)) {
-				foreach($results as $result) {
-					$this->configDirectives[$result['config_key']] = array();
-					$this->configDirectives[$result['config_key']]['value']  = $result['config_value'];
-					$this->configDirectives[$result['config_key']]['type']   = $result['value_type'];
-					$this->configDirectives[$result['config_key']]['regex'] = $result['value_regex'];
-				}
+				$this->storeAttributes($results);
 			}
 			return true;
+		}
+	}
+
+	private function storeAttributes($sqlResults)
+	{
+		foreach($sqlResults as $result) {
+			$this->configDirectives[$result['config_key']] = array();
+			switch($result['value_type']) {
+				case 'numeric':
+					$this->configDirectives[$result['config_key']]['value'] = intval($result['config_value']);
+				break;
+				default:
+					$this->configDirectives[$result['config_key']]['value'] = $result['config_value'];
+				break;
+			}
+			$this->configDirectives[$result['config_key']]['type']  = $result['value_type'];
+			$this->configDirectives[$result['config_key']]['regex'] = $result['value_regex'];
 		}
 	}
 

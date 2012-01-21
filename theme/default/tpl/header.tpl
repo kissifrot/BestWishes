@@ -13,6 +13,7 @@
 		<script language="javascript" src="{$webDir}/js/jquery.js" type="text/javascript"></script>
 		<script language="javascript" src="{$webDir}/js/jquery-ui.js" type="text/javascript"></script>
 		<script language="javascript" src="{$webDir}/js/tools.js" type="text/javascript"></script>
+		<script language="javascript" src="{$webDir}/js/variables.js" type="text/javascript"></script>
 		<script language="javascript" src="{$webDir}/js/functions.js" type="text/javascript"></script>
 	</head>
 

@@ -6,8 +6,9 @@ require_once($GLOBALS['bwVendorDir'] . '/smarty/Smarty.class.php');
 
 class BwDisplay extends Smarty
 {
-	public $siteName;
-	public $theme = 'default';
+	protected $siteName;
+	protected $theme = 'default';
+	protected $themeWebDir = '';
 	
 	private $pageTitle = '';
 
@@ -26,6 +27,7 @@ class BwDisplay extends Smarty
 		if(!is_dir($bwThemeDir . DS . $this->theme)) {
 			exit('Theme not found');
 		}
+		$this->themeWebDir = $bwURL . '/theme/' . $this->theme;
 
 		parent::__construct(); // Call Smarty's constructor
 		$this->setTemplateDir($bwThemeDir . DS . $this->theme . DS . 'tpl' . DS);
@@ -36,7 +38,7 @@ class BwDisplay extends Smarty
 
 		$this->assign('theme', $this->theme);
 		$this->assign('webDir', $bwURL);
-		$this->assign('themeWebDir', $bwURL . '/theme/' . $this->theme);
+		$this->assign('themeWebDir', $this->themeWebDir);
 		$this->assign('sessionOk', false);
 		$this->assign('lists', BwList::getAll());
 
@@ -54,8 +56,13 @@ class BwDisplay extends Smarty
 		$this->assign('lngCouldNotLoadTab', _('Could not load this tab'));
 	}
 
+	/**
+	 * List translated strings
+	 */
 	public function assignListStrings()
 	{
+		global $themeWebDir;
+
 		$this->assign('lngPossibleActions', _('Possible actions:'));
 		$this->assign('lngInfoEmptyList', _('(This list is still empty)'));
 		$this->assign('lngDetails', _('Details'));
@@ -65,6 +72,8 @@ class BwDisplay extends Smarty
 		$this->assign('lngDeleteCategory', _('Delete category'));
 		$this->assign('lngMarkAsBought', _('Mark as bought'));
 		$this->assign('lngMarkAsReceived', _('Mark as received'));
+		$this->assign('lngCannotEditGift', _('You cannot edit this gift name'));
+		$this->assign('lngEditGift', _('Edit this gift name'));
 		$this->assign('lngCannotEdit', _('You cannot edit this gift name'));
 		$this->assign('lngMaxEditsReached', _('The max edits count was reached for this gift, you cannot edit it anymore'));
 		$this->assign('lngCatNameTooShort', _('The category name is too short'));
@@ -77,6 +86,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngConfirmation', _('Confirmation'));
 		$this->assign('lngPurchaseConfirmation', _('Purchase confirmation'));
 		$this->assign('lngConfirmPurchase', _('Confirm purchase'));
+		$this->assign('lngTipsP', _('Tips:'));
 		$this->assign('lngCommentOptionalP', _('Comment <em>(optional)</em>:'));
 		$this->assign('lngGiftP', _('Gift:'));
 		$this->assign('lngPurchaseInformation', _('Purchase information'));
@@ -87,6 +97,35 @@ class BwDisplay extends Smarty
 		$this->assign('lngBoughtByP', _('Bought by:'));
 		$this->assign('lngOnP', _('On:'));
 		$this->assign('lngCommentP', _('Comment:'));
+		$this->assign('lngGiftNameP', _('Gift name:'));
+		$this->assign('lngCategoryNameP', _('Category name:'));
+		$this->assign('lngGiftCategoryP', _('Gift category:'));
+
+		// Explanation texts
+		$this->assign('lngAddCatExplanation', _('To add a category:<br />-&nbsp;Fill its name<br />-&nbsp;Click on the &#8220;Add the category&#8221; button below'));
+		$this->assign('lngAddGiftExplanation', _('To add a gift:<br />-&nbsp;Fill its name<br />-&nbsp;Choose its category<br />-&nbsp;If it does not exist, create it using &#8220;Add a category to the list&#8221; above<br />-&nbsp;Click on the &#8220;Add the gift&#8221; just below'));
+		$this->assign('lngDeleteGiftExplanation', sprintf(_('To delete a gift, click on the %s icon next to it.'),
+			'<img class="icon_text" src="' . $this->themeWebDir . '/img/delete.png" alt="Del" />'));
+		$this->assign('lngDeleteCatExplanation', sprintf(_('To delete a category, click on the %s icon next to it.<br />%s Deleting a category will delete all its gifts.'),
+			'<img class="icon_text" src="' . $this->themeWebDir . '/img/delete.png" alt="Del" />', '<img class="icon_text" src="' . $this->themeWebDir . '/img/exclamation.png" alt="!" />'));
+		$this->assign('lngAddSurpriseGiftExplanation', _('To add a surprise gift:<br />-&nbsp;Fill its name<br />-&nbsp;Choose its category<br />-&nbsp;Click on the &#8220;Add the gift&#8221; just below'));
+		$limitedEdition = $this->getTemplateVars('cfgMaxEdits');
+		if(!empty($limitedEdition)) {
+			$this->assign('lngEditExplanation', sprintf(_('To edit a gift name, click on the %s icon to the left of it.<br />Once you have finished the edition, click anywhere in the page or use Enter key to validate the modification(s).'),
+				'<img class="icon_text" src="' . $this->themeWebDir . '/img/edit.png" alt="' . _('Edit') . '" />'));
+		} else {
+			$this->assign('lngEditExplanation', sprintf(_('To edit a gift name, click on the %s icon to the left of it.<br />Once you have finished the edition, click anywhere in the page or use Enter key to validate the modification(s).<br />%s The modifications allowed are limited.'),
+				'<img class="icon_text" src="' . $this->themeWebDir . '/img/edit.png" alt="' . _('Edit') . '" />', '<img class="icon_text" src="' . $this->themeWebDir . '/img/exclamation.png" alt="!" />'));
+		}
+
+		// Possible actions
+		$this->assign('lngActnAddCategory', _('Add a category to the list'));
+		$this->assign('lngActnAddGift', _('Add a gift (in an already existing category) to the list'));
+		$this->assign('lngActnEditGift', _('Edit a gift\'s name'));
+		$this->assign('lngActnDelGift', _('Delete a gift'));
+		$this->assign('lngActnDelCategory', _('Delete a category'));
+		$this->assign('lngActnAddSurpriseGift', _('Add a surprise gift (in an already existing category) to the list'));
+		$this->assign('lngActnDisplayPDF', _('Display the list as PDF'));
 	}
 
 	public function showJSONStatus($status = 'success', $message = '')

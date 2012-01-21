@@ -151,6 +151,54 @@ switch($action) {
 			break;
 		}
 	break;
+	case 'edit':
+		// Editing an element
+		if($user->canEditList($listId) || $user->isListOwner($list)) {
+			$elementType = $_POST['type'];
+			switch($elementType) {
+				case 'gift':
+					// Editing a gift
+					if(!isset($_POST['id']) || empty($_POST['id'])) {
+						exit;
+					}
+					if(!isset($_POST['catId']) || empty($_POST['catId'])) {
+						exit;
+					}
+					if(!isset($_POST['newName']) || empty($_POST['newName'])) {
+						exit;
+					}
+					$catId = intval($_POST['catId']);
+					$giftId = intval($_POST['id']);
+					$newName = trim($_POST['newName']);
+					$gift = new BwGift($giftId);
+					$category = new BwCategory($catId);
+					
+					$statusMessages = array(
+						0 => _('Gift name edited successfully'),
+						1 => _('Could not edit this gift name'),
+						2 => _('Could not edit this gift name: you already used your max edits'),
+						3 => _('Could not edit this gift name: there are too many differences between the old name and the new one'),
+						99 => _('Internal error'),
+					);
+					$statusCode = 99;
+					$status = 'error';
+					if(!$category->load() || !$gift->load()) {
+						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+						exit;
+					}
+					if($category->giftListId !== $listId) {
+						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+						exit;
+					}
+					$statusCode = $gift->edit($listId, $newName);
+					if($statusCode == 0) {
+						$status = 'success';
+					}
+					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+				break;
+			}
+		}
+	break;
 	case 'del':
 		// Deleting an element
 		if($user->canEditList($listId) || $user->isListOwner($list)) {
