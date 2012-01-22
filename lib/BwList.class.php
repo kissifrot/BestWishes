@@ -267,7 +267,68 @@ class BwList
 		$list = new self();
 		return $list->loadAll();
 	}
-	
+
+	/**
+	 *
+	 */
+	public function PdfOutput($title = '', $subTitle = '', $sessionOK = false, $user = null) {
+		// Initialize the PDF class
+		$pdf = new BwPdf();
+		
+		$pdf->SetFont('DejaVu', 'B', 16);
+		$pdf->Cell(0, 10, $title, 0, 1, 'C');
+		$pdf->SetFont('DejaVu', 'I', 12);
+		$pdf->Cell(0, 10, $subTitle, 0, 1, 'C');
+
+		if($this->categoriesCount > 0) {
+			foreach ($this->categories as $category) {
+				if ($category->giftsCount > 0) {
+					$pdf->SetFont('DejaVu', 'B', 12);
+					$pdf->Cell(0, 12, ucfirst($category->name).' :', 0, 1);
+					foreach ($category->getGifts() as $gift) {
+						if($sessionOK) {
+							if($user->isListOwner($this)) {
+								$pdf->SetFont('DejaVu','',12);
+								$pdf->Cell($pdf->GetStringWidth($gift->name), 6, ucfirst($gift->name), 0, 1);
+							} else {
+								if($gift->isBought) {
+									if($gift->boughtBy === $user->getId()) {
+										$pdf->SetFont('DejaVu', 'BI', 12);
+										$pdf->SetTextColor(255, 0, 0);
+										$pdf->Cell($pdf->GetStringWidth($gift->name), 6, ucfirst($gift->name), 0, 0);
+										$pdf->SetTextColor(0, 0, 0);
+										$pdf->SetFont('DejaVu', 'I', 12);
+										$pdf->Cell(0, 6, sprintf(_('(bought by yourself on %s)'), date(_('d/m/y'), strtotime($gift->purchaseDate))), 0, 1);
+									} else {
+										$pdf->SetFont('DejaVu', 'BI', 12);
+										$pdf->SetTextColor(255, 0, 0);
+										if($pdf->GetStringWidth($gift->name) > 200)
+											$pdf->MultiCell(0, 6, ucfirst($gift->name), 0, 'L');
+										else
+											$pdf->Cell($pdf->GetStringWidth($gift->name), 6, ucfirst($gift->name), 0, 0);
+										$pdf->SetTextColor(0, 0, 0);
+										$pdf->SetFont('DejaVu', 'I', 12);
+										$pdf->Cell(0, 6, sprintf(_('(bought by %s on %s)'), $gift->boughtByName, date(_('d/m/y'), strtotime($gift->purchaseDate))), 0, 1);
+									}
+								} else {
+									$pdf->SetFont('DejaVu','',12);
+									$pdf->Cell($pdf->GetStringWidth($gift->name), 6, ucfirst($gift->name), 0, 1);
+								}
+							}
+						} else {
+							$pdf->SetFont('DejaVu','',12);
+							$pdf->Cell($pdf->GetStringWidth($gift->name), 6, ucfirst($gift->name), 0, 1);
+						}
+					}
+				}
+			}
+		} else {
+			$pdf->SetFont('DejaVu','I',12);
+			$pdf->Cell(0,12,_('(This list is still empty)'), 0, 1, 'C');
+		}
+		$pdf->Output(_('list_') . $this->slug . '.pdf', 'I');
+	}
+
 	/**
 	 * This function will flter the categories and gifts which will then be displayed
 	 */

@@ -60,7 +60,7 @@ if($list->load()) {
 	}
 	$subTitle = $listTitle;
 	if(!empty($list->lastUpdate)) {
-		$subTitle .= '<br /><span id="list_last_update" class="copyright">' . sprintf(_('(last update on: %s)'), date(_('m/d/Y'), strtotime($list->lastUpdate))) . '</span>';
+		$subTitle .= '<br /><span id="list_last_update" class="smaller">' . sprintf(_('(last update on: %s)'), date(_('m/d/Y'), strtotime($list->lastUpdate))) . '</span>';
 	}
 	$disp->header($listTitle, $subTitle);
 	$disp->assign('list', $list);

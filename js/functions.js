@@ -6,8 +6,8 @@ function showGiftDetailsWindow(giftDetails)
 		if(giftDetails.isBought) {
 			$('#gift_details_buy').show();
 			$('#gift_details_buy_who').text(giftDetails.boughtByName);
-			if(giftDetails.boughtDate != null) {
-				$('#gift_details_buy_date').text(date(bwLng.dateFormat, strtotime(giftDetails.boughtDate)));
+			if(giftDetails.purchaseDate != null) {
+				$('#gift_details_buy_date').text(date(bwLng.dateFormat, strtotime(giftDetails.purchaseDate)));
 			}
 			if(typeof giftDetails.boughtComment !== 'undefined' && giftDetails.boughtComment != null && giftDetails.boughtComment.length > 0) {
 				$('#gift_details_buy_comment').show();

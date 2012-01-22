@@ -11,7 +11,7 @@ class BwGift
 	public $editsCount;
 	public $isBought;
 	public $isReceived;
-	public $boughtDate;
+	public $purchaseDate;
 	public $boughtBy;
 	public $boughtByName;
 	public $isSurprise;
@@ -220,7 +220,7 @@ class BwGift
 		$this->editsCount      = (int)$sqlResult['edits_count'];
 		$this->isBought        = (bool)$sqlResult['is_bought'];
 		$this->isReceived      = (bool)$sqlResult['is_received'];
-		$this->boughtDate      = $sqlResult['bought_date'];
+		$this->purchaseDate    = $sqlResult['purchase_date'];
 		$this->boughtBy        = null;
 		$this->boughtByName    = null;
 		$this->purchaseComment = null;
@@ -243,7 +243,7 @@ class BwGift
 	public function filterContent()
 	{
 		$this->isBought        = false;
-		$this->boughtDate      = null;
+		$this->purchaseDate    = null;
 		$this->boughtBy        = null;
 		$this->boughtByName    = null;
 		$this->purchaseComment = null;
@@ -549,7 +549,7 @@ class BwGift
 			'queryType' => 'UPDATE',
 			'queryFields' => array(
 				'is_bought' => ':is_bought',
-				'bought_date' => ':bought_date',
+				'purchase_date' => ':purchase_date',
 				'bought_by' => ':bought_by',
 				'purchase_comment' => ':purchase_comment'
 			),
@@ -566,7 +566,7 @@ class BwGift
 					'data_type' => PDO::PARAM_INT
 				),
 				array(
-					'parameter' => ':bought_date',
+					'parameter' => ':purchase_date',
 					'variable' => date('Y-m-d'),
 					'data_type' => PDO::PARAM_STR
 				),

@@ -2,7 +2,7 @@
 /**
  * Display management class
  */
-require_once($GLOBALS['bwVendorDir'] . '/smarty/Smarty.class.php');
+require_once($GLOBALS['bwVendorDir'] . DS . 'smarty' . DS . 'Smarty.class.php');
 
 class BwDisplay extends Smarty
 {
