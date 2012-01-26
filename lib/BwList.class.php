@@ -298,7 +298,7 @@ class BwList
 										$pdf->Cell($pdf->GetStringWidth($gift->name), 6, ucfirst($gift->name), 0, 0);
 										$pdf->SetTextColor(0, 0, 0);
 										$pdf->SetFont('DejaVu', 'I', 12);
-										$pdf->Cell(0, 6, sprintf(_('(bought by yourself on %s)'), date(_('d/m/y'), strtotime($gift->purchaseDate))), 0, 1);
+										$pdf->Cell(0, 6, sprintf(_('(bought by yourself on %s)'), date(_('m/d/y'), strtotime($gift->purchaseDate))), 0, 1);
 									} else {
 										$pdf->SetFont('DejaVu', 'BI', 12);
 										$pdf->SetTextColor(255, 0, 0);
@@ -308,7 +308,7 @@ class BwList
 											$pdf->Cell($pdf->GetStringWidth($gift->name), 6, ucfirst($gift->name), 0, 0);
 										$pdf->SetTextColor(0, 0, 0);
 										$pdf->SetFont('DejaVu', 'I', 12);
-										$pdf->Cell(0, 6, sprintf(_('(bought by %s on %s)'), $gift->boughtByName, date(_('d/m/y'), strtotime($gift->purchaseDate))), 0, 1);
+										$pdf->Cell(0, 6, sprintf(_('(bought by %s on %s)'), $gift->boughtByName, date(_('m/d/y'), strtotime($gift->purchaseDate))), 0, 1);
 									}
 								} else {
 									$pdf->SetFont('DejaVu','',12);
