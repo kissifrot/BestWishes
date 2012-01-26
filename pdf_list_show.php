@@ -27,7 +27,6 @@ if(BwUser::checkSession()) {
 	$user = null;
 	$publicLists = BwConfig::get('public_lists', 'true');
 	// Stop if not public
-	// TODO: Tweak this
 	if(!boolVal($publicLists)) {
 		echo _('You must be logged in to view this list');
 		exit;

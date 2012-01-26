@@ -131,7 +131,7 @@ class BwMailer
 				$variables['__USER_NAME__'] = $anUser->name;
 
 				// Prepare the mail data
-				$mailSubject = sprintf(_('Addition of a surprise gift to the list %s'), $addingList->name)
+				$mailSubject = sprintf(_('Addition of a surprise gift to the list %s'), $addingList->name);
 				$mailHtmlContent = $bwMailer->populateTemplate($variables);
 				$mailTextContent = strip_tags($mailHtmlContent);
 
@@ -139,7 +139,7 @@ class BwMailer
 				->setSubject($mailSubject)
 				->setFrom($bwMailer->mailFrom)
 				->setTo($anUser->email)
-				->setBody($mailHtmlContent, 'text/html');
+				->setBody($mailHtmlContent, 'text/html')
 				->addPart($mailTextContent, 'text/plain');
 			}
 		}
@@ -186,7 +186,7 @@ class BwMailer
 				$variables['__USER_NAME__'] = $anUser->name;
 
 				// Prepare the mail data
-				$mailSubject = sprintf(_('Addition of a gift to the list %s'), $addingList->name)
+				$mailSubject = sprintf(_('Addition of a gift to the list %s'), $addingList->name);
 				$mailHtmlContent = $bwMailer->populateTemplate($variables);
 				$mailTextContent = strip_tags($mailHtmlContent);
 
@@ -194,7 +194,7 @@ class BwMailer
 				->setSubject($mailSubject)
 				->setFrom($bwMailer->mailFrom)
 				->setTo($anUser->email)
-				->setBody($mailHtmlContent, 'text/html');
+				->setBody($mailHtmlContent, 'text/html')
 				->addPart($mailTextContent, 'text/plain');
 			}
 		}
@@ -252,7 +252,7 @@ class BwMailer
 				if($anUser->getId() != $buyingUser->getId()) {
 					$variables['__USER_NAME__'] = $anUser->name;
 					// Prepare the mail data
-					$mailSubject = sprintf(_('Purchase of a gift to the list %s'), $addingList->name)
+					$mailSubject = sprintf(_('Purchase of a gift to the list %s'), $addingList->name);
 					$mailHtmlContent = $bwMailer->populateTemplate($variables);
 					$mailTextContent = strip_tags($mailHtmlContent);
 
@@ -260,7 +260,7 @@ class BwMailer
 					->setSubject($mailSubject)
 					->setFrom($bwMailer->mailFrom)
 					->setTo($anUser->email)
-					->setBody($mailHtmlContent, 'text/html');
+					->setBody($mailHtmlContent, 'text/html')
 					->addPart($mailTextContent, 'text/plain');
 				}
 			}
