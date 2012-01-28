@@ -531,6 +531,54 @@ class BwGift
 	/**
 	 *
 	 */
+	public function deleteByCategoryId($listId = null, $catId = null) {
+		$resultValue = 99;
+		if(empty($listId) || empty($catId)) {
+			return $resultValue;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift',
+			'queryType' => 'DELETE',
+			'queryFields' => '',
+			'queryCondition' => array(
+				'gift_list_id = :gift_list_id',
+				'category_id = :category_id'
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':category_id',
+					'variable' => $catId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':gift_list_id',
+					'variable' => $listId,
+					'data_type' => PDO::PARAM_INT
+				)
+			),
+			
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('category_all_list_' . $listId);
+				BwCache::delete('category_' . $catId);
+				BwCache::delete('gift_all_list_' . $listId);
+				BwCache::delete('gift_all_cat_' . $catId);
+				$resultValue = 0;
+			} else {
+				$resultValue = 1;
+			}
+		}
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
 	public function markAsBought($listId = null, $userId = null, $purchaseComment = '') {
 		$resultValue = 99;
 		if(empty($listId) || empty($userId)) {

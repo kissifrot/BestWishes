@@ -233,7 +233,7 @@ class BwDatabase
 			return false;
 
 		try {
-			$this->currentStatement->execute();
+			$execResult = $this->currentStatement->execute();
 			if($this->debugMode == BwDebug::LOG_ALL) {
 				BwDebug::storeQuery($this->currentStatement->queryString);
 			} else {
@@ -241,10 +241,13 @@ class BwDatabase
 					BwDebug::incrementQueriesCount();
 				}
 			}
-			return true;
-		} 
+			return $execResult;
+		}
 		catch(PDOException $e)
 		{
+			if($this->debugMode == BwDebug::LOG_ALL) {
+				BwDebug::storeQuery($this->currentStatement->queryString);
+			}
 			if($this->debugMode > 0) {
 				BwDebug::storeError($e->getMessage());
 			}

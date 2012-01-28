@@ -23,7 +23,7 @@
 	{include file='gift_details.tpl'}
 </div>
 
-{* Gift purchase indocation form *}
+{* Gift purchase indication form *}
 {include file='form_purchase_gift.tpl'}
 
 <div id="cat_confirm_delete_dialog">

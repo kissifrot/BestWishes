@@ -8,12 +8,14 @@
 		
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/general.css" />
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/jquery-ui.css" />
-		<link rel="shortcut icon" href="favicon.ico" />
+		<link rel="shortcut icon" href="{$webDir}/favicon.ico" />
 
 		<script language="javascript" src="{$webDir}/js/jquery.js" type="text/javascript"></script>
 		<script language="javascript" src="{$webDir}/js/jquery-ui.js" type="text/javascript"></script>
 		<script language="javascript" src="{$webDir}/js/tools.js" type="text/javascript"></script>
-		<script language="javascript" src="{$webDir}/js/functions.js" type="text/javascript"></script>
+		<script language="javascript" src="{$webDir}/js/variables.js" type="text/javascript"></script>
+		<script language="javascript" src="{$webDir}/js/common_functions.js" type="text/javascript"></script>
+		<script language="javascript" src="{$webDir}/js/adm_functions.js" type="text/javascript"></script>
 	</head>
 
 	<body>

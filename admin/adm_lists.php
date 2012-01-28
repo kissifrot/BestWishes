@@ -21,6 +21,7 @@ if(!BwAdminUser::checkSession()) {
 $disp = new BwAdminDisplay(BwConfig::get('default_theme', 'default'));
 $disp->header(_('Lists magnagement'));
 $allUsers = BwUser::getAll();
+$disp->assignListStrings();
 $disp->assign('users', $allUsers);
 $disp->display('lists_mgmt.tpl');
 $disp->footer();

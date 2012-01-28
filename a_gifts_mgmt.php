@@ -49,7 +49,7 @@ switch($action) {
 				$statusMessages = array(
 					0 => sprintf(_('Category %s added'), $catName),
 					1 => sprintf(_('Could not add category %s'), $catName),
-					99 => _('Internal error'),
+					99 => _('Internal error')
 				);
 				$statusCode = 99;
 				$status = 'error';
@@ -75,7 +75,7 @@ switch($action) {
 				$statusMessages = array(
 					0 => sprintf(_('Gift %s added'), $giftName),
 					1 => sprintf(_('A gift named %s already exists and is indicated as bought, do you want to add it anyway?'), $giftName),
-					99 => _('Internal error'),
+					99 => _('Internal error')
 				);
 				$statusCode = 99;
 				$status = 'error';
@@ -117,7 +117,7 @@ switch($action) {
 				$statusMessages = array(
 					0 => sprintf(_('Surprise gift %s added'), $giftName),
 					1 => sprintf(_('A gift named %s already exists and is indicated as bought, do you want to add it anyway?'), $giftName),
-					99 => _('Internal error'),
+					99 => _('Internal error')
 				);
 				$statusCode = 99;
 				$status = 'error';
@@ -178,7 +178,7 @@ switch($action) {
 						1 => _('Could not edit this gift name'),
 						2 => _('Could not edit this gift name: you already used your max edits'),
 						3 => _('Could not edit this gift name: there are too many differences between the old name and the new one'),
-						99 => _('Internal error'),
+						99 => _('Internal error')
 					);
 					$statusCode = 99;
 					$status = 'error';
@@ -218,7 +218,7 @@ switch($action) {
 					$statusMessages = array(
 						0 => _('Category deleted'),
 						1 => _('Could not delete category'),
-						99 => _('Internal error'),
+						99 => _('Internal error')
 					);
 					$statusCode = 99;
 					$status = 'error';
@@ -248,7 +248,7 @@ switch($action) {
 					$statusMessages = array(
 						0 => _('Gift deleted'),
 						1 => _('Could not delete gift'),
-						99 => _('Internal error'),
+						99 => _('Internal error')
 					);
 					$statusCode = 99;
 					$status = 'error';
@@ -289,7 +289,7 @@ switch($action) {
 			0 => _('Gift marked as bought'),
 			1 => _('Could not mark the gift as bought'),
 			2 => _('Gift is already marked as bought'),
-			99 => _('Internal error'),
+			99 => _('Internal error')
 		);
 		$statusCode = 99;
 		$status = 'error';
@@ -332,7 +332,7 @@ switch($action) {
 			0 => _('Gift marked as received'),
 			1 => _('Could not mark the gift as received'),
 			2 => _('Gift is already marked as received'),
-			99 => _('Internal error'),
+			99 => _('Internal error')
 		);
 		$statusCode = 99;
 		$status = 'error';

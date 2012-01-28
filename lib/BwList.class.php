@@ -157,11 +157,23 @@ class BwList
 
 	public function save($fields = array())
 	{
+		$resultValue = 99;
 		if(empty($fields))
-			return false;
+			return $resultValue;
 
 		$editableFields = array('name', 'slug', 'birthdate');
 
+		// Special case for the name
+		if(isset($fields['name']) && !empty($fields['name'])) {
+			// Check for already existing list
+			if($this->checkExisting('name', $fields['name'])) {
+				$resultValue = 1;
+				return $resultValue;
+			}
+			$fields['slug'] = BwInflector::slug($fields['name']);
+		}
+
+		// Associate the data given to SQL params
 		foreach($fields as $fieldName => $fieldValue) {
 			if(in_array(strtolower($fieldName), $editableFields)) {
 				$dataFields[] = array(
@@ -190,21 +202,25 @@ class BwList
 
 			$db = BwDatabase::getInstance();
 			if($db->prepareQuery($queryParams)) {
-				return $db->exec();
-			} else {
-				return false;
+				if($db->exec()) {
+					$resultValue = 0;
+					$this->deleteFromCache();
+				} else {
+					$resultValue = 1;
+				}
 			}
 		}
+		return $resultValue;
 	}
 
-	public function checkExisting($name, $value) {
+	public function checkExisting($nameField, $nameValue) {
 		$queryParams = array(
 			'tableName' => 'gift_list',
 			'queryType' => 'SELECT',
 			'queryFields' => 'COUNT(id) as count_existing',
 			'queryCondition' => array(
 				'id != :id',
-				$name . ' = :' . $name
+				$nameField . ' = :' . $nameField
 			),
 			'queryValues' => array(
 				array(
@@ -213,8 +229,8 @@ class BwList
 					'data_type' => PDO::PARAM_INT
 				),
 				array(
-					'parameter' => ':' . $name,
-					'variable' => $value,
+					'parameter' => ':' . $nameField,
+					'variable' => $nameValue,
 					'data_type' => PDO::PARAM_STR
 				)
 			),
@@ -266,6 +282,87 @@ class BwList
 	{
 		$list = new self();
 		return $list->loadAll();
+	}
+
+	/**
+	 *
+	 */
+	public function delete() {
+		$resultValue = 99;
+		
+		// First delete the categories (and their gifts)
+		$resultValue = $this->deleteAllCategories();
+		if($resultValue != 0) {
+			return $resultValue;
+		}
+		
+		// The delete the user params delete the categories
+		$resultValue = $this->deleteAllParams();
+		if($resultValue != 0) {
+			return $resultValue;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list',
+			'queryType' => 'DELETE',
+			'queryFields' => '',
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				)
+			),
+			
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// TODO: Correctly empty cache
+				BwCache::delete('list_all');
+				BwCache::delete('category_all_list_' . $this->id);
+				BwCache::delete('gift_all_list_' . $this->id);
+				$resultValue = 0;
+			} else {
+				$resultValue = 1;
+			}
+		}
+		return $resultValue;
+	}
+
+	private function deleteAllCategories() {
+		$resultValue = 99;
+
+		if($this->categoriesCount = 0) {
+			$resultValue = 0;
+			return $resultValue;
+		}
+
+		// Delete each of the categories
+		foreach($this->categories as $aCategory) {
+			$resultValue = $aCategory->delete($this->id);
+			if($resultValue != 0) {
+				return $resultValue;
+			}
+		}
+		return $resultValue;
+	}
+
+	private function deleteAllParams() {
+		$resultValue = 99;
+
+		if($this->categoriesCount = 0) {
+			$resultValue = 0;
+			return $resultValue;
+		}
+
+		// Delete all the corresponding parameters
+		$userParams = new BwUserParams();
+		$resultValue = $userParams->deleteByListId($this->id, $this->ownerId);
+
+		return $resultValue;
 	}
 
 	/**

@@ -1,1 +1,1 @@
-{ldelim}"status": "{$status}", "statusMessage": "{$statusMessage}"{rdelim}
+{ldelim}"status": "{$status}", "message": "{$message|escape}"{rdelim}

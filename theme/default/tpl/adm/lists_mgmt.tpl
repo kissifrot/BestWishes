@@ -23,6 +23,7 @@
 </div>
 
 <script type="text/javascript">
+{include file='list_translation_strings.tpl'}
 $(document).ready(function() {
 	var tabsList = $( '#list-tabs' ).tabs({
 		ajaxOptions: {

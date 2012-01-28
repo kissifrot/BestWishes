@@ -153,6 +153,9 @@ class BwCategory
 		}
 	}
 
+	/**
+	 *
+	*/
 	public static function add($listId = null, $name = '') {
 		$resultValue = 99;
 		if(empty($listId) || empty($name)) {
@@ -162,7 +165,7 @@ class BwCategory
 		if(self::checkExisting($listId, $name)) {
 			return $resultValue;
 		}
-		
+
 		$db = BwDatabase::getInstance();
 		$queryParams = array(
 			'tableName' => 'category',
@@ -208,6 +211,12 @@ class BwCategory
 			return $resultValue;
 		}
 
+		// Delete all the gifts first
+		$resultValue = $this->deleteAllGifts($listId);
+		if($resultValue != 0) {
+			return $resultValue;
+		}
+
 		$db = BwDatabase::getInstance();
 		$queryParams = array(
 			'tableName' => 'category',
@@ -237,7 +246,6 @@ class BwCategory
 				// Empty cache
 				BwCache::delete('category_all_list_' . $listId);
 				BwCache::delete('category_' . $this->id);
-				// TODO: delete the gifts too
 				BwCache::delete('gift_all_list_' . $listId);
 				$resultValue = 0;
 			} else {
@@ -247,6 +255,24 @@ class BwCategory
 		return $resultValue;
 	}
 
+	/**
+	 *
+	 */
+	private function deleteAllGifts($listId = null) {
+		$resultValue = 99;
+		if(empty($listId)) {
+			return $resultValue;
+		}
+
+		$gift = new BwGift();
+		// Delete all the gifts for this category
+		$resultValue = $gift->deleteByCategoryId($listId, $this->id);
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
 	public static function checkExisting($listId = null, $name = '') {
 
 		if(empty($listId) || empty($name))
