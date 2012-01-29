@@ -154,6 +154,95 @@ class BwUserParams
 		return $resultValue;
 	}
 
+	/**
+	 *
+	 */
+	public function addByListId($listId = null, $ownerId = null)
+	{
+		$resultValue = 99;
+		if(empty($listId) || empty($ownerId)) {
+			return $resultValue;
+		}
+		
+		$allUsers = BwUser::getAll();
+		foreach($allUsers as $anUser) {
+			if($anUser->getId() == $ownerId) {
+				$canEdit = 1;
+				$canMark = 0;
+			} else {
+				$canEdit = 0;
+				$canMark = 1;
+			}
+			$db = BwDatabase::getInstance();
+			$queryParams = array(
+				'tableName' => 'list_user_params',
+				'queryType' => 'INSERT',
+				'queryFields' => array(
+					'gift_list_id' => ':gift_list_id',
+					'gift_list_user_id' => ':gift_list_user_id',
+					'can_view' => ':can_view',
+					'can_edit' => ':can_edit',
+					'can_mark' => ':can_mark',
+					'alert_addition' => ':alert_addition',
+					'alert_purchase' => ':alert_purchase',
+				),
+				'queryValues' => array(
+					array(
+						'parameter' => ':gift_list_id',
+						'variable' => $listId,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':gift_list_user_id',
+						'variable' => $anUser->getId(),
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':can_view',
+						'variable' => 1,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':can_edit',
+						'variable' => $canEdit,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':can_mark',
+						'variable' => $canMark,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':alert_addition',
+						'variable' => 0,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':alert_purchase',
+						'variable' => 0,
+						'data_type' => PDO::PARAM_INT
+					)
+				)
+			);
+			if($db->prepareQuery($queryParams)) {
+				$result =  $db->exec();
+				if($result) {
+					// All OK
+					$resultValue = 0;
+					BwCache::delete('user_param_' . $anUser->getId());
+				} else {
+					return $resultValue;
+				}
+			} else {
+				return $resultValue;
+			}
+		}
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
 	public function updateRight($userId = null, $listId = null, $rightType = '', $enabled = false)
 	{
 		$resultCode = 99;

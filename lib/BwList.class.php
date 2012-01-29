@@ -213,6 +213,88 @@ class BwList
 		return $resultValue;
 	}
 
+	/**
+	 *
+	 */
+	public static function add($name, $ownerId, $birthdate) {
+		$resultValue = 99;
+		if(empty($name) || empty($ownerId) || empty($birthdate))
+			return $resultValue;
+		
+		// Check for correct birthdate
+		$timeBirthdate = strtotime($birthdate);
+		if($timeBirthdate === false || $timeBirthdate > strtotime('-1 month', strtotime(date('Y-m-d')))) {
+			$resultValue = 1;
+			return $resultValue;
+		}
+
+		// Check for already existing list
+		if(self::checkAnyExisting('name', $name)) {
+			$resultValue = 2;
+			return $resultValue;
+		}
+		// Now generate the slug
+		$slug = BwInflector::slug($name);
+		$countStart = 1;
+		if(self::checkAnyExisting('slug', $slug)) {
+			// That slug already exists, we'll try another
+			while(self::checkAnyExisting('slug', $slug . $countStart)) {
+				$countStart++;
+			}
+			$slug = $slug . $countStart;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list',
+			'queryType' => 'INSERT',
+			'queryFields' => array(
+				'user_id' => ':user_id',
+				'name' => ':name',
+				'slug' => ':slug',
+				'birthdate' => ':birthdate',
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':user_id',
+					'variable' => $ownerId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':name',
+					'variable' => $name,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':slug',
+					'variable' => $slug,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':birthdate',
+					'variable' => $birthdate,
+					'data_type' => PDO::PARAM_STR
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('list_all');
+				// All OK
+				$newListId = intval($db->lastInsertId());
+				// TODO: Add the necessary rights to all users
+				$userParams = new BwUserParams();
+				$resultValue = $userParams->addByListId($newListId, $ownerId);
+			}
+		}
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
 	public function checkExisting($nameField, $nameValue) {
 		$queryParams = array(
 			'tableName' => 'gift_list',
@@ -255,11 +337,48 @@ class BwList
 	/**
 	 *
 	 */
+	public static function checkAnyExisting($nameField, $nameValue) {
+		$queryParams = array(
+			'tableName' => 'gift_list',
+			'queryType' => 'SELECT',
+			'queryFields' => 'COUNT(id) as count_existing',
+			'queryCondition' => $nameField . ' = :' . $nameField,
+			'queryValues' => array(
+				array(
+					'parameter' => ':' . $nameField,
+					'variable' => $nameValue,
+					'data_type' => PDO::PARAM_STR
+				)
+			),
+			'queryLimit' => 1
+		);
+		$db = BwDatabase::getInstance();
+		if($db->prepareQuery($queryParams)) {
+			$result = $db->fetch();
+			$db->closeQuery();
+			if($result === false)
+				return $result;
+
+			if(empty($result)) {
+				return false;
+			}
+			return (intval($result['count_existing']) != 0);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 *
+	 */
 	public function deleteFromCache()
 	{
 		return (BwCache::delete('list_all') && BwCache::delete('list_' . $this->id));
 	}
 
+	/**
+	 *
+	 */
 	private function storeAttributes($sqlResult)
 	{
 		$this->id         = (int)$sqlResult['id'];
@@ -332,6 +451,9 @@ class BwList
 		return $resultValue;
 	}
 
+	/**
+	 *
+	 */
 	private function deleteAllCategories() {
 		$resultValue = 99;
 
@@ -350,6 +472,9 @@ class BwList
 		return $resultValue;
 	}
 
+	/**
+	 *
+	 */
 	private function deleteAllParams() {
 		$resultValue = 99;
 
@@ -432,6 +557,8 @@ class BwList
 	public function filterContent($isConnected = false, $connectedUser = null)
 	{
 		if(!$isConnected) {
+			if(empty($this->categories))
+				return true;
 			// Standard view, delete the surprise gifts, received gifts and the empty categories
 			foreach($this->categories as $category) {
 				if($category->giftsCount > 0) {
@@ -442,25 +569,29 @@ class BwList
 					}
 				}
 			}
-		} else {
-			// Connected view
-			if(!empty($connectedUser)) {
-				if($connectedUser->getId() == $this->ownerId) {
-					// The user is viewing his/her list, delete the surprise and received gifts
-					foreach($this->categories as $category) {
-						if($category->giftsCount > 0) {
-							foreach($category->gifts as $index => $gift) {
-								if($gift->isBought) {
-									$category->gifts[$index]->filterContent();
-								}
-								if($gift->isSurprise) {
-									unset($category->gifts[$index]);
-								}
+			return true;
+		}
+
+		// Connected view
+		if(!empty($connectedUser)) {
+			if($connectedUser->getId() == $this->ownerId) {
+				if(empty($this->categories))
+					return true;
+				// The user is viewing his/her list, delete the surprise and received gifts
+				foreach($this->categories as $category) {
+					if($category->giftsCount > 0) {
+						foreach($category->gifts as $index => $gift) {
+							if($gift->isBought) {
+								$category->gifts[$index]->filterContent();
+							}
+							if($gift->isSurprise) {
+								unset($category->gifts[$index]);
 							}
 						}
 					}
 				}
 			}
+			return true;
 		}
 	}
 

@@ -1,4 +1,4 @@
-{foreach from=$list->getCategories() item=category}
+{foreach $list->getCategories() as $category}
 	{if $category->giftsCount > 0}
 			<div id="cat_{$category->getId()}" class="category_list_element">
 				{if $sessionOk && $user->canEditList($list->getId())}
@@ -49,5 +49,3 @@
 {foreachelse}
 	<i>{$lngInfoEmptyList}</i>
 {/foreach}
-{if $sessionOk}
-{/if}

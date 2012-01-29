@@ -19,9 +19,13 @@ if(!BwAdminUser::checkSession()) {
 }
 
 $disp = new BwAdminDisplay(BwConfig::get('default_theme', 'default'));
-$disp->header(_('Lists magnagement'));
-$allUsers = BwUser::getAll();
+$disp->header(_('Lists management'));
 $disp->assignListStrings();
-$disp->assign('users', $allUsers);
+$allUsers = BwUser::getAll();
+$usersList = array();
+foreach($allUsers as $anUser) {
+	$usersList[$anUser->getId()] = $anUser->name;
+}
+$disp->assign('users', $usersList);
 $disp->display('lists_mgmt.tpl');
 $disp->footer();

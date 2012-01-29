@@ -6,14 +6,14 @@
 	</ul>
 	<div id="tab-add-list">
 		<p>Add a new list</p>
-		<form method="POST">
+		<form method="POST" onsubmit="addList(); return false">
 			<label>List name:</label>
-			<input type="text" name="list_name" /><br />
+			<input type="text" name="list_name" id="add_list_name" /><br />
 			<label>Related user:</label>
-			{html_options name=list_user options=$users}
+			{html_options name=list_user options=$users id=add_list_user}
 			<!--<select name="list_user"></select>--><br />
 			<label>Birthdate:</label>
-			<input id="birthdate_picker" type="text" name="birthdate"><br />
+			<input id="add_list_bday" type="text" name="birthdate"><br />
 			<input type="submit" value="Add" />
 		</form>
 	</div>
@@ -28,12 +28,11 @@ $(document).ready(function() {
 	var tabsList = $( '#list-tabs' ).tabs({
 		ajaxOptions: {
 			error: function( xhr, status, index, anchor ) {
-				$( anchor.hash ).html(
-					'Could not load this tab' );
+				$( anchor.hash ).html( bwLng.couldNotLoadTab );
 			}
 		}
 	});
 	$('input[type="submit"]').button();
-	$('#birthdate_picker').datepicker({ changeYear: true, yearRange: '-120:+0', dateFormat: 'yy-mm-dd', minDate: '-120y', maxDate: '-1m'});
+	$('#add_list_bday').datepicker({ changeYear: true, yearRange: '-120:+0', dateFormat: 'yy-mm-dd', minDate: '-120y', maxDate: '-1m'});
 });
 </script>

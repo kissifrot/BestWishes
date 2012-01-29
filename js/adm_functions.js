@@ -55,3 +55,33 @@ function deleteList(id) {
 		}
 	});
 }
+
+function addList() {
+	var lName = $('#add_list_name').val();
+	var lBday = $('#add_list_bday').val();
+	var lUser = $('#add_list_user').val();
+	if(lName.length < 2 || lBday.length != 10 || lUser.length < 1) {
+		showFlashMessage('error', bwLng.errorFormFields);
+	} else {
+		$.ajax({
+			url: 'a_adm_lists_mgmt.php?action=add',
+			type: 'POST',
+			dataType: 'json',
+			data: { listName: lName, listUser: lUser, listBirthdate: lBday },
+			error: function(jqXHR, textStatus, errorThrown) {
+				showFlashMessage('error', 'An error occured: ' + errorThrown);
+			},
+			success: function(returnedData, textStatus, jqXHR) {
+				if(returnedData.status == 'error') {
+					showFlashMessage('error', returnedData.message);
+				} else {
+					// All OK
+					$('#add_list_name').val('');
+					$('#add_list_bday').val('');
+					showFlashMessage('info', returnedData.message);
+				}
+			}
+		});
+	}
+
+}

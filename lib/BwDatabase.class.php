@@ -14,6 +14,7 @@ class BwDatabase
 	protected static $instance;
 
 	protected $currentStatement = null;
+	protected $currentQueryType = null;
 
 	protected $debugMode;
 
@@ -95,6 +96,7 @@ class BwDatabase
 		
 		switch($params['queryType']) {
 			case 'SELECT':
+				$this->currentQueryType = $params['queryType'];
 				$query = 'SELECT ';
 				if(is_array($params['queryFields'])) {
 					$query .= implode(', ', $params['queryFields']);
@@ -123,6 +125,7 @@ class BwDatabase
 				}
 			break;
 			case 'UPDATE':
+				$this->currentQueryType = $params['queryType'];
 				if(empty($params['queryValues']) || empty($params['queryFields'])) {
 					return false;
 				}
@@ -145,6 +148,7 @@ class BwDatabase
 				}
 			break;
 			case 'INSERT':
+				$this->currentQueryType = $params['queryType'];
 				if(empty($params['queryValues']) || empty($params['queryFields'])) {
 					return false;
 				}
@@ -155,8 +159,13 @@ class BwDatabase
 				$query .= ') VALUES ( ';
 					$query .= implode(', ', array_values($params['queryFields']));
 				$query .= ')';
+				// Special case for PostgreSQL to get the inserted id
+				if($this->dbType == 'postgresql') {
+					$query .= ' RETURNING id';
+				}
 			break;
 			case 'DELETE':
+				$this->currentQueryType = $params['queryType'];
 				if(empty($params['queryValues'])) {
 					return false;
 				}
@@ -303,6 +312,16 @@ class BwDatabase
 	public function exec()
 	{
 		return $this->executeStatement();
+	}
+
+	public function lastInsertId()
+	{
+		if($this->dbType != 'postgresql') {
+			return $this->db->lastInsertId();
+		} else {
+			$result = $this->fetch();
+			return $result['id'];
+		}
 	}
 
 	public function disconnect()

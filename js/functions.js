@@ -492,7 +492,8 @@ function reloadCatsList(listId) {
 				{
 					giftCat.append('<option value="' + returnedData[i].id + '">' + returnedData[i].name + '</option>');
 				}
-				giftCat.val(returnedData[0].id);
+				if(returnedData.length > 0)
+					giftCat.val(returnedData[0].id);
 			}
 		}
 	});

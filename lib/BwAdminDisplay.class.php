@@ -24,5 +24,6 @@ class BwAdminDisplay extends BwDisplay
 		$this->assign('lngDeleteIt', _('Delete it'));
 		$this->assign('lngCancel', _('Cancel'));
 		$this->assign('lngConfirmation', _('Confirmation'));
+		$this->assign('lngErrorFormFields', _('You must correctly fill all the form fields'));
 	}
 }

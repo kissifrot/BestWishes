@@ -74,8 +74,30 @@ switch($action) {
 		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 	break;
 	case 'add':
-		$disp->assign('status', 'error');
-		$disp->assign('statusMessage', _('Could not create the list'));
-		$disp->display('json_message.tpl');
+		$statusMessages = array(
+			0 => _('List created succesfully'),
+			1 => _('The list birthdate is incorrect'),
+			2 => _('A list of the same name already exist'),
+			99 => _('Internal error')
+		);
+		$statusCode = 99;
+		$status = 'error';
+		if(!isset($_POST['listBirthdate']) || empty($_POST['listBirthdate']) || !isset($_POST['listName']) || empty($_POST['listName']) || !isset($_POST['listUser']) || empty($_POST['listUser'])) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		$listUser = intval($_POST['listUser']);
+		$listBirthdate = trim($_POST['listBirthdate']);
+		$listName = trim($_POST['listName']);
+		$user = new BwUser($listUser);
+		if(!$user->load()) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		$statusCode = BwList::add($listName, $listUser, $listBirthdate);
+		if($statusCode == 0) {
+			$status = 'success';
+		}
+		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 	break;
 }

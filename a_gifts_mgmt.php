@@ -45,10 +45,10 @@ switch($action) {
 					exit;
 				}
 				$catName = trim($_POST['name']);
-				$result = BwCategory::add($listId, $catName);
 				$statusMessages = array(
-					0 => sprintf(_('Category %s added'), $catName),
-					1 => sprintf(_('Could not add category %s'), $catName),
+					0 => sprintf(_('Category "%s" added'), $catName),
+					1 => sprintf(_('Could not add category "%s"'), $catName),
+					2 => sprintf(_('Could not add category "%s": it already exists'), $catName),
 					99 => _('Internal error')
 				);
 				$statusCode = 99;
@@ -73,8 +73,8 @@ switch($action) {
 				$force = (bool)($_POST['force']);
 				$category = new BwCategory($catId);
 				$statusMessages = array(
-					0 => sprintf(_('Gift %s added'), $giftName),
-					1 => sprintf(_('A gift named %s already exists and is indicated as bought, do you want to add it anyway?'), $giftName),
+					0 => sprintf(_('Gift "%s" added'), $giftName),
+					1 => sprintf(_('A gift named "%s" already exists and is indicated as bought, do you want to add it anyway?'), $giftName),
 					99 => _('Internal error')
 				);
 				$statusCode = 99;

@@ -125,7 +125,7 @@ class BwCategory
 					return $results;
 
 				if(empty($results)) {
-					return false;
+					return array();
 				}
 				
 				$allCategories = array();
@@ -163,6 +163,7 @@ class BwCategory
 		}
 
 		if(self::checkExisting($listId, $name)) {
+			$resultValue = 2;
 			return $resultValue;
 		}
 
