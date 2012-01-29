@@ -275,7 +275,8 @@ class BwList
 					'variable' => $birthdate,
 					'data_type' => PDO::PARAM_STR
 				)
-			)
+			),
+			'queryAutoField' => 'id'
 		);
 		if($db->prepareQuery($queryParams)) {
 			$result =  $db->exec();

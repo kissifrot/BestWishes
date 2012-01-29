@@ -31,11 +31,11 @@ class BwDatabase
 		// Import params from config file
 		global $confDBType, $confDBServer, $confDBName, $confDBPrefix, $confDBUser, $confDBPasswd, $confDBPort;
 
-		$this->dbType     = $confDBType;
+		$this->dbType     = (!empty($confDBType)) ? strtolower($confDBType) : '';
 		$this->dbServer   = $confDBServer;
 		$this->dbUser     = $confDBUser;
 		$this->dbPassword = $confDBPasswd;
-		$this->dbPort     = $confDBPort;
+		$this->dbPort     = (!empty($confDBPort)) ? intval($confDBPort) : '';
 		$this->dbName     = $confDBName;
 		$this->dbPrefix   = $confDBPrefix;
 
@@ -88,7 +88,8 @@ class BwDatabase
 			'queryCondition' => '',
 			'queryValues' => '',
 			'queryOrderBy' => '',
-			'queryLimit' => ''
+			'queryLimit' => '',
+			'queryAutoField' => ''
 		);
 		$params = array_merge($defaults, $queryParams);
 		if(!isset($params['tableName']))
@@ -134,6 +135,7 @@ class BwDatabase
 					foreach($params['queryFields'] as $queryField => $queryVariable) {
 						$query .= $queryField . ' = ' . $queryVariable . ', ';
 					}
+					// Remove the last " ," from the query string
 					$query = substr($query, 0, - 2);
 				} else {
 					$query .= '*';
@@ -160,8 +162,8 @@ class BwDatabase
 					$query .= implode(', ', array_values($params['queryFields']));
 				$query .= ')';
 				// Special case for PostgreSQL to get the inserted id
-				if($this->dbType == 'postgresql') {
-					$query .= ' RETURNING id';
+				if($this->dbType === 'postgresql' && !empty($params['queryAutoField'])) {
+					$query .= ' RETURNING ' . $params['queryAutoField'];
 				}
 			break;
 			case 'DELETE':
