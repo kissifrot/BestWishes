@@ -20,6 +20,15 @@ class BwUser
 		}
 	}
 
+	public static function getInstance()
+	{
+		if (!isset(self::$instance))
+		{
+			self::$instance = new self($_SESSION['user_id']);
+		}
+		return self::$instance;
+	}
+
 	public function __toString()
 	{
 		return $this->name;
@@ -30,13 +39,9 @@ class BwUser
 		return $this->id;
 	}
 
-	public static function getInstance()
+	public function getTheme()
 	{
-		if (!isset(self::$instance))
-		{
-			self::$instance = new self($_SESSION['user_id']);
-		}
-		return self::$instance;
+		return $this->theme;
 	}
 
 	public function login($username = '', $password = '')
@@ -357,6 +362,139 @@ class BwUser
 		}
 	}
 
+	/**
+	 *
+	 */
+	public static function add($username = '', $pwd = '', $name = '', $email = '') {
+		$resultValue = 99;
+		if(empty($username) || empty($pwd))
+			return $resultValue;
+
+		// Check for correct email
+		if(!empty($email)) {
+			if(filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+				$resultValue = 1;
+				return $resultValue;
+			}
+		}
+
+		// Get the default theme
+		$allThemes = BwTheme::getAll();
+		$themeId = null;
+		foreach($allThemes as $aTheme) {
+			if($aTheme->isDefault) {
+				$themeId = $aTheme->getId();
+				break;
+			}
+		}
+		if(empty($themeId)) {
+			$themeId = $allThemes[0]->getId();
+		}
+
+		// Check for already existing username
+		if(self::checkAnyExisting('username', $username)) {
+			$resultValue = 2;
+			return $resultValue;
+		}
+
+		// Now generate the salt and password
+		$salt = sha1(uniqid() . mt_rand(0, 50));
+		$hashedPwd = sha1($salt . $pwd . '/' . $salt);
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list_user',
+			'queryType' => 'INSERT',
+			'queryFields' => array(
+				'theme_id' => ':theme_id',
+				'name' => ':name',
+				'username' => ':username',
+				'password' => ':password',
+				'salt' => ':salt',
+				'email' => ':email'
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':theme_id',
+					'variable' => $themeId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':name',
+					'variable' => $name,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':username',
+					'variable' => $username,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':password',
+					'variable' => $hashedPwd,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':salt',
+					'variable' => $salt,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':email',
+					'variable' => $email,
+					'data_type' => PDO::PARAM_STR
+				)
+			),
+			'queryAutoField' => 'id'
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result = $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('user_all');
+				// All OK
+				$newUserId = intval($db->lastInsertId());
+				//  Add the necessary rights to all users
+				$resultValue = BwUserParams::addByUserId($newUserId);
+			}
+		}
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
+	public static function checkAnyExisting($nameField, $nameValue) {
+		$queryParams = array(
+			'tableName' => 'gift_list_user',
+			'queryType' => 'SELECT',
+			'queryFields' => 'COUNT(id) as count_existing',
+			'queryCondition' => $nameField . ' = :' . $nameField,
+			'queryValues' => array(
+				array(
+					'parameter' => ':' . $nameField,
+					'variable' => $nameValue,
+					'data_type' => PDO::PARAM_STR
+				)
+			),
+			'queryLimit' => 1
+		);
+		$db = BwDatabase::getInstance();
+		if($db->prepareQuery($queryParams)) {
+			$result = $db->fetch();
+			$db->closeQuery();
+			if($result === false)
+				return $result;
+
+			if(empty($result)) {
+				return false;
+			}
+			return (intval($result['count_existing']) != 0);
+		} else {
+			return false;
+		}
+	}
+
 	private function deleteSession()
 	{
 		$_SESSION['user_id']      = null;
@@ -364,11 +502,6 @@ class BwUser
 		$_SESSION['identif_serv'] = null;
 		$_SESSION['last_login']   = null;
 		unset($_SESSION['user_id'], $_SESSION['identif'], $_SESSION['identif_serv'], $_SESSION['last_login']);
-	}
-
-	public function getTheme()
-	{
-		return $this->theme;
 	}
 
 	/**

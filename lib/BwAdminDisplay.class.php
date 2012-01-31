@@ -26,4 +26,16 @@ class BwAdminDisplay extends BwDisplay
 		$this->assign('lngConfirmation', _('Confirmation'));
 		$this->assign('lngErrorFormFields', _('You must correctly fill all the form fields'));
 	}
+
+	/**
+	 * User translated strings
+	 */
+	public function assignUserStrings()
+	{
+		$this->assign('lngConfirmUserDeletion', _('Are you sure you want to delete this user?'));
+		$this->assign('lngDeleteIt', _('Delete it'));
+		$this->assign('lngCancel', _('Cancel'));
+		$this->assign('lngConfirmation', _('Confirmation'));
+		$this->assign('lngErrorFormFields', _('You must correctly fill all the form fields'));
+	}
 }

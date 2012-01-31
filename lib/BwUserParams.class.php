@@ -157,13 +157,13 @@ class BwUserParams
 	/**
 	 *
 	 */
-	public function addByListId($listId = null, $ownerId = null)
+	public static function addByListId($listId = null, $ownerId = null)
 	{
 		$resultValue = 99;
 		if(empty($listId) || empty($ownerId)) {
 			return $resultValue;
 		}
-		
+
 		$allUsers = BwUser::getAll();
 		foreach($allUsers as $anUser) {
 			if($anUser->getId() == $ownerId) {
@@ -230,6 +230,86 @@ class BwUserParams
 					// All OK
 					$resultValue = 0;
 					BwCache::delete('user_param_' . $anUser->getId());
+				} else {
+					return $resultValue;
+				}
+			} else {
+				return $resultValue;
+			}
+		}
+		return $resultValue;
+	}
+
+
+	/**
+	 *
+	 */
+	public static function addByUserId($userId = null)
+	{
+		$resultValue = 99;
+		if(empty($userId)) {
+			return $resultValue;
+		}
+
+		$allLists = BwList::getAll();
+		foreach($allLists as $aList) {
+			$db = BwDatabase::getInstance();
+			$queryParams = array(
+				'tableName' => 'list_user_params',
+				'queryType' => 'INSERT',
+				'queryFields' => array(
+					'gift_list_id' => ':gift_list_id',
+					'gift_list_user_id' => ':gift_list_user_id',
+					'can_view' => ':can_view',
+					'can_edit' => ':can_edit',
+					'can_mark' => ':can_mark',
+					'alert_addition' => ':alert_addition',
+					'alert_purchase' => ':alert_purchase',
+				),
+				'queryValues' => array(
+					array(
+						'parameter' => ':gift_list_id',
+						'variable' => $aList->getId(),
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':gift_list_user_id',
+						'variable' => $userId,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':can_view',
+						'variable' => 1,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':can_edit',
+						'variable' => 0,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':can_mark',
+						'variable' => 0,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':alert_addition',
+						'variable' => 0,
+						'data_type' => PDO::PARAM_INT
+					),
+					array(
+						'parameter' => ':alert_purchase',
+						'variable' => 0,
+						'data_type' => PDO::PARAM_INT
+					)
+				)
+			);
+			if($db->prepareQuery($queryParams)) {
+				$result =  $db->exec();
+				if($result) {
+					// All OK
+					$resultValue = 0;
+					BwCache::delete('user_param_' . $userId);
 				} else {
 					return $resultValue;
 				}

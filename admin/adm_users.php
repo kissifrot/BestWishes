@@ -14,7 +14,8 @@ if(!BwAdminUser::checkSession()) {
 }
 
 $disp = new BwAdminDisplay(BwConfig::get('default_theme', 'default'));
-$disp->header(_('Users magnagement'));
+$disp->header(_('Users management'));
+$disp->assignUserStrings();
 $allUsers = BwUser::getAll();
 $disp->assign('users', $allUsers);
 $disp->display('users_mgmt.tpl');

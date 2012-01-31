@@ -285,9 +285,8 @@ class BwList
 				BwCache::delete('list_all');
 				// All OK
 				$newListId = intval($db->lastInsertId());
-				// TODO: Add the necessary rights to all users
-				$userParams = new BwUserParams();
-				$resultValue = $userParams->addByListId($newListId, $ownerId);
+				//  Add the necessary rights to all users
+				$resultValue = BwUserParams::addByListId($newListId, $ownerId);
 			}
 		}
 		return $resultValue;

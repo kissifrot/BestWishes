@@ -83,5 +83,38 @@ function addList() {
 			}
 		});
 	}
+}
 
+function addUser() {
+	var uUsername = $('#username_add').val();
+	var uName = $('#name_add').val();
+	var uPwd = $('#pwd_add').val();
+	var uPwdRepeat = $('#pwd_repeat_add').val();
+	var uEmail = $('#email_add').val();
+	if(uPwd.length < 2 || uPwd != uPwdRepeat || uUsername.length < 1) {
+		showFlashMessage('error', bwLng.errorFormFields);
+	} else {
+		$.ajax({
+			url: 'a_adm_users_mgmt.php?action=add',
+			type: 'POST',
+			dataType: 'json',
+			data: { username: uUsername, name: uName, pwd: uPwd, email: uEmail },
+			error: function(jqXHR, textStatus, errorThrown) {
+				showFlashMessage('error', 'An error occured: ' + errorThrown);
+			},
+			success: function(returnedData, textStatus, jqXHR) {
+				if(returnedData.status == 'error') {
+					showFlashMessage('error', returnedData.message);
+				} else {
+					// All OK
+					$('#username_add').val('');
+					$('#name_add').val('');
+					$('#pwd_add').val('');
+					$('#pwd_repeat_add').val('');
+					$('#email_add').val('');
+					showFlashMessage('info', returnedData.message);
+				}
+			}
+		});
+	}
 }

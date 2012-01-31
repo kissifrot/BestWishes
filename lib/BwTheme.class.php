@@ -6,6 +6,7 @@ class BwTheme
 	public $name;
 	public $shortName;
 	public $isDefault;
+
 	public function __construct($id = null)
 	{
 		if(!empty($id))
@@ -58,6 +59,10 @@ class BwTheme
 			$this->storeAttributes($result);
 			return true;
 		}
+	}
+
+	public function getId() {
+		return $this->id;
 	}
 
 	public function loadDefault()

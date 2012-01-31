@@ -6,14 +6,17 @@
 	</ul>
 	<div id="tab-add-user">
 		<p>Add a new user</p>
-		<form method="POST">
-			<label>List name:</label>
-			<input type="text" name="list_name" /><br />
-			<label>Related user:</label>
-			{html_options name=list_user options=$users}
-			<!--<select name="list_user"></select>--><br />
-			<label>Birthdate:</label>
-			<input id="birthdate_picker" type="text" name="birthdate"><br />
+		<form method="POST" onsubmit="addUser(); return false">
+			<label>Username *</label>
+			<input type="text" name="username" id="username_add" /><br />
+			<label>Name *</label>
+			<input type="text" name="name" id="name_add" /><br />
+			<label>Password *</label>
+			<input type="password" name="pwd" id="pwd_add" /><br />
+			<label>Password (repeat) *</label>
+			<input type="password" name="pwd_repeat" id="pwd_repeat_add" /><br />
+			<label>E-mail</label>
+			<input type="text" name="email" id="email_add" /><br />
 			<input type="submit" value="Add" />
 		</form>
 	</div>
@@ -23,16 +26,15 @@
 </div>
 
 <script type="text/javascript">
+{include file='user_translation_strings.tpl'}
 $(document).ready(function() {
 	var tabsList = $( "#list-tabs" ).tabs({
 		ajaxOptions: {
 			error: function( xhr, status, index, anchor ) {
-				$( anchor.hash ).html(
-					"Could not load this tab" );
+				$( anchor.hash ).html( bwLng.couldNotLoadTab );
 			}
 		}
 	});
 	$('input[type="submit"]').button();
-	$('#birthdate_picker').datepicker({ changeYear: true, yearRange: '-120:+0', dateFormat: 'yy-mm-dd', minDate: '-120y', maxDate: '-1m'});
 });
 </script>
