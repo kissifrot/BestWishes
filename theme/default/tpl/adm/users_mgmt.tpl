@@ -1,6 +1,6 @@
 <div id="list-tabs">
 	<ul>
-		<li><a href="a_adm_lists_mgmt.php?action=list">All users</a></li>
+		<li><a href="a_adm_users_mgmt.php?action=list">All users</a></li>
 		<li><a href="#tab-add-user">Add an user</a></li>
 		<li><a href="#tab-edit-rights">User rights</a></li>
 	</ul>

@@ -13,6 +13,7 @@ class BwAdminDisplay extends BwDisplay
 		
 		$this->siteName .= ' Admin';
 		$this->assign('sessionOk', true);
+		$this->assign('users', BwUser::getAll());
 	}
 
 	/**

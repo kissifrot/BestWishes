@@ -118,3 +118,24 @@ function addUser() {
 		});
 	}
 }
+
+function deleteUser(id) {
+	$.ajax({
+		url: 'a_adm_users_mgmt.php?action=del',
+		type: 'POST',
+		dataType: 'json',
+		data: { userId: id },
+		error: function(jqXHR, textStatus, errorThrown) {
+			showFlashMessage('error', 'An error occured: ' + errorThrown);
+		},
+		success: function(returnedData, textStatus, jqXHR) {
+			if(returnedData.status == 'error') {
+				showFlashMessage('error', returnedData.message);
+			} else {
+				// All OK
+				$('#user_' + currentUserId).remove();
+				showFlashMessage('info', returnedData.message);
+			}
+		}
+	});
+}

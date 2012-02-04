@@ -20,8 +20,10 @@ if(!isset($_GET['action']) || empty($_GET['action'])) {
 $action = $_GET['action'];
 
 switch($action) {
+	case 'list':
+		$disp->display('users_list.tpl');
+	break;
 	case 'del':
-		/*
 		$statusMessages = array(
 			0 => _('User deleted succesfully'),
 			1 => _('Could not delete user'),
@@ -44,7 +46,6 @@ switch($action) {
 			$status = 'success';
 		}
 		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
-		*/
 	break;
 	case 'add':
 		$statusMessages = array(

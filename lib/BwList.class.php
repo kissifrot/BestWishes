@@ -415,7 +415,7 @@ class BwList
 			return $resultValue;
 		}
 		
-		// The delete the user params delete the categories
+		// Then delete the user params
 		$resultValue = $this->deleteAllParams();
 		if($resultValue != 0) {
 			return $resultValue;
@@ -484,8 +484,7 @@ class BwList
 		}
 
 		// Delete all the corresponding parameters
-		$userParams = new BwUserParams();
-		$resultValue = $userParams->deleteByListId($this->id, $this->ownerId);
+		$resultValue = BwUserParams::deleteByListId($this->id, $this->ownerId);
 
 		return $resultValue;
 	}

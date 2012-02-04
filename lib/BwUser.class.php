@@ -464,6 +464,58 @@ class BwUser
 	/**
 	 *
 	 */
+	public function delete() {
+		$resultValue = 99;
+
+		// First delete the params
+		$resultValue = $this->deleteAllParams();
+		if($resultValue != 0) {
+			echo 'pas ok';
+			return $resultValue;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list_user',
+			'queryType' => 'DELETE',
+			'queryFields' => '',
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				)
+			),
+			
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				BwCache::delete('user_all');
+				$resultValue = 0;
+			} else {
+				$resultValue = 1;
+			}
+		}
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
+	private function deleteAllParams() {
+		$resultValue = 99;
+
+		// Delete all the corresponding parameters
+		$resultValue = BwUserParams::deleteByUserId($this->id);
+
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
 	public static function checkAnyExisting($nameField, $nameValue) {
 		$queryParams = array(
 			'tableName' => 'gift_list_user',
@@ -516,6 +568,13 @@ class BwUser
 	public function loadParams()
 	{
 		$this->listParams = BwUserParams::getAllByUserId($this->id);
+	}
+
+	public function isListOwner($list = null) {
+		if(empty($list))
+			return false;
+		
+		return ($list->ownerId === $this->id);
 	}
 
 	public function updateRight($listId =  null, $rightType = '', $enabled = false)
@@ -597,13 +656,6 @@ class BwUser
 			return false;
 
 		return $this->canDoActionForList($listId, 'a_purchase');
-	}
-
-	public function isListOwner($list = null) {
-		if(empty($list))
-			return false;
-		
-		return ($list->ownerId === $this->id);
 	}
 
 	private function getParamsByListId($listId = null)

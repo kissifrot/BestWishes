@@ -118,7 +118,7 @@ class BwUserParams
 	/**
 	 *
 	 */
-	public function deleteByListId($listId = null, $userId = null) {
+	public static function deleteByListId($listId = null, $userId = null) {
 		$resultValue = 99;
 		if(empty($listId) || empty($userId)) {
 			return $resultValue;
@@ -136,6 +136,45 @@ class BwUserParams
 				array(
 					'parameter' => ':gift_list_id',
 					'variable' => $listId,
+					'data_type' => PDO::PARAM_INT
+				)
+			),
+			
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Clear cache
+				BwCache::delete('user_param_' . $userId);
+				$resultValue = 0;
+			} else {
+				$resultValue = 1;
+			}
+		}
+		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
+	public static function deleteByUserId($userId = null) {
+		$resultValue = 99;
+		if(empty($userId)) {
+			return $resultValue;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'list_user_params',
+			'queryType' => 'DELETE',
+			'queryFields' => '',
+			'queryCondition' => array(
+				'gift_list_user_id = :gift_list_user_id',
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':gift_list_user_id',
+					'variable' => $userId,
 					'data_type' => PDO::PARAM_INT
 				)
 			),
