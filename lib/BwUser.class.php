@@ -467,10 +467,20 @@ class BwUser
 	public function delete() {
 		$resultValue = 99;
 
-		// First delete the params
+		// First delete the belonging list(s) and all its/their content
+		$allLists = bwList::getAll();
+		foreach($allLists as $aList) {
+			if($this->isListOwner($aList)) {
+				$resultValue = $aList->delete();
+				if($resultValue != 0) {
+					return $resultValue;
+				}
+			}
+		}
+
+		// Then delete the params
 		$resultValue = $this->deleteAllParams();
 		if($resultValue != 0) {
-			echo 'pas ok';
 			return $resultValue;
 		}
 

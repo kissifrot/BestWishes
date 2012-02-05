@@ -265,9 +265,14 @@ class BwCategory
 			return $resultValue;
 		}
 
+		if($this->giftsCount == 0) {
+			$resultValue = 0;
+			return $resultValue;
+		}
+
 		$gift = new BwGift();
 		// Delete all the gifts for this category
-		$resultValue = $gift->deleteByCategoryId($listId, $this->id);
+		$resultValue = BwGift::deleteByCategoryId($listId, $this->id);
 		return $resultValue;
 	}
 

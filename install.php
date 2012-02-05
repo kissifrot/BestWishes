@@ -51,3 +51,6 @@ var_dump($installSteps);
 
 $currentStep = isset($_GET['step']) ? (int) $_GET['step'] : 0;
 
+var_dump($currentStep);
+
+

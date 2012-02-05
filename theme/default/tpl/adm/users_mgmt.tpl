@@ -7,16 +7,28 @@
 	<div id="tab-add-user">
 		<p>Add a new user</p>
 		<form method="POST" onsubmit="addUser(); return false">
-			<label>Username *</label>
-			<input type="text" name="username" id="username_add" /><br />
-			<label>Name *</label>
-			<input type="text" name="name" id="name_add" /><br />
-			<label>Password *</label>
-			<input type="password" name="pwd" id="pwd_add" /><br />
-			<label>Password (repeat) *</label>
-			<input type="password" name="pwd_repeat" id="pwd_repeat_add" /><br />
-			<label>E-mail</label>
-			<input type="text" name="email" id="email_add" /><br />
+			<table>
+				<tr>
+					<td><label>Username *</label></td>
+					<td><input type="text" name="username" id="username_add" /></td>
+				<tr>
+				<tr>
+					<td><label>Name *</label></td>
+					<td><input type="text" name="name" id="name_add" /><td>
+				<tr>
+				<tr>
+					<td><label>Password *</label></td>
+					<td><input type="password" name="pwd" id="pwd_add" /></td>
+				<tr>
+				<tr>
+					<td><label>Password (repeat) *</label></td>
+					<td><input type="password" name="pwd_repeat" id="pwd_repeat_add" /></td>
+				<tr>
+				<tr>
+					<td><label>E-mail address</label></td>
+					<td><input type="text" name="email" id="email_add" /></td>
+				<tr>
+			<table>
 			<input type="submit" value="Add" />
 		</form>
 	</div>

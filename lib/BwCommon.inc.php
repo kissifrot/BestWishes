@@ -20,6 +20,14 @@ if(!is_file(dirname(__FILE__) . DS . '..' . DS . 'config.inc.php')) {
 		header('Location: http' . (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 's' : '') . '://' . (empty($_SERVER['HTTP_HOST']) ? $_SERVER['SERVER_NAME'] . (empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':' . $_SERVER['SERVER_PORT']) : $_SERVER['HTTP_HOST']) . (strtr(dirname($_SERVER['PHP_SELF']), '\\', '/') == '/' ? '' : strtr(dirname($_SERVER['PHP_SELF']), '\\', '/')) . '/install.php');
 		exit;
 	}
+} else {
+	/* disabled for dev
+	// Ensure the install files are removed, to avoid the app to be erased
+	if(is_file(dirname(__FILE__) . DS . '..' . DS . 'install.php') || is_dir(dirname(__FILE__) . DS . '..' . DS . 'install')) {
+		echo _('Please remove the <b>install.php</b> file and <b>install/</b> folder before using Bestwishes');
+		exit;
+	}
+	*/
 }
 if(!defined('INSTALL_MODE')) {
 	require_once(dirname(__FILE__) . DS . '..' . DS . 'config.inc.php');

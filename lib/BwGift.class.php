@@ -121,10 +121,10 @@ class BwGift
 
 				if(empty($results)) {
 					// Store this in the cache even if empty
-					BwCache::write('gift_all_cat_' . $categoryId, $results);
-					return false;
+					BwCache::write('gift_all_cat_' . $categoryId, array());
+					return array();
 				}
-				
+
 				$allGifts = array();
 				foreach($results as $result) {
 					$gift = new self((int)$result['id']);
@@ -531,7 +531,7 @@ class BwGift
 	/**
 	 *
 	 */
-	public function deleteByCategoryId($listId = null, $catId = null) {
+	public static function deleteByCategoryId($listId = null, $catId = null) {
 		$resultValue = 99;
 		if(empty($listId) || empty($catId)) {
 			return $resultValue;

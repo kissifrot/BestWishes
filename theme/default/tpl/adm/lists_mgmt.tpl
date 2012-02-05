@@ -7,13 +7,20 @@
 	<div id="tab-add-list">
 		<p>Add a new list</p>
 		<form method="POST" onsubmit="addList(); return false">
-			<label>List name:</label>
-			<input type="text" name="list_name" id="add_list_name" /><br />
-			<label>Related user:</label>
-			{html_options name=list_user options=$users id=add_list_user}
-			<!--<select name="list_user"></select>--><br />
-			<label>Birthdate:</label>
-			<input id="add_list_bday" type="text" name="birthdate"><br />
+			<table>
+				<tr>
+					<td><label>List name:</label></td>
+					<td><input type="text" name="list_name" id="add_list_name" /></td>
+				</tr>
+				<tr>
+					<td><label>Related user:</label></td>
+					<td>{html_options name=list_user options=$users id=add_list_user}</td>
+				</tr>
+				<tr>
+					<td><label>Birthdate:</label></td>
+					<td><input id="add_list_bday" type="text" name="birthdate" /></td>
+				</tr>
+			</table>
 			<input type="submit" value="Add" />
 		</form>
 	</div>
