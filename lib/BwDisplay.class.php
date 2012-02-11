@@ -30,7 +30,13 @@ class BwDisplay extends Smarty
 		$this->themeWebDir = $bwURL . '/theme/' . $this->theme;
 
 		parent::__construct(); // Call Smarty's constructor
-		$this->setTemplateDir($bwThemeDir . DS . $this->theme . DS . 'tpl' . DS);
+		$this->setTemplateDir(array(
+			$bwThemeDir . DS . $this->theme . DS . 'tpl' . DS,
+			$bwThemeDir . DS . $this->theme . DS . 'tpl' . DS . 'common' . DS
+		));
+		// Detect a mobile device
+		$this->adaptMobile();
+
 		$this->setCompileDir($bwThemeDir . DS . $this->theme . DS . 'tpl_c' . DS);
 		$this->setConfigDir($bwThemeDir . DS . $this->theme . DS . 'configs' . DS);
 		$this->setCacheDir($bwThemeDir . DS . $this->theme . DS . 'cache' . DS);
@@ -54,6 +60,25 @@ class BwDisplay extends Smarty
 		$this->assign('lngPleaseWait', _('Please wait...'));
 		$this->assign('lngConfirm', _('Confirm'));
 		$this->assign('lngCouldNotLoadTab', _('Could not load this tab'));
+	}
+
+	/**
+	 * Try to detect a mobile device and adapt the template
+	 */
+	private function adaptMobile()
+	{
+		global $bwVendorDir, $bwThemeDir;
+		
+		require_once($bwVendorDir . DS . 'Mobile_Detect' . DS . 'Mobile_Detect.php');
+		$detect = new Mobile_Detect();
+		$isMobile = $detect->isMobile();
+		if($isMobile) {
+			$this->setTemplateDir(array(
+				$bwThemeDir . DS . $this->theme . DS . 'tpl' . DS . 'mobile' . DS,
+				$bwThemeDir . DS . $this->theme . DS . 'tpl' . DS,
+				$bwThemeDir . DS . $this->theme . DS . 'tpl' . DS . 'common' . DS
+			));
+		}
 	}
 
 	/**

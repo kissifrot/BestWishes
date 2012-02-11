@@ -9,8 +9,10 @@ class BwAdminDisplay extends BwDisplay
 		global $bwThemeDir;
 
 		parent::__construct($theme);
-		$this->setTemplateDir($bwThemeDir . DS . $this->theme . DS . 'tpl' . DS . 'adm' . DS);
-		
+		$this->setTemplateDir(array(
+			$bwThemeDir . DS . $this->theme . DS . 'tpl' . DS . 'adm' . DS,
+			$bwThemeDir . DS . $this->theme . DS . 'tpl' . DS . 'common' . DS
+		));
 		$this->siteName .= ' Admin';
 		$this->assign('sessionOk', true);
 		$this->assign('users', BwUser::getAll());
