@@ -5,6 +5,7 @@
 		<!--<meta http-equiv="Content-Language" content="fr" />-->
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="robots" content="noindex, nofollow" />
+		<meta name="viewport" content="width=device-width, user-scalable=yes" />
 		
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/general_mobile.css" />
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/jquery-ui.css" />
