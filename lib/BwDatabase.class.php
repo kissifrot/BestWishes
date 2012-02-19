@@ -15,6 +15,7 @@ class BwDatabase
 
 	protected $currentStatement = null;
 	protected $currentQueryType = null;
+	protected $queryAutoField = null;
 
 	protected $debugMode;
 
@@ -35,7 +36,7 @@ class BwDatabase
 		$this->dbServer   = $confDBServer;
 		$this->dbUser     = $confDBUser;
 		$this->dbPassword = $confDBPasswd;
-		$this->dbPort     = (!empty($confDBPort)) ? intval($confDBPort) : '';
+		$this->dbPort     = (!empty($confDBPort)) ? intval($confDBPort) : 0;
 		$this->dbName     = $confDBName;
 		$this->dbPrefix   = $confDBPrefix;
 
@@ -77,6 +78,9 @@ class BwDatabase
 		}
 	}
 
+	/**
+	 *
+	 */
 	public function prepareQuery($queryParams = array())
 	{
 		if(empty($queryParams))
@@ -94,7 +98,8 @@ class BwDatabase
 		$params = array_merge($defaults, $queryParams);
 		if(!isset($params['tableName']))
 			return false;
-		
+
+		$this->queryAutoField = null;
 		switch($params['queryType']) {
 			case 'SELECT':
 				$this->currentQueryType = $params['queryType'];
@@ -164,6 +169,7 @@ class BwDatabase
 				// Special case for PostgreSQL to get the inserted id
 				if($this->dbType === 'postgresql' && !empty($params['queryAutoField'])) {
 					$query .= ' RETURNING ' . $params['queryAutoField'];
+					$this->queryAutoField = $params['queryAutoField'];
 				}
 			break;
 			case 'DELETE':
@@ -238,6 +244,9 @@ class BwDatabase
 		}
 	}
 
+	/**
+	 *
+	 */
 	private function executeStatement()
 	{
 		if(empty($this->currentStatement))
@@ -266,6 +275,9 @@ class BwDatabase
 		}
 	}
 
+	/**
+	 *
+	 */
 	public function fetch($fetchMode = PDO::FETCH_ASSOC)
 	{
 		if(!$this->executeStatement())
@@ -283,6 +295,9 @@ class BwDatabase
 		}
 	}
 
+	/**
+	 *
+	 */
 	public function fetchAll($fetchMode = PDO::FETCH_ASSOC)
 	{
 		if(!$this->executeStatement())
@@ -300,6 +315,9 @@ class BwDatabase
 		}
 	}
 
+	/**
+	 *
+	 */
 	public function closeQuery()
 	{
 		if(empty($this->currentStatement))
@@ -311,21 +329,35 @@ class BwDatabase
 		return $closeResult;
 	}
 
+	/**
+	 *
+	 */
 	public function exec()
 	{
 		return $this->executeStatement();
 	}
 
+	/**
+	 *
+	 */
 	public function lastInsertId()
 	{
 		if($this->dbType != 'postgresql') {
 			return $this->db->lastInsertId();
 		} else {
-			$result = $this->fetch();
-			return $result['id'];
+			// Try to retrieve the auto incremented field for PostgreSQL
+			if(!empty($this->queryAutoField)) {
+				$result = $this->fetch();
+				return $result[$this->queryAutoField];
+			} else {
+				return $this->db->lastInsertId();
+			}
 		}
 	}
 
+	/**
+	 *
+	 */
 	public function disconnect()
 	{
 		if( $this->db != null )
