@@ -6,12 +6,20 @@
 	<div id="tab-options-pwd">
 		<p>Manage your password</p>
 		<form method="POST" action="" onsubmit="updatePwd(); return false">
-			<label>Current password:</label>
-			<input type="password" name="pass" id="pass" /><br />
-			<label>New password:</label>
-			<input type="password" name="new_pwd" id="new_pwd" /><br />
-			<label>New Password (repeat):</label>
-			<input type="password" name="new_pwd_repeat" id="new_pwd_repeat" /><br />
+		<table class="no-border" border="0">
+			<tr>
+				<td><label>Current password:</label></td>
+				<td><input type="password" name="pass" id="pass" /></td>
+			</tr>
+			<tr>
+				<td><label>New password:</label></td>
+				<td><input type="password" name="new_pwd" id="new_pwd" /></td>
+			</tr>
+			<tr>
+				<td><label>New Password (repeat):</label></td>
+				<td><input type="password" name="new_pwd_repeat" id="new_pwd_repeat" /></td>
+			</tr>
+		</table>
 			<input type="submit" value="Update" />
 		</form>
 	</div>
