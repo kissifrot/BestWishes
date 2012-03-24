@@ -5,7 +5,9 @@
 class BwMailer
 {
 	private $transport;
-	public $mailFrom;
+	private $mailer;
+	public $mailFromAddress;
+	public $mailFromName;
 	
 	private $templateData;
 
@@ -31,7 +33,8 @@ class BwMailer
 				throw new Exception(_('No mailer or incompatiuble one'));
 			break;
 		}
-		$this->mailFrom = bwConfig::get('mail_from', false);
+		$this->mailFromAddress = bwConfig::get('mail_from', false);
+		$this->mailFromName = bwConfig::get('mail_from_name', '');
 	}
 
 	/**
@@ -80,13 +83,14 @@ class BwMailer
 		if(empty($messagesToSend)) {
 			return false;
 		}
+		$mailer = Swift_Mailer::newInstance($this->transport);
 
 		$messagesSent = 0;
 		foreach($messagesToSend as $messageToSend) {
 			try {
 				$messagesSent += $mailer->send($messageToSend);
 			} catch(Exception $e) {
-				// TODO : log the error
+				// TODO : log (correctly) the error
 			}
 		}
 		
@@ -102,7 +106,7 @@ class BwMailer
 
 		try {
 			$bwMailer = new self();
-			if(empty($bwMailer->mailFrom)) {
+			if(empty($bwMailer->mailFromAddress)) {
 				return false;
 			}
 		} catch(Exception $e) {
@@ -126,6 +130,7 @@ class BwMailer
 			'__GIFT_NAME__' => $giftName,
 			'__ADDING_USER_NAME__' => $addingUser->name
 		);
+
 		foreach($allUsers as $anUser) {
 			if(!$anUser->isListOwner($addingList) && $anUser->hasAddAlertForList($addingList->getId())) {
 				$variables['__USER_NAME__'] = $anUser->name;
@@ -137,14 +142,14 @@ class BwMailer
 
 				$messagesToSend[] = Swift_Message::newInstance()
 				->setSubject($mailSubject)
-				->setFrom($bwMailer->mailFrom)
+				->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
 				->setTo($anUser->email)
 				->setBody($mailHtmlContent, 'text/html')
 				->addPart($mailTextContent, 'text/plain');
 			}
 		}
 		
-		$nbMessages = $mailer->send($message);
+		$nbMessages = $bwMailer->sendMessages($messagesToSend);
 		
 		return ($nbMessages == count($messagesToSend));
 	}
@@ -158,7 +163,7 @@ class BwMailer
 
 		try {
 			$bwMailer = new self();
-			if(empty($bwMailer->mailFrom)) {
+			if(empty($bwMailer->mailFromAddress)) {
 				return false;
 			}
 		} catch(Exception $e) {
@@ -181,6 +186,7 @@ class BwMailer
 			'__GIFT_NAME__' => $giftName,
 			'__ADDING_USER_NAME__' => $addingUser->name
 		);
+
 		foreach($allUsers as $anUser) {
 			if(!$anUser->isListOwner($addingList) && $anUser->hasAddAlertForList($addingList->getId())) {
 				$variables['__USER_NAME__'] = $anUser->name;
@@ -192,14 +198,14 @@ class BwMailer
 
 				$messagesToSend[] = Swift_Message::newInstance()
 				->setSubject($mailSubject)
-				->setFrom($bwMailer->mailFrom)
+				->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
 				->setTo($anUser->email)
 				->setBody($mailHtmlContent, 'text/html')
 				->addPart($mailTextContent, 'text/plain');
 			}
 		}
 		
-		$nbMessages = $mailer->send($message);
+		$nbMessages = $bwMailer->sendMessages($messagesToSend);
 		
 		return ($nbMessages == count($messagesToSend));
 	}
@@ -214,7 +220,7 @@ class BwMailer
 
 		try {
 			$bwMailer = new self();
-			if(empty($bwMailer->mailFrom)) {
+			if(empty($bwMailer->mailFromAddress)) {
 				return false;
 			}
 		} catch(Exception $e) {
@@ -258,7 +264,7 @@ class BwMailer
 
 					$messagesToSend[] = Swift_Message::newInstance()
 					->setSubject($mailSubject)
-					->setFrom($bwMailer->mailFrom)
+					->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
 					->setTo($anUser->email)
 					->setBody($mailHtmlContent, 'text/html')
 					->addPart($mailTextContent, 'text/plain');
@@ -266,7 +272,7 @@ class BwMailer
 			}
 		}
 		
-		$nbMessages = $mailer->send($message);
+		$nbMessages = $bwMailer->sendMessages($messagesToSend);
 		
 		return ($nbMessages == count($messagesToSend));
 	}
