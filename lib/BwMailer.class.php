@@ -30,7 +30,7 @@ class BwMailer
 				$this->transport = Swift_MailTransport::newInstance();
 			break;
 			default:
-				throw new Exception(_('No mailer or incompatiuble one'));
+				throw new Exception(_('No mailer or incompatible one'));
 			break;
 		}
 		$this->mailFromAddress = bwConfig::get('mail_from', false);
@@ -132,6 +132,7 @@ class BwMailer
 		);
 
 		foreach($allUsers as $anUser) {
+			// Check for users other than the owner who enabled the add alert for the list
 			if(!$anUser->isListOwner($addingList) && $anUser->hasAddAlertForList($addingList->getId())) {
 				$variables['__USER_NAME__'] = $anUser->name;
 
@@ -188,6 +189,7 @@ class BwMailer
 		);
 
 		foreach($allUsers as $anUser) {
+			// Check for users other than the owner who enabled the add alert for the list
 			if(!$anUser->isListOwner($addingList) && $anUser->hasAddAlertForList($addingList->getId())) {
 				$variables['__USER_NAME__'] = $anUser->name;
 
@@ -254,6 +256,7 @@ class BwMailer
 		}
 
 		foreach($allUsers as $anUser) {
+			// Check for users other than the owner who enabled the purchase alert for the list
 			if(!$anUser->isListOwner($addingList) && $anUser->hasPurchaseAlertForList($addingList->getId())) {
 				if($anUser->getId() != $buyingUser->getId()) {
 					$variables['__USER_NAME__'] = $anUser->name;
