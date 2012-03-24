@@ -23,9 +23,11 @@ $disp->header(_('Lists management'));
 $disp->assignListStrings();
 $allUsers = BwUser::getAll();
 $usersList = array();
+$usersList[''] = _('(Select an user)'); // Default value
 foreach($allUsers as $anUser) {
 	$usersList[$anUser->getId()] = $anUser->name;
 }
 $disp->assign('users', $usersList);
+$disp->assign('allUsers', $allUsers);
 $disp->display('lists_mgmt.tpl');
 $disp->footer();

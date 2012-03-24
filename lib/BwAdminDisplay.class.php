@@ -6,7 +6,7 @@ class BwAdminDisplay extends BwDisplay
 {
 	public function __construct($theme = null)
 	{
-		global $bwThemeDir;
+		global $bwThemeDir, $bwURL;
 
 		parent::__construct($theme);
 		$this->setTemplateDir(array(
@@ -15,6 +15,7 @@ class BwAdminDisplay extends BwDisplay
 		));
 		$this->siteName .= ' Admin';
 		$this->assign('sessionOk', true);
+		$this->assign('adminWebDir', $bwURL . '/admin');
 		$this->assign('users', BwUser::getAll());
 	}
 

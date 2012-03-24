@@ -2,7 +2,7 @@
 		{include file='error_message.tpl'}
 	{/if}
 	<br />To log in:</strong>
-	<form name="login" method="POST">
+	<form name="login" method="post">
 		<table border="0" width="300" cellpadding="5">
 			<tr><td align="left">&nbsp;&nbsp;{$lngLoginLabel}&nbsp;</td><td>
 			<input type="text" id="username" name="adm_username" size="15" maxlength="15">

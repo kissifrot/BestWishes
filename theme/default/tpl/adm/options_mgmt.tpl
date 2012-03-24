@@ -6,7 +6,7 @@
 	</ul>
 	<div id="tab-add-user">
 		<p>Add a new user</p>
-		<form method="POST">
+		<form method="post">
 			<label>List name:</label>
 			<input type="text" name="list_name" /><br />
 			<label>Related user:</label>

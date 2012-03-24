@@ -73,6 +73,53 @@ switch($action) {
 		}
 		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 	break;
+	case 'editrights':
+		// Editing a list's rights
+		if(!isset($_GET['listId']) || empty($_GET['listId'])) {
+			exit;
+		}
+		if(!isset($_GET['userId']) || empty($_GET['userId'])) {
+			exit;
+		}
+		if(!isset($_POST['rtype']) || empty($_POST['rtype'])) {
+			exit;
+		}
+		$listId = intval($_GET['listId']);
+		$userId = intval($_GET['userId']);
+		$rightType = trim($_POST['rtype']);
+		$enabled = (bool)($_POST['enabled']);
+
+		$list = new BwList();
+		if(!$list->loadById($listId)) {
+			exit;
+		}
+		$user = new BwUser();
+		if(!$user->load($userId)) {
+			exit;
+		}
+		$statusMessages = array(
+			0 => _('Right updated successfully'),
+			1 => _('Could not update this right'),
+			99 => _('Internal error'),
+		);
+		$statusCode = 99;
+		$status = 'error';
+		switch($rightType) {
+			case 'can_view':
+			case 'can_edit':
+			case 'can_mark':
+			case 'alert_addition':
+			case 'alert_purchase':
+				$statusCode = $user->updateRight($listId, $rightType, $enabled);
+			break;
+			default:
+			exit;
+		}
+		if($statusCode == 0) {
+			$status = 'success';
+		}
+		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+	break;
 	case 'add':
 		$statusMessages = array(
 			0 => _('List created succesfully'),

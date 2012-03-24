@@ -78,11 +78,47 @@ function addList() {
 					// All OK
 					$('#add_list_name').val('');
 					$('#add_list_bday').val('');
+					$('#add_list_user').val('');
 					showFlashMessage('info', returnedData.message);
 				}
 			}
 		});
 	}
+}
+
+function updateRight(userId, listId, rightElement, rightType) {
+	currentUserId = parseInt(userId);
+	currentListId = parseInt(listId);
+	rightElement = rightElement;
+	if(rightElement.checked) {
+		rElementChecked = true;
+		rightData = {rtype: rightType, enabled: '1' };
+	} else {
+		rElementChecked = false;
+		rightData = {rtype: rightType, enabled: '0' };
+	}
+	$.ajax({
+		type: 'POST',
+		url: bwAdminURL + '/a_adm_lists_mgmt.php?listId=' + currentListId + '&userId=' + currentUserId + '&action=editrights',
+		data: rightData,
+		dataType: 'json',
+		error: function(jqXHR, textStatus, errorThrown) {
+			showFlashMessage('error', 'An error occured: ' + errorThrown);
+		},
+		success: function(returnedData, textStatus, jqXHR) {
+			if(returnedData.status == 'success') {
+				showFlashMessage('info', returnedData.message);
+			} else {
+				showFlashMessage('error', returnedData.message);
+				// Revert the check status
+				if(rElementChecked) {
+					rightElement.checked = false;
+				} else {
+					rightElement.checked = true;
+				}
+			}
+		}
+	});
 }
 
 function addUser() {

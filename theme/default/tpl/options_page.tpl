@@ -5,7 +5,7 @@
 	</ul>
 	<div id="tab-options-pwd">
 		<p>Manage your password</p>
-		<form method="POST" action="" onsubmit="updatePwd(); return false">
+		<form method="post" action="" onsubmit="updatePwd(); return false">
 		<table class="no-border" border="0">
 			<tr>
 				<td><label>Current password:</label></td>
@@ -27,7 +27,7 @@
 		<p>List rights and alerts</p>
 		You can adjust your alerts and see your rights for each list below:<br /><br />
 		{if !empty($lists)}
-		<form method="POST" id="frm_list_rights" action="" onsubmit="return false">
+		<form method="post" id="frm_list_rights" action="" onsubmit="return false">
 		<table class="border-collapsed">
 			<tr>
 				<th>List name</th>
@@ -54,7 +54,6 @@
 		{else}
 		<i>(no list)</i>
 		{/if}
-		
 	</div>
 </div>
 
