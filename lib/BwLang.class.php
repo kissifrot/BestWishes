@@ -69,11 +69,12 @@ class BwLang
 	public function setupLocale()
 	{
 		global $bwLocaleDir;
+
 		// Set locale
-		_setlocale(LC_MESSAGES, $this->currentLanguage);
-		_bindtextdomain('bestwishes', $bwLocaleDir);
-		_bind_textdomain_codeset('bestwishes', 'UTF-8');
-		_textdomain('bestwishes');
+		T_bind_textdomain_codeset('bestwishes', 'UTF-8');
+		T_bindtextdomain('bestwishes', $bwLocaleDir);
+		T_textdomain('bestwishes');
+		T_setlocale(LC_MESSAGES, $this->currentLanguage);
 
 		return true;
 	}
