@@ -14,6 +14,6 @@ if(!BwAdminUser::checkSession()) {
 }
 
 $disp = new BwAdminDisplay(BwConfig::get('default_theme', 'default'));
-$disp->header(_('Options magnagement'));
+$disp->header(_('Options management'));
 $disp->display('options_mgmt.tpl');
 $disp->footer();

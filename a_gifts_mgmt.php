@@ -74,7 +74,7 @@ switch($action) {
 				$category = new BwCategory($catId);
 				$statusMessages = array(
 					0 => sprintf(_('Gift "%s" added'), $giftName),
-					1 => sprintf(_('A gift named "%s" already exists and is indicated as bought, do you want to add it anyway?'), $giftName),
+					1 => sprintf(_('A gift named "%s" already exists and is indicated as received, do you want to add it anyway?'), $giftName),
 					99 => _('Internal error')
 				);
 				$statusCode = 99;
@@ -115,8 +115,8 @@ switch($action) {
 				$force = (bool)($_POST['force']);
 				$category = new BwCategory($catId);
 				$statusMessages = array(
-					0 => sprintf(_('Surprise gift %s added'), $giftName),
-					1 => sprintf(_('A gift named %s already exists and is indicated as bought, do you want to add it anyway?'), $giftName),
+					0 => sprintf(_('Surprise gift "%s" added'), $giftName),
+					1 => sprintf(_('A gift named "%s" already exists and is indicated as received, do you want to add it anyway?'), $giftName),
 					99 => _('Internal error')
 				);
 				$statusCode = 99;
