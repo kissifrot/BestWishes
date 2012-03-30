@@ -27,6 +27,7 @@ $disp = new BwDisplay(BwConfig::get('theme', 'default'));
 $disp->assign('message', $errorMessage);
 // Translation strings
 $disp->assign('lngPasswordForgot', _('Forgot your password?'));
+$disp->assign('lngToLogin', _('To log in:'));
 $disp->assign('lngLoginLabel', _('Login:'));
 $disp->assign('lngLoginAction', _('Login'));
 $disp->assign('lngPasswordLabel', _('Password:'));
