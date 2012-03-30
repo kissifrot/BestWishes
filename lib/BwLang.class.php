@@ -2,6 +2,8 @@
 class BwLang
 {
 	private $currentLanguage = '';
+	private $systemLanguage  = '';
+
 	public function __construct($lang = '')
 	{
 		// Import params from config file
@@ -11,6 +13,7 @@ class BwLang
 			$this->currentLanguage = $lang;
 		else
 			$this->currentLanguage = BwConfig::get('default_langage', 'en');
+		$this->systemLanguage = $this->getSystemLocale($this->currentLanguage);
 
 		require_once($bwVendorDir . DS . 'php-gettext' . DS . 'gettext.inc');
 	}
@@ -19,6 +22,19 @@ class BwLang
 	{
 		$lang = new self();
 		$lang->setupLocale();
+	}
+
+	/**
+	 * Returns the system locale format
+	 */
+	private function getSystemLocale($simpleLang = 'en')
+	{
+		switch ($simpleLang) {
+			case 'en':
+				return 'en_US';
+			case 'fr':
+				return 'fr_FR';
+		}
 	}
 
 	/**
@@ -65,7 +81,7 @@ class BwLang
 		}
 		return array("$lang|$lang", $lang, $lang);
 	}
-	
+
 	public function setupLocale()
 	{
 		global $bwLocaleDir;
@@ -74,7 +90,7 @@ class BwLang
 		T_bind_textdomain_codeset('bestwishes', 'UTF-8');
 		T_bindtextdomain('bestwishes', $bwLocaleDir);
 		T_textdomain('bestwishes');
-		T_setlocale(LC_MESSAGES, $this->currentLanguage);
+		T_setlocale(LC_MESSAGES, $this->systemLanguage);
 
 		return true;
 	}
