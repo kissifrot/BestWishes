@@ -1,7 +1,7 @@
 {if !empty($message)}
 	{include file='error_message.tpl'}
 {/if}
-<br />To log in:</strong>
+<br />{$lngToLogin}</strong>
 <form name="login" method="post" action="login.php">
 	<table border="0" width="300" cellpadding="5">
 		<tr><td align="left">&nbsp;&nbsp;{$lngLoginLabel}&nbsp;</td><td>

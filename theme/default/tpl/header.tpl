@@ -5,6 +5,7 @@
 		<!--<meta http-equiv="Content-Language" content="fr" />-->
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="robots" content="noindex, nofollow" />
+		<meta name="description" content="{$lngBwDesciption}" />
 		
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/general.css" />
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/jquery-ui.css" />

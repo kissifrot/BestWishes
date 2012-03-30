@@ -44,6 +44,9 @@ class BwUser
 		return $this->theme;
 	}
 
+	/**
+	 *
+	 */
 	public function login($username = '', $password = '')
 	{
 		$usernameTrim = trim($username);
@@ -293,6 +296,9 @@ class BwUser
 		$this->listParams = array();
 	}
 
+	/**
+	 * Setup the session variables
+	 */
 	private function setupSession()
 	{
 		$_SESSION['user_id']      = (int)$this->id;

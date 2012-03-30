@@ -1,16 +1,12 @@
-<strong>Management/visualization of wishlists</strong><br />
+<strong>{$lngBwDesciption}</strong><br />
 
 {if $sessionOk}
 	<p>
-		{if !empty($userLastLogin) }
-		Welcome <b>{$user->name}</b>, your last visit was on {$userLastLogin|date_format:$lngDateFormat}
-		{else}
-		Welcome <b>{$user->name}</b>
-		{/if}
+		{$lngUserWelcomeMessage}
 	</p>
-	<p>Choose a list to show in the left menu</p>
+	<p>{$lngHomeInstructions}</p>
 {else}
-<p>Choose a list to show in the left menu</p>
+<p>{$lngHomeInstructions}</p>
 <div style="width: 300px; margin-left: auto; margin-right: auto; text-align: center">
 	{include file='login_form.tpl'}
 </div>

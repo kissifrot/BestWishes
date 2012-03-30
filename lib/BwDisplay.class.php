@@ -49,11 +49,12 @@ class BwDisplay extends Smarty
 		$this->assign('lists', BwList::getAll());
 
 		// Translated strings
+		
 		$this->assign('lngHomeLogin', _('Home/Login'));
 		$this->assign('lngHome', _('Home'));
+		$this->assign('lngBwDesciption', _('Management/visualization of wishlists'));
 		$this->assign('lngLists', _('Lists:'));
 		$this->assign('lngOptions', _('Options'));
-		$this->assign('lngLogout', _('Logout'));
 		$this->assign('lngLogout', _('Logout'));
 		$this->assign('lngChangeOptions', _('Change your options'));
 		$this->assign('lngDateFormat', _('m/d/Y'));
