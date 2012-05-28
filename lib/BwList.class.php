@@ -383,6 +383,9 @@ class BwList
 	{
 		$this->id         = (int)$sqlResult['id'];
 		$this->name       = $sqlResult['name'];
+		if(empty($this->slug)) {
+			$this->slug   = $sqlResult['slug'];
+		}
 		$this->ownerId    = (int)$sqlResult['user_id'];
 		$this->birthdate  = $sqlResult['birthdate'];
 		$this->lastUpdate = $sqlResult['last_update'];
