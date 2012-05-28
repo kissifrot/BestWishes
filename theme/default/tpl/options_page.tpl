@@ -1,41 +1,41 @@
 <div id="options-tabs">
 	<ul>
-		<li><a href="#tab-options-pwd">Password</a></li>
-		<li><a href="#tab-options-list">Lists rights/alerts</a></li>
+		<li><a href="#tab-options-pwd">{$lngPassword}</a></li>
+		<li><a href="#tab-options-list">{$lngListRightsAndAlerts}</a></li>
 	</ul>
 	<div id="tab-options-pwd">
-		<p>Manage your password</p>
+		<p>{$lngPasswordManagement}</p>
 		<form method="post" action="" onsubmit="updatePwd(); return false">
 		<table class="no-border" border="0">
 			<tr>
-				<td><label>Current password:</label></td>
+				<td><label>{$lngCurrentPasswordLabel}</label></td>
 				<td><input type="password" name="pass" id="pass" /></td>
 			</tr>
 			<tr>
-				<td><label>New password:</label></td>
+				<td><label>{$lngNewPasswordLabel}</label></td>
 				<td><input type="password" name="new_pwd" id="new_pwd" /></td>
 			</tr>
 			<tr>
-				<td><label>New Password (repeat):</label></td>
+				<td><label>{$lngNewPasswordRepeatLabel}</label></td>
 				<td><input type="password" name="new_pwd_repeat" id="new_pwd_repeat" /></td>
 			</tr>
 		</table>
-			<input type="submit" value="Update" />
+			<input type="submit" value="{$lngUpdateLabel}" />
 		</form>
 	</div>
 	<div id="tab-options-list">
-		<p>List rights and alerts</p>
-		You can adjust your alerts and see your rights for each list below:<br /><br />
+		<p>{$lngListRightsAndAlerts}</p>
+		{$lngListRightsAndAlertsExplanation}<br /><br />
 		{if !empty($lists)}
 		<form method="post" id="frm_list_rights" action="" onsubmit="return false">
 		<table class="border-collapsed">
 			<tr>
-				<th>List name</th>
-				<th>Can view</th>
-				<th>Can edit</th>
-				<th>Can mark</th>
-				<th>Addition alert</th>
-				<th>Purchase alert</th>
+				<th>{$lngListName}</th>
+				<th>{$lngCanView}</th>
+				<th>{$lngCanEdit}</th>
+				<th>{$lngCanMark}</th>
+				<th>{$lngAdditionAlert}</th>
+				<th>{$lngPurchaseAlert}</th>
 			</tr>
 			{foreach $lists as $list}
 			{if !$user->isListOwner($list)}
@@ -52,7 +52,7 @@
 		</table>
 		</form>
 		{else}
-		<i>(no list)</i>
+		<i>{$lngNoList}</i>
 		{/if}
 	</div>
 </div>

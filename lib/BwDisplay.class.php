@@ -61,6 +61,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngPleaseWait', _('Please wait...'));
 		$this->assign('lngConfirm', _('Confirm'));
 		$this->assign('lngCouldNotLoadTab', _('Could not load this tab'));
+		$this->assign('lngPassword', _('Password'));
 	}
 
 	/**
