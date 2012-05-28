@@ -20,15 +20,15 @@ a:hover {
 }
 </style>
 <br />
-Hello __USER_NAME__,<br />
-This is a message to inform you that <b>__ADDING_USER_NAME__</b> added a surprise gift to the list __LIST_NAME__:<br />
-<b>__GIFT_NAME__</b> (category __CATEGORY_NAME__) has just been added.<br />
+Bonjour __USER_NAME__,<br />
+Ceci est un message pour vous informer que <b>__ADDING_USER_NAME__</b> a ajouté un cadeau surprise à la liste __LIST_NAME__:<br />
+<b>__GIFT_NAME__</b> (catégorie __CATEGORY_NAME__) vient d'être ajouté.<br />
 <br />
-You can see the list by clicking on the following link: <a href="__BW_LIST_URL__">__BW_LIST_URL__</a><br />
-(you must be logged in order to view such information)
+Vous pouvez consulter la liste en cliquant sur le lien suivant : <a href="__BW_LIST_URL__">__BW_LIST_URL__</a><br />
+(vous devez être identifié(e) pour voir cette information)
 <hr style="border: 0; width: 90%; color: #fff; background-color: #fff; height: 1px;" />
 <br /><br />
-<span class="smaller">Regards,<br />
-The Admin<br />
+<span class="smaller">Cordialement,<br />
+L'admin<br />
 <a href="__BW_URL__">__BW_URL__</a></span>
 <br />
