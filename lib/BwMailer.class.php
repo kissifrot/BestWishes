@@ -10,6 +10,7 @@ class BwMailer
 	public $mailFromName;
 	
 	private $templateData;
+	private $logFilePath;
 
 	public function __construct()
 	{
@@ -35,10 +36,25 @@ class BwMailer
 		}
 		$this->mailFromAddress = bwConfig::get('mail_from', false);
 		$this->mailFromName = bwConfig::get('mail_from_name', '');
+		$this->logFilePath = bwConfig::get('log_filepath', false);
 	}
 
 	/**
 	 *
+	 */
+	private function log($message)
+	{
+		if(!empty($message) && !empty($this->logFilePath)) {
+			if(is_writable($this->logFilePath)) {
+				$message = date('Y-m-d H:i:s'). ':' . "\t" . $message . "\n";
+				file_put_contents($this->logFilePath, $message, FILE_APPEND);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Use a template file for a message
 	 */
 	public function setTemplate($templateFilename = '', $theme = 'default') {
 		global $bwThemeDir;
@@ -48,15 +64,16 @@ class BwMailer
 		}
 
 		// Add the template file extension if not specified
-		if(stristr($templateFilename, '.tpl') === false) {
+		if(stripos($templateFilename, '.tpl') === false) {
 			$templateFilename .= '.tpl';
 		}
 
 		$templatePath = $bwThemeDir . DS . $theme . DS . 'tpl' . DS . 'mails' . DS . $templateFilename;
 		if(!is_file($templatePath)) {
+			$this->log('Template file "' . $templatePath . '" does not exist');
 			return false;
 		}
-		$this->templateData = @file_get_contents($templatePath);
+		$this->templateData = file_get_contents($templatePath);
 		return true;
 	}
 
@@ -90,7 +107,7 @@ class BwMailer
 			try {
 				$messagesSent += $mailer->send($messageToSend);
 			} catch(Exception $e) {
-				// TODO : log (correctly) the error
+				$this->log('Mailer Exception: ' . $e->getMessage());
 			}
 		}
 		
@@ -110,7 +127,7 @@ class BwMailer
 				return false;
 			}
 		} catch(Exception $e) {
-			// TODO: log this
+			$this->log('Mailer Exception: ' . $e->getMessage());
 			return false;
 		}
 
@@ -149,9 +166,9 @@ class BwMailer
 				->addPart($mailTextContent, 'text/plain');
 			}
 		}
-		
+
 		$nbMessages = $bwMailer->sendMessages($messagesToSend);
-		
+
 		return ($nbMessages == count($messagesToSend));
 	}
 
@@ -168,7 +185,7 @@ class BwMailer
 				return false;
 			}
 		} catch(Exception $e) {
-			// TODO: log this
+			$this->log('Mailer Exception: ' . $e->getMessage());
 			return false;
 		}
 
@@ -206,9 +223,9 @@ class BwMailer
 				->addPart($mailTextContent, 'text/plain');
 			}
 		}
-		
+
 		$nbMessages = $bwMailer->sendMessages($messagesToSend);
-		
+
 		return ($nbMessages == count($messagesToSend));
 	}
 
@@ -226,7 +243,7 @@ class BwMailer
 				return false;
 			}
 		} catch(Exception $e) {
-			// TODO: log this
+			$this->log('Mailer Exception: ' . $e->getMessage());
 			return false;
 		}
 
@@ -274,9 +291,9 @@ class BwMailer
 				}
 			}
 		}
-		
+
 		$nbMessages = $bwMailer->sendMessages($messagesToSend);
-		
+
 		return ($nbMessages == count($messagesToSend));
 	}
 }
