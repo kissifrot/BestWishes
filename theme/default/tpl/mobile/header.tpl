@@ -9,6 +9,7 @@
 		
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/general_mobile.css" />
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/jquery-ui-adjust.css" />
 		<link rel="shortcut icon" href="{$webDir}/favicon.ico" />
 
 		<script language="javascript" src="{$webDir}/js/jquery.js" type="text/javascript"></script>

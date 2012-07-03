@@ -1,0 +1,9 @@
+/*
+ * Adjustments to original jQuery UI css
+ */
+ 
+.ui-widget-content { border: 1px solid #a6c9e2; background: #fcfdfd url(../img/ui-bg_inset-hard_100_fcfdfd_1x100.png) 50% bottom repeat-x; color: #2e6e9e; }
+.ui-widget-content a { color: #2e6e9e; }
+
+.ui-dialog .ui-dialog-titlebar { padding: .5em 1em .3em; position: relative;  }
+.ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; } 
