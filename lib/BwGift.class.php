@@ -30,6 +30,11 @@ class BwGift
 		return $this->id;
 	}
 
+	public function getCategoryId()
+	{
+		return $this->categoryId;
+	}
+
 	public function load($id = null)
 	{
 		if(!empty($id))
@@ -635,6 +640,7 @@ class BwGift
 			$result =  $db->exec();
 			if($result) {
 				// Empty cache
+				BwCache::delete('gift_' . $this->id);
 				BwCache::delete('category_all_list_' . $listId);
 				BwCache::delete('category_' . $this->categoryId);
 				BwCache::delete('gift_all_list_' . $listId);
@@ -689,10 +695,61 @@ class BwGift
 			$result =  $db->exec();
 			if($result) {
 				// Empty cache
+				BwCache::delete('gift_' . $this->id);
 				BwCache::delete('category_all_list_' . $listId);
 				BwCache::delete('category_' . $this->categoryId);
 				BwCache::delete('gift_all_list_' . $listId);
 				BwCache::delete('gift_all_cat_' . $this->categoryId);
+				$resultValue = 0;
+			} else {
+				$resultValue = 1;
+			}
+		}
+		return $resultValue;
+	}
+
+	/**
+	 * Moves a gift to another category
+	 */
+	public function moveToCategory($catId = null, $listId = null) {
+		$resultValue = 99;
+		if(empty($catId) || empty($listId)) {
+			return $resultValue;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift',
+			'queryType' => 'UPDATE',
+			'queryFields' => array(
+				'category_id' => ':category_id'
+			),
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':category_id',
+					'variable' => $catId,
+					'data_type' => PDO::PARAM_INT
+				)
+			),
+			
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// Empty cache
+				BwCache::delete('gift_' . $this->id);
+				BwCache::delete('category_all_list_' . $listId);
+				BwCache::delete('category_' . $this->categoryId);
+				BwCache::delete('category_' . $catId);
+				BwCache::delete('gift_all_list_' . $listId);
+				BwCache::delete('gift_all_cat_' . $this->categoryId);
+				BwCache::delete('gift_all_cat_' . $catId);
 				$resultValue = 0;
 			} else {
 				$resultValue = 1;

@@ -13,5 +13,6 @@ bwLng = {
 	confirmPurchase     : '{$lngConfirmPurchase|escape}',
 	pleaseWait          : '{$lngPleaseWait|escape}',
 	confirmGiftReceive  : '{$lngConfirmGiftReceive|escape}',
-	confirm             : '{$lngConfirm|escape}'
+	confirm             : '{$lngConfirm|escape}',
+	sameMoveCategory    : '{$lngSameMoveCategory|escape}'
 };

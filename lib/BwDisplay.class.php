@@ -127,6 +127,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngGiftNameP', _('Gift name:'));
 		$this->assign('lngCategoryNameP', _('Category name:'));
 		$this->assign('lngGiftCategoryP', _('Gift category:'));
+		$this->assign('lngSameMoveCategory', _('Source and destination categories are the same!'));
 
 		// Explanation texts
 		$this->assign('lngAddCatExplanation', _('To add a category:<br />-&nbsp;Fill its name<br />-&nbsp;Click on the &#8220;Add the category&#8221; button below'));
@@ -144,6 +145,7 @@ class BwDisplay extends Smarty
 			$this->assign('lngEditExplanation', sprintf(_('To edit a gift name, click on the %s icon to the left of it.<br />Once you have finished the edition, click anywhere in the page or use Enter key to validate the modification(s).<br />%s The modifications allowed are limited.'),
 				'<img class="icon_text" src="' . $this->themeWebDir . '/img/edit.png" alt="' . _('Edit') . '" />', '<img class="icon_text" src="' . $this->themeWebDir . '/img/exclamation.png" alt="!" />'));
 		}
+		$this->assign('lngShowDetailsExplanation', _('To show a gift\'s details, such as the addition date, purchase info (if applicable), ... Just double-click on its name.'));
 
 		// Possible actions
 		$this->assign('lngActnAddCategory', _('Add a category to the list'));
@@ -152,6 +154,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngActnDelGift', _('Delete a gift'));
 		$this->assign('lngActnDelCategory', _('Delete a category'));
 		$this->assign('lngActnAddSurpriseGift', _('Add a surprise gift (in an already existing category) to the list'));
+		$this->assign('lngActnShowDetails', _('Show a gift\'s details'));
 		$this->assign('lngActnDisplayPDF', _('Display the list as PDF'));
 	}
 

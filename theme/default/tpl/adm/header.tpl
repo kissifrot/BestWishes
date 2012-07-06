@@ -8,6 +8,7 @@
 		
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/general.css" />
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/jquery-ui-adjust.css" />
 		<link rel="shortcut icon" href="{$webDir}/favicon.ico" />
 
 		<script language="javascript" src="{$webDir}/js/jquery.js" type="text/javascript"></script>
@@ -34,7 +35,7 @@
 					{if $sessionOk}
 					<h2><a href="adm_lists.php">Manage lists</a></h2>
 					<h2><a href="adm_users.php">Manage users</a></h2>
-					<h2><a href="#">Manage events</a></h2>
+					<h2><a href="adm_events.php">Manage events</a></h2>
 					<h2><a href="adm_options.php">Manage options</a></h2>
 					<h2><a href="#">Manage cache</a></h2>
 					<a id="" href="#"><i>Show advanced</i></a>

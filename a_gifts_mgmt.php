@@ -354,5 +354,50 @@ switch($action) {
 		}
 		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 	break;
+	case 'move':
+		if($user->canEditList($listId) || $user->isListOwner($list)) {
+			// Move a gift to another category
+			if(!isset($_POST['id']) || empty($_POST['id'])) {
+				exit;
+			}if(!isset($_POST['targetCatId']) || empty($_POST['targetCatId'])) {
+				exit;
+			}
+			$giftId = intval($_POST['id']);
+			$catId = intval($_POST['targetCatId']);
+			$gift = new BwGift($giftId);
+			$category = new BwCategory($catId);
+			$statusMessages = array(
+				0 => _('Gift moved successfully'),
+				1 => _('Could not move the gift to this category'),
+				2 => _('Source and destination categories are the same!'),
+				99 => _('Internal error')
+			);
+			$statusCode = 99;
+			$status = 'error';
+			if(!$category->load() || !$gift->load()) {
+				$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+				exit;
+			}
+			$sourceCategory = new BwCategory($gift->getCategoryId());
+			if(!$sourceCategory->load()) {
+				$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+				exit;
+			}
+			if($category->giftListId !== $listId || $sourceCategory->giftListId !== $listId) {
+				$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+				exit;
+			}
+			if($gift->getCategoryId() === $category->getId()) {
+				$statusCode = 2;
+				$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+				exit;
+			}
+			$statusCode = $gift->moveToCategory($catId, $listId);
+			if($statusCode == 0) {
+				$status = 'success';
+			}
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+		}
+	break;
 }
 

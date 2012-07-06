@@ -1,25 +1,39 @@
-function showGiftDetailsWindow(giftDetails)
+function showGiftDetailsWindow(giftId, listId)
 {
-	if(typeof giftDetails !== 'undefined') {
-		$('#gift_details_name').text(giftDetails.name);
-		$('#gift_details_added').text(date(bwLng.dateFormat, strtotime(giftDetails.addedDate)));
-		if(giftDetails.isBought) {
-			$('#gift_details_buy').show();
-			$('#gift_details_buy_who').text(giftDetails.boughtByName);
-			if(giftDetails.purchaseDate != null) {
-				$('#gift_details_buy_date').text(date(bwLng.dateFormat, strtotime(giftDetails.purchaseDate)));
-			}
-			if(typeof giftDetails.boughtComment !== 'undefined' && giftDetails.boughtComment != null && giftDetails.boughtComment.length > 0) {
-				$('#gift_details_buy_comment').show();
-				$('#gift_details_buy_comment_text').text(giftDetails.boughtComment);
+	var currlistId = parseInt(listId);
+	var currGiftId = parseInt(giftId);
+	$.ajax({
+		url: bwURL + '/a_gift_show.php?listId=' + currlistId + '&id=' + currGiftId,
+		dataType: 'json',
+		error: function(jqXHR, textStatus, errorThrown) {
+			showFlashMessage('error', 'An error occured: ' + errorThrown);
+		},
+		success: function(returnedData, textStatus, jqXHR) {
+			if(typeof returnedData !== 'undefined') {
+				var giftDetails = returnedData;
+				$('#gift_details_name').text(giftDetails.name);
+				$('#gift_details_added').text(date(bwLng.dateFormat, strtotime(giftDetails.addedDate)));
+				if(giftDetails.isBought) {
+					$('#gift_details_buy').show();
+					$('#gift_details_buy_who').text(giftDetails.boughtByName);
+					if(giftDetails.purchaseDate != null) {
+						$('#gift_details_buy_date').text(date(bwLng.dateFormat, strtotime(giftDetails.purchaseDate)));
+					}
+					if(typeof giftDetails.boughtComment !== 'undefined' && giftDetails.boughtComment != null && giftDetails.boughtComment.length > 0) {
+						$('#gift_details_buy_comment').show();
+						$('#gift_details_buy_comment_text').text(giftDetails.boughtComment);
+					} else {
+						$('#gift_details_buy_comment').hide();
+					}
+				} else {
+					$('#gift_details_buy').hide();
+				}
+				giftDetailsDialog.dialog('open');
 			} else {
-				$('#gift_details_buy_comment').hide();
+				showFlashMessage('error', 'Internal error');
 			}
-		} else {
-			$('#gift_details_buy').hide();
 		}
-		giftDetailsDialog.dialog('open');
-	}
+	});
 }
 
 function addCat(listId)
@@ -354,6 +368,30 @@ function addSurpriseGift(listId, force) {
 	}
 }
 
+function moveGift(giftId, listId, targetCatId)
+{
+	var currGiftId = parseInt(giftId);
+	var currTargetCatId = parseInt(targetCatId);
+	var currListId = parseInt(listId);
+	$.ajax({
+		type: 'POST',
+		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=move',
+		data: {type: 'gift', targetCatId: currTargetCatId, id: currGiftId},
+		dataType: 'json',
+		error: function(jqXHR, textStatus, errorThrown) {
+			showFlashMessage('error', 'An error occured: ' + errorThrown);
+		},
+		success: function(returnedData, textStatus, jqXHR) {
+			if(returnedData.status == 'success') {
+				showFlashMessage('info', returnedData.message);
+				reloadList(listId);
+			} else {
+				showFlashMessage('error', returnedData.message);
+			}
+		}
+	});
+}
+
 function showBuyWindow(giftName, giftId, catId, listId)
 {
 	currentGiftId = parseInt(giftId);
@@ -459,8 +497,9 @@ function reloadList(listId) {
 	currentListId = parseInt(listId);
 	$.ajax({
 		type: 'GET',
-		url: bwURL + '/a_list_show.php',
-		data: {id: currentListId},
+		cache: false,
+		url: bwURL + '/a_elem_show.php',
+		data: {listId: currentListId, type: 'list'},
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
 		},
@@ -477,8 +516,9 @@ function reloadCatsList(listId) {
 	currentListId = parseInt(listId);
 	$.ajax({
 		type: 'GET',
-		url: bwURL + '/a_cats_show.php',
-		data: {id: currentListId},
+		cache: false,
+		url: bwURL + '/a_elem_show.php',
+		data: {listId: currentListId, type: 'cats'},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
@@ -517,6 +557,7 @@ function updatePwd() {
 				// Let the server handle the rest
 				$.ajax({
 					type: 'POST',
+					cache: false,
 					url: bwURL + '/a_opts_mgmt.php?action=editpwd',
 					data: {currentPasswd: currentPwd, newPasswd: newPwd, newPasswdRepeat: newPwdRepeat},
 					dataType: 'json',

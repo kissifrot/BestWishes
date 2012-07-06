@@ -145,6 +145,11 @@
 			</div>
 		{/if}
 	{/if}
+			<div class="action_element">-&nbsp;<a href="/" class="list_action_link" onclick="$('#section_show_details').toggle(); return false"><img alt="Informations" class="icon_text" src="{$themeWebDir}/img/information.png" />&nbsp;{$lngActnShowDetails}</a>
+				<div id="section_show_details" style="visibility: visible; display: none;">
+					<em><span class="smaller">{$lngShowDetailsExplanation}</span></em>
+				</div>
+			</div>
 	<div class="action_element">
 		-&nbsp;<a href="{$webDir}/list/pdf/list_{$list->slug}" class="list_action_link"><img alt="PDF" class="icon_text" src="{$themeWebDir}/img/pdf.png" />&nbsp;{$lngActnDisplayPDF}</a>
 	</div>
@@ -152,6 +157,7 @@
 <script type="text/javascript">
 {include file='list_translation_strings.tpl'}
 bwURL = '{$webDir}';
+var pageListId = {$list->getId()};
 {literal}
 $(document).ready(function(){
 	$( '#cat_confirm_delete_dialog' ).dialog({

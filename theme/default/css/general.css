@@ -134,6 +134,15 @@ a {
 	cursor: pointer;
 }
 
+.selectedCat {
+	border: 2px dotted #FAD42E;
+}
+
+.selectedGift {
+	padding: 2px;
+	border: 1px dotted #2e6e9e;
+}
+
 /* Admin */
 
 #tab-add-list label {
