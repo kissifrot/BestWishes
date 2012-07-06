@@ -20,7 +20,7 @@
 </div>
 <div id="gift_details_dialog">
 	{* Gift details *}
-	{include file='gift_details.tpl'}
+	{include file='gift_details.tpl' caching}
 </div>
 
 {* Gift purchase indication form *}
