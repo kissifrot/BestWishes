@@ -1,6 +1,6 @@
 			{if $sessionOk}
 				<p class="smaller">
-					<i><br />Connected as <b>{$user->name}</b>
+					<i><br />{$lngConnectedAs}
 					<br /><a href="{$webDir}/logout.php"><img src="{$themeWebDir}/img/logout.png" alt="" class="icon_text" /> {$lngLogout}</a>
 					<br /><a href="{$webDir}/options.php"><img src="{$themeWebDir}/img/options.png" alt="" class="icon_text" /> {$lngChangeOptions}</a>
 					</i>

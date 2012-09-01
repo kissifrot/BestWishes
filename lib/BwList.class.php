@@ -27,7 +27,12 @@ class BwList
 		return $this->categories;
 	}
 
-	public function load($slug = null)
+	public function lightLoad($slug = null)
+	{
+		return $this->load($slug, true);
+	}
+
+	public function load($slug = null, $lightLoad = false)
 	{
 		if(!empty($slug))
 			$this->slug = $slug;
@@ -58,7 +63,7 @@ class BwList
 				return false;
 			}
 
-			$this->storeAttributes($result);
+			$this->storeAttributes($result, $lightLoad);
 			return true;
 		} else {
 			return false;
@@ -379,7 +384,7 @@ class BwList
 	/**
 	 *
 	 */
-	private function storeAttributes($sqlResult)
+	private function storeAttributes($sqlResult, $lightStore = false)
 	{
 		$this->id         = (int)$sqlResult['id'];
 		$this->name       = $sqlResult['name'];
@@ -390,10 +395,12 @@ class BwList
 		$this->birthdate  = $sqlResult['birthdate'];
 		$this->lastUpdate = $sqlResult['last_update'];
 
-		$this->categoriesCount = 0;
-		$this->categories = BwCategory::getAllByListId($this->id);
-		if(!empty($this->categories)) {
-			$this->categoriesCount = count($this->categories);
+		if(!$lightStore) {
+			$this->categoriesCount = 0;
+			$this->categories = BwCategory::getAllByListId($this->id);
+			if(!empty($this->categories)) {
+				$this->categoriesCount = count($this->categories);
+			}
 		}
 	}
 

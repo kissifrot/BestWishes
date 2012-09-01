@@ -1,6 +1,6 @@
 <?php
 /**
- * Show a list
+ * Show a gift details
  */
 define('BESTWISHES', true);
 
@@ -11,6 +11,11 @@ $autoloader = BwClassAutoloader::getInstance();
 
 if(isset($_GET['slug']) && !empty($_GET['slug'])) {
 	$slug = BwInflector::slug($_GET['slug']);
+	if(isset($_GET['id']) && !empty($_GET['id'])) {
+		$giftId = intval($_GET['id']);
+	} else {
+		exit('Gift not specified');
+	}
 } else {
 	exit('List not specified');
 }
@@ -39,33 +44,28 @@ if(BwUser::checkSession()) {
 	}
 }
 $disp->assign('cfgMaxEdits', BwConfig::get('max_gift_name_edits', false));
-$disp->assign('pageViewed', 'list_display');
+$disp->assign('pageViewed', 'gift_display');
 // Translation strings
 $disp->assignListStrings();
 
-// Load and display the list
-$subTitle = '';
+// Load and display the gift
+$gift = new BwGift($giftId);
 $list = new BwList($slug);
-if($list->load()) {
-	// Remove some categories/gifts depending on the situation
-	$list->filterContent($sessionOk, $user);
-	$listTitle = sprintf(_('List display: %s\'s list'), $list->name);
-	$nextEventData = $list->getNearestEventData();
-	$daysLeft = intval($nextEventData['daysLeft']);
-	$eventText = sprintf(_('Next event (%s): '), $nextEventData['name']);
-	if($daysLeft > 0) {
-		$eventText .= sprintf(ngettext('%d day', '%d days', $daysLeft), $daysLeft);
-	} else {
-		$eventText .= _('today');
+if($list->lightLoad()) {
+	if($gift->load()) {
+		// Filter gift data if needed
+		if($sessionOk) {
+			if($user->isListOwner($list)) {
+				$gift->filterContent();
+			}
+		} else {
+			$gift->filterContent();
+		}
+		$title = _('Gift details');
+		$disp->header($title);
+		$disp->assign('list', $list);
+		$disp->assign('gift', $gift);
+		$disp->display('gift_page.tpl');
+		$disp->footer();
 	}
-	$subTitle = $listTitle;
-	if(!empty($list->lastUpdate)) {
-		$subTitle .= '<br /><span id="list_last_update" class="smaller">' . sprintf(_('(last update on: %s)'), date(_('m/d/Y'), strtotime($list->lastUpdate))) . '</span>';
-	}
-	$disp->header($listTitle, $subTitle);
-	$disp->assign('list', $list);
-	$disp->assign('daysLeft', $daysLeft);
-	$disp->assign('timeLeftText', $eventText);
-	$disp->display('list_page.tpl');
-	$disp->footer();
 }

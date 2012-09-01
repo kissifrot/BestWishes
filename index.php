@@ -20,6 +20,7 @@ if(BwUser::checkSession()) {
 } else {
 	$disp = new BwDisplay(BwConfig::get('theme', 'default'));
 }
+$disp->assign('pageViewed', 'home');
 // Translation strings
 $disp->assign('lngHomeInstructions', _('Choose a list to show in the left menu'));
 $disp->assign('lngPasswordForgot', _('Forgot your password?'));

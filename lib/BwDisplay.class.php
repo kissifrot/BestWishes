@@ -43,6 +43,7 @@ class BwDisplay extends Smarty
 		// $this->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
 
 		$this->assign('theme', $this->theme);
+		$this->assign('pageViewed', 'any');
 		$this->assign('webDir', $bwURL);
 		$this->assign('themeWebDir', $this->themeWebDir);
 		$this->assign('sessionOk', false);
@@ -70,7 +71,7 @@ class BwDisplay extends Smarty
 	private function adaptMobile()
 	{
 		global $bwVendorDir, $bwThemeDir;
-		
+
 		require_once($bwVendorDir . DS . 'Mobile_Detect' . DS . 'Mobile_Detect.php');
 		$detect = new Mobile_Detect();
 		$isMobile = $detect->isMobile();
@@ -128,6 +129,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngCategoryNameP', _('Category name:'));
 		$this->assign('lngGiftCategoryP', _('Gift category:'));
 		$this->assign('lngSameMoveCategory', _('Source and destination categories are the same!'));
+		$this->assign('lngBackToList', _('Go back to the list'));
 
 		// Explanation texts
 		$this->assign('lngAddCatExplanation', _('To add a category:<br />-&nbsp;Fill its name<br />-&nbsp;Click on the &#8220;Add the category&#8221; button below'));

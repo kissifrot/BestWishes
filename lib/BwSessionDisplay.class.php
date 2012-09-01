@@ -10,6 +10,7 @@ class BwSessionDisplay extends BwDisplay
 	{
 		parent::__construct($theme);
 		
+		$this->user = $user;
 		$this->assign('sessionOk', true);
 		$this->assign('user', $user);
 		$this->assign('userLastLogin', $_SESSION['last_login']);
@@ -34,5 +35,11 @@ class BwSessionDisplay extends BwDisplay
 		$this->assign('lngCanMark', _('Can mark'));
 		$this->assign('lngAdditionAlert', _('Addition alert'));
 		$this->assign('lngPurchaseAlert', _('Purchase alert'));
+	}
+
+	public function footer()
+	{
+		$this->assign('lngConnectedAs', sprintf(_('Connected as <b>%s</b>'), $this->user->name));
+		parent::footer();
 	}
 }

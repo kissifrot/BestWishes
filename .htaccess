@@ -4,4 +4,5 @@ RewriteEngine On
 
 RewriteRule ^list/([A-za-z0-9]+)$ list_show.php?slug=$1 [L]
 RewriteRule ^list/pdf/list_([A-za-z0-9]+)$ pdf_list_show.php?slug=$1 [L]
+RewriteRule ^gift/([A-za-z0-9]+)/([0-9]+)$ gift_show.php?slug=$1&id=$2 [L]
 </IfModule>

@@ -1,16 +1,15 @@
 			{if $sessionOk}
 				<p class="smaller">
-					<i><br />Connected as <b>{$user->name}</b>
-					<br /><a href="{$webDir}/logout.php"><img src="{$themeWebDir}/img/logout.png" alt="" class="icon_text" /> {$lngLogout}</a>
-					<br /><a href="{$webDir}/options.php"><img src="{$themeWebDir}/img/options.png" alt="" class="icon_text" /> {$lngChangeOptions}</a>
+					<i><br />{$lngConnectedAs}
+					<a href="{$webDir}/logout.php" data-role="button" data-icon="back">{$lngLogout}</a> 
 					</i>
 				</p>
 			{/if}
 				</div>
+			</div><!-- /content -->
+			<div class="footer-docs ui-footer ui-bar-c" data-theme="c" data-role="footer" role="contentinfo">
+				<p>Powered by BestWishes {$version}</p>
 			</div>
-			<div id="footer">
-				Powered by BestWishes {$version} - <a href="{$webDir}/admin/">Admin</a>
-			</div>
-		</div>
+		</div><!-- /page -->
 	</body>
 </html>
