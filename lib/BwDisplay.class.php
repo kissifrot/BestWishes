@@ -96,6 +96,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngDetails', _('Details'));
 		$this->assign('lngDelete', _('Delete'));
 		$this->assign('lngAdd', _('Add'));
+		$this->assign('lngNewGift', _('New gift'));
 		$this->assign('lngEdit', _('Edit'));
 		$this->assign('lngDeleteCategory', _('Delete category'));
 		$this->assign('lngMarkAsBought', _('Mark as bought'));

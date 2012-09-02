@@ -12,6 +12,10 @@
 								{else}
 									<a id="actn_edit_gift_{$gift->getId()}" href="/" onclick="startEditGift(true, '{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$category->getId()}, {$list->getId()}); return false" title="{$lngEditGift}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit.png" /></a>&nbsp;
 								{/if}
+							{else}
+								{if $userLastLoginTime < strtotime($gift->addedDate)}
+									<img alt="{$lngNewGift}" title="{$lngNewGift}" class="icon_text" src="{$themeWebDir}/img/new.png" />
+								{/if}
 							{/if}
 							<span id="gif_name_{$gift->getId()}" class="gift_name{if $gift->isBought && !$user->isListOwner($list)} bought_gift{/if}" ondblclick="showGiftDetailsWindow({$gift->getId()}, {$list->getId()})">{$gift->name|ucfirst}</span>
 							{if $user->canMarkGiftsForList($list->getId()) && !$gift->isBought}

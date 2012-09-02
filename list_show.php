@@ -47,6 +47,9 @@ $disp->assignListStrings();
 $subTitle = '';
 $list = new BwList($slug);
 if($list->load()) {
+	if($sessionOk) {
+		$disp->assign('userLastLoginTime', strtotime($_SESSION['last_login']));
+	}
 	// Remove some categories/gifts depending on the situation
 	$list->filterContent($sessionOk, $user);
 	$listTitle = sprintf(_('List display: %s\'s list'), $list->name);
