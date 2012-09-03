@@ -118,9 +118,8 @@ function deleteCat(listId, catId)
 	});
 }
 
-function confirmDeleteGift(giftId, catId, listId) {
+function confirmDeleteGift(giftId, listId) {
 	currentGiftId = parseInt(giftId);
-	currentCatId = parseInt(catId);
 	currentListId = parseInt(listId);
 	$('<div></div>')
 	.html(bwLng.confirmGiftDeletion)
@@ -130,7 +129,7 @@ function confirmDeleteGift(giftId, catId, listId) {
 			{
 				text: bwLng.deleteIt,
 				click: function() { 
-					deleteGift(currentGiftId, currentCatId, currentListId);
+					deleteGift(currentGiftId, currentListId);
 					$(this).dialog('close');
 				}
 			},
@@ -144,12 +143,12 @@ function confirmDeleteGift(giftId, catId, listId) {
 	});
 }
 
-function deleteGift(giftId, catId, listId)
+function deleteGift(giftId, listId)
 {
 	$.ajax({
 		type: 'POST',
 		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=del',
-		data: {type: 'gift', catId: catId, id: giftId},
+		data: {type: 'gift', id: giftId},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
@@ -165,7 +164,7 @@ function deleteGift(giftId, catId, listId)
 	});
 }
 
-function startEditGift(canEdit, giftName, giftId, catId, listId)
+function startEditGift(canEdit, giftName, giftId, listId)
 {
 	if(!canEdit) {
 		showFlashMessage('error', bwLng.maxEditsReached);
@@ -175,7 +174,6 @@ function startEditGift(canEdit, giftName, giftId, catId, listId)
 		currentGiftName = giftName;
 	}
 	currentGiftId = parseInt(giftId);
-	currentCatId = parseInt(catId);
 	currentListId = parseInt(listId);
 	$('<input type="text" id="gift_edit_name" />')
 	.insertAfter('#gif_name_' + currentGiftId)
@@ -392,10 +390,9 @@ function moveGift(giftId, listId, targetCatId)
 	});
 }
 
-function showBuyWindow(giftName, giftId, catId, listId)
+function showBuyWindow(giftName, giftId, listId)
 {
 	currentGiftId = parseInt(giftId);
-	currentCatId = parseInt(catId);
 	currentListId = parseInt(listId);
 	$('#bought_gift_name').text(giftName);
 	$('#gift_purchase_dialog').dialog( 'option', 'buttons', 
@@ -406,7 +403,7 @@ function showBuyWindow(giftName, giftId, catId, listId)
 			click: function() { 
 				$('#btn-confirm-purchase').button( 'disable' );
 				$('#btn-confirm-purchase').button( 'option', 'label', bwLng.pleaseWait );
-				markGiftAsBought(currentGiftId, currentCatId, currentListId);
+				markGiftAsBought(currentGiftId, currentListId);
 			}
 		},
 		{
@@ -420,12 +417,12 @@ function showBuyWindow(giftName, giftId, catId, listId)
 	$('#gift_purchase_dialog').dialog( 'open' );
 }
 
-function markGiftAsBought(giftId, catId, listId)
+function markGiftAsBought(giftId, listId)
 {
 	$.ajax({
 		type: 'POST',
 		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=mark_bought',
-		data: {type: 'gift', catId: catId, id: giftId, purchaseComment: $('#purchase_comment').val()},
+		data: {type: 'gift', id: giftId, purchaseComment: $('#purchase_comment').val()},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);

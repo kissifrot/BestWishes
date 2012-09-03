@@ -6,11 +6,11 @@
 					<div id="gift_list_elem_{$gift->getId()}" class="gift_list_element">
 						{if $sessionOk}
 							{if $user->canEditList($list->getId())}
-							<a href="/" onclick="confirmDeleteGift({$gift->getId()}, {$category->getId()}, {$list->getId()}); return false" title="{$lngDelete}"><img alt="{$lngDelete}" class="icon_text" src="{$themeWebDir}/img/delete.png" /></a>&nbsp;
+							<a href="/" onclick="confirmDeleteGift({$gift->getId()}, {$list->getId()}); return false" title="{$lngDelete}"><img alt="{$lngDelete}" class="icon_text" src="{$themeWebDir}/img/delete.png" /></a>&nbsp;
 								{if $cfgMaxEdits && $gift->editsCount >= $cfgMaxEdits}
 									<a href="/" onclick="startEditGift(false); return false" title="{$lngCannotEditGift}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit_not.png" /></a>&nbsp;
 								{else}
-									<a id="actn_edit_gift_{$gift->getId()}" href="/" onclick="startEditGift(true, '{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$category->getId()}, {$list->getId()}); return false" title="{$lngEditGift}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit.png" /></a>&nbsp;
+									<a id="actn_edit_gift_{$gift->getId()}" href="/" onclick="startEditGift(true, '{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$list->getId()}); return false" title="{$lngEditGift}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit.png" /></a>&nbsp;
 								{/if}
 							{else}
 								{if $userLastLoginTime < strtotime($gift->addedDate)}
@@ -19,7 +19,7 @@
 							{/if}
 							<span id="gif_name_{$gift->getId()}" class="gift_name{if $gift->isBought && !$user->isListOwner($list)} bought_gift{/if}" ondblclick="showGiftDetailsWindow({$gift->getId()}, {$list->getId()})">{$gift->name|ucfirst}</span>
 							{if $user->canMarkGiftsForList($list->getId()) && !$gift->isBought}
-							&nbsp;<a href="/" onclick="showBuyWindow('{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$category->getId()}, {$list->getId()}); return false" title="{$lngMarkAsBought}"><img alt="{$lngMarkAsBought}" class="icon_text" src="{$themeWebDir}/img/gift_buy.png" /></a> 
+							&nbsp;<a href="/" onclick="showBuyWindow('{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$list->getId()}); return false" title="{$lngMarkAsBought}"><img alt="{$lngMarkAsBought}" class="icon_text" src="{$themeWebDir}/img/gift_buy.png" /></a> 
 							{/if}
 							{if $user->isListOwner($list) && !$gift->isReceived}
 							&nbsp;<a href="/" onclick="markGiftAsReceived(); return false" title="{$lngMarkAsReceived}"><img alt="{$lngMarkAsReceived}" class="icon_text" src="{$themeWebDir}/img/gift_received.png" /></a> 

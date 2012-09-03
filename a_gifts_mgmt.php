@@ -226,6 +226,10 @@ switch($action) {
 						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 						exit;
 					}
+					if($category->giftListId !== $listId) {
+						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+						exit;
+					}
 					$statusCode = $category->delete($listId);
 					if($statusCode == 0) {
 						$status = 'success';
@@ -237,13 +241,8 @@ switch($action) {
 					if(!isset($_POST['id']) || empty($_POST['id'])) {
 						exit;
 					}
-					if(!isset($_POST['catId']) || empty($_POST['catId'])) {
-						exit;
-					}
-					$catId = intval($_POST['catId']);
 					$giftId = intval($_POST['id']);
 					$gift = new BwGift($giftId);
-					$category = new BwCategory($catId);
 					
 					$statusMessages = array(
 						0 => _('Gift deleted'),
@@ -252,7 +251,13 @@ switch($action) {
 					);
 					$statusCode = 99;
 					$status = 'error';
-					if(!$category->load() || !$gift->load()) {
+					if(!$gift->load()) {
+						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+						exit;
+					}
+					$catId = $gift->getCategoryId();
+					$category = new BwCategory($catId);
+					if(!$category->load()) {
 						$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 						exit;
 					}
@@ -273,18 +278,14 @@ switch($action) {
 		// Mark a gift as bought
 		if(!isset($_POST['id']) || empty($_POST['id'])) {
 			exit;
-		}if(!isset($_POST['catId']) || empty($_POST['catId'])) {
-			exit;
 		}
 		$giftId = intval($_POST['id']);
-		$catId = intval($_POST['catId']);
 		// Little cleanup of purchase comment
 		$purchaseComment = trim($_POST['purchaseComment']);
 		if(!empty($purchaseComment)) {
 			$purchaseComment = strip_tags($purchaseComment);
 		}
 		$gift = new BwGift($giftId);
-		$category = new BwCategory($catId);
 		$statusMessages = array(
 			0 => _('Gift marked as bought'),
 			1 => _('Could not mark the gift as bought'),
@@ -297,7 +298,13 @@ switch($action) {
 			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 			exit;
 		}
-		if(!$category->load() || !$gift->load()) {
+		if(!$gift->load()) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		$catId = $gift->getCategoryId();
+		$category = new BwCategory($catId);
+		if(!$category->load()) {
 			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 			exit;
 		}
