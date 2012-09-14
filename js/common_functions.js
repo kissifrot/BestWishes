@@ -5,18 +5,18 @@ function isTextNode(){
 function showFlashMessage(type, message) {
 	var spanContent = '<span class="ui-icon floatingIcon ';
 	if(type == 'error') {
+		spanContent += 'ui-icon-alert">';
 		if(!$('#flash_message > div').hasClass('ui-state-error')) {
 			// We showed previously an info message
 			$('#flash_message > div').removeClass('ui-state-highlight');
 			$('#flash_message > div').addClass('ui-state-error');
-			spanContent += 'ui-icon-error">';
 		}
 	} else {
+		spanContent += 'ui-icon-info">';
 		if(!$('#flash_message > div').hasClass('ui-state-highlight')) {
 			// We showed previously an error message
 			$('#flash_message > div').removeClass('ui-state-error');
 			$('#flash_message > div').addClass('ui-state-highlight');
-			spanContent += 'ui-icon-info">';
 		}
 	}
 	spanContent += '</span>';
