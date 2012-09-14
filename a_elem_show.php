@@ -59,7 +59,7 @@ switch($type) {
 		if(!$sessionOk) {
 			exit;
 		}
-		$allCats = BwCategory::getAllByListId($id);
+		$allCats = BwCategory::getAllByListId($listId);
 		foreach($allCats as $cat) {
 			unset($cat->gifts);
 		}
