@@ -18,6 +18,7 @@ class BwMailer
 		require_once $GLOBALS['bwVendorDir'] . '/swift/swift_required.php';
 		// Configure the transport class
 		$transportType = BwConfig::get('mail_transport_type', 'mail');
+		$this->logFilePath = bwConfig::get('log_filepath', false);
 		switch($transportType) {
 			case 'smtp':
 				// Send mails using a SMTP server
@@ -36,19 +37,16 @@ class BwMailer
 		}
 		$this->mailFromAddress = bwConfig::get('mail_from', false);
 		$this->mailFromName = bwConfig::get('mail_from_name', '');
-		$this->logFilePath = bwConfig::get('log_filepath', false);
 	}
 
 	/**
 	 *
 	 */
-	private function log($message)
+	protected function log($message)
 	{
 		if(!empty($message) && !empty($this->logFilePath)) {
-			if(is_writable($this->logFilePath)) {
-				$message = date('Y-m-d H:i:s'). ':' . "\t" . $message . "\n";
-				file_put_contents($this->logFilePath, $message, FILE_APPEND);
-			}
+			$message = date('Y-m-d H:i:s'). ':' . "\t" . $message . "\n";
+			@file_put_contents($this->logFilePath, $message, FILE_APPEND);
 		}
 		return false;
 	}
@@ -127,7 +125,7 @@ class BwMailer
 				return false;
 			}
 		} catch(Exception $e) {
-			$this->log('Mailer Exception: ' . $e->getMessage());
+			$bwMailer->log('Mailer Exception: ' . $e->getMessage());
 			return false;
 		}
 
@@ -185,7 +183,7 @@ class BwMailer
 				return false;
 			}
 		} catch(Exception $e) {
-			$this->log('Mailer Exception: ' . $e->getMessage());
+			$bwMailer->log('Mailer Exception: ' . $e->getMessage());
 			return false;
 		}
 
@@ -215,12 +213,14 @@ class BwMailer
 				$mailHtmlContent = $bwMailer->populateTemplate($variables);
 				$mailTextContent = strip_tags($mailHtmlContent);
 
-				$messagesToSend[] = Swift_Message::newInstance()
-				->setSubject($mailSubject)
-				->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
-				->setTo($anUser->email)
-				->setBody($mailHtmlContent, 'text/html')
-				->addPart($mailTextContent, 'text/plain');
+				if(!empty($anUser->email)) {
+					$messagesToSend[] = Swift_Message::newInstance()
+					->setSubject($mailSubject)
+					->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
+					->setTo($anUser->email)
+					->setBody($mailHtmlContent, 'text/html')
+					->addPart($mailTextContent, 'text/plain');
+				}
 			}
 		}
 
@@ -243,7 +243,7 @@ class BwMailer
 				return false;
 			}
 		} catch(Exception $e) {
-			$this->log('Mailer Exception: ' . $e->getMessage());
+			$bwMailer->log('Mailer Exception: ' . $e->getMessage());
 			return false;
 		}
 
