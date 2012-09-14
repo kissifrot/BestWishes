@@ -143,6 +143,11 @@ a {
 	border: 1px dotted #2e6e9e;
 }
 
+.floatingIcon {
+	float: left;
+	margin-right: 0.3em;
+}
+
 /* Admin */
 
 #tab-add-list label {

@@ -3,28 +3,24 @@ function isTextNode(){
 }
 
 function showFlashMessage(type, message) {
+	var spanContent = '<span class="ui-icon floatingIcon ';
 	if(type == 'error') {
 		if(!$('#flash_message > div').hasClass('ui-state-error')) {
 			// We showed previously an info message
 			$('#flash_message > div').removeClass('ui-state-highlight');
 			$('#flash_message > div').addClass('ui-state-error');
-			$('#flash_message > div > p > span').removeClass('ui-icon-info');
-			$('#flash_message > div > p > span').addClass('ui-icon-error');
+			spanContent += 'ui-icon-error">';
 		}
 	} else {
 		if(!$('#flash_message > div').hasClass('ui-state-highlight')) {
 			// We showed previously an error message
 			$('#flash_message > div').removeClass('ui-state-error');
 			$('#flash_message > div').addClass('ui-state-highlight');
-			$('#flash_message > div > p > span').removeClass('ui-icon-error');
-			$('#flash_message > div > p > span').addClass('ui-icon-info');
+			spanContent += 'ui-icon-info">';
 		}
 	}
-	if($('#flash_message > div > p').contents().filter(isTextNode).length > 0) {
-		$('#flash_message > div > p').contents().filter(isTextNode).replaceWith(document.createTextNode(message));
-	} else {
-		$('#flash_message > div > p > span').after(message);
-	}
+	spanContent += '</span>';
+	$('#flash_message > div > p').html(spanContent + message);
 	if(type == 'error') {
 		$('#flash_message').show();
 	} else {
