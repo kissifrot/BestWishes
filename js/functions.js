@@ -443,9 +443,8 @@ function markGiftAsBought(giftId, listId)
 	});
 }
 
-function confirmMarkGiftAsReceived(giftId, catId, listId) {
+function confirmMarkGiftAsReceived(giftId, listId) {
 	currentGiftId = parseInt(giftId);
-	currentCatId = parseInt(catId);
 	currentListId = parseInt(listId);
 	$('<div></div>')
 	.html(bwLng.confirmGiftReceive)
@@ -455,7 +454,7 @@ function confirmMarkGiftAsReceived(giftId, catId, listId) {
 			{
 				text: bwLng.confirm,
 				click: function() { 
-					markGiftAsReceived(currentGiftId, currentCatId, currentListId);
+					markGiftAsReceived(currentGiftId, currentListId);
 					$(this).dialog('close');
 				}
 			},
@@ -469,12 +468,14 @@ function confirmMarkGiftAsReceived(giftId, catId, listId) {
 	});
 }
 
-function markGiftAsReceived(giftId, catId, listId)
+function markGiftAsReceived(giftId, listId)
 {
+	currentGiftId = parseInt(giftId);
+	currentListId = parseInt(listId);
 	$.ajax({
 		type: 'POST',
 		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=mark_received',
-		data: {type: 'gift', catId: catId, id: giftId},
+		data: {type: 'gift', id: giftId},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
@@ -482,7 +483,7 @@ function markGiftAsReceived(giftId, catId, listId)
 		success: function(returnedData, textStatus, jqXHR) {
 			if(returnedData.status == 'success') {
 				showFlashMessage('info', returnedData.message);
-				reloadList(listId);
+				reloadList(currentListId);
 			} else {
 				showFlashMessage('error', returnedData.message);
 			}

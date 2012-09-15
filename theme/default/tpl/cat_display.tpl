@@ -22,7 +22,7 @@
 							&nbsp;<a href="/" onclick="showBuyWindow('{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$list->getId()}); return false" title="{$lngMarkAsBought}"><img alt="{$lngMarkAsBought}" class="icon_text" src="{$themeWebDir}/img/gift_buy.png" /></a> 
 							{/if}
 							{if $user->isListOwner($list) && !$gift->isReceived}
-							&nbsp;<a href="/" onclick="markGiftAsReceived(); return false" title="{$lngMarkAsReceived}"><img alt="{$lngMarkAsReceived}" class="icon_text" src="{$themeWebDir}/img/gift_received.png" /></a> 
+							&nbsp;<a href="/" onclick="confirmMarkGiftAsReceived({$gift->getId()}, {$list->getId()}); return false" title="{$lngMarkAsReceived}"><img alt="{$lngMarkAsReceived}" class="icon_text" src="{$themeWebDir}/img/gift_received.png" /></a> 
 							{/if}
 							{if $gift->isBought && !$user->isListOwner($list)}
 								{if !empty($gift->boughtComment)}

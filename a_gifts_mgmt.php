@@ -328,13 +328,9 @@ switch($action) {
 		// Mark a gift as received
 		if(!isset($_POST['id']) || empty($_POST['id'])) {
 			exit;
-		}if(!isset($_POST['catId']) || empty($_POST['catId'])) {
-			exit;
 		}
 		$giftId = intval($_POST['id']);
-		$catId = intval($_POST['catId']);
 		$gift = new BwGift($giftId);
-		$category = new BwCategory($catId);
 		$statusMessages = array(
 			0 => _('Gift marked as received'),
 			1 => _('Could not mark the gift as received'),
@@ -347,7 +343,13 @@ switch($action) {
 			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 			exit;
 		}
-		if(!$category->load() || !$gift->load()) {
+		if(!$gift->load()) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		$catId = $gift->getCategoryId();
+		$category = new BwCategory($catId);
+		if(!$category->load()) {
 			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 			exit;
 		}
