@@ -268,7 +268,7 @@ class BwMailer
 			'__BW_URL__' => $bwURL,
 			'__BW_LIST_URL__' => $bwURL . '/list/' . $buyingList->slug,
 			'__GIFT_COMMENT__' => $purchaseComment,
-			'__GIFT_FULL_NAME__' => $giftName,
+			'__GIFT_NAME__' => $giftName,
 		);
 		if(!empty($purchaseComment)) {
 			$variables['__GIFT_COMMENT__'] = sprintf(_('He/she left the following comment: %s<br />'), strip_tags($purchaseComment));
