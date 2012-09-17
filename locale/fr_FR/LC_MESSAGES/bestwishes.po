@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: BestWishes 0.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-02 11:25+0100\n"
-"PO-Revision-Date: 2012-09-17 21:17+0100\n"
+"PO-Revision-Date: 2012-09-17 21:31+0100\n"
 "Last-Translator: Philippe Villiers <kissifrot@gmail.com>\n"
 "Language-Team:  <kissifrot@gmail.com>\n"
 "Language: fr_FR\n"
@@ -418,7 +418,7 @@ msgstr "Il/elle a laissé le commentaire suivant : %s<br />"
 #: lib/BwMailer.class.php:281
 #, php-format
 msgid "Purchase of a gift to the list %s"
-msgstr "Achat d'un cadeau de la lsite %s"
+msgstr "Achat d'un cadeau de la liste %s"
 
 #: lib/BwPdf.class.php:34
 #, php-format
@@ -766,7 +766,7 @@ msgstr "Gestion des listes"
 
 #: admin/adm_lists.php:26
 msgid "(Select an user)"
-msgstr ""
+msgstr "(Sélectionnez un utilisateur)"
 
 #: admin/adm_users.php:17
 msgid "Users management"
@@ -782,7 +782,7 @@ msgstr ""
 
 #: admin/a_adm_lists_mgmt.php:30 admin/a_adm_lists_mgmt.php:127
 msgid "A list of the same name already exist"
-msgstr ""
+msgstr "Une liste existe déjà avec ce nom"
 
 #: admin/a_adm_lists_mgmt.php:54
 msgid "List deleted succesfully"
@@ -822,11 +822,11 @@ msgstr ""
 
 #: admin/a_adm_users_mgmt.php:53
 msgid "The given e-mail address is invalid"
-msgstr ""
+msgstr "L'adresse e-mail est invalide"
 
 #: admin/a_adm_users_mgmt.php:54
 msgid "An user of the same name already exist"
-msgstr ""
+msgstr "Un utilisateur existe déjà avec ce pesudo"
 
 #~ msgid "Options magnagement"
 #~ msgstr "Gestion des options"
