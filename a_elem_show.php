@@ -68,6 +68,7 @@ switch($type) {
 	case 'list':
 		if($sessionOk) {
 			$user->loadParams();
+			$disp->assign('userLastLoginTime', strtotime($_SESSION['last_login']));
 			$tipsText = BwConfig::get('list_tips_text', false);
 			$disp->assign('tipsText', $tipsText);
 		} else {

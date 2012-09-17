@@ -108,7 +108,7 @@ class BwMailer
 				$this->log('Mailer Exception: ' . $e->getMessage());
 			}
 		}
-		
+
 		return $messagesSent;
 	}
 
@@ -156,12 +156,14 @@ class BwMailer
 				$mailHtmlContent = $bwMailer->populateTemplate($variables);
 				$mailTextContent = strip_tags($mailHtmlContent);
 
-				$messagesToSend[] = Swift_Message::newInstance()
-				->setSubject($mailSubject)
-				->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
-				->setTo($anUser->email)
-				->setBody($mailHtmlContent, 'text/html')
-				->addPart($mailTextContent, 'text/plain');
+				if(!empty($anUser->email)) {
+					$messagesToSend[] = Swift_Message::newInstance()
+					->setSubject($mailSubject)
+					->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
+					->setTo($anUser->email)
+					->setBody($mailHtmlContent, 'text/html')
+					->addPart($mailTextContent, 'text/plain');
+				}
 			}
 		}
 
@@ -247,7 +249,7 @@ class BwMailer
 			return false;
 		}
 
-		if(!$bwMailer->setTemplate('alert_buy_' . $bwLang)) {
+		if(!$bwMailer->setTemplate('alert_purchase_' . $bwLang)) {
 			return false;
 		}
 
@@ -256,38 +258,40 @@ class BwMailer
 		$messagesToSend = array();
 		$purchaseComment = trim($purchaseComment);
 		if($isSurprise) {
-			$giftName = sprintf(_('surprise gift %s', $giftName));
+			$giftName = sprintf(_('surprise gift %s'), $giftName);
 		} else {
-			$giftName = sprintf(_('gift %s', $giftName));
+			$giftName = sprintf(_('gift %s'), $giftName);
 		}
 		$variables = array(
 			'__BUYER_NAME__' => $buyingUser->name,
-			'__LIST_NAME__' => $addingList->name,
+			'__LIST_NAME__' => $buyingList->name,
 			'__BW_URL__' => $bwURL,
-			'__BW_LIST_URL__' => $bwURL . '/list/' . $addingList->slug,
+			'__BW_LIST_URL__' => $bwURL . '/list/' . $buyingList->slug,
 			'__GIFT_COMMENT__' => $purchaseComment,
 			'__GIFT_FULL_NAME__' => $giftName,
 		);
 		if(!empty($purchaseComment)) {
-			$variables['__GIFT_COMMENT__'] = sprintf(_('He/she left the following comment: %s<br />'), striptags($purchaseComment));
+			$variables['__GIFT_COMMENT__'] = sprintf(_('He/she left the following comment: %s<br />'), strip_tags($purchaseComment));
 		}
 
 		foreach($allUsers as $anUser) {
 			// Check for users other than the owner who enabled the purchase alert for the list
-			if(!$anUser->isListOwner($addingList) && $anUser->hasPurchaseAlertForList($addingList->getId())) {
+			if(!$anUser->isListOwner($buyingList) && $anUser->hasPurchaseAlertForList($buyingList->getId())) {
 				if($anUser->getId() != $buyingUser->getId()) {
 					$variables['__USER_NAME__'] = $anUser->name;
 					// Prepare the mail data
-					$mailSubject = sprintf(_('Purchase of a gift to the list %s'), $addingList->name);
+					$mailSubject = sprintf(_('Purchase of a gift to the list %s'), $buyingList->name);
 					$mailHtmlContent = $bwMailer->populateTemplate($variables);
 					$mailTextContent = strip_tags($mailHtmlContent);
 
-					$messagesToSend[] = Swift_Message::newInstance()
-					->setSubject($mailSubject)
-					->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
-					->setTo($anUser->email)
-					->setBody($mailHtmlContent, 'text/html')
-					->addPart($mailTextContent, 'text/plain');
+					if(!empty($anUser->email)) {
+						$messagesToSend[] = Swift_Message::newInstance()
+						->setSubject($mailSubject)
+						->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
+						->setTo($anUser->email)
+						->setBody($mailHtmlContent, 'text/html')
+						->addPart($mailTextContent, 'text/plain');
+					}
 				}
 			}
 		}

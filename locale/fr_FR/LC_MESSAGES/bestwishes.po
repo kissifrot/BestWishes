@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: BestWishes 0.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-02 11:25+0100\n"
-"PO-Revision-Date: 2012-09-02 11:27+0100\n"
+"PO-Revision-Date: 2012-09-17 21:17+0100\n"
 "Last-Translator: Philippe Villiers <kissifrot@gmail.com>\n"
 "Language-Team:  <kissifrot@gmail.com>\n"
 "Language: fr_FR\n"
@@ -14,6 +14,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: H:\\Copies_travail_depots\\BestWishes\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.5.3\n"
 "X-Poedit-SearchPath-0: lib\n"
 
 #: lib/BwAdminDisplay.class.php:27
@@ -188,7 +189,7 @@ msgstr "Astuces :"
 
 #: lib/BwDisplay.class.php:119
 msgid "Comment <em>(optional)</em>:"
-msgstr "Commentaire <em>(optionel)</em>:"
+msgstr "Commentaire <em>(optionnel)</em> :"
 
 #: lib/BwDisplay.class.php:120
 msgid "Gift:"
