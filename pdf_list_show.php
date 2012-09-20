@@ -43,7 +43,7 @@ if($list->load()) {
 	if(!empty($list->lastUpdate)) {
 		$subTitle = sprintf(_('(last update on: %s)'), date(_('m/d/Y'), strtotime($list->lastUpdate)));
 	} else {
-		$subTitle = ('(last update on: n/a)');
+		$subTitle = (_('(last update on: n/a)'));
 	}
 	// Outpuf the PDF
 	$list->PdfOutput($listTitle, $subTitle, $sessionOk, $user);

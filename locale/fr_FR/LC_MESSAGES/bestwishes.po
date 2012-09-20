@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BestWishes 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-02 11:25+0100\n"
-"PO-Revision-Date: 2012-09-17 21:31+0100\n"
+"POT-Creation-Date: 2012-09-20 21:44+0100\n"
+"PO-Revision-Date: 2012-09-20 21:44+0100\n"
 "Last-Translator: Philippe Villiers <kissifrot@gmail.com>\n"
 "Language-Team:  <kissifrot@gmail.com>\n"
 "Language: fr_FR\n"
@@ -75,7 +75,7 @@ msgstr "Déconnexion"
 msgid "Change your options"
 msgstr "Changez vos options"
 
-#: lib/BwDisplay.class.php:61 index.php:17 list_show.php:63
+#: lib/BwDisplay.class.php:61 index.php:17 list_show.php:66
 #: pdf_list_show.php:44
 msgid "m/d/Y"
 msgstr "d/m/Y"
@@ -243,7 +243,7 @@ msgstr "Nom de la catégorie"
 msgid "Gift category:"
 msgstr "Catégorie du cadeau :"
 
-#: lib/BwDisplay.class.php:132 a_gifts_mgmt.php:372
+#: lib/BwDisplay.class.php:132 a_gifts_mgmt.php:381
 msgid "Source and destination categories are the same!"
 msgstr "La catégorie source et celle de destination sont identiques !"
 
@@ -386,11 +386,11 @@ msgstr "(acheté par %s le %s)"
 msgid "list_"
 msgstr "list_"
 
-#: lib/BwMailer.class.php:34
+#: lib/BwMailer.class.php:35
 msgid "No mailer or incompatible one"
 msgstr ""
 
-#: lib/BwMailer.class.php:157
+#: lib/BwMailer.class.php:155
 #, php-format
 msgid "Addition of a surprise gift to the list %s"
 msgstr "Ajout d'un cadeau surprise à la liste %s"
@@ -400,22 +400,22 @@ msgstr "Ajout d'un cadeau surprise à la liste %s"
 msgid "Addition of a gift to the list %s"
 msgstr "Ajout d'un cadeau à la liste %s"
 
-#: lib/BwMailer.class.php:259
+#: lib/BwMailer.class.php:261
 #, php-format
 msgid "surprise gift %s"
 msgstr "cadeau surprise %s"
 
-#: lib/BwMailer.class.php:261
+#: lib/BwMailer.class.php:263
 #, php-format
 msgid "gift %s"
 msgstr "cadeau %s"
 
-#: lib/BwMailer.class.php:272
+#: lib/BwMailer.class.php:274
 #, php-format
 msgid "He/she left the following comment: %s<br />"
 msgstr "Il/elle a laissé le commentaire suivant : %s<br />"
 
-#: lib/BwMailer.class.php:281
+#: lib/BwMailer.class.php:283
 #, php-format
 msgid "Purchase of a gift to the list %s"
 msgstr "Achat d'un cadeau de la liste %s"
@@ -504,33 +504,33 @@ msgid ""
 "\n"
 msgstr ""
 
-#: a_elem_show.php:78 gift_show.php:40 list_show.php:35
+#: a_elem_show.php:79 gift_show.php:40 list_show.php:35
 msgid "This list is not public"
 msgstr "Cette liste n'est pas publique"
 
-#: a_elem_show.php:78 a_elem_show.php:79 gift_show.php:40 gift_show.php:41
+#: a_elem_show.php:79 a_elem_show.php:80 gift_show.php:40 gift_show.php:41
 #: list_show.php:35 list_show.php:36 pdf_list_show.php:31
 msgid "You must be logged in to view this list"
 msgstr "Vous devez être identifié pour voir cette liste"
 
-#: a_elem_show.php:92 list_show.php:52
+#: a_elem_show.php:93 list_show.php:55
 #, php-format
 msgid "List display: %s's list"
 msgstr "Affichage d'une liste : liste de %s"
 
-#: a_elem_show.php:95 list_show.php:55
+#: a_elem_show.php:96 list_show.php:58
 #, php-format
 msgid "Next event (%s): "
 msgstr "Prochain évènement (%s) : "
 
-#: a_elem_show.php:97 list_show.php:57
+#: a_elem_show.php:98 list_show.php:60
 #, php-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d jour"
 msgstr[1] "%d jours"
 
-#: a_elem_show.php:99 list_show.php:59
+#: a_elem_show.php:100 list_show.php:62
 msgid "today"
 msgstr "ajourd'hui"
 
@@ -550,8 +550,8 @@ msgid "Could not add category \"%s\": it already exists"
 msgstr "Impossible d'ajouter la catégorie \"%s\" : elle existe déjà"
 
 #: a_gifts_mgmt.php:52 a_gifts_mgmt.php:78 a_gifts_mgmt.php:120
-#: a_gifts_mgmt.php:181 a_gifts_mgmt.php:221 a_gifts_mgmt.php:251
-#: a_gifts_mgmt.php:292 a_gifts_mgmt.php:335 a_gifts_mgmt.php:373
+#: a_gifts_mgmt.php:181 a_gifts_mgmt.php:221 a_gifts_mgmt.php:250
+#: a_gifts_mgmt.php:293 a_gifts_mgmt.php:338 a_gifts_mgmt.php:382
 #: a_opts_mgmt.php:34 a_opts_mgmt.php:77 admin/a_adm_lists_mgmt.php:31
 #: admin/a_adm_lists_mgmt.php:56 admin/a_adm_lists_mgmt.php:103
 #: admin/a_adm_lists_mgmt.php:128 admin/a_adm_users_mgmt.php:30
@@ -608,43 +608,43 @@ msgstr "Catégorie supprimée"
 msgid "Could not delete category"
 msgstr "Impossible de supprimer la catégorie"
 
-#: a_gifts_mgmt.php:249
+#: a_gifts_mgmt.php:248
 msgid "Gift deleted"
 msgstr "Cadeau supprimé"
 
-#: a_gifts_mgmt.php:250
+#: a_gifts_mgmt.php:249
 msgid "Could not delete gift"
 msgstr "Impossible de supprimer le cadeau"
 
-#: a_gifts_mgmt.php:289
+#: a_gifts_mgmt.php:290
 msgid "Gift marked as bought"
 msgstr "Cadeau marqué comme acheté"
 
-#: a_gifts_mgmt.php:290
+#: a_gifts_mgmt.php:291
 msgid "Could not mark the gift as bought"
 msgstr "Impossible de marquer le cadeau comme acheté"
 
-#: a_gifts_mgmt.php:291
+#: a_gifts_mgmt.php:292
 msgid "Gift is already marked as bought"
 msgstr "Le cadeau est déjà marqué comme acheté"
 
-#: a_gifts_mgmt.php:332
+#: a_gifts_mgmt.php:335
 msgid "Gift marked as received"
 msgstr "Cadeau marqué comme reçu"
 
-#: a_gifts_mgmt.php:333
+#: a_gifts_mgmt.php:336
 msgid "Could not mark the gift as received"
 msgstr "Imposssible de marquer le cadeau comme reçu"
 
-#: a_gifts_mgmt.php:334
+#: a_gifts_mgmt.php:337
 msgid "Gift is already marked as received"
 msgstr "Le cadeau est déjà marqué comme reçu"
 
-#: a_gifts_mgmt.php:370
+#: a_gifts_mgmt.php:379
 msgid "Gift moved successfully"
 msgstr "Cadeau déplacé"
 
-#: a_gifts_mgmt.php:371
+#: a_gifts_mgmt.php:380
 msgid "Could not move the gift to this category"
 msgstr "Impossible de déplacer le cadeau vers cetta catégorie"
 
@@ -742,7 +742,7 @@ msgstr ""
 msgid "Finalize Install"
 msgstr ""
 
-#: list_show.php:63 pdf_list_show.php:44
+#: list_show.php:66 pdf_list_show.php:44
 #, php-format
 msgid "(last update on: %s)"
 msgstr "(dernière mise à jour : le %s)"
@@ -759,6 +759,10 @@ msgstr "Gestion des options"
 #, php-format
 msgid "%s's list"
 msgstr "liste de %s"
+
+#: pdf_list_show.php:46
+msgid "(last update on: n/a)"
+msgstr "(dernière mise à jour : n/a)"
 
 #: admin/adm_lists.php:22
 msgid "Lists management"

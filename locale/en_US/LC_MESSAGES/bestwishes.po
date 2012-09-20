@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BestWishes 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-02 11:25+0100\n"
-"PO-Revision-Date: 2012-09-17 21:17+0100\n"
+"POT-Creation-Date: 2012-09-20 21:44+0100\n"
+"PO-Revision-Date: 2012-09-20 21:45+0100\n"
 "Last-Translator: Philippe Villiers <kissifrot@gmail.com>\n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -74,7 +74,7 @@ msgstr ""
 msgid "Change your options"
 msgstr ""
 
-#: lib/BwDisplay.class.php:61 index.php:17 list_show.php:63
+#: lib/BwDisplay.class.php:61 index.php:17 list_show.php:66
 #: pdf_list_show.php:44
 msgid "m/d/Y"
 msgstr ""
@@ -235,7 +235,7 @@ msgstr ""
 msgid "Gift category:"
 msgstr ""
 
-#: lib/BwDisplay.class.php:132 a_gifts_mgmt.php:372
+#: lib/BwDisplay.class.php:132 a_gifts_mgmt.php:381
 msgid "Source and destination categories are the same!"
 msgstr ""
 
@@ -357,11 +357,11 @@ msgstr ""
 msgid "list_"
 msgstr ""
 
-#: lib/BwMailer.class.php:34
+#: lib/BwMailer.class.php:35
 msgid "No mailer or incompatible one"
 msgstr ""
 
-#: lib/BwMailer.class.php:157
+#: lib/BwMailer.class.php:155
 #, php-format
 msgid "Addition of a surprise gift to the list %s"
 msgstr ""
@@ -371,22 +371,22 @@ msgstr ""
 msgid "Addition of a gift to the list %s"
 msgstr ""
 
-#: lib/BwMailer.class.php:259
+#: lib/BwMailer.class.php:261
 #, php-format
 msgid "surprise gift %s"
 msgstr ""
 
-#: lib/BwMailer.class.php:261
+#: lib/BwMailer.class.php:263
 #, php-format
 msgid "gift %s"
 msgstr ""
 
-#: lib/BwMailer.class.php:272
+#: lib/BwMailer.class.php:274
 #, php-format
 msgid "He/she left the following comment: %s<br />"
 msgstr ""
 
-#: lib/BwMailer.class.php:281
+#: lib/BwMailer.class.php:283
 #, php-format
 msgid "Purchase of a gift to the list %s"
 msgstr ""
@@ -475,33 +475,33 @@ msgid ""
 "\n"
 msgstr ""
 
-#: a_elem_show.php:78 gift_show.php:40 list_show.php:35
+#: a_elem_show.php:79 gift_show.php:40 list_show.php:35
 msgid "This list is not public"
 msgstr ""
 
-#: a_elem_show.php:78 a_elem_show.php:79 gift_show.php:40 gift_show.php:41
+#: a_elem_show.php:79 a_elem_show.php:80 gift_show.php:40 gift_show.php:41
 #: list_show.php:35 list_show.php:36 pdf_list_show.php:31
 msgid "You must be logged in to view this list"
 msgstr ""
 
-#: a_elem_show.php:92 list_show.php:52
+#: a_elem_show.php:93 list_show.php:55
 #, php-format
 msgid "List display: %s's list"
 msgstr ""
 
-#: a_elem_show.php:95 list_show.php:55
+#: a_elem_show.php:96 list_show.php:58
 #, php-format
 msgid "Next event (%s): "
 msgstr ""
 
-#: a_elem_show.php:97 list_show.php:57
+#: a_elem_show.php:98 list_show.php:60
 #, php-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: a_elem_show.php:99 list_show.php:59
+#: a_elem_show.php:100 list_show.php:62
 msgid "today"
 msgstr ""
 
@@ -521,8 +521,8 @@ msgid "Could not add category \"%s\": it already exists"
 msgstr ""
 
 #: a_gifts_mgmt.php:52 a_gifts_mgmt.php:78 a_gifts_mgmt.php:120
-#: a_gifts_mgmt.php:181 a_gifts_mgmt.php:221 a_gifts_mgmt.php:251
-#: a_gifts_mgmt.php:292 a_gifts_mgmt.php:335 a_gifts_mgmt.php:373
+#: a_gifts_mgmt.php:181 a_gifts_mgmt.php:221 a_gifts_mgmt.php:250
+#: a_gifts_mgmt.php:293 a_gifts_mgmt.php:338 a_gifts_mgmt.php:382
 #: a_opts_mgmt.php:34 a_opts_mgmt.php:77 admin/a_adm_lists_mgmt.php:31
 #: admin/a_adm_lists_mgmt.php:56 admin/a_adm_lists_mgmt.php:103
 #: admin/a_adm_lists_mgmt.php:128 admin/a_adm_users_mgmt.php:30
@@ -573,43 +573,43 @@ msgstr ""
 msgid "Could not delete category"
 msgstr ""
 
-#: a_gifts_mgmt.php:249
+#: a_gifts_mgmt.php:248
 msgid "Gift deleted"
 msgstr ""
 
-#: a_gifts_mgmt.php:250
+#: a_gifts_mgmt.php:249
 msgid "Could not delete gift"
 msgstr ""
 
-#: a_gifts_mgmt.php:289
+#: a_gifts_mgmt.php:290
 msgid "Gift marked as bought"
 msgstr ""
 
-#: a_gifts_mgmt.php:290
+#: a_gifts_mgmt.php:291
 msgid "Could not mark the gift as bought"
 msgstr ""
 
-#: a_gifts_mgmt.php:291
+#: a_gifts_mgmt.php:292
 msgid "Gift is already marked as bought"
 msgstr ""
 
-#: a_gifts_mgmt.php:332
+#: a_gifts_mgmt.php:335
 msgid "Gift marked as received"
 msgstr ""
 
-#: a_gifts_mgmt.php:333
+#: a_gifts_mgmt.php:336
 msgid "Could not mark the gift as received"
 msgstr ""
 
-#: a_gifts_mgmt.php:334
+#: a_gifts_mgmt.php:337
 msgid "Gift is already marked as received"
 msgstr ""
 
-#: a_gifts_mgmt.php:370
+#: a_gifts_mgmt.php:379
 msgid "Gift moved successfully"
 msgstr ""
 
-#: a_gifts_mgmt.php:371
+#: a_gifts_mgmt.php:380
 msgid "Could not move the gift to this category"
 msgstr ""
 
@@ -705,7 +705,7 @@ msgstr ""
 msgid "Finalize Install"
 msgstr ""
 
-#: list_show.php:63 pdf_list_show.php:44
+#: list_show.php:66 pdf_list_show.php:44
 #, php-format
 msgid "(last update on: %s)"
 msgstr ""
@@ -721,6 +721,10 @@ msgstr ""
 #: pdf_list_show.php:42
 #, php-format
 msgid "%s's list"
+msgstr ""
+
+#: pdf_list_show.php:46
+msgid "(last update on: n/a)"
 msgstr ""
 
 #: admin/adm_lists.php:22
