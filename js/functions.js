@@ -73,6 +73,7 @@ function confirmDeleteCat(listId, catId)
 	currentCatId = parseInt(catId);
 	$( '#cat_confirm_delete_dialog' ).dialog( 'open' );
 	$( '#cat_confirm_delete_dialog' ).dialog({
+		width: 400,
 		resizable: false,
 		modal: true,
 		title: bwLng.confirmation,

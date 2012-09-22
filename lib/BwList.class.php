@@ -342,6 +342,44 @@ class BwList
 	/**
 	 *
 	 */
+	public function updateLastUpdate()
+	{
+		$lastUpdate = date('Y-m-d H:i:s');
+		$this->lastUpdate = $lastUpdate;
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list',
+			'queryType' => 'UPDATE',
+			'queryFields' => array(
+				'last_update' => ':last_update',
+			),
+			'queryValues' => array(
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':last_update',
+					'variable' => $lastUpdate,
+					'data_type' => PDO::PARAM_STR
+				)
+			),
+			'queryCondition' => 'id = :id'
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result =  $db->exec();
+			if($result) {
+				// TODO: Empty cache or not?
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 *
+	 */
 	public static function checkAnyExisting($nameField, $nameValue) {
 		$queryParams = array(
 			'tableName' => 'gift_list',

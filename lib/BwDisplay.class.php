@@ -115,6 +115,9 @@ class BwDisplay extends Smarty
 		$this->assign('lngConfirmation', _('Confirmation'));
 		$this->assign('lngPurchaseConfirmation', _('Purchase confirmation'));
 		$this->assign('lngConfirmPurchase', _('Confirm purchase'));
+		$this->assign('lngHasComment', _('has comment'));
+		$this->assign('lngIsSurprise', _('is surprise'));
+		$this->assign('lngIsBought', _('is bought'));
 		$this->assign('lngTipsP', _('Tips:'));
 		$this->assign('lngCommentOptionalP', _('Comment <em>(optional)</em>:'));
 		$this->assign('lngGiftP', _('Gift:'));

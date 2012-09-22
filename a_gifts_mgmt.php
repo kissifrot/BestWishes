@@ -94,6 +94,7 @@ switch($action) {
 				$statusCode = BwGift::add($listId, $catId, $giftName, $force);
 				if($statusCode == 0) {
 					$status = 'success';
+					$list->updateLastUpdate();
 					// Send an e-mail if configured
 					$transport = BwConfig::get('mail_transport_type', 'none');
 					if($transport != 'none') {
@@ -193,6 +194,7 @@ switch($action) {
 					$statusCode = $gift->edit($listId, $newName);
 					if($statusCode == 0) {
 						$status = 'success';
+						$list->updateLastUpdate();
 					}
 					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 				break;
@@ -233,6 +235,7 @@ switch($action) {
 					$statusCode = $category->delete($listId);
 					if($statusCode == 0) {
 						$status = 'success';
+						$list->updateLastUpdate();
 					}
 					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 				break;
@@ -268,6 +271,7 @@ switch($action) {
 					$statusCode = $gift->delete($listId);
 					if($statusCode == 0) {
 						$status = 'success';
+						$list->updateLastUpdate();
 					}
 					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 				break;
@@ -360,6 +364,7 @@ switch($action) {
 		$statusCode = $gift->markAsReceived($listId);
 		if($statusCode == 0) {
 			$status = 'success';
+			$list->updateLastUpdate();
 		}
 		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 	break;
@@ -404,6 +409,7 @@ switch($action) {
 			$statusCode = $gift->moveToCategory($catId, $listId);
 			if($statusCode == 0) {
 				$status = 'success';
+				$list->updateLastUpdate();
 			}
 			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 		}

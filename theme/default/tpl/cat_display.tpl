@@ -26,12 +26,12 @@
 							{/if}
 							{if $gift->isBought && !$user->isListOwner($list)}
 								{if !empty($gift->boughtComment)}
-								<img class="icon_text gift_status" alt="comment" title="has comment" src="{$themeWebDir}/img/comment.png" />
+								<img class="icon_text gift_status" alt="comment" title="{$lngHasComment}" src="{$themeWebDir}/img/comment.png" />
 								{/if}
-								<img class="icon_text gift_status" alt="bought" title="is bought" src="{$themeWebDir}/img/gift_bought.png" />
+								<img class="icon_text gift_status" alt="bought" title="{$lngIsBought}" src="{$themeWebDir}/img/gift_bought.png" />
 							{/if}
 							{if $gift->isSurprise}
-								<img class="icon_text gift_status" alt="surprise" title="is surprise" src="{$themeWebDir}/img/surprise.png" />
+								<img class="icon_text gift_status" alt="surprise" title="{$lngIsSurprise}" src="{$themeWebDir}/img/surprise.png" />
 							{/if}
 						{else}
 							<span id="gif_name_{$gift->getId()}" class="gift_name" ondblclick="showGiftDetailsWindow({$gift->getId()}, {$list->getId()})">{$gift->name|ucfirst}</span>
