@@ -91,7 +91,7 @@ switch($action) {
 					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 					exit;
 				}
-				$statusCode = BwGift::add($listId, $catId, $giftName, $force);
+				$statusCode = BwGift::add($listId, $catId, $giftName, $user->getId(), $force);
 				if($statusCode == 0) {
 					$status = 'success';
 					$list->updateLastUpdate();
@@ -135,7 +135,7 @@ switch($action) {
 					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 					exit;
 				}
-				$statusCode = BwGift::addSurprise($listId, $catId, $giftName, $force);
+				$statusCode = BwGift::addSurprise($listId, $catId, $giftName, $user->getId(), $force);
 				if($statusCode == 0) {
 					$status = 'success';
 					// Send an e-mail if configured
@@ -148,7 +148,6 @@ switch($action) {
 					$status = 'confirm';
 				}
 				$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
-				//var_dump(BwDebug::getInstance());
 			break;
 		}
 	break;

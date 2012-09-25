@@ -8,6 +8,7 @@ class BwGift
 	private $categoryId;
 	public $name;
 	public $addedDate;
+	public $addedBy;
 	public $editsCount;
 	public $isBought;
 	public $isReceived;
@@ -222,6 +223,7 @@ class BwGift
 		$this->categoryId      = (int)$sqlResult['category_id'];
 		$this->name            = $sqlResult['name'];
 		$this->addedDate       = $sqlResult['added_date'];
+		$this->addedBy         = (int)$sqlResult['added_by'];
 		$this->editsCount      = (int)$sqlResult['edits_count'];
 		$this->isBought        = (bool)$sqlResult['is_bought'];
 		$this->isReceived      = (bool)$sqlResult['is_received'];
@@ -248,6 +250,7 @@ class BwGift
 	public function filterContent()
 	{
 		$this->isBought        = false;
+		$this->addedBy         = null;
 		$this->purchaseDate    = null;
 		$this->boughtBy        = null;
 		$this->boughtByName    = null;
@@ -257,10 +260,10 @@ class BwGift
 	/**
 	 *
 	 */
-	public static function add($listId = null, $catId = null, $name = '', $forceAdd = false) {
+	public static function add($listId = null, $catId = null, $name = '', $addingUserId = null, $forceAdd = false, $isSurprise = false) {
 
 		$resultValue = 99;
-		if(empty($listId) || empty($catId) || empty($name)) {
+		if(empty($listId) || empty($catId) || empty($name) || empty($addingUserId)) {
 			return $resultValue;
 		}
 
@@ -279,6 +282,7 @@ class BwGift
 				'gift_list_id' => ':gift_list_id',
 				'category_id' => ':category_id',
 				'name' => ':name',
+				'added_by' => ':added_by',
 				'added_date' => ':added_date',
 			),
 			'queryValues' => array(
@@ -298,81 +302,25 @@ class BwGift
 					'data_type' => PDO::PARAM_INT
 				),
 				array(
-					'parameter' => ':added_date',
-					'variable' => date('Y-m-d H:i:s'),
-					'data_type' => PDO::PARAM_STR
-				)
-			)
-		);
-		if($db->prepareQuery($queryParams)) {
-			$result =  $db->exec();
-			if($result) {
-				// Empty cache
-				BwCache::delete('category_all_list_' . $listId);
-				BwCache::delete('gift_all_cat_' . $catId);
-				// All OK
-				$resultValue = 0;
-			}
-		}
-		return $resultValue;
-	}
-
-	/**
-	 *
-	 */
-	public static function addSurprise($listId = null, $catId = null, $name = '', $forceAdd = false) {
-
-		$resultValue = 99;
-		if(empty($listId) || empty($catId) || empty($name)) {
-			return $resultValue;
-		}
-
-		if(!$forceAdd) {
-			if(self::checkExisting($listId, $name)) {
-				$resultValue = 1;
-				return $resultValue;
-			}
-		}
-
-		$db = BwDatabase::getInstance();
-		$queryParams = array(
-			'tableName' => 'gift',
-			'queryType' => 'INSERT',
-			'queryFields' => array(
-				'gift_list_id' => ':gift_list_id',
-				'category_id' => ':category_id',
-				'name' => ':name',
-				'added_date' => ':added_date',
-				'is_surprise' => ':is_surprise',
-			),
-			'queryValues' => array(
-				array(
-					'parameter' => ':gift_list_id',
-					'variable' => $listId,
-					'data_type' => PDO::PARAM_INT
-				),
-				array(
-					'parameter' => ':category_id',
-					'variable' => $catId,
-					'data_type' => PDO::PARAM_INT
-				),
-				array(
-					'parameter' => ':name',
-					'variable' => $name,
+					'parameter' => ':added_by',
+					'variable' => $addingUserId,
 					'data_type' => PDO::PARAM_INT
 				),
 				array(
 					'parameter' => ':added_date',
 					'variable' => date('Y-m-d H:i:s'),
 					'data_type' => PDO::PARAM_STR
-				),
-				array(
-					'parameter' => ':is_surprise',
-					'variable' => 1,
-					'data_type' => PDO::PARAM_INT
 				)
 			)
 		);
+		if($isSurprise) {
+			$queryParams['queryFields']['is_surprise'] = ':is_surprise';
+			$queryParams['queryValues'][] = array(
+				'parameter' => ':is_surprise',
+				'variable' => 1,
+				'data_type' => PDO::PARAM_INT
+			);
+		}
 		if($db->prepareQuery($queryParams)) {
 			$result =  $db->exec();
 			if($result) {
@@ -388,6 +336,14 @@ class BwGift
 			}
 		}
 		return $resultValue;
+	}
+
+	/**
+	 *
+	 */
+	public static function addSurprise($listId = null, $catId = null, $name = '', $addingUserId = null, $forceAdd = false) {
+
+		return self::add($listId, $catId, $name, $addingUserId, $forceAdd, true);
 	}
 
 	/**
