@@ -57,7 +57,7 @@
 							</td>
 						</tr>
 					</table>
-					<input type="submit" name="submit" value="Add the category" />
+					<input type="submit" name="submit" value="{$lngAddCategory}" />
 					</form>
 				</div>
 			</div>
@@ -87,7 +87,7 @@
 								</td>
 							</tr>
 						</table>
-						<input type="submit" name="submit" value="Add the gift" />
+						<input type="submit" name="submit" value="{$lngAddGift}" />
 					</form>
 				</div>
 			</div>
@@ -139,7 +139,7 @@
 								</td>
 							</tr>
 						</table>
-						<input type="submit" name="submit" value="Add the gift" />
+						<input type="submit" name="submit" value="{$lngAddGift}" />
 					</form>
 				</div>
 			</div>

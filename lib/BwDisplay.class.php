@@ -134,6 +134,8 @@ class BwDisplay extends Smarty
 		$this->assign('lngGiftCategoryP', _('Gift category:'));
 		$this->assign('lngSameMoveCategory', _('Source and destination categories are the same!'));
 		$this->assign('lngBackToList', _('Go back to the list'));
+		$this->assign('lngAddGift', _('Add the gift'));
+		$this->assign('lngAddCategory', _('Add the category'));
 
 		// Explanation texts
 		$this->assign('lngAddCatExplanation', _('To add a category:<br />-&nbsp;Fill its name<br />-&nbsp;Click on the &#8220;Add the category&#8221; button below'));
