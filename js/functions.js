@@ -606,11 +606,7 @@ function updateRight(listId, rightElement, rightType) {
 			} else {
 				showFlashMessage('error', returnedData.message);
 				// Revert the check status
-				if(rElementChecked) {
-					rightElement.checked = false;
-				} else {
-					rightElement.checked = true;
-				}
+				rightElement.checked = !rElementChecked;
 			}
 		}
 	});

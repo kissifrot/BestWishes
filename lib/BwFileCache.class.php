@@ -3,7 +3,7 @@
  * File-based cache mamagement class, borrowed from CakePHP 2.0 ;)
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
@@ -49,14 +49,16 @@ class BwFileCache extends BwAbstractCache {
  */
 	public function init($settings = array()) {
 		global $bwCacheDir;
-		
-		parent::init(array_merge(
-			array(
-				'engine' => 'File', 'path' => $bwCacheDir, 'prefix'=> 'bw_', 'lock'=> true,
-				'serialize'=> true, 'isWindows' => false, 'mask' => 0664
-			),
-			$settings
-		));
+		$settings += array(
+			'engine' => 'File',
+			'path' => $bwCacheDir,
+			'prefix' => 'bw_',
+			'lock' => true,
+			'serialize' => true,
+			'isWindows' => false,
+			'mask' => 0664
+		);
+		parent::init($settings);
 
 		if (DS === '\\') {
 			$this->settings['isWindows'] = true;
@@ -64,15 +66,19 @@ class BwFileCache extends BwAbstractCache {
 		if (substr($this->settings['path'], -1) !== DS) {
 			$this->settings['path'] .= DS;
 		}
+		if (!empty($this->_groupPrefix)) {
+			$this->_groupPrefix = str_replace('_', DS, $this->_groupPrefix);
+		}
 		return $this->_active();
 	}
 
 /**
  * Garbage collection. Permanently remove all expired and deleted data
- *
+ * 
+ * @param integer $expires [optional] An expires timestamp, invalidataing all data before.
  * @return boolean True if garbage collection was successful, false on failure
  */
-	public function gc() {
+	public function gc($expires = null) {
 		return $this->clear(true);
 	}
 
@@ -81,7 +87,7 @@ class BwFileCache extends BwAbstractCache {
  *
  * @param string $key Identifier for the data
  * @param mixed $data Data to be cached
- * @param mixed $duration How long to cache the data, in seconds
+ * @param integer $duration How long to cache the data, in seconds
  * @return boolean True if the data was successfully cached, false on failure
  */
 	public function write($key, $data, $duration) {
@@ -242,7 +248,16 @@ class BwFileCache extends BwAbstractCache {
  * @return boolean true if the cache key could be set, false otherwise
  */
 	protected function _setKey($key, $createKey = false) {
-		$path = new SplFileInfo($this->settings['path'] . $key);
+		$groups = null;
+		if (!empty($this->_groupPrefix)) {
+			$groups = vsprintf($this->_groupPrefix, $this->groups());
+		}
+		$dir = $this->settings['path'] . $groups;
+
+		if (!is_dir($dir)) {
+			mkdir($dir, 0777, true);
+		}
+		$path = new SplFileInfo($dir . $key);
 
 		if (!$createKey && !$path->isFile()) {
 			return false;
@@ -257,7 +272,7 @@ class BwFileCache extends BwAbstractCache {
 			}
 			unset($path);
 
-			if (!$exists && !chmod($this->_File->getPathname(), (int) $this->settings['mask'])) {
+			if (!$exists && !chmod($this->_File->getPathname(), (int)$this->settings['mask'])) {
 				trigger_error(sprintf(_(
 					'Could not apply permission mask "%s" on cache file "%s"'),
 					array($this->_File->getPathname(), $this->settings['mask'])), E_USER_WARNING);
@@ -277,6 +292,38 @@ class BwFileCache extends BwAbstractCache {
 			$this->_init = false;
 			trigger_error(sprintf(_('%s is not writable'), $this->settings['path']), E_USER_WARNING);
 			return false;
+		}
+		return true;
+	}
+
+/**
+ * Generates a safe key for use with cache engine storage engines.
+ *
+ * @param string $key the key passed over
+ * @return mixed string $key or false
+ */
+	public function key($key) {
+		if (empty($key)) {
+			return false;
+		}
+
+		$key = Inflector::underscore(str_replace(array(DS, '/', '.'), '_', strval($key)));
+		return $key;
+	}
+
+/**
+ * Recursively deletes all files under any directory named as $group
+ *
+ * @return boolean success
+ **/
+	public function clearGroup($group) {
+		$directoryIterator = new RecursiveDirectoryIterator($this->settings['path']);
+		$contents = new RecursiveIteratorIterator($directoryIterator, RecursiveIteratorIterator::CHILD_FIRST);
+		foreach ($contents as $object) {
+			$containsGroup = strpos($object->getPathName(), DS . $group . DS) !== false;
+			if ($object->isFile() && $containsGroup) {
+				unlink($object->getPathName());
+			}
 		}
 		return true;
 	}

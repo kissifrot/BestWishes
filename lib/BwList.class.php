@@ -633,8 +633,9 @@ class BwList
 					}
 				}
 			}
-			return true;
+
 		}
+		return true;
 	}
 
 	/**

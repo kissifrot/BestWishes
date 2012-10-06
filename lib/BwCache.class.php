@@ -1,9 +1,9 @@
 <?php
 /**
- * Cache mamagement class, borrowed from CakePHP 2.0 ;)
+ * Cache mamagement class, borrowed from CakePHP 2.2 ;)
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
@@ -34,8 +34,14 @@ class BwCache
 	protected static $_engines = array();
 
 /**
- * Set the cache configuration to use.
+ * Set the cache configuration to use.  config() can
+ * both create new configurations, return the settings for already configured
+ * configurations.
  *
+ * @param string $name Name of the configuration
+ * @param array $settings Optional associative array of settings passed to the engine
+ * @return array(engine, settings) on success, false on failure
+ * @throws CacheException
  */
 	public static function configure($name = null, $settings = array()) {
 		if (is_array($name)) {
@@ -133,7 +139,7 @@ class BwCache
  *
  * `Cache::set(null, 'my_config');`
  *
- * @param mixed $settings Optional string for simple name-value pair or array
+ * @param string|array $settings Optional string for simple name-value pair or array
  * @param string $value Optional for a simple name-value pair
  * @param string $config The configuration name you are changing. Defaults to 'default'
  * @return array Array of settings.
@@ -172,11 +178,12 @@ class BwCache
  *
  * Permanently remove all expired and deleted data
  *
- * @param string $config The config name you wish to have garbage collected. Defaults to 'default'
+ * @param string $config [optional] The config name you wish to have garbage collected. Defaults to 'default'
+ * @param integer $expires [optional] An expires timestamp. Defaults to NULL
  * @return void
  */
-	public static function gc($config = 'default') {
-		self::$_engines[$config]->gc();
+	public static function gc($config = 'default', $expires = null) {
+		self::$_engines[$config]->gc($expires);
 	}
 
 /**
@@ -218,8 +225,7 @@ class BwCache
 		self::set(null, $config);
 		if ($success === false && $value !== '') {
 			trigger_error(
-				__d('cake_dev',
-					"%s cache was unable to write '%s' to %s cache",
+				sprintf(_("%s cache was unable to write '%s' to %s cache"),
 					$config,
 					$key,
 					self::$_engines[$config]->settings['engine']
@@ -264,6 +270,63 @@ class BwCache
 		}
 		return self::$_engines[$config]->read($settings['prefix'] . $key);
 	}
+
+/**
+ * Increment a number under the key and return incremented value.
+ *
+ * @param string $key Identifier for the data
+ * @param integer $offset How much to add
+ * @param string $config Optional string configuration name. Defaults to 'default'
+ * @return mixed new value, or false if the data doesn't exist, is not integer,
+ *    or if there was an error fetching it.
+ */
+	public static function increment($key, $offset = 1, $config = 'default') {
+		$settings = self::settings($config);
+
+		if (empty($settings)) {
+			return false;
+		}
+		if (!self::isInitialized($config)) {
+			return false;
+		}
+		$key = self::$_engines[$config]->key($key);
+
+		if (!$key || !is_integer($offset) || $offset < 0) {
+			return false;
+		}
+		$success = self::$_engines[$config]->increment($settings['prefix'] . $key, $offset);
+		self::set(null, $config);
+		return $success;
+	}
+
+/**
+ * Decrement a number under the key and return decremented value.
+ *
+ * @param string $key Identifier for the data
+ * @param integer $offset How much to subtract
+ * @param string $config Optional string configuration name. Defaults to 'default'
+ * @return mixed new value, or false if the data doesn't exist, is not integer,
+ *   or if there was an error fetching it
+ */
+	public static function decrement($key, $offset = 1, $config = 'default') {
+		$settings = self::settings($config);
+
+		if (empty($settings)) {
+			return false;
+		}
+		if (!self::isInitialized($config)) {
+			return false;
+		}
+		$key = self::$_engines[$config]->key($key);
+
+		if (!$key || !is_integer($offset) || $offset < 0) {
+			return false;
+		}
+		$success = self::$_engines[$config]->decrement($settings['prefix'] . $key, $offset);
+		self::set(null, $config);
+		return $success;
+	}
+
 /**
  * Delete a key from the cache.
  *
@@ -312,6 +375,22 @@ class BwCache
 			return false;
 		}
 		$success = self::$_engines[$config]->clear($check);
+		self::set(null, $config);
+		return $success;
+	}
+
+/**
+ * Delete all keys from the cache belonging to the same group.
+ *
+ * @param string $group name of the group to be cleared
+ * @param string $config name of the configuration to use. Defaults to 'default'
+ * @return boolean True if the cache group was successfully cleared, false otherwise
+ */
+	public static function clearGroup($group, $config = 'default') {
+		if (!self::isInitialized($config)) {
+			return false;
+		}
+		$success = self::$_engines[$config]->clearGroup($group);
 		self::set(null, $config);
 		return $success;
 	}
