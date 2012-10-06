@@ -32,7 +32,7 @@ class BwApcCache extends BwAbstractCache {
  */
 	public function init($settings = array()) {
 		if (!isset($settings['prefix'])) {
-			$settings['prefix'] = Inflector::slug(APP_DIR) . '_';
+			$settings['prefix'] = 'bw_';
 		}
 		$settings += array('engine' => 'Apc');
 		parent::init($settings);

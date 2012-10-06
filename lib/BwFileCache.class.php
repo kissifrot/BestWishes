@@ -307,7 +307,7 @@ class BwFileCache extends BwAbstractCache {
 			return false;
 		}
 
-		$key = Inflector::underscore(str_replace(array(DS, '/', '.'), '_', strval($key)));
+		$key = preg_replace('/[\s]+/', '_', str_replace(array(DS, '/', '.'), '_', strval($key)));
 		return $key;
 	}
 

@@ -1,6 +1,9 @@
 <?php
 /**
- * Inflector class, borrowed from CakePHP 2.0.0 ;)
+ * Inflector class, borrowed from CakePHP 2.2 ;)
+ *
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
@@ -58,7 +61,7 @@ class BwInflector {
 		'/Ź|Ż|Ž/' => 'Z',
 		'/ź|ż|ž/' => 'z',
 		'/Æ|Ǽ/' => 'AE',
-		'/ß/'=> 'ss',
+		'/ß/' => 'ss',
 		'/Ĳ/' => 'IJ',
 		'/ĳ/' => 'ij',
 		'/Œ/' => 'OE',
