@@ -3,7 +3,7 @@ function showGiftDetailsWindow(giftId, listId)
 	var currlistId = parseInt(listId);
 	var currGiftId = parseInt(giftId);
 	$.ajax({
-		url: bwURL + '/a_gift_show.php?listId=' + currlistId + '&id=' + currGiftId,
+		url: bwURL + '/a_elem_show.php?listId=' + currlistId + '&id=' + currGiftId,
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
