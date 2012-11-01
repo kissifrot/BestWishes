@@ -26,7 +26,7 @@ function editListName(id)
 							$('#orig_name_list_' + id).val(newListName);
 							$('#name_list_' + id).show();
 							$('#edit_list_' + id).remove();
-							showFlashMessage('error', returnedData.message);
+							showFlashMessage('info', returnedData.message);
 						}
 					}
 				});
@@ -170,4 +170,73 @@ function deleteUser(id) {
 			}
 		}
 	});
+}
+
+function addEvent() {
+	var eName = $('#add_event_name').val();
+	var ePerm = $('#add_event_perm').val();
+	var eDay = $('#add_event_day').val();
+	var ePMonth = $('#add_event_month').val();
+	var eYear = $('#add_event_year').val();
+	if(eName.length < 2) {
+		showFlashMessage('error', bwLng.errorFormFields);
+	} else {
+		$.ajax({
+			url: 'a_adm_events_mgmt.php?action=add',
+			type: 'POST',
+			dataType: 'json',
+			data: { eventName: eName, eventPerm: ePerm, eventDay: eDay, eventMonth: ePMonth, eventYear: eYear },
+			error: function(jqXHR, textStatus, errorThrown) {
+				showFlashMessage('error', 'An error occured: ' + errorThrown);
+			},
+			success: function(returnedData, textStatus, jqXHR) {
+				if(returnedData.status == 'error') {
+					showFlashMessage('error', returnedData.message);
+				} else {
+					// All OK
+					$('#add_event_name').val('');
+					$('#add_event_day').val('');
+					$('#add_event_month').val('');
+					$('#add_event_year').val('');
+					showFlashMessage('info', returnedData.message);
+				}
+			}
+		});
+	}
+}
+
+function editEventName(id)
+{
+	if($('#edit_event_' + id).length > 0) {
+		var newEventName = $('#edit_event_' + id).val();
+		if(newEventName.length > 4) {
+			if(newEventName == currentEventName) {
+				// No need to edit anything
+				$('#name_event_' + id).show();
+				$('#edit_event_' + id).remove();
+			} else {
+				$.ajax({
+					url: 'a_adm_events_mgmt.php?action=edit',
+					type: 'POST',
+					dataType: 'json',
+					data: { eventId: id, newName: newEventName },
+					error: function(jqXHR, textStatus, errorThrown) {
+						showFlashMessage('error', 'An error occured: ' + errorThrown);
+					},
+					success: function(returnedData, textStatus, jqXHR) {
+						if(returnedData.status == 'error') {
+							showFlashMessage('error', returnedData.message);
+						} else {
+							// All OK
+							$('#name_event_' + id).text(newEventName);
+							$('#orig_name_event_' + id).val(newEventName);
+							$('#name_event_' + id).show();
+							$('#edit_event_' + id).remove();
+							showFlashMessage('info', returnedData.message);
+						}
+					}
+				});
+			}
+		}
+	}
 }
