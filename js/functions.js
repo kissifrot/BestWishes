@@ -46,7 +46,7 @@ function addCat(listId)
 	} else {
 		$.ajax({
 			type: 'POST',
-			url: bwURL + '/a_gifts_mgmt.php?listId=' + currentListId + '&action=add',
+			url: bwURL + '/a_list_mgmt.php?listId=' + currentListId + '&action=add',
 			data: {type: 'cat', name: currentCatName},
 			dataType: 'json',
 			error: function(jqXHR, textStatus, errorThrown) {
@@ -101,7 +101,7 @@ function deleteCat(listId, catId)
 	currentCatId = parseInt(catId);
 	$.ajax({
 		type: 'POST',
-		url: bwURL + '/a_gifts_mgmt.php?listId=' + currentListId + '&action=del',
+		url: bwURL + '/a_list_mgmt.php?listId=' + currentListId + '&action=del',
 		data: {type: 'cat', id: currentCatId},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
@@ -148,7 +148,7 @@ function deleteGift(giftId, listId)
 {
 	$.ajax({
 		type: 'POST',
-		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=del',
+		url: bwURL + '/a_list_mgmt.php?listId=' + listId + '&action=del',
 		data: {type: 'gift', id: giftId},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
@@ -208,7 +208,7 @@ function endEditGift()
 			} else {
 				$.ajax({
 					type: 'POST',
-					url: bwURL + '/a_gifts_mgmt.php?listId=' + currentListId + '&action=edit',
+					url: bwURL + '/a_list_mgmt.php?listId=' + currentListId + '&action=edit',
 					data: {type: 'gift', catId: currentCatId, id: currentGiftId, newName: giftName},
 					dataType: 'json',
 					error: function(jqXHR, textStatus, errorThrown) {
@@ -258,7 +258,7 @@ function addGift(listId, detailedAdd, force) {
 				}
 				$.ajax({
 					type: 'POST',
-					url: bwURL + '/a_gifts_mgmt.php?listId=' + currentListId + '&action=add',
+					url: bwURL + '/a_list_mgmt.php?listId=' + currentListId + '&action=add',
 					data: giftData,
 					dataType: 'json',
 					error: function(jqXHR, textStatus, errorThrown) {
@@ -322,7 +322,7 @@ function addSurpriseGift(listId, force) {
 			}
 			$.ajax({
 				type: 'POST',
-				url: bwURL + '/a_gifts_mgmt.php?listId=' + currentListId + '&action=add',
+				url: bwURL + '/a_list_mgmt.php?listId=' + currentListId + '&action=add',
 				data: giftData,
 				dataType: 'json',
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -374,7 +374,7 @@ function moveGift(giftId, listId, targetCatId)
 	var currListId = parseInt(listId);
 	$.ajax({
 		type: 'POST',
-		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=move',
+		url: bwURL + '/a_list_mgmt.php?listId=' + listId + '&action=move',
 		data: {type: 'gift', targetCatId: currTargetCatId, id: currGiftId},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
@@ -422,7 +422,7 @@ function markGiftAsBought(giftId, listId)
 {
 	$.ajax({
 		type: 'POST',
-		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=mark_bought',
+		url: bwURL + '/a_list_mgmt.php?listId=' + listId + '&action=mark_bought',
 		data: {type: 'gift', id: giftId, purchaseComment: $('#purchase_comment').val()},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
@@ -442,6 +442,63 @@ function markGiftAsBought(giftId, listId)
 			}
 		}
 	});
+}
+
+function showPwdResetWindow()
+{
+	$('#pwd_reset_dialog').dialog( 'option', 'buttons', 
+	[
+		{
+			text: bwLng.confirm,
+			id: 'btn-send-pwd',
+			click: function() { 
+				var uname = $('#username_rst').val();
+				if(uname.length > 3) {
+					$('#btn-send-pwd').button( 'disable' );
+					$('#btn-send-pwd').button( 'option', 'label', bwLng.pleaseWait );
+					askResetPwd(uname);
+				} else {
+					showFlashMessage('error', bwLng.usernameIncorrect);
+				}
+			}
+		},
+		{
+			text: bwLng.cancel,
+			click: function() {
+				$('#pwd_reset_dialog').dialog('close');
+			}
+		}
+	]
+	);
+	$('#pwd_reset_dialog').dialog( 'open' );
+}
+
+function askResetPwd(username)
+{
+	if(username.length > 2) {
+		$.ajax({
+			type: 'POST',
+			cache: false,
+			url: bwURL + '/a_user_mgmt.php?action=resetpwd',
+			data: {uname: username},
+			dataType: 'json',
+			error: function(jqXHR, textStatus, errorThrown) {
+				showFlashMessage('error', 'An error occured: ' + errorThrown);
+			},
+			success: function(returnedData, textStatus, jqXHR) {
+				if(returnedData.status == 'success') {
+					$('#username_rst').val('');
+					$('#pwd_reset_dialog').dialog('close');
+					showFlashMessage('info', returnedData.message);
+				} else {
+					// Reenable the button
+					$('#btn-send-pwd').button( 'enable' );
+					$('#btn-send-pwd').button( 'option', 'label', bwLng.confirm );
+					showFlashMessage('error', returnedData.message);
+				}
+			}
+		});
+	}
 }
 
 function confirmMarkGiftAsReceived(giftId, listId) {
@@ -475,7 +532,7 @@ function markGiftAsReceived(giftId, listId)
 	currentListId = parseInt(listId);
 	$.ajax({
 		type: 'POST',
-		url: bwURL + '/a_gifts_mgmt.php?listId=' + listId + '&action=mark_received',
+		url: bwURL + '/a_list_mgmt.php?listId=' + listId + '&action=mark_received',
 		data: {type: 'gift', id: giftId},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {

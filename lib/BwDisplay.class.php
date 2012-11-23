@@ -63,6 +63,8 @@ class BwDisplay extends Smarty
 		$this->assign('lngConfirm', _('Confirm'));
 		$this->assign('lngCouldNotLoadTab', _('Could not load this tab'));
 		$this->assign('lngPassword', _('Password'));
+		$this->assign('lngConfirmation', _('Confirmation'));
+		$this->assign('lngCancel', _('Cancel'));
 	}
 
 	/**
@@ -111,8 +113,6 @@ class BwDisplay extends Smarty
 		$this->assign('lngConfirmCategoryDeletion', _('Deleting this category will delete all its gifts too. Are you sure?'));
 		$this->assign('lngAddAnyway', _('Add anyway'));
 		$this->assign('lngDeleteIt', _('Delete it'));
-		$this->assign('lngCancel', _('Cancel'));
-		$this->assign('lngConfirmation', _('Confirmation'));
 		$this->assign('lngPurchaseConfirmation', _('Purchase confirmation'));
 		$this->assign('lngConfirmPurchase', _('Confirm purchase'));
 		$this->assign('lngHasComment', _('has comment'));

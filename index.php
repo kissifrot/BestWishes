@@ -24,6 +24,8 @@ $disp->assign('pageViewed', 'home');
 // Translation strings
 $disp->assign('lngHomeInstructions', _('Choose a list to show in the left menu'));
 $disp->assign('lngPasswordForgot', _('Forgot your password?'));
+$disp->assign('lngPasswordForgotInformation', _('To request a password reset, just enter your username below'));
+$disp->assign('lngUsernameIncorrect', _('You must enter a valid username'));
 $disp->assign('lngToLogin', _('To log in:'));
 $disp->assign('lngLoginLabel', _('Login:'));
 $disp->assign('lngLoginAction', _('Login'));

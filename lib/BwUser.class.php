@@ -161,6 +161,81 @@ class BwUser
 		}
 	}
 
+	public function loadByUsername($username = '')
+	{
+		if(empty($username)) {
+			return false;
+		}
+		$username = mb_strtolower($username);
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list_user',
+			'queryType' => 'SELECT',
+			'queryFields' => '*',
+			'queryCondition' => 'LOWER(username) = :username',
+			'queryValues' => array(
+				array(
+					'parameter' => ':username',
+					'variable' => $username,
+					'data_type' => PDO::PARAM_STR
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result = $db->fetch();
+			$db->closeQuery();
+			if($result === false)
+				return $result;
+			
+			if(empty($result)) {
+				return false;
+			}
+
+			$this->storeAttributes($result);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function loadByResetToken($token = '')
+	{
+		if(empty($token)) {
+			return false;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list_user',
+			'queryType' => 'SELECT',
+			'queryFields' => '*',
+			'queryCondition' => 'pwd_reset_token = :pwd_reset_token',
+			'queryValues' => array(
+				array(
+					'parameter' => ':pwd_reset_token',
+					'variable' => $token,
+					'data_type' => PDO::PARAM_INT
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$result = $db->fetch();
+			$db->closeQuery();
+			if($result === false)
+				return $result;
+			
+			if(empty($result)) {
+				return false;
+			}
+
+			$this->storeAttributes($result);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function updatePassword($password = '', $newPassword = '')
 	{
 		$resultCode = 99;
@@ -220,6 +295,146 @@ class BwUser
 			$resultCode = 0;
 		}
 		return $resultCode;
+	}
+
+	public function updateResetToken($token = '')
+	{
+		if(empty($token)) {
+			return false;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list_user',
+			'queryType' => 'UPDATE',
+			'queryFields' => array(
+				'pwd_reset_token' => ':pwd_reset_token'
+			),
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':pwd_reset_token',
+					'variable' => $token,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$resultExec = $db->exec();
+			if($resultExec === false)
+				return false;
+			
+			// All OK
+			return true;
+		}
+		return false;
+	}
+
+	private function replacePassword($newPassword = '')
+	{
+		$resultCode = 99;
+		if(empty($newPassword)) {
+			return $resultCode;
+		}
+
+		// All seems ok, continue
+		$newSalt = sha1(uniqid());
+		$hashedPwd = sha1($newSalt . $newPassword . '/' . $newSalt);
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list_user',
+			'queryType' => 'UPDATE',
+			'queryFields' => array(
+				'salt' => ':salt',
+				'password' => ':password'
+			),
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':salt',
+					'variable' => $newSalt,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':password',
+					'variable' => $hashedPwd,
+					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$resultExec = $db->exec();
+			if($resultExec === false)
+				return $resultCode;
+			
+			// All OK
+			$resultCode = 0;
+		}
+		return $resultCode;
+	}
+
+	public function sendPasswordReset()
+	{
+		$resultCode = 99;
+		if(empty($this->email)) {
+			return $resultCode;
+		}
+		// We'll generate a password token
+		$passwdToken = sha1(uniqid($this->id));
+		// Update the token in the DB
+		$resultUpd = $this->updateResetToken($passwdToken);
+		if($resultUpd) {
+			// Then send it
+			if(BwMailer::sendPwdReset($this, $passwdToken)) {
+				// All OK
+				$resultCode = 0;
+				return $resultCode;
+			} else {
+				$resultCode = 3;
+				return $resultCode;
+			}
+		} else {
+			return $resultCode;
+		}
+	}
+
+	public function sendNewPassword()
+	{
+		if(empty($this->email)) {
+			return false;
+		}
+		// We'll generate a password
+		$newPass = '';
+		$minPasswordSize = BwConfig::get('min_password_size', 6);
+
+		$letter = "23456789abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+		$nbLetters = strlen($letter) - 1;
+		for($i=0; $i < $minPasswordSize; $i++) {
+			$newPass .= $letter[rand(0, $nbLetters)];
+		}
+		// Update the password in the DB
+		$resultUpd = $this->replacePassword($newPass);
+		if($resultUpd == 0) {
+			// Then send it
+			if(BwMailer::sendNewPwd($this, $newPass)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -314,7 +529,8 @@ class BwUser
 			'tableName' => 'gift_list_user',
 			'queryType' => 'UPDATE',
 			'queryFields' => array(
-				'last_login' => ':last_login'
+				'last_login' => ':last_login',
+				'pwd_reset_token' => ':pwd_reset_token'
 			),
 			'queryCondition' => 'id = :id',
 			'queryValues' => array(
@@ -322,6 +538,11 @@ class BwUser
 					'parameter' => ':last_login',
 					'variable' => date('Y-m-d H:i:s'),
 					'data_type' => PDO::PARAM_STR
+				),
+				array(
+					'parameter' => ':pwd_reset_token',
+					'variable' => NULL,
+					'data_type' => PDO::PARAM_NULL
 				),
 				array(
 					'parameter' => ':id',

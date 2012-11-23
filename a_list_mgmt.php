@@ -1,6 +1,6 @@
 <?php
 /**
- * Gifts managment (Ajax)
+ * List managment (Ajax)
  */
 define('BESTWISHES', true);
 

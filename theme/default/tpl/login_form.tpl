@@ -14,9 +14,18 @@
 	<input type="hidden" name="login_frm_submitted" value="1" />
 	<input type="submit" name="submit" value="{$lngLoginAction}" />
 </form>
-<br /><a href="/" onclick="alert('TODO: password reset'); return false">{$lngPasswordForgot}</a>
+<br /><a href="/" onclick="showPwdResetWindow(); return false">{$lngPasswordForgot}</a>
 <script type="text/javascript">
 $(document).ready(function() {
 	$('input[type="submit"]').button();
 });
+bwURL = '{$webDir}';
+bwLng = {
+	cancel            : '{$lngCancel|escape:javascript}',
+	confirmation      : '{$lngConfirmation|escape:javascript}',
+	confirm           : '{$lngConfirm|escape:javascript}',
+	usernameIncorrect : '{$lngUsernameIncorrect|escape:javascript}',
+	pleaseWait        : '{$lngPleaseWait|escape:javascript}',
+};
 </script>
+{include file='form_reset_pwd.tpl'}

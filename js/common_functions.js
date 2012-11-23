@@ -26,5 +26,5 @@ function showFlashMessage(type, message) {
 
 function fadeOutMessage()
 {
-	$('#flash_message').effect('fade', null, 500);
+	$('#flash_message').fadeOut(500);
 }

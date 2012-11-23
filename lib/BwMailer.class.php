@@ -18,7 +18,6 @@ class BwMailer
 		require_once $GLOBALS['bwVendorDir'] . '/swift/swift_required.php';
 		// Configure the transport class
 		$transportType = BwConfig::get('mail_transport_type', 'mail');
-		$this->logFilePath = bwConfig::get('log_filepath', false);
 		switch($transportType) {
 			case 'smtp':
 				// Send mails using a SMTP server
@@ -40,18 +39,6 @@ class BwMailer
 	}
 
 	/**
-	 *
-	 */
-	protected function log($message)
-	{
-		if(!empty($message) && !empty($this->logFilePath)) {
-			$message = date('Y-m-d H:i:s'). ':' . "\t" . $message . "\n";
-			@file_put_contents($this->logFilePath, $message, FILE_APPEND);
-		}
-		return false;
-	}
-
-	/**
 	 * Use a template file for a message
 	 */
 	public function setTemplate($templateFilename = '', $theme = 'default') {
@@ -68,7 +55,7 @@ class BwMailer
 
 		$templatePath = $bwThemeDir . DS . $theme . DS . 'tpl' . DS . 'mails' . DS . $templateFilename;
 		if(!is_file($templatePath)) {
-			$this->log('Template file "' . $templatePath . '" does not exist');
+			BwLogger::log('Template file "' . $templatePath . '" does not exist');
 			return false;
 		}
 		$this->templateData = file_get_contents($templatePath);
@@ -105,11 +92,111 @@ class BwMailer
 			try {
 				$messagesSent += $mailer->send($messageToSend);
 			} catch(Exception $e) {
-				$this->log('Mailer Exception: ' . $e->getMessage());
+				BwLogger::log('Mailer Exception: ' . $e->getMessage());
 			}
 		}
 
 		return $messagesSent;
+	}
+
+	/**
+	 *
+	 */
+	public static function sendPwdReset($resetUser, $resetToken)
+	{
+		global $bwLang, $bwURL;
+
+		try {
+			$bwMailer = new self();
+			if(empty($bwMailer->mailFromAddress)) {
+				return false;
+			}
+		} catch(Exception $e) {
+			BwLogger::log('Mailer Exception: ' . $e->getMessage());
+			return false;
+		}
+
+		if(!$bwMailer->setTemplate('password_reset_' . $bwLang)) {
+			return false;
+		}
+
+		// Now cycle through all users to send them an alert
+		$allUsers = BwUser::getAll();
+		$messagesToSend = array();
+
+		$variables = array(
+			'__USER_NAME__' => $resetUser->name,
+			'__BW_PWD_REST_URL__' => $bwURL . '/resetpwd/' . $resetToken,
+			'__BW_URL__' => $bwURL,
+		);
+
+		// Prepare the mail data
+		$mailSubject = _('BestWishes - Password reset');
+		$mailHtmlContent = $bwMailer->populateTemplate($variables);
+		$mailTextContent = strip_tags($mailHtmlContent);
+
+		if(!empty($resetUser->email)) {
+			$messagesToSend[] = Swift_Message::newInstance()
+			->setSubject($mailSubject)
+			->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
+			->setTo($resetUser->email)
+			->setBody($mailHtmlContent, 'text/html')
+			->addPart($mailTextContent, 'text/plain');
+		}
+
+		$nbMessages = $bwMailer->sendMessages($messagesToSend);
+
+		return ($nbMessages == count($messagesToSend));
+	}
+
+	/**
+	 *
+	 */
+	public static function sendNewPwd($resetUser, $newPassword)
+	{
+		global $bwLang, $bwURL;
+
+		try {
+			$bwMailer = new self();
+			if(empty($bwMailer->mailFromAddress)) {
+				return false;
+			}
+		} catch(Exception $e) {
+			BwLogger::log('Mailer Exception: ' . $e->getMessage());
+			return false;
+		}
+
+		if(!$bwMailer->setTemplate('new_password_' . $bwLang)) {
+			return false;
+		}
+
+		// Now cycle through all users to send them an alert
+		$allUsers = BwUser::getAll();
+		$messagesToSend = array();
+
+		$variables = array(
+			'__USER_NAME__' => $resetUser->name,
+			'__NEW_PASSWORD__' => $newPassword,
+			'__BW_URL__' => $bwURL,
+		);
+
+		// Prepare the mail data
+		$mailSubject = _('BestWishes - Your new password');
+		$mailHtmlContent = $bwMailer->populateTemplate($variables);
+		$mailTextContent = strip_tags($mailHtmlContent);
+
+		if(!empty($resetUser->email)) {
+			$messagesToSend[] = Swift_Message::newInstance()
+			->setSubject($mailSubject)
+			->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
+			->setTo($resetUser->email)
+			->setBody($mailHtmlContent, 'text/html')
+			->addPart($mailTextContent, 'text/plain');
+		}
+
+		$nbMessages = $bwMailer->sendMessages($messagesToSend);
+
+		return ($nbMessages == count($messagesToSend));
 	}
 
 	/**
@@ -125,7 +212,7 @@ class BwMailer
 				return false;
 			}
 		} catch(Exception $e) {
-			$bwMailer->log('Mailer Exception: ' . $e->getMessage());
+			BwLogger::log('Mailer Exception: ' . $e->getMessage());
 			return false;
 		}
 
@@ -185,7 +272,7 @@ class BwMailer
 				return false;
 			}
 		} catch(Exception $e) {
-			$bwMailer->log('Mailer Exception: ' . $e->getMessage());
+			BwLogger::log('Mailer Exception: ' . $e->getMessage());
 			return false;
 		}
 
@@ -245,7 +332,7 @@ class BwMailer
 				return false;
 			}
 		} catch(Exception $e) {
-			$bwMailer->log('Mailer Exception: ' . $e->getMessage());
+			BwLogger::log('Mailer Exception: ' . $e->getMessage());
 			return false;
 		}
 
