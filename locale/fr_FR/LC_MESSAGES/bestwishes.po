@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BestWishes 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-25 21:02+0100\n"
-"PO-Revision-Date: 2012-09-25 21:03+0100\n"
+"POT-Creation-Date: 2012-11-23 14:41+0100\n"
+"PO-Revision-Date: 2012-11-23 14:50+0100\n"
 "Last-Translator: Philippe Villiers <kissifrot@gmail.com>\n"
 "Language-Team:  <kissifrot@gmail.com>\n"
 "Language: fr_FR\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: H:\\Copies_travail_depots\\BestWishes\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.5.3\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: lib\n"
 
 #: lib/BwAdminDisplay.class.php:27
@@ -22,17 +22,17 @@ msgid "Are you sure you want to delete this list?"
 msgstr "Etes-vous sûr(e) de vouloir supprimer cette liste ?"
 
 #: lib/BwAdminDisplay.class.php:28 lib/BwAdminDisplay.class.php:40
-#: lib/BwDisplay.class.php:113
+#: lib/BwDisplay.class.php:115
 msgid "Delete it"
 msgstr "Supprimer"
 
 #: lib/BwAdminDisplay.class.php:29 lib/BwAdminDisplay.class.php:41
-#: lib/BwDisplay.class.php:114
+#: lib/BwDisplay.class.php:67
 msgid "Cancel"
 msgstr "Annuler"
 
 #: lib/BwAdminDisplay.class.php:30 lib/BwAdminDisplay.class.php:42
-#: lib/BwDisplay.class.php:115
+#: lib/BwDisplay.class.php:66
 msgid "Confirmation"
 msgstr "Confirmation"
 
@@ -47,11 +47,16 @@ msgid ""
 msgstr ""
 "Etes-vous sûr(e) de vouloir supprimer cet utilisateur ? Sa/ses liste(s)"
 
+#: lib/BwCache.class.php:228
+#, php-format
+msgid "%s cache was unable to write '%s' to %s cache"
+msgstr ""
+
 #: lib/BwDisplay.class.php:54
 msgid "Home/Login"
 msgstr "Accueil/Connexion"
 
-#: lib/BwDisplay.class.php:55 index.php:32 admin/index.php:17
+#: lib/BwDisplay.class.php:55 index.php:34 admin/index.php:17
 msgid "Home"
 msgstr "Accueil"
 
@@ -96,82 +101,82 @@ msgstr "Impossible de charger cet onglet"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: lib/BwDisplay.class.php:94
+#: lib/BwDisplay.class.php:96
 msgid "Possible actions:"
 msgstr "Actions possibles :"
 
-#: lib/BwDisplay.class.php:95 lib/BwList.class.php:591
+#: lib/BwDisplay.class.php:97 lib/BwList.class.php:591
 msgid "(This list is still empty)"
 msgstr "(La liste est encore vide)"
 
-#: lib/BwDisplay.class.php:96
+#: lib/BwDisplay.class.php:98
 msgid "Details"
 msgstr "Détails"
 
-#: lib/BwDisplay.class.php:97
+#: lib/BwDisplay.class.php:99
 msgid "Delete"
 msgstr "Supprimer"
 
-#: lib/BwDisplay.class.php:98
+#: lib/BwDisplay.class.php:100
 msgid "Add"
 msgstr "Ajouter"
 
-#: lib/BwDisplay.class.php:99
+#: lib/BwDisplay.class.php:101
 msgid "New gift"
 msgstr "Nouvau cadeau"
 
-#: lib/BwDisplay.class.php:100 lib/BwDisplay.class.php:151
+#: lib/BwDisplay.class.php:102 lib/BwDisplay.class.php:151
 #: lib/BwDisplay.class.php:154
 msgid "Edit"
 msgstr "Modifier"
 
-#: lib/BwDisplay.class.php:101
+#: lib/BwDisplay.class.php:103
 msgid "Delete category"
 msgstr "Supprimer la catégorie"
 
-#: lib/BwDisplay.class.php:102
+#: lib/BwDisplay.class.php:104
 msgid "Mark as bought"
 msgstr "Marquer comme acheté"
 
-#: lib/BwDisplay.class.php:103
+#: lib/BwDisplay.class.php:105
 msgid "Mark as received"
 msgstr "Marquer comme reçu"
 
-#: lib/BwDisplay.class.php:104 lib/BwDisplay.class.php:106
+#: lib/BwDisplay.class.php:106 lib/BwDisplay.class.php:108
 msgid "You cannot edit this gift name"
 msgstr "Vous ne pouvez pas éditer ce nom de cadeau"
 
-#: lib/BwDisplay.class.php:105
+#: lib/BwDisplay.class.php:107
 msgid "Edit this gift name"
 msgstr "Modifier le nom de ce cadeau"
 
-#: lib/BwDisplay.class.php:107
+#: lib/BwDisplay.class.php:109
 msgid ""
 "The max edits count was reached for this gift, you cannot edit it anymore"
 msgstr ""
 "Le nombre maximum d'édition a été atteint pour ce cadeau, vous ne pouvez "
 "plus le modifier"
 
-#: lib/BwDisplay.class.php:108
+#: lib/BwDisplay.class.php:110
 msgid "The category name is too short"
 msgstr "Le nom de la catégorie est trop court"
 
-#: lib/BwDisplay.class.php:109
+#: lib/BwDisplay.class.php:111
 msgid "The gift name is too short"
 msgstr "Le nom du cadeau est trop court"
 
-#: lib/BwDisplay.class.php:110
+#: lib/BwDisplay.class.php:112
 msgid "Are you sure you want to delete this gift? It cannot be undone"
 msgstr ""
 "Êtes-vous sûr(e) de vouloir supprimer ce cadeau ? La suppression est "
 "irréversible"
 
-#: lib/BwDisplay.class.php:111
+#: lib/BwDisplay.class.php:113
 msgid "Deleting this category will delete all its gifts too. Are you sure?"
 msgstr ""
 "Supprimer cette catégorie supprimera tous ses cadeaux. Êtes-vous sûr(e) ?"
 
-#: lib/BwDisplay.class.php:112
+#: lib/BwDisplay.class.php:114
 msgid "Add anyway"
 msgstr "Ajouter quand même"
 
@@ -255,7 +260,7 @@ msgstr "Nom de la catégorie"
 msgid "Gift category:"
 msgstr "Catégorie du cadeau :"
 
-#: lib/BwDisplay.class.php:135 a_gifts_mgmt.php:385
+#: lib/BwDisplay.class.php:135 a_list_mgmt.php:385
 msgid "Source and destination categories are the same!"
 msgstr "La catégorie source et celle de destination sont identiques !"
 
@@ -378,15 +383,15 @@ msgstr "Afficher les détails d'un cadeau"
 msgid "Display the list as PDF"
 msgstr "Afficher la liste comme PDF"
 
-#: lib/BwFileCache.class.php:262
+#: lib/BwFileCache.class.php:277
 #, php-format
 msgid "Could not apply permission mask \"%s\" on cache file \"%s\""
 msgstr ""
 
-#: lib/BwFileCache.class.php:278
+#: lib/BwFileCache.class.php:293
 #, php-format
 msgid "%s is not writable"
-msgstr ""
+msgstr "%s n'est pas accessible en écriture"
 
 #: lib/BwList.class.php:565
 #, php-format
@@ -406,36 +411,44 @@ msgstr "(acheté par %s le %s)"
 msgid "list_"
 msgstr "list_"
 
-#: lib/BwMailer.class.php:35
+#: lib/BwMailer.class.php:34
 msgid "No mailer or incompatible one"
-msgstr ""
+msgstr "Pas de mailer ou mailer incompatible"
 
-#: lib/BwMailer.class.php:155
+#: lib/BwMailer.class.php:134
+msgid "BestWishes - Password reset"
+msgstr "BestWishes - Réinitialisation du mot de passe"
+
+#: lib/BwMailer.class.php:184
+msgid "BestWishes - Your new password"
+msgstr "BestWishes - Votre nouveau mot de passe"
+
+#: lib/BwMailer.class.php:242
 #, php-format
 msgid "Addition of a surprise gift to the list %s"
 msgstr "Ajout d'un cadeau surprise à la liste %s"
 
-#: lib/BwMailer.class.php:214
+#: lib/BwMailer.class.php:301
 #, php-format
 msgid "Addition of a gift to the list %s"
 msgstr "Ajout d'un cadeau à la liste %s"
 
-#: lib/BwMailer.class.php:261
+#: lib/BwMailer.class.php:348
 #, php-format
 msgid "surprise gift %s"
 msgstr "cadeau surprise %s"
 
-#: lib/BwMailer.class.php:263
+#: lib/BwMailer.class.php:350
 #, php-format
 msgid "gift %s"
 msgstr "cadeau %s"
 
-#: lib/BwMailer.class.php:274
+#: lib/BwMailer.class.php:361
 #, php-format
 msgid "He/she left the following comment: %s<br />"
 msgstr "Il/elle a laissé le commentaire suivant : %s<br />"
 
-#: lib/BwMailer.class.php:283
+#: lib/BwMailer.class.php:370
 #, php-format
 msgid "Purchase of a gift to the list %s"
 msgstr "Achat d'un cadeau de la liste %s"
@@ -451,7 +464,7 @@ msgstr "Vous devez spécifier le mot de passe courant"
 
 #: lib/BwSessionDisplay.class.php:22
 msgid "You must repeat the password"
-msgstr ""
+msgstr "Vous devez répéter le mot de passe"
 
 #: lib/BwSessionDisplay.class.php:23
 msgid "Nothing to change !"
@@ -524,11 +537,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: a_elem_show.php:79 gift_show.php:40 list_show.php:35
+#: a_elem_show.php:79 gifts_mgmt.php:50 list_show.php:35
 msgid "This list is not public"
 msgstr "Cette liste n'est pas publique"
 
-#: a_elem_show.php:79 a_elem_show.php:80 gift_show.php:40 gift_show.php:41
+#: a_elem_show.php:79 a_elem_show.php:80 gifts_mgmt.php:50 gifts_mgmt.php:51
 #: list_show.php:35 list_show.php:36 pdf_list_show.php:31
 msgid "You must be logged in to view this list"
 msgstr "Vous devez être identifié pour voir cette liste"
@@ -554,37 +567,38 @@ msgstr[1] "%d jours"
 msgid "today"
 msgstr "ajourd'hui"
 
-#: a_gifts_mgmt.php:49
+#: a_list_mgmt.php:49
 #, php-format
 msgid "Category \"%s\" added"
 msgstr "Catégorie \"%s\" ajoutée"
 
-#: a_gifts_mgmt.php:50
+#: a_list_mgmt.php:50
 #, php-format
 msgid "Could not add category \"%s\""
 msgstr "Impossible d'ajouter la catégorie \"%s\""
 
-#: a_gifts_mgmt.php:51
+#: a_list_mgmt.php:51
 #, php-format
 msgid "Could not add category \"%s\": it already exists"
 msgstr "Impossible d'ajouter la catégorie \"%s\" : elle existe déjà"
 
-#: a_gifts_mgmt.php:52 a_gifts_mgmt.php:78 a_gifts_mgmt.php:121
-#: a_gifts_mgmt.php:181 a_gifts_mgmt.php:222 a_gifts_mgmt.php:252
-#: a_gifts_mgmt.php:296 a_gifts_mgmt.php:341 a_gifts_mgmt.php:386
-#: a_opts_mgmt.php:34 a_opts_mgmt.php:77 admin/a_adm_lists_mgmt.php:31
-#: admin/a_adm_lists_mgmt.php:56 admin/a_adm_lists_mgmt.php:103
-#: admin/a_adm_lists_mgmt.php:128 admin/a_adm_users_mgmt.php:30
-#: admin/a_adm_users_mgmt.php:55
+#: a_list_mgmt.php:52 a_list_mgmt.php:78 a_list_mgmt.php:121
+#: a_list_mgmt.php:181 a_list_mgmt.php:222 a_list_mgmt.php:252
+#: a_list_mgmt.php:296 a_list_mgmt.php:341 a_list_mgmt.php:386
+#: a_opts_mgmt.php:34 a_opts_mgmt.php:77 a_user_mgmt.php:47
+#: admin/a_adm_events_mgmt.php:33 admin/a_adm_events_mgmt.php:85
+#: admin/a_adm_lists_mgmt.php:31 admin/a_adm_lists_mgmt.php:56
+#: admin/a_adm_lists_mgmt.php:103 admin/a_adm_lists_mgmt.php:128
+#: admin/a_adm_users_mgmt.php:30 admin/a_adm_users_mgmt.php:55
 msgid "Internal error"
 msgstr "Erreur interne"
 
-#: a_gifts_mgmt.php:76
+#: a_list_mgmt.php:76
 #, php-format
 msgid "Gift \"%s\" added"
 msgstr "Cadeau \"%s\" ajouté"
 
-#: a_gifts_mgmt.php:77 a_gifts_mgmt.php:120
+#: a_list_mgmt.php:77 a_list_mgmt.php:120
 #, php-format
 msgid ""
 "A gift named \"%s\" already exists and is indicated as received, do you want "
@@ -593,26 +607,26 @@ msgstr ""
 "Un cadeau nommé \"%s\" existe déjà et est indiqué comme reçu, voulez-vous "
 "l'ajouter quand même ?"
 
-#: a_gifts_mgmt.php:119
+#: a_list_mgmt.php:119
 #, php-format
 msgid "Surprise gift \"%s\" added"
 msgstr "Cadeau surprise \"%s\" ajouté"
 
-#: a_gifts_mgmt.php:177
+#: a_list_mgmt.php:177
 msgid "Gift name edited successfully"
 msgstr "Nom du cadeau modifié"
 
-#: a_gifts_mgmt.php:178
+#: a_list_mgmt.php:178
 msgid "Could not edit this gift name"
 msgstr "Impossible de modifier le nom du cadeau"
 
-#: a_gifts_mgmt.php:179
+#: a_list_mgmt.php:179
 msgid "Could not edit this gift name: you already used your max edits"
 msgstr ""
 "Impossible de modifier le nom du cadeau : vous avez dépassé votre nom "
 "d'éditions maximum"
 
-#: a_gifts_mgmt.php:180
+#: a_list_mgmt.php:180
 msgid ""
 "Could not edit this gift name: there are too many differences between the "
 "old name and the new one"
@@ -620,51 +634,51 @@ msgstr ""
 "Impossible de modifier le nom du cadeau : il y a trop de différences entre "
 "l'ancien nom et le nouveau"
 
-#: a_gifts_mgmt.php:220
+#: a_list_mgmt.php:220
 msgid "Category deleted"
 msgstr "Catégorie supprimée"
 
-#: a_gifts_mgmt.php:221
+#: a_list_mgmt.php:221
 msgid "Could not delete category"
 msgstr "Impossible de supprimer la catégorie"
 
-#: a_gifts_mgmt.php:250
+#: a_list_mgmt.php:250
 msgid "Gift deleted"
 msgstr "Cadeau supprimé"
 
-#: a_gifts_mgmt.php:251
+#: a_list_mgmt.php:251
 msgid "Could not delete gift"
 msgstr "Impossible de supprimer le cadeau"
 
-#: a_gifts_mgmt.php:293
+#: a_list_mgmt.php:293
 msgid "Gift marked as bought"
 msgstr "Cadeau marqué comme acheté"
 
-#: a_gifts_mgmt.php:294
+#: a_list_mgmt.php:294
 msgid "Could not mark the gift as bought"
 msgstr "Impossible de marquer le cadeau comme acheté"
 
-#: a_gifts_mgmt.php:295
+#: a_list_mgmt.php:295
 msgid "Gift is already marked as bought"
 msgstr "Le cadeau est déjà marqué comme acheté"
 
-#: a_gifts_mgmt.php:338
+#: a_list_mgmt.php:338
 msgid "Gift marked as received"
 msgstr "Cadeau marqué comme reçu"
 
-#: a_gifts_mgmt.php:339
+#: a_list_mgmt.php:339
 msgid "Could not mark the gift as received"
 msgstr "Imposssible de marquer le cadeau comme reçu"
 
-#: a_gifts_mgmt.php:340
+#: a_list_mgmt.php:340
 msgid "Gift is already marked as received"
 msgstr "Le cadeau est déjà marqué comme reçu"
 
-#: a_gifts_mgmt.php:383
+#: a_list_mgmt.php:383
 msgid "Gift moved successfully"
 msgstr "Cadeau déplacé"
 
-#: a_gifts_mgmt.php:384
+#: a_list_mgmt.php:384
 msgid "Could not move the gift to this category"
 msgstr "Impossible de déplacer le cadeau vers cetta catégorie"
 
@@ -699,9 +713,36 @@ msgstr "Alerte mise à jour"
 msgid "Could not update this alert"
 msgstr "Impossible de mettre à jour cette alerte"
 
-#: gift_show.php:64
+#: a_user_mgmt.php:43
+msgid "An e-mail containing instructions was sent"
+msgstr "Un e-mail contenant des instructions a été envoyé"
+
+#: a_user_mgmt.php:44
+#, php-format
+msgid "The user \"%s\" doesn't exist"
+msgstr "Lutilisateur \"%s\" n'existe pas"
+
+#: a_user_mgmt.php:45
+#, php-format
+msgid "The user \"%s\" doesn't have an e-mail address"
+msgstr "L'utilisateur \"%s\" n'a pas d'adresse e-mail"
+
+#: a_user_mgmt.php:46
+#, php-format
+msgid "Could not send an e-mail to \"%s\""
+msgstr "Impossible d'envoyer un e-mail à \"%s\""
+
+#: gifts_mgmt.php:74 gifts_mgmt.php:95
 msgid "Gift details"
 msgstr "Détails d'un cadeau"
+
+#: gifts_mgmt.php:87
+msgid "Error"
+msgstr "Erreur"
+
+#: gifts_mgmt.php:87 gifts_mgmt.php:88
+msgid "You must be logged in to mark this gift as bought"
+msgstr "Vous devez être identifié pour marquer ce cadeau comme acheté"
 
 #: index.php:15
 #, php-format
@@ -721,20 +762,30 @@ msgstr "Choisissez une liste à voir dans le menu de gauche"
 msgid "Forgot your password?"
 msgstr "Vous avez oublié votre mot de passe ?"
 
-#: index.php:27 login.php:30
+#: index.php:27
+msgid "To request a password reset, just enter your username below"
+msgstr ""
+"Pour demander une réinitialisation de mot de passe, entrez votre identifiant "
+"ci-dessous"
+
+#: index.php:28
+msgid "You must enter a valid username"
+msgstr "Yous devez entrer un identifiant valide"
+
+#: index.php:29 login.php:30
 msgid "To log in:"
 msgstr "Pour vous connecter :"
 
-#: index.php:28 login.php:31 admin/login.php:29
+#: index.php:30 login.php:31 admin/login.php:29
 msgid "Login:"
 msgstr "Identifiant :"
 
-#: index.php:29 login.php:32 login.php:35 admin/login.php:30
+#: index.php:31 login.php:32 login.php:35 admin/login.php:30
 #: admin/login.php:33
 msgid "Login"
 msgstr "Se connecter"
 
-#: index.php:30 login.php:33 admin/login.php:31
+#: index.php:32 login.php:33 admin/login.php:31
 msgid "Password:"
 msgstr "Mot de passe :"
 
@@ -784,6 +835,34 @@ msgstr "liste de %s"
 msgid "(last update on: n/a)"
 msgstr "(dernière mise à jour : n/a)"
 
+#: pwdreset.php:19 pwdreset.php:21
+msgid "Password reset"
+msgstr "Réinitialisation de mot de passe"
+
+#: pwdreset.php:28
+msgid "Either the token doesn't exist or you already reset your password"
+msgstr ""
+"Soit le token n'existe pas soit vous avez déjà réinitialisé votre mot de "
+"passe"
+
+#: pwdreset.php:31
+msgid "Couldn't send a new password"
+msgstr "Impossible d'envoyer un nouveau mot de passe"
+
+#: pwdreset.php:34
+msgid "An e-mail was sent with a new password, please check your e-mail inbox"
+msgstr ""
+"Un e-mail a été envoyé avec un nouveau mot de passe, veuillez vérifier votre "
+"boîte de réception"
+
+#: pwdreset.php:38
+msgid "No token specified"
+msgstr "Aucun token spécifié"
+
+#: admin/adm_events.php:22
+msgid "Events management"
+msgstr "Gestion des lévènements"
+
 #: admin/adm_lists.php:22
 msgid "Lists management"
 msgstr "Gestion des listes"
@@ -794,15 +873,35 @@ msgstr "(Sélectionnez un utilisateur)"
 
 #: admin/adm_users.php:17
 msgid "Users management"
-msgstr ""
+msgstr "Gestion des utilisateurs"
+
+#: admin/a_adm_events_mgmt.php:30
+msgid "Event updated succesfully"
+msgstr "Evènement mis à jour"
+
+#: admin/a_adm_events_mgmt.php:31
+msgid "Could not update event"
+msgstr "Impossible de mettre à jour cet évènement"
+
+#: admin/a_adm_events_mgmt.php:32 admin/a_adm_events_mgmt.php:84
+msgid "An event of the same name already exist"
+msgstr "Un évènement de même nom existe déjà"
+
+#: admin/a_adm_events_mgmt.php:82
+msgid "Event created succesfully"
+msgstr "Evènement créé"
+
+#: admin/a_adm_events_mgmt.php:83
+msgid "The event date is incorrect"
+msgstr "La date de l'évènement est incorrecte"
 
 #: admin/a_adm_lists_mgmt.php:28
 msgid "List updated succesfully"
-msgstr ""
+msgstr "Liste mise à jour"
 
 #: admin/a_adm_lists_mgmt.php:29
 msgid "Could not update list"
-msgstr ""
+msgstr "Impossible de mettre à jour la liste"
 
 #: admin/a_adm_lists_mgmt.php:30 admin/a_adm_lists_mgmt.php:127
 msgid "A list of the same name already exist"
@@ -810,39 +909,39 @@ msgstr "Une liste existe déjà avec ce nom"
 
 #: admin/a_adm_lists_mgmt.php:54
 msgid "List deleted succesfully"
-msgstr ""
+msgstr "Liste supprimée"
 
 #: admin/a_adm_lists_mgmt.php:55
 msgid "Could not delete list"
-msgstr ""
+msgstr "Impossile de supprimer la liste"
 
 #: admin/a_adm_lists_mgmt.php:101
 msgid "Right updated successfully"
-msgstr ""
+msgstr "Droit mis à jour"
 
 #: admin/a_adm_lists_mgmt.php:102
 msgid "Could not update this right"
-msgstr ""
+msgstr "Impossible de mettre à jour ce droit"
 
 #: admin/a_adm_lists_mgmt.php:125
 msgid "List created succesfully"
-msgstr ""
+msgstr "Liste créée"
 
 #: admin/a_adm_lists_mgmt.php:126
 msgid "The list birthdate is incorrect"
-msgstr ""
+msgstr "La date anniversaire de la liste est incorrecte"
 
 #: admin/a_adm_users_mgmt.php:28
 msgid "User deleted succesfully"
-msgstr ""
+msgstr "Utilisateur supprimé"
 
 #: admin/a_adm_users_mgmt.php:29
 msgid "Could not delete user"
-msgstr ""
+msgstr "Impossible de supprimer l'utilisateur"
 
 #: admin/a_adm_users_mgmt.php:52
 msgid "User created succesfully"
-msgstr ""
+msgstr "Utilisateur créé"
 
 #: admin/a_adm_users_mgmt.php:53
 msgid "The given e-mail address is invalid"
