@@ -11,7 +11,7 @@
 			<br /><br /><br />
 			<br style="clear: both" />
 			<div id="footer">
-				Powered by BestWishes {$version} - <a href="{$webDir}/admin/">Admin</a>
+				Powered by <a target="_blank" href="https://github.com/kissifrot/BestWishes">BestWishes</a> {$version} - <a href="{$webDir}/admin/">Admin</a>
 			</div>
 		</div>
 	</body>

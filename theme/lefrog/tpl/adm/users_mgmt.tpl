@@ -40,7 +40,7 @@
 		<b>{$user->name}: </b><br />
 		<table class="border-collapsed">
 			<tr>
-				<th>Username</th>
+				<th>List name</th>
 				<th>Can view</th>
 				<th>Can edit</th>
 				<th>Can mark</th>
@@ -68,6 +68,7 @@
 </div>
 
 <script type="text/javascript">
+bwAdminURL = '{$adminWebDir}';
 {include file='user_translation_strings.tpl'}
 $(document).ready(function() {
 	var tabsList = $( "#list-tabs" ).tabs({
