@@ -639,6 +639,33 @@ function updatePwd() {
 	}
 }
 
+function updateTheme() {
+	var currTheme = $('#curr_theme_id').val();
+	var newTheme = $('#theme_id').val();
+	if(currTheme != newTheme) {
+		$.ajax({
+			type: 'POST',
+			cache: false,
+			url: bwURL + '/a_opts_mgmt.php?action=updtheme',
+			data: {newTheme: newTheme},
+			dataType: 'json',
+			error: function(jqXHR, textStatus, errorThrown) {
+				showFlashMessage('error', 'An error occured: ' + errorThrown);
+			},
+			success: function(returnedData, textStatus, jqXHR) {
+				if(returnedData.status == 'success') {
+					showFlashMessage('info', returnedData.message);
+					window.setTimeout(function() {
+						document.location.reload();
+					}, 1000);
+				} else {
+					showFlashMessage('error', returnedData.message);
+				}
+			}
+		});
+	}
+}
+
 function updateRight(listId, rightElement, rightType) {
 	currentListId = parseInt(listId);
 	rightElement = rightElement;

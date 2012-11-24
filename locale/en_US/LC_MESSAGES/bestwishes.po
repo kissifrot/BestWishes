@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BestWishes 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-23 14:41+0100\n"
-"PO-Revision-Date: 2012-11-23 14:50+0100\n"
+"POT-Creation-Date: 2012-11-24 09:50+0100\n"
+"PO-Revision-Date: 2012-11-24 09:51+0100\n"
 "Last-Translator: Philippe Villiers <kissifrot@gmail.com>\n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -462,42 +462,58 @@ msgid "Update"
 msgstr ""
 
 #: lib/BwSessionDisplay.class.php:29
-msgid "List rights and alerts"
+msgid "Themes"
 msgstr ""
 
 #: lib/BwSessionDisplay.class.php:30
-msgid "(no list)"
+msgid "You can change the current theme below"
 msgstr ""
 
 #: lib/BwSessionDisplay.class.php:31
-msgid "You can adjust your alerts and see your rights for each list below:"
+msgid "(no theme)"
 msgstr ""
 
 #: lib/BwSessionDisplay.class.php:32
-msgid "List name"
+msgid "(default)"
 msgstr ""
 
 #: lib/BwSessionDisplay.class.php:33
-msgid "Can view"
+msgid "List rights and alerts"
 msgstr ""
 
 #: lib/BwSessionDisplay.class.php:34
-msgid "Can edit"
+msgid "You can adjust your alerts and see your rights for each list below:"
 msgstr ""
 
 #: lib/BwSessionDisplay.class.php:35
-msgid "Can mark"
+msgid "(no list)"
 msgstr ""
 
 #: lib/BwSessionDisplay.class.php:36
-msgid "Addition alert"
+msgid "List name"
 msgstr ""
 
 #: lib/BwSessionDisplay.class.php:37
+msgid "Can view"
+msgstr ""
+
+#: lib/BwSessionDisplay.class.php:38
+msgid "Can edit"
+msgstr ""
+
+#: lib/BwSessionDisplay.class.php:39
+msgid "Can mark"
+msgstr ""
+
+#: lib/BwSessionDisplay.class.php:40
+msgid "Addition alert"
+msgstr ""
+
+#: lib/BwSessionDisplay.class.php:41
 msgid "Purchase alert"
 msgstr ""
 
-#: lib/BwSessionDisplay.class.php:42
+#: lib/BwSessionDisplay.class.php:46
 #, php-format
 msgid "Connected as <b>%s</b>"
 msgstr ""
@@ -556,11 +572,12 @@ msgstr ""
 #: a_list_mgmt.php:52 a_list_mgmt.php:78 a_list_mgmt.php:121
 #: a_list_mgmt.php:181 a_list_mgmt.php:222 a_list_mgmt.php:252
 #: a_list_mgmt.php:296 a_list_mgmt.php:341 a_list_mgmt.php:386
-#: a_opts_mgmt.php:34 a_opts_mgmt.php:77 a_user_mgmt.php:47
-#: admin/a_adm_events_mgmt.php:33 admin/a_adm_events_mgmt.php:85
-#: admin/a_adm_lists_mgmt.php:31 admin/a_adm_lists_mgmt.php:56
-#: admin/a_adm_lists_mgmt.php:103 admin/a_adm_lists_mgmt.php:128
-#: admin/a_adm_users_mgmt.php:30 admin/a_adm_users_mgmt.php:55
+#: a_opts_mgmt.php:34 a_opts_mgmt.php:68 a_opts_mgmt.php:100
+#: a_user_mgmt.php:47 admin/a_adm_events_mgmt.php:33
+#: admin/a_adm_events_mgmt.php:85 admin/a_adm_lists_mgmt.php:31
+#: admin/a_adm_lists_mgmt.php:56 admin/a_adm_lists_mgmt.php:103
+#: admin/a_adm_lists_mgmt.php:128 admin/a_adm_users_mgmt.php:30
+#: admin/a_adm_users_mgmt.php:55
 msgid "Internal error"
 msgstr ""
 
@@ -668,11 +685,23 @@ msgstr ""
 msgid "You must repeat the same password"
 msgstr ""
 
-#: a_opts_mgmt.php:75
+#: a_opts_mgmt.php:65
+msgid "Theme updated successfully, page will reload to show the changes"
+msgstr ""
+
+#: a_opts_mgmt.php:66
+msgid "This theme doesn't exist"
+msgstr ""
+
+#: a_opts_mgmt.php:67
+msgid "Could not update this theme"
+msgstr ""
+
+#: a_opts_mgmt.php:98
 msgid "Alert updated successfully"
 msgstr ""
 
-#: a_opts_mgmt.php:76
+#: a_opts_mgmt.php:99
 msgid "Could not update this alert"
 msgstr ""
 
@@ -729,7 +758,7 @@ msgstr ""
 msgid "To request a password reset, just enter your username below"
 msgstr ""
 
-#: index.php:28
+#: index.php:28 login.php:34
 msgid "You must enter a valid username"
 msgstr ""
 
@@ -741,7 +770,7 @@ msgstr ""
 msgid "Login:"
 msgstr ""
 
-#: index.php:31 login.php:32 login.php:35 admin/login.php:30
+#: index.php:31 login.php:32 login.php:36 admin/login.php:30
 #: admin/login.php:33
 msgid "Login"
 msgstr ""

@@ -236,6 +236,48 @@ class BwUser
 		}
 	}
 
+	public function updateTheme($themeId = null)
+	{
+		$resultCode = 99;
+		if(empty($themeId)) {
+			return $resultCode;
+		}
+
+		$db = BwDatabase::getInstance();
+		$queryParams = array(
+			'tableName' => 'gift_list_user',
+			'queryType' => 'UPDATE',
+			'queryFields' => array(
+				'theme_id' => ':theme_id'
+			),
+			'queryCondition' => 'id = :id',
+			'queryValues' => array(
+				array(
+					'parameter' => ':theme_id',
+					'variable' => $themeId,
+					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':id',
+					'variable' => $this->id,
+					'data_type' => PDO::PARAM_INT
+				)
+			)
+		);
+		if($db->prepareQuery($queryParams)) {
+			$resultExec = $db->exec();
+			if($resultExec === false) {
+				$resultCode = 2;
+				return $resultCode;
+			}
+
+			// All OK
+			BwCache::delete('user_' . $this->id);
+			$resultCode = 0;
+		}
+		return $resultCode;
+	}
+
 	public function updatePassword($password = '', $newPassword = '')
 	{
 		$resultCode = 99;

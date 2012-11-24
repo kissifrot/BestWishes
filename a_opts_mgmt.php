@@ -53,7 +53,30 @@ switch($action) {
 			$status = 'success';
 		}
 		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
-		//var_dump(BwDebug::getInstance());
+	break;
+	case 'updtheme':
+		// Updating the user's theme
+		if(!isset($_POST['newTheme']) || empty($_POST['newTheme'])) {
+			exit;
+		}
+		$themeId = intval($_POST['newTheme']);
+		$theme = new BwTheme();
+		$statusMessages = array(
+			0 => _('Theme updated successfully, page will reload to show the changes'),
+			1 => _('This theme doesn\'t exist'),
+			2 => _('Could not update this theme'),
+			99 => _('Internal error'),
+		);
+		if(!$theme->load($themeId)) {
+			$statusCode = 1;
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		$statusCode = $user->updateTheme($themeId);
+		if($statusCode == 0) {
+			$status = 'success';
+		}
+		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 	break;
 	case 'editrights':
 		// Editing a list's rights

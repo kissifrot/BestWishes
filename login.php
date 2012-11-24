@@ -31,6 +31,7 @@ $disp->assign('lngToLogin', _('To log in:'));
 $disp->assign('lngLoginLabel', _('Login:'));
 $disp->assign('lngLoginAction', _('Login'));
 $disp->assign('lngPasswordLabel', _('Password:'));
+$disp->assign('lngUsernameIncorrect', _('You must enter a valid username'));
 
 $disp->header(_('Login'));
 $disp->display('login.tpl');

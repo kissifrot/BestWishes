@@ -1,7 +1,7 @@
 <?php
 class BwTheme
 {
-	private $id;
+	public $id;
 
 	public $name;
 	public $shortName;

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BestWishes 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-23 14:41+0100\n"
-"PO-Revision-Date: 2012-11-23 14:50+0100\n"
+"POT-Creation-Date: 2012-11-24 09:50+0100\n"
+"PO-Revision-Date: 2012-11-24 09:53+0100\n"
 "Last-Translator: Philippe Villiers <kissifrot@gmail.com>\n"
 "Language-Team:  <kissifrot@gmail.com>\n"
 "Language: fr_FR\n"
@@ -491,42 +491,58 @@ msgid "Update"
 msgstr "Mettre à jour"
 
 #: lib/BwSessionDisplay.class.php:29
+msgid "Themes"
+msgstr "Thèmes"
+
+#: lib/BwSessionDisplay.class.php:30
+msgid "You can change the current theme below"
+msgstr "Vous pouvez changer le thème courant ci-dessous"
+
+#: lib/BwSessionDisplay.class.php:31
+msgid "(no theme)"
+msgstr "(pas de thème)"
+
+#: lib/BwSessionDisplay.class.php:32
+msgid "(default)"
+msgstr "(par défaut)"
+
+#: lib/BwSessionDisplay.class.php:33
 msgid "List rights and alerts"
 msgstr "Droits des listes et alertes"
 
-#: lib/BwSessionDisplay.class.php:30
-msgid "(no list)"
-msgstr "(pas de liste)"
-
-#: lib/BwSessionDisplay.class.php:31
+#: lib/BwSessionDisplay.class.php:34
 msgid "You can adjust your alerts and see your rights for each list below:"
 msgstr "Vous pouvez ajuster vos alertes et voir vos droits ci-dessous :"
 
-#: lib/BwSessionDisplay.class.php:32
+#: lib/BwSessionDisplay.class.php:35
+msgid "(no list)"
+msgstr "(pas de liste)"
+
+#: lib/BwSessionDisplay.class.php:36
 msgid "List name"
 msgstr "Nom de la liste"
 
-#: lib/BwSessionDisplay.class.php:33
+#: lib/BwSessionDisplay.class.php:37
 msgid "Can view"
 msgstr "Peut voir"
 
-#: lib/BwSessionDisplay.class.php:34
+#: lib/BwSessionDisplay.class.php:38
 msgid "Can edit"
 msgstr "Peut éditer"
 
-#: lib/BwSessionDisplay.class.php:35
+#: lib/BwSessionDisplay.class.php:39
 msgid "Can mark"
 msgstr "Peut indiquer achat"
 
-#: lib/BwSessionDisplay.class.php:36
+#: lib/BwSessionDisplay.class.php:40
 msgid "Addition alert"
 msgstr "Alerte ajout"
 
-#: lib/BwSessionDisplay.class.php:37
+#: lib/BwSessionDisplay.class.php:41
 msgid "Purchase alert"
 msgstr "Alerte achat"
 
-#: lib/BwSessionDisplay.class.php:42
+#: lib/BwSessionDisplay.class.php:46
 #, php-format
 msgid "Connected as <b>%s</b>"
 msgstr "Connecté en tant que <b>%s</b>"
@@ -585,11 +601,12 @@ msgstr "Impossible d'ajouter la catégorie \"%s\" : elle existe déjà"
 #: a_list_mgmt.php:52 a_list_mgmt.php:78 a_list_mgmt.php:121
 #: a_list_mgmt.php:181 a_list_mgmt.php:222 a_list_mgmt.php:252
 #: a_list_mgmt.php:296 a_list_mgmt.php:341 a_list_mgmt.php:386
-#: a_opts_mgmt.php:34 a_opts_mgmt.php:77 a_user_mgmt.php:47
-#: admin/a_adm_events_mgmt.php:33 admin/a_adm_events_mgmt.php:85
-#: admin/a_adm_lists_mgmt.php:31 admin/a_adm_lists_mgmt.php:56
-#: admin/a_adm_lists_mgmt.php:103 admin/a_adm_lists_mgmt.php:128
-#: admin/a_adm_users_mgmt.php:30 admin/a_adm_users_mgmt.php:55
+#: a_opts_mgmt.php:34 a_opts_mgmt.php:68 a_opts_mgmt.php:100
+#: a_user_mgmt.php:47 admin/a_adm_events_mgmt.php:33
+#: admin/a_adm_events_mgmt.php:85 admin/a_adm_lists_mgmt.php:31
+#: admin/a_adm_lists_mgmt.php:56 admin/a_adm_lists_mgmt.php:103
+#: admin/a_adm_lists_mgmt.php:128 admin/a_adm_users_mgmt.php:30
+#: admin/a_adm_users_mgmt.php:55
 msgid "Internal error"
 msgstr "Erreur interne"
 
@@ -705,11 +722,24 @@ msgstr "Champ requis manquant"
 msgid "You must repeat the same password"
 msgstr "Vous devez répétter le mot de passe"
 
-#: a_opts_mgmt.php:75
+#: a_opts_mgmt.php:65
+msgid "Theme updated successfully, page will reload to show the changes"
+msgstr ""
+"Thème mis à jour, la page va se recharger pour afficher les changements"
+
+#: a_opts_mgmt.php:66
+msgid "This theme doesn't exist"
+msgstr "Ce thème n'existe pas"
+
+#: a_opts_mgmt.php:67
+msgid "Could not update this theme"
+msgstr "Impossible de mettre à jour ce thème"
+
+#: a_opts_mgmt.php:98
 msgid "Alert updated successfully"
 msgstr "Alerte mise à jour"
 
-#: a_opts_mgmt.php:76
+#: a_opts_mgmt.php:99
 msgid "Could not update this alert"
 msgstr "Impossible de mettre à jour cette alerte"
 
@@ -768,7 +798,7 @@ msgstr ""
 "Pour demander une réinitialisation de mot de passe, entrez votre identifiant "
 "ci-dessous"
 
-#: index.php:28
+#: index.php:28 login.php:34
 msgid "You must enter a valid username"
 msgstr "Yous devez entrer un identifiant valide"
 
@@ -780,7 +810,7 @@ msgstr "Pour vous connecter :"
 msgid "Login:"
 msgstr "Identifiant :"
 
-#: index.php:31 login.php:32 login.php:35 admin/login.php:30
+#: index.php:31 login.php:32 login.php:36 admin/login.php:30
 #: admin/login.php:33
 msgid "Login"
 msgstr "Se connecter"
