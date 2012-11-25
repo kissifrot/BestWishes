@@ -30,6 +30,7 @@ $disp->assign('lngToLogin', _('To log in:'));
 $disp->assign('lngLoginLabel', _('Login:'));
 $disp->assign('lngLoginAction', _('Login'));
 $disp->assign('lngPasswordLabel', _('Password:'));
+$disp->assign('lngRememberMe', _('Remember me'));
 
 $disp->header(_('Home'));
 $disp->display('home.tpl');

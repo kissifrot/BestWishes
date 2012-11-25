@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BestWishes 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-24 09:50+0100\n"
-"PO-Revision-Date: 2012-11-24 09:53+0100\n"
+"POT-Creation-Date: 2012-11-25 12:05+0100\n"
+"PO-Revision-Date: 2012-11-25 12:06+0100\n"
 "Last-Translator: Philippe Villiers <kissifrot@gmail.com>\n"
 "Language-Team:  <kissifrot@gmail.com>\n"
 "Language: fr_FR\n"
@@ -56,7 +56,7 @@ msgstr ""
 msgid "Home/Login"
 msgstr "Accueil/Connexion"
 
-#: lib/BwDisplay.class.php:55 index.php:34 admin/index.php:17
+#: lib/BwDisplay.class.php:55 index.php:35 admin/index.php:17
 msgid "Home"
 msgstr "Accueil"
 
@@ -788,7 +788,7 @@ msgstr ", votre dernière visite était le %s"
 msgid "Choose a list to show in the left menu"
 msgstr "Choisissez une liste à voir dans le menu de gauche"
 
-#: index.php:26 login.php:29 admin/login.php:28
+#: index.php:26 login.php:31 admin/login.php:28
 msgid "Forgot your password?"
 msgstr "Vous avez oublié votre mot de passe ?"
 
@@ -798,26 +798,30 @@ msgstr ""
 "Pour demander une réinitialisation de mot de passe, entrez votre identifiant "
 "ci-dessous"
 
-#: index.php:28 login.php:34
+#: index.php:28 login.php:36
 msgid "You must enter a valid username"
 msgstr "Yous devez entrer un identifiant valide"
 
-#: index.php:29 login.php:30
+#: index.php:29 login.php:32
 msgid "To log in:"
 msgstr "Pour vous connecter :"
 
-#: index.php:30 login.php:31 admin/login.php:29
+#: index.php:30 login.php:33 admin/login.php:29
 msgid "Login:"
 msgstr "Identifiant :"
 
-#: index.php:31 login.php:32 login.php:36 admin/login.php:30
+#: index.php:31 login.php:34 login.php:39 admin/login.php:30
 #: admin/login.php:33
 msgid "Login"
 msgstr "Se connecter"
 
-#: index.php:32 login.php:33 admin/login.php:31
+#: index.php:32 login.php:35 admin/login.php:31
 msgid "Password:"
 msgstr "Mot de passe :"
+
+#: index.php:33 login.php:37
+msgid "Remember me"
+msgstr "Se souvenir de moi"
 
 #: install.php:42
 msgid "Welcome"
@@ -848,7 +852,7 @@ msgstr ""
 msgid "(last update on: %s)"
 msgstr "(dernière mise à jour : le %s)"
 
-#: login.php:22 admin/login.php:20
+#: login.php:24 admin/login.php:20
 msgid "Username or password incorrect"
 msgstr "Identifiant ou mot de passe incorrect"
 

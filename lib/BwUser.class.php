@@ -47,7 +47,7 @@ class BwUser
 	/**
 	 *
 	 */
-	public function login($username = '', $password = '')
+	public function login($username = '', $password = '', $remember = false)
 	{
 		$usernameTrim = trim($username);
 		$passwordTrim = trim($password);
@@ -59,6 +59,9 @@ class BwUser
 		if($this->loadByUsernamePassword($usernameTrim, $passwordTrim)) {
 			// We can mark the user as connected
 			$this->setupSession();
+			if($remember) {
+				$this->setupRememberCookie();
+			}
 			return true;
 		}
 
@@ -68,6 +71,7 @@ class BwUser
 	public function logout()
 	{
 		$this->deleteSession();
+		self::clearAutoLogin();
 	}
 
 	public function load($id = null)
@@ -556,12 +560,20 @@ class BwUser
 	/**
 	 * Setup the session variables
 	 */
-	private function setupSession()
+	protected function setupSession()
 	{
 		$_SESSION['user_id']      = (int)$this->id;
 		$_SESSION['identif']      = sha1((int)$this->id . '|' . $_SERVER['HTTP_USER_AGENT']);
 		$_SESSION['identif_serv'] = sha1($_SERVER['SERVER_NAME']);
 		$_SESSION['last_login']   = $this->lastLogin;
+	}
+
+	private function setupRememberCookie()
+	{
+		$userAgent = $_SERVER['HTTP_USER_AGENT'];
+		$cookieHash = sha1((int)$this->id . '|' . $userAgent);
+		setcookie('identifier', $_SESSION['user_id'], strtotime('+1 year'), '/');
+		setcookie('auto_conn', $cookieHash, strtotime('+1 year'), '/');
 	}
 
 	public function updateLastLogin()
@@ -629,6 +641,28 @@ class BwUser
 			else
 				return false;
 		}
+	}
+
+	public static function setupAutoLogin()
+	{
+		if(!self::checkSession() && !empty($_COOKIE['identifier']) && !empty($_COOKIE['auto_conn'])) {
+			$user = new self();
+			$cookieUserId = $_COOKIE['identifier'];
+			$cookieAutoConn = $_COOKIE['auto_conn'];
+			$userAgent = $_SERVER['HTTP_USER_AGENT'];
+			if($user->load($cookieUserId)) {
+				$cookieHashRef = sha1((int)$user->getId() . '|' . $userAgent);
+				if($cookieHashRef === $cookieAutoConn) {
+					$user->setupSession();
+				}
+			}
+		}
+	}
+
+	public static function clearAutoLogin()
+	{
+		setcookie('identifier', '');
+		setcookie('auto_conn', '');
 	}
 
 	/**

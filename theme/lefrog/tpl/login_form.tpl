@@ -10,6 +10,9 @@
 		<tr><td align="left">&nbsp;&nbsp;{$lngPasswordLabel}&nbsp;</td><td>
 		<input type="password" name="pass" size="15" maxlength="30" />
 		</td></tr>
+		<tr><td align="left">&nbsp;&nbsp;{$lngRememberMe}&nbsp;</td><td>
+		<input type="checkbox" name="rememberme" value="1" />
+		</td></tr>
 	</table>
 	<input type="hidden" name="login_frm_submitted" value="1" />
 	<input type="submit" name="submit" value="{$lngLoginAction}" />

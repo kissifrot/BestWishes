@@ -63,6 +63,9 @@ BwCache::configure('default', array(
 	'duration'=> 3600
 ));
 
+// Setup the remember me
+BwUser::setupAutoLogin();
+
 /**
  * Cleans up a variable depending on its type
  */

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BestWishes 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-24 09:50+0100\n"
-"PO-Revision-Date: 2012-11-24 09:51+0100\n"
+"POT-Creation-Date: 2012-11-25 12:05+0100\n"
+"PO-Revision-Date: 2012-11-25 12:06+0100\n"
 "Last-Translator: Philippe Villiers <kissifrot@gmail.com>\n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -55,7 +55,7 @@ msgstr ""
 msgid "Home/Login"
 msgstr ""
 
-#: lib/BwDisplay.class.php:55 index.php:34 admin/index.php:17
+#: lib/BwDisplay.class.php:55 index.php:35 admin/index.php:17
 msgid "Home"
 msgstr ""
 
@@ -750,7 +750,7 @@ msgstr ""
 msgid "Choose a list to show in the left menu"
 msgstr ""
 
-#: index.php:26 login.php:29 admin/login.php:28
+#: index.php:26 login.php:31 admin/login.php:28
 msgid "Forgot your password?"
 msgstr ""
 
@@ -758,25 +758,29 @@ msgstr ""
 msgid "To request a password reset, just enter your username below"
 msgstr ""
 
-#: index.php:28 login.php:34
+#: index.php:28 login.php:36
 msgid "You must enter a valid username"
 msgstr ""
 
-#: index.php:29 login.php:30
+#: index.php:29 login.php:32
 msgid "To log in:"
 msgstr ""
 
-#: index.php:30 login.php:31 admin/login.php:29
+#: index.php:30 login.php:33 admin/login.php:29
 msgid "Login:"
 msgstr ""
 
-#: index.php:31 login.php:32 login.php:36 admin/login.php:30
+#: index.php:31 login.php:34 login.php:39 admin/login.php:30
 #: admin/login.php:33
 msgid "Login"
 msgstr ""
 
-#: index.php:32 login.php:33 admin/login.php:31
+#: index.php:32 login.php:35 admin/login.php:31
 msgid "Password:"
+msgstr ""
+
+#: index.php:33 login.php:37
+msgid "Remember me"
 msgstr ""
 
 #: install.php:42
@@ -808,7 +812,7 @@ msgstr ""
 msgid "(last update on: %s)"
 msgstr ""
 
-#: login.php:22 admin/login.php:20
+#: login.php:24 admin/login.php:20
 msgid "Username or password incorrect"
 msgstr ""
 
