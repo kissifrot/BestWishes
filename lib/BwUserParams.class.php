@@ -57,6 +57,7 @@ class BwUserParams
 			$this->storeAttributes($result);
 			return true;
 		}
+		return false;
 	}
 
 	public function loadByUserId($userId = null)

@@ -1,6 +1,6 @@
 <?php
 /**
- * File-based cache mamagement class, borrowed from CakePHP 2.0 ;)
+ * File-based cache management class, borrowed from CakePHP 2.0 ;)
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)

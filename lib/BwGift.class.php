@@ -82,6 +82,7 @@ class BwGift
 			$this->storeAttributes($result);
 			return true;
 		}
+		return false;
 	}
 
 	/**

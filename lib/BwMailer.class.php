@@ -34,6 +34,7 @@ class BwMailer
 				throw new Exception(_('No mailer or incompatible one'));
 			break;
 		}
+		$this->mailer = Swift_Mailer::newInstance($this->transport);
 		$this->mailFromAddress = bwConfig::get('mail_from', false);
 		$this->mailFromName = bwConfig::get('mail_from_name', '');
 	}
@@ -85,18 +86,32 @@ class BwMailer
 		if(empty($messagesToSend)) {
 			return false;
 		}
-		$mailer = Swift_Mailer::newInstance($this->transport);
 
 		$messagesSent = 0;
 		foreach($messagesToSend as $messageToSend) {
 			try {
-				$messagesSent += $mailer->send($messageToSend);
+				$messagesSent += $this->mailer->send($messageToSend);
 			} catch(Exception $e) {
 				BwLogger::log('Mailer Exception: ' . $e->getMessage());
 			}
 		}
 
 		return $messagesSent;
+	}
+
+	/**
+	 *
+	 */
+	public function sendMessage($messageToSend) {
+		$messageSent = 0;
+		try {
+			$messageSent += $this->mailer->send($messageToSend);
+		} catch(Exception $e) {
+			BwLogger::log('Mailer Exception: ' . $e->getMessage());
+			return $messageSent;
+		}
+
+		return $messageSent;
 	}
 
 	/**
@@ -122,7 +137,6 @@ class BwMailer
 
 		// Now cycle through all users to send them an alert
 		$allUsers = BwUser::getAll();
-		$messagesToSend = array();
 
 		$variables = array(
 			'__USER_NAME__' => $resetUser->name,
@@ -135,8 +149,9 @@ class BwMailer
 		$mailHtmlContent = $bwMailer->populateTemplate($variables);
 		$mailTextContent = strip_tags($mailHtmlContent);
 
+		$nbMessage = 0;
 		if(!empty($resetUser->email)) {
-			$messagesToSend[] = Swift_Message::newInstance()
+			$messageToSend = Swift_Message::newInstance()
 			->setSubject($mailSubject)
 			->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
 			->setTo($resetUser->email)
@@ -144,9 +159,9 @@ class BwMailer
 			->addPart($mailTextContent, 'text/plain');
 		}
 
-		$nbMessages = $bwMailer->sendMessages($messagesToSend);
+		$nbMessage = $bwMailer->sendMessage($messageToSend);
 
-		return ($nbMessages == count($messagesToSend));
+		return ($nbMessage == 1);
 	}
 
 	/**
@@ -172,7 +187,6 @@ class BwMailer
 
 		// Now cycle through all users to send them an alert
 		$allUsers = BwUser::getAll();
-		$messagesToSend = array();
 
 		$variables = array(
 			'__USER_NAME__' => $resetUser->name,
@@ -185,8 +199,9 @@ class BwMailer
 		$mailHtmlContent = $bwMailer->populateTemplate($variables);
 		$mailTextContent = strip_tags($mailHtmlContent);
 
+		$nbMessage = 0;
 		if(!empty($resetUser->email)) {
-			$messagesToSend[] = Swift_Message::newInstance()
+			$messageToSend = Swift_Message::newInstance()
 			->setSubject($mailSubject)
 			->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
 			->setTo($resetUser->email)
@@ -194,9 +209,9 @@ class BwMailer
 			->addPart($mailTextContent, 'text/plain');
 		}
 
-		$nbMessages = $bwMailer->sendMessages($messagesToSend);
+		$nbMessage = $bwMailer->sendMessage($messageToSend);
 
-		return ($nbMessages == count($messagesToSend));
+		return ($nbMessage == 1);
 	}
 
 	/**

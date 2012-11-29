@@ -1,18 +1,19 @@
 function showFlashMessage(type, message) {
 	var spanContent = '<span class="ui-icon floatingIcon ';
+	var $flashMessageDiv = $('#flash_message').find('> div');
 	if(type == 'error') {
 		spanContent += 'ui-icon-alert">';
-		if(!$('#flash_message').find('> div').hasClass('ui-state-error')) {
+		if(!$flashMessageDiv.hasClass('ui-state-error')) {
 			// We showed previously an info message
-			$('#flash_message').find('> div').removeClass('ui-state-highlight');
-			$('#flash_message').find('> div').addClass('ui-state-error');
+			$flashMessageDiv.removeClass('ui-state-highlight');
+			$flashMessageDiv.addClass('ui-state-error');
 		}
 	} else {
 		spanContent += 'ui-icon-info">';
-		if(!$('#flash_message').find('> div').hasClass('ui-state-highlight')) {
+		if(!$flashMessageDiv.hasClass('ui-state-highlight')) {
 			// We showed previously an error message
-			$('#flash_message').find('> div').removeClass('ui-state-error');
-			$('#flash_message').find('> div').addClass('ui-state-highlight');
+			$flashMessageDiv.removeClass('ui-state-error');
+			$flashMessageDiv.addClass('ui-state-highlight');
 		}
 	}
 	spanContent += '</span>';

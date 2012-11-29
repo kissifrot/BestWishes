@@ -1,13 +1,15 @@
 /* Admin */
 function editListName(id)
 {
-	if($('#edit_list_' + id).length > 0) {
-		var newListName = $('#edit_list_' + id).val();
+	var $editList = $('#edit_list_' + id);
+	var $nameList = $('#name_list_' + id);
+	if($editList.length > 0) {
+		var newListName = $editList.val();
 		if(newListName.length > 5) {
 			if(newListName == currentListName) {
 				// No need to edit anything
-				$('#name_list_' + id).show();
-				$('#edit_list_' + id).remove();
+				$nameList.show();
+				$editList.remove();
 			} else {
 				$.ajax({
 					url: 'a_adm_lists_mgmt.php?action=edit',
@@ -22,10 +24,10 @@ function editListName(id)
 							showFlashMessage('error', returnedData.message);
 						} else {
 							// All OK
-							$('#name_list_' + id).text(newListName);
+							$nameList.text(newListName);
 							$('#orig_name_list_' + id).val(newListName);
-							$('#name_list_' + id).show();
-							$('#edit_list_' + id).remove();
+							$nameList.show();
+							$editList.remove();
 							showFlashMessage('info', returnedData.message);
 						}
 					}

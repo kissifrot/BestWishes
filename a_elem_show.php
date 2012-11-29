@@ -31,6 +31,7 @@ if(BwUser::checkSession()) {
 } else {
 	// Nobody logged
 	$sessionOk = false;
+	$user = null;
 	$disp = new BwDisplay(BwConfig::get('theme', 'default'));
 }
 switch($type) {

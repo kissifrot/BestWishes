@@ -43,6 +43,7 @@ class BwAdminUser
 			$this->setupSession();
 			return true;
 		}
+		return false;
 	}
 
 	private function setupSession()

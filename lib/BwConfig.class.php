@@ -35,6 +35,7 @@ class BwConfig
 			}
 			return true;
 		}
+		return false;
 	}
 
 	private function storeAttributes($sqlResults)

@@ -30,6 +30,7 @@ if(BwUser::checkSession()) {
 	$sessionOk = true;
 	$user = BwUser::getInstance();
 	$disp = new BwSessionDisplay($user->getTheme()->shortName, $user);
+	$publicLists = 'false';
 	$user->loadParams();
 } else {
 	// Nobody logged

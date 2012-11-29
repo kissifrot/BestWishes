@@ -218,9 +218,8 @@ function endEditGift()
 						if(returnedData.status == 'success') {
 							showFlashMessage('info', returnedData.message);
 							$('#gift_edit_name').remove();
-							$('#gif_name_' + currentGiftId).text(giftName);
+							$('#gif_name_' + currentGiftId).text(giftName).show();
 							currentGiftName = giftName;
-							$('#gif_name_' + currentGiftId).show();
 							$('#actn_edit_gift_' + currentGiftId).show();
 						} else {
 							showFlashMessage('error', returnedData.message);
