@@ -66,6 +66,40 @@ switch($type) {
 		}
 		$disp->showJSONData($allCats);
 	break;
+	case 'cat':
+		if(!isset($_GET['id']) || empty($_GET['id'])) {
+			exit;
+		}
+		$catId = intval($_GET['id']);
+		$category = new BwCategory($catId);
+		if(!$category->load()) {
+			exit;
+		}
+		if($category->giftListId != $list->getId()) {
+			exit;
+		}
+		if($sessionOk) {
+			$user->loadParams();
+		} else {
+			$user = null;
+			$publicLists = BwConfig::get('public_lists', 'true');
+			// Stop if not public
+			// TODO: Tweak this
+			if(!boolVal($publicLists)) {
+				exit;
+			}
+		}
+		$disp->assign('cfgMaxEdits', BwConfig::get('max_gift_name_edits', false));
+		// Translation strings
+		$disp->assignListStrings();
+		
+		// Remove some categories/gifts depending on the situation
+		$category->filterContent($sessionOk, $user, $list);
+		
+		$disp->assign('list', $list);
+		$disp->assign('category', $category);
+		$disp->display('cat_display.tpl');
+	break;
 	case 'list':
 		if($sessionOk) {
 			$user->loadParams();
@@ -74,6 +108,7 @@ switch($type) {
 			$disp->assign('tipsText', $tipsText);
 		} else {
 			$user = null;
+			$publicLists = BwConfig::get('public_lists', 'true');
 			// Stop if not public
 			// TODO: Tweak this
 			if(!boolVal($publicLists)) {

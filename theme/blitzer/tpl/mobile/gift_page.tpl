@@ -21,7 +21,7 @@
 		<a href="/" onclick="confirmDeleteGift({$gift->getId()}, {$list->getId()}); return false" title="{$lngDelete}" data-rel="dialog" data-role="button">{$lngDelete}</a>
 	{/if}
 	{if $user->canMarkGiftsForList($list->getId()) && !$gift->isBought}
-		<a href="/" onclick="showBuyWindow('{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$list->getId()}); return false" title="{$lngMarkAsBought}" data-rel="dialog" data-role="button">$lngMarkAsBought}</a> 
+		<a href="/" onclick="showBuyWindow('{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$list->getId()}); return false" title="{$lngMarkAsBought}" data-rel="dialog" data-role="button">{$lngMarkAsBought}</a> 
 	{/if}
 	{if $user->isListOwner($list) && !$gift->isReceived}
 		<a href="/" onclick="markGiftAsReceived(); return false" title="{$lngMarkAsReceived}" data-rel="dialog" data-role="button">{$lngMarkAsReceived}</a> 

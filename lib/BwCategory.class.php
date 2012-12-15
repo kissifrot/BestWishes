@@ -333,4 +333,44 @@ class BwCategory
 		$category = new self();
 		return $category->loadAllByListId((int)$listId);
 	}
+
+	/**
+	 * This function will flter the gifts which will then be displayed
+	 */
+	public function filterContent($isConnected = false, $connectedUser = null, $list)
+	{
+		if(!$isConnected) {
+			if(empty($this->gifts))
+				return true;
+			// Standard view, delete the surprise gifts and received gifts
+			if($this->giftsCount > 0) {
+				foreach($this->gifts as $index => $gift) {
+					if($gift->isSurprise) {
+						unset($this->gifts[$index]);
+					}
+				}
+			}
+			return true;
+		}
+
+		// Connected view
+		if(!empty($connectedUser)) {
+			if($connectedUser->getId() == $list->ownerId) {
+				if(empty($this->gifts))
+					return true;
+				// The user is viewing his/her list, delete the surprise and received gifts
+				if($this->giftsCount > 0) {
+					foreach($this->gifts as $index => $gift) {
+						if($gift->isBought) {
+							$this->gifts[$index]->filterContent();
+						}
+						if($gift->isSurprise) {
+							unset($this->gifts[$index]);
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
 }

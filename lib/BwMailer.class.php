@@ -145,7 +145,7 @@ class BwMailer
 		);
 
 		// Prepare the mail data
-		$mailSubject = _('BestWishes - Password reset');
+		$mailSubject = BwConfig::get('site_name', 'BestWishes') . ' - ' .  _('Password reset');
 		$mailHtmlContent = $bwMailer->populateTemplate($variables);
 		$mailTextContent = strip_tags($mailHtmlContent);
 
@@ -195,7 +195,7 @@ class BwMailer
 		);
 
 		// Prepare the mail data
-		$mailSubject = _('BestWishes - Your new password');
+		$mailSubject = BwConfig::get('site_name', 'BestWishes') . ' - ' .  _('Your new password');
 		$mailHtmlContent = $bwMailer->populateTemplate($variables);
 		$mailTextContent = strip_tags($mailHtmlContent);
 

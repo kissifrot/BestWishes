@@ -25,7 +25,7 @@
 							&nbsp;<a href="/" onclick="confirmMarkGiftAsReceived({$gift->getId()}, {$list->getId()}); return false" title="{$lngMarkAsReceived}"><img alt="{$lngMarkAsReceived}" class="icon_text" src="{$themeWebDir}/img/gift_received.png" /></a> 
 							{/if}
 							{if $gift->isBought && !$user->isListOwner($list)}
-								{if !empty($gift->boughtComment)}
+								{if !empty($gift->purchaseComment)}
 								<img class="icon_text gift_status" alt="comment" title="{$lngHasComment}" src="{$themeWebDir}/img/comment.png" />
 								{/if}
 								<img class="icon_text gift_status" alt="bought" title="{$lngIsBought}" src="{$themeWebDir}/img/gift_bought.png" />

@@ -19,9 +19,9 @@ function showGiftDetailsWindow(giftId, listId)
 					if(giftDetails.purchaseDate != null) {
 						$('#gift_details_buy_date').text(date(bwLng.dateFormat, strtotime(giftDetails.purchaseDate)));
 					}
-					if(typeof giftDetails.boughtComment !== 'undefined' && giftDetails.boughtComment != null && giftDetails.boughtComment.length > 0) {
+					if(typeof giftDetails.purchaseComment !== 'undefined' && giftDetails.purchaseComment != null && giftDetails.purchaseComment.length > 0) {
 						$('#gift_details_buy_comment').show();
-						$('#gift_details_buy_comment_text').text(giftDetails.boughtComment);
+						$('#gift_details_buy_comment_text').text(giftDetails.purchaseComment);
 					} else {
 						$('#gift_details_buy_comment').hide();
 					}
@@ -268,7 +268,7 @@ function addGift(listId, detailedAdd, force) {
 							showFlashMessage('info', returnedData.message);
 							$('#gift_name').val('');
 							$('#section_add_gift').hide();
-							reloadList(currentListId);
+							reloadCat(currentCatId, currentListId);
 						} else {
 							if(returnedData.status == 'confirm') {
 								// Show a confirmation dialog
@@ -332,7 +332,7 @@ function addSurpriseGift(listId, force) {
 						showFlashMessage('info', returnedData.message);
 						$('#surprise_gift_name').val('');
 						$('#section_add_surprise_gift').hide();
-						reloadList(currentListId);
+						reloadCat(currentCatId, currentListId);
 					} else {
 						if(returnedData.status == 'confirm') {
 							// Show a confirmation dialog
@@ -563,6 +563,26 @@ function reloadList(listId) {
 				$( '#div_complete_list' ).removeAttr( 'style' ).hide().fadeIn();
 			}, 200 );});
 			$('#div_complete_list').html(returnedData);
+		}
+	});
+}
+
+function reloadCat(catId, listId) {
+	currentCatId = parseInt(catId);
+	currentListId = parseInt(listId);
+	$.ajax({
+		type: 'GET',
+		cache: false,
+		url: bwURL + '/a_elem_show.php',
+		data: {listId: currentListId, id: currentCatId, type: 'cat'},
+		error: function(jqXHR, textStatus, errorThrown) {
+			showFlashMessage('error', 'An error occured: ' + errorThrown);
+		},
+		success: function(returnedData, textStatus, jqXHR) {
+			$('#cat_' + currentCatId).effect('fade', 200, function() {setTimeout(function() {
+				$( '#cat_' + currentCatId ).removeAttr( 'style' ).hide().fadeIn();
+			}, 200 );});
+			$('#cat_' + currentCatId).html(returnedData);
 		}
 	});
 }
