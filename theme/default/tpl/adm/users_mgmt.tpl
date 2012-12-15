@@ -26,7 +26,7 @@
 				</tr>
 				<tr>
 					<td><label>E-mail address</label></td>
-					<td><input type="text" name="email" id="email_add" /></td>
+					<td><input type="email" name="email" id="email_add" /></td>
 				</tr>
 			</table>
 			<input type="submit" value="Add" />

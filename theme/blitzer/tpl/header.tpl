@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 	<head>
 		<title>{$pageTitle}</title>
 		<!--<meta http-equiv="Content-Language" content="fr" />-->
@@ -12,12 +12,12 @@
 		<link rel="stylesheet" type="text/css" href="{$themeWebDir}/css/jquery-ui-adjust.css" />
 		<link rel="shortcut icon" href="{$webDir}/favicon.ico" />
 
-		<script language="javascript" src="{$webDir}/js/jquery.min.js" type="text/javascript"></script>
-		<script language="javascript" src="{$webDir}/js/jquery-ui.min.js" type="text/javascript"></script>
-		<script language="javascript" src="{$webDir}/js/tools.min.js" type="text/javascript"></script>
-		<script language="javascript" src="{$webDir}/js/variables.js" type="text/javascript"></script>
-		<script language="javascript" src="{$webDir}/js/common_functions.js" type="text/javascript"></script>
-		<script language="javascript" src="{$webDir}/js/functions.js" type="text/javascript"></script>
+		<script src="{$webDir}/js/jquery.min.js" type="text/javascript"></script>
+		<script src="{$webDir}/js/jquery-ui.min.js" type="text/javascript"></script>
+		<script src="{$webDir}/js/tools.min.js" type="text/javascript"></script>
+		<script src="{$webDir}/js/variables.js" type="text/javascript"></script>
+		<script src="{$webDir}/js/common_functions.js" type="text/javascript"></script>
+		<script src="{$webDir}/js/functions.js" type="text/javascript"></script>
 	</head>
 
 	<body>
