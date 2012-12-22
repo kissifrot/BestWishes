@@ -1,10 +1,10 @@
-				<div class="category_list_element_inner" data-catid="{$category->getId()}" data-empty="false" data-canedit="{if $user->canEditList($list->getId())}true{else}false{/if}"><span id="category_name_{$category->getId()}" class="category_name">{$category->name|ucfirst}</span> :</div>
+				<div class="category_list_element_inner" data-catid="{$category->getId()}" data-empty="false" data-canedit="{if $sessionOk && $user->canEditList($list->getId())}true{else}false{/if}"><span id="category_name_{$category->getId()}" class="category_name">{$category->name|ucfirst}</span> :</div>
 				{foreach from=$category->getGifts() item=gift}
 					<div id="gift_list_elem_{$gift->getId()}" class="gift_list_element" data-giftid="{$gift->getId()}"
 					data-giftname="{$gift->name|escape}"
-					data-canmarkbought="{if $user->canMarkGiftsForList($list->getId()) && !$gift->isBought}true{else}false{/if}"
-					data-canmarkreceived="{if $user->isListOwner($list) && !$gift->isReceived}true{else}false{/if}"
-					data-canedit="{if $user->canEditList($list->getId())}true{else}false{/if}"
+					data-canmarkbought="{if $sessionOk && $user->canMarkGiftsForList($list->getId()) && !$gift->isBought}true{else}false{/if}"
+					data-canmarkreceived="{if $sessionOk && $user->isListOwner($list) && !$gift->isReceived}true{else}false{/if}"
+					data-canedit="{if $sessionOk && $user->canEditList($list->getId())}true{else}false{/if}"
 					>
 						{if $sessionOk}
 							{if $userLastLoginTime < strtotime($gift->addedDate)}
