@@ -55,14 +55,14 @@ class BwDatabase
 			switch($this->dbType) {
 				case 'mysql':
 					if (version_compare(PHP_VERSION, '5.3.6', '<')) {
-						$pdoOptions = array_merge($pdoDefaultOptions, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+						$pdoOptions = $pdoDefaultOptions + array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 						$this->db = new PDO('mysql:host=' .$this->dbServer. ';port=' . $this->dbPort . ';dbname=' .$this->dbName, $this->dbUser, $this->dbPassword, $pdoOptions);
 					} else {
-						$this->db = new PDO('mysql:host=' .$this->dbServer. ';port=' . $this->dbPort . ';dbname=' .$this->dbName. ';charset=UTF-8', $this->dbUser, $this->dbPassword, $pdoDefaultOptions);
+						$this->db = new PDO('mysql:host=' .$this->dbServer. ';port=' . $this->dbPort . ';dbname=' .$this->dbName. ';charset=utf8', $this->dbUser, $this->dbPassword, $pdoDefaultOptions);
 					}
 				break;
 				case 'postgresql':
-					$this->db = new PDO('pgsql:host=' .$this->dbServer. ';port=' . $this->dbPort . ';dbname=' .$this->dbName. ';charset=UTF-8', $this->dbUser, $this->dbPassword, $pdoDefaultOptions);
+					$this->db = new PDO('pgsql:host=' .$this->dbServer. ';port=' . $this->dbPort . ';dbname=' .$this->dbName, $this->dbUser, $this->dbPassword, $pdoDefaultOptions);
 				break;
 				default:
 					throw new Exception('Unsupported DB type');
