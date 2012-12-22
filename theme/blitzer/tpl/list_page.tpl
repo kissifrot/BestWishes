@@ -26,12 +26,16 @@ $(document).ready(function(){
 		selectGift($(this));
 		addGiftMenu($(this));
 	});
+{/literal}
+{if $sessionOk && $user->canEditList($list->getId())}
+{literal}
 	$(document).on('click', '.category_list_element_inner', function() {
 		selectCat($(this));
 		addCatMenu($(this));
 	});
-});
 {/literal}
+{/if}
+{rdelim});
 </script>
 
 <div id="gift_actions_menu" style="display:none">

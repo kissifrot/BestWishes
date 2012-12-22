@@ -2,6 +2,8 @@ function addGiftMenu(giftElem) {
 	currentGiftElem = giftElem;
 	// "Deselect" the categories
 	$('.category_list_element_inner').removeClass('selectedCat ui-corner-all');
+	$('#cat_actions_menu').hide();
+
 	$('.gift_list_element').not(giftElem).removeClass('selectedGift ui-corner-all');
 	giftElem.addClass('selectedGift ui-corner-all');
 	if(giftElem.data('canmarkbought')) {
@@ -30,6 +32,8 @@ function addCatMenu(catElem) {
 	currentCatElem = catElem;
 	// "Deselect" the gifts
 	$('.gift_list_element').removeClass('selectedGift ui-corner-all');
+	$('#gift_actions_menu').hide();
+
 	$('.category_list_element_inner').not(catElem).removeClass('selectedCat ui-corner-all');
 	catElem.addClass('selectedCat ui-corner-all');
 	if(catElem.data('canedit')) {
