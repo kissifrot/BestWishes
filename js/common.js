@@ -1,3 +1,13 @@
+var currentListId = null;
+var currentGiftId = null;
+var currentUserId = null;
+var currentCatName = null;
+var currentCatId = null;
+var currentGiftName = null;
+
+var currentGiftElem = null;
+var currentCatElem = null;
+
 function showFlashMessage(type, message) {
 	var spanContent = '<span class="ui-icon floatingIcon ';
 	var $flashMessageDiv = $('#flash_message').find('> div');

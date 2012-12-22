@@ -135,12 +135,13 @@ a {
 }
 
 .selectedCat {
-	border: 2px dotted #FAD42E;
+	border: 2px dotted #A6C9E2;
+	background-color: #D3ECFF;
 }
 
 .selectedGift {
-	padding: 2px;
-	border: 1px dotted #2e6e9e;
+	border: 2px solid #A6C9E2;
+	background-color: #D3ECFF;
 }
 
 .floatingIcon {
@@ -168,15 +169,19 @@ a {
 .category_name {
 	font-size: 105%;
 	font-weight: bold;
-	height: 24px;
+	/*height: 24px;*/
 	line-height: 24px;
 }
 
 .gift_list_element {
 	font-size: 105%;
-	height: 24px;
+	/*height: 24px;*/
 	line-height: 24px;
 	margin: 2px;
+}
+
+#gift_actions_menu {
+	font-size: 100%;
 }
 
 /*
@@ -193,14 +198,13 @@ a {
 	line-height: 24px;
 }
 
-
 .gift_status {
 	float: right;
 	margin-left: 0.3em;
 }
 
 .bought_gift {
-	text-decoration:line-through;
+	text-decoration: line-through;
 	font-style: italic;
 }
 

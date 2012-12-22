@@ -1,9 +1,65 @@
-function showGiftDetailsWindow(giftId, listId)
+function addGiftMenu(giftElem) {
+	currentGiftElem = giftElem;
+	// "Deselect" the categories
+	$('.category_list_element_inner').removeClass('selectedCat ui-corner-all');
+	$('.gift_list_element').not(giftElem).removeClass('selectedGift ui-corner-all');
+	giftElem.addClass('selectedGift ui-corner-all');
+	if(giftElem.data('canmarkbought')) {
+		$('#action_show_buy').show();
+	} else {
+		$('#action_show_buy').hide();
+	}
+	if(giftElem.data('canmarkreceived')) {
+		$('#action_mark_received').show();
+	} else {
+		$('#action_mark_received').hide();
+	}
+	if(giftElem.data('canedit')) {
+		$('#action_edit_gift').show();
+		$('#action_delete_gift').show();
+	} else {
+		$('#action_edit_gift').hide();
+		$('#action_delete_gift').hide();
+	}
+	$('#gift_actions_menu').show();
+	$('#gift_actions_menu a:visible:not(:first)').css('margin-left', '10px');
+	giftElem.append($('#gift_actions_menu'));
+}
+
+function addCatMenu(catElem) {
+	currentCatElem = catElem;
+	// "Deselect" the gifts
+	$('.gift_list_element').removeClass('selectedGift ui-corner-all');
+	$('.category_list_element_inner').not(catElem).removeClass('selectedCat ui-corner-all');
+	catElem.addClass('selectedCat ui-corner-all');
+	if(catElem.data('canedit')) {
+		$('#action_delete_cat').show();
+	} else {
+		$('#action_delete_cat').hide();
+	}
+	catElem.append($('#cat_actions_menu'));
+}
+
+function selectGift(giftElem) {
+	currentGiftId = giftElem.data('giftid');
+	currentCatId = giftElem.parent().find('.category_list_element_inner').data('catid');
+}
+
+function selectCat(catElem) {
+	currentCatId = catElem.data('catid');
+	if(catElem.data('canedit')) {
+		$('#action_delete_cat').show();
+	} else {
+		$('#action_delete_cat').hide();
+	}
+	$('#cat_actions_menu').show();
+	catElem.append($('#cat_actions_menu'));
+}
+
+function showGiftDetailsWindow()
 {
-	var currlistId = parseInt(listId);
-	var currGiftId = parseInt(giftId);
 	$.ajax({
-		url: bwURL + '/a_elem_show.php?listId=' + currlistId + '&type=gift&id=' + currGiftId,
+		url: bwURL + '/a_elem_show.php?listId=' + currentListId + '&type=gift&id=' + currentGiftId,
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
@@ -36,9 +92,8 @@ function showGiftDetailsWindow(giftId, listId)
 	});
 }
 
-function addCat(listId)
+function addCat()
 {
-	currentListId = parseInt(listId);
 	currentCatName = $('#cat_name').val();
 	if(currentCatName.length < 2) {
 		// Category name too short
@@ -57,8 +112,8 @@ function addCat(listId)
 					showFlashMessage('info', returnedData.message);
 					$('#cat_name').val('');
 					$('#section_add_cat').hide();
-					reloadList(currentListId);
-					reloadCatsList(currentListId);
+					reloadList();
+					reloadCatsList();
 				} else {
 					showFlashMessage('error', returnedData.message);
 				}
@@ -67,38 +122,38 @@ function addCat(listId)
 	}
 }
 
-function confirmDeleteCat(listId, catId)
+function confirmDeleteCat()
 {
-	currentListId = parseInt(listId);
-	currentCatId = parseInt(catId);
-	$( '#cat_confirm_delete_dialog' ).dialog( 'open' );
-	$( '#cat_confirm_delete_dialog' ).dialog({
-		width: 400,
-		resizable: false,
-		modal: true,
-		title: bwLng.confirmation,
-		buttons: [
-			{
-				text: bwLng.deleteCategory,
-				click: function() { 
-					deleteCat(currentListId, currentCatId);
-					$(this).dialog('close');
+	if(currentCatElem.data('empty')) {
+		deleteCat(currentListId, currentCatId);
+	} else {
+		$( '#cat_confirm_delete_dialog' ).dialog( 'open' );
+		$( '#cat_confirm_delete_dialog' ).dialog({
+			width: 400,
+			resizable: false,
+			modal: true,
+			title: bwLng.confirmation,
+			buttons: [
+				{
+					text: bwLng.deleteCategory,
+					click: function() { 
+						deleteCat(currentListId, currentCatId);
+						$(this).dialog('close');
+					}
+				},
+				{
+					text: bwLng.cancel,
+					click: function() { 
+						$(this).dialog('close');
+					}
 				}
-			},
-			{
-				text: bwLng.cancel,
-				click: function() { 
-					$(this).dialog('close');
-				}
-			}
-		]
-	});
+			]
+		});
+	}
 }
 
-function deleteCat(listId, catId)
+function deleteCat()
 {
-	currentListId = parseInt(listId);
-	currentCatId = parseInt(catId);
 	$.ajax({
 		type: 'POST',
 		url: bwURL + '/a_list_mgmt.php?listId=' + currentListId + '&action=del',
@@ -110,8 +165,8 @@ function deleteCat(listId, catId)
 		success: function(returnedData, textStatus, jqXHR) {
 			if(returnedData.status == 'success') {
 				showFlashMessage('info', returnedData.message);
-				$('#cat_' + currentCatId).remove();
-				reloadCatsList(currentListId);
+				removeCatElement();
+				reloadCatsList();
 			} else {
 				showFlashMessage('error', returnedData.message);
 			}
@@ -119,9 +174,7 @@ function deleteCat(listId, catId)
 	});
 }
 
-function confirmDeleteGift(giftId, listId) {
-	currentGiftId = parseInt(giftId);
-	currentListId = parseInt(listId);
+function confirmDeleteGift() {
 	$('<div></div>')
 	.html(bwLng.confirmGiftDeletion)
 	.dialog({
@@ -157,7 +210,7 @@ function deleteGift(giftId, listId)
 		success: function(returnedData, textStatus, jqXHR) {
 			if(returnedData.status == 'success') {
 				showFlashMessage('info', returnedData.message);
-				reloadList(listId);
+				removeGiftElement();
 			} else {
 				showFlashMessage('error', returnedData.message);
 			}
@@ -165,17 +218,46 @@ function deleteGift(giftId, listId)
 	});
 }
 
-function startEditGift(canEdit, giftName, giftId, listId)
+/**
+ * Removes the gift element
+ */
+function removeGiftElement() {
+	if(currentGiftElem != null) {
+		// Move the gift menu elsewhere
+		$('#gift_actions_menu').hide();
+		$('body').append($('#gift_actions_menu'));
+		// Remove the gift element
+		currentGiftElem.remove();
+		// Reset the variables
+		currentGiftElem = null;
+		currentGiftId = null;
+	}
+}
+
+/**
+ * Removes the cat element
+ */
+function removeCatElement() {
+	if(currentCatElem != null) {
+		// Move the cat and gift menu elsewhere
+		$('#cat_actions_menu').hide();
+		$('#gift_actions_menu').hide();
+		$('body').append($('#cat_actions_menu'));
+		$('body').append($('#gift_actions_menu'));
+		// Remove the gift element
+		currentCatElem.parent().remove();
+		// currentCatElem.remove();
+		// Reset the variables
+		currentCatElem = null;
+		currentCatId = null;
+		currentGiftElem = null;
+		currentGiftId = null;
+	}
+}
+
+function startEditGift()
 {
-	if(!canEdit) {
-		showFlashMessage('error', bwLng.maxEditsReached);
-		return false;
-	}
-	if(currentGiftId != giftId) {
-		currentGiftName = giftName;
-	}
-	currentGiftId = parseInt(giftId);
-	currentListId = parseInt(listId);
+	currentGiftName = currentGiftElem.data('giftname');
 	$('<input type="text" id="gift_edit_name" />')
 	.insertAfter('#gif_name_' + currentGiftId)
 	.val(currentGiftName)
@@ -219,7 +301,7 @@ function endEditGift()
 							showFlashMessage('info', returnedData.message);
 							$('#gift_edit_name').remove();
 							$('#gif_name_' + currentGiftId).text(giftName).show();
-							currentGiftName = giftName;
+							currentGiftElem.data('giftname', giftName);
 							$('#actn_edit_gift_' + currentGiftId).show();
 						} else {
 							showFlashMessage('error', returnedData.message);
@@ -235,13 +317,22 @@ function endEditGift()
 	}
 }
 
-function addGift(listId, detailedAdd, force) {
+/*
+function addGiftToCat(giftName, catId) {
+	var lastElementList = $('#cat_' + catId).find('.gift_list_element').last();
+	if(lastElementList.length > 0) {
+		clonedElement = lastElementList.clone();
+		clonedElement.data('giftname', giftName).appendTo('#cat_' + catId);
+		clonedElement.find('.gift_name').text(giftName);
+	}
+}*/
+
+function addGift(detailedAdd, force) {
 
 	catId = $('#gift_cat').val();
 	giftData = null;
 	detailedAdd = detailedAdd;
 	if(catId.length > 0) {
-		currentListId = parseInt(listId);
 		currentCatId = parseInt(catId);
 		if(detailedAdd) {
 			//giftName =  
@@ -268,7 +359,7 @@ function addGift(listId, detailedAdd, force) {
 							showFlashMessage('info', returnedData.message);
 							$('#gift_name').val('');
 							$('#section_add_gift').hide();
-							reloadCat(currentCatId, currentListId);
+							reloadList();
 						} else {
 							if(returnedData.status == 'confirm') {
 								// Show a confirmation dialog
@@ -280,7 +371,7 @@ function addGift(listId, detailedAdd, force) {
 										{
 											text: bwLng.addAnyway,
 											click: function() { 
-												addGift(currentListId, detailedAdd, true);
+												addGift(detailedAdd, true);
 												$(this).dialog('close');
 											}
 										},
@@ -303,12 +394,11 @@ function addGift(listId, detailedAdd, force) {
 	}
 }
 
-function addSurpriseGift(listId, force) {
+function addSurpriseGift(force) {
 
 	catId = $('#surprise_gift_cat').val();
 	giftData = null;
 	if(catId.length > 0) {
-		currentListId = parseInt(listId);
 		currentCatId = parseInt(catId);
 		giftName = $('#surprise_gift_name').val();
 		if(giftName.length < 2) {
@@ -366,34 +456,9 @@ function addSurpriseGift(listId, force) {
 	}
 }
 
-function moveGift(giftId, listId, targetCatId)
+function showBuyWindow()
 {
-	var currGiftId = parseInt(giftId);
-	var currTargetCatId = parseInt(targetCatId);
-	var currListId = parseInt(listId);
-	$.ajax({
-		type: 'POST',
-		url: bwURL + '/a_list_mgmt.php?listId=' + listId + '&action=move',
-		data: {type: 'gift', targetCatId: currTargetCatId, id: currGiftId},
-		dataType: 'json',
-		error: function(jqXHR, textStatus, errorThrown) {
-			showFlashMessage('error', 'An error occured: ' + errorThrown);
-		},
-		success: function(returnedData, textStatus, jqXHR) {
-			if(returnedData.status == 'success') {
-				showFlashMessage('info', returnedData.message);
-				reloadList(listId);
-			} else {
-				showFlashMessage('error', returnedData.message);
-			}
-		}
-	});
-}
-
-function showBuyWindow(giftName, giftId, listId)
-{
-	currentGiftId = parseInt(giftId);
-	currentListId = parseInt(listId);
+	var giftName = currentGiftElem.data('giftname');
 	$('#bought_gift_name').text(giftName);
 	$('#gift_purchase_dialog').dialog( 'option', 'buttons', 
 	[
@@ -403,7 +468,7 @@ function showBuyWindow(giftName, giftId, listId)
 			click: function() { 
 				$('#btn-confirm-purchase').button( 'disable' );
 				$('#btn-confirm-purchase').button( 'option', 'label', bwLng.pleaseWait );
-				markGiftAsBought(currentGiftId, currentListId);
+				markGiftAsBought();
 			}
 		},
 		{
@@ -417,12 +482,12 @@ function showBuyWindow(giftName, giftId, listId)
 	$('#gift_purchase_dialog').dialog( 'open' );
 }
 
-function markGiftAsBought(giftId, listId)
+function markGiftAsBought()
 {
 	$.ajax({
 		type: 'POST',
-		url: bwURL + '/a_list_mgmt.php?listId=' + listId + '&action=mark_bought',
-		data: {type: 'gift', id: giftId, purchaseComment: $('#purchase_comment').val()},
+		url: bwURL + '/a_list_mgmt.php?listId=' + currentListId + '&action=mark_bought',
+		data: {type: 'gift', id: currentGiftId, purchaseComment: $('#purchase_comment').val()},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
@@ -432,7 +497,7 @@ function markGiftAsBought(giftId, listId)
 				$('#purchase_comment').val('');
 				$('#gift_purchase_dialog').dialog('close');
 				showFlashMessage('info', returnedData.message);
-				reloadList(listId);
+				reloadList();
 			} else {
 				// Reenable the button
 				$('#btn-confirm-purchase').button( 'enable' );
@@ -500,9 +565,7 @@ function askResetPwd(username)
 	}
 }
 
-function confirmMarkGiftAsReceived(giftId, listId) {
-	currentGiftId = parseInt(giftId);
-	currentListId = parseInt(listId);
+function confirmMarkGiftAsReceived() {
 	$('<div></div>')
 	.html(bwLng.confirmGiftReceive)
 	.dialog({
@@ -511,7 +574,7 @@ function confirmMarkGiftAsReceived(giftId, listId) {
 			{
 				text: bwLng.confirm,
 				click: function() { 
-					markGiftAsReceived(currentGiftId, currentListId);
+					markGiftAsReceived();
 					$(this).dialog('close');
 				}
 			},
@@ -525,14 +588,12 @@ function confirmMarkGiftAsReceived(giftId, listId) {
 	});
 }
 
-function markGiftAsReceived(giftId, listId)
+function markGiftAsReceived()
 {
-	currentGiftId = parseInt(giftId);
-	currentListId = parseInt(listId);
 	$.ajax({
 		type: 'POST',
-		url: bwURL + '/a_list_mgmt.php?listId=' + listId + '&action=mark_received',
-		data: {type: 'gift', id: giftId},
+		url: bwURL + '/a_list_mgmt.php?listId=' + currentListId + '&action=mark_received',
+		data: {type: 'gift', id: currentGiftId},
 		dataType: 'json',
 		error: function(jqXHR, textStatus, errorThrown) {
 			showFlashMessage('error', 'An error occured: ' + errorThrown);
@@ -540,7 +601,7 @@ function markGiftAsReceived(giftId, listId)
 		success: function(returnedData, textStatus, jqXHR) {
 			if(returnedData.status == 'success') {
 				showFlashMessage('info', returnedData.message);
-				reloadList(currentListId);
+				reloadList();
 			} else {
 				showFlashMessage('error', returnedData.message);
 			}
@@ -548,8 +609,7 @@ function markGiftAsReceived(giftId, listId)
 	});
 }
 
-function reloadList(listId) {
-	currentListId = parseInt(listId);
+function reloadList() {
 	$.ajax({
 		type: 'GET',
 		cache: false,
@@ -567,28 +627,7 @@ function reloadList(listId) {
 	});
 }
 
-function reloadCat(catId, listId) {
-	currentCatId = parseInt(catId);
-	currentListId = parseInt(listId);
-	$.ajax({
-		type: 'GET',
-		cache: false,
-		url: bwURL + '/a_elem_show.php',
-		data: {listId: currentListId, id: currentCatId, type: 'cat'},
-		error: function(jqXHR, textStatus, errorThrown) {
-			showFlashMessage('error', 'An error occured: ' + errorThrown);
-		},
-		success: function(returnedData, textStatus, jqXHR) {
-			$('#cat_' + currentCatId).effect('fade', 200, function() {setTimeout(function() {
-				$( '#cat_' + currentCatId ).removeAttr( 'style' ).hide().fadeIn();
-			}, 200 );});
-			$('#cat_' + currentCatId).html(returnedData);
-		}
-	});
-}
-
-function reloadCatsList(listId) {
-	currentListId = parseInt(listId);
+function reloadCatsList() {
 	$.ajax({
 		type: 'GET',
 		cache: false,

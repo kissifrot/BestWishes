@@ -3,7 +3,7 @@
 	<head>
 		<title>{$pageTitle}</title>
 		<!--<meta http-equiv="Content-Language" content="fr" />-->
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta charset="utf-8" />
 		<meta name="robots" content="noindex, nofollow" />
 		<meta name="description" content="{$lngBwDesciption}" />
 		
@@ -15,8 +15,7 @@
 		<script src="{$webDir}/js/jquery.min.js" type="text/javascript"></script>
 		<script src="{$webDir}/js/jquery-ui.min.js" type="text/javascript"></script>
 		<script src="{$webDir}/js/tools.min.js" type="text/javascript"></script>
-		<script src="{$webDir}/js/variables.js" type="text/javascript"></script>
-		<script src="{$webDir}/js/common_functions.js" type="text/javascript"></script>
+		<script src="{$webDir}/js/common.js" type="text/javascript"></script>
 		<script src="{$webDir}/js/functions.js" type="text/javascript"></script>
 	</head>
 
