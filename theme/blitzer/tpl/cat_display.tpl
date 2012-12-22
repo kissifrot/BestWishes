@@ -1,29 +1,16 @@
-				{if $sessionOk && $user->canEditList($list->getId())}
-					<a href="/" onclick="confirmDeleteCat({$list->getId()}, {$category->getId()}); return false" title="{$lngDelete}"><img alt="{$lngDelete}" class="icon_text" src="{$themeWebDir}/img/delete.png" /></a> 
-				{/if}
-				<span id="category_name_{$category->getId()}" class="category_name">{$category->name|ucfirst}</span> :
+				<div class="category_list_element_inner" data-catid="{$category->getId()}" data-empty="false" data-canedit="{if $sessionOk && $user->canEditList($list->getId())}true{else}false{/if}"><span id="category_name_{$category->getId()}" class="category_name">{$category->name|ucfirst}</span> :</div>
 				{foreach from=$category->getGifts() item=gift}
-					<div id="gift_list_elem_{$gift->getId()}" class="gift_list_element">
+					<div id="gift_list_elem_{$gift->getId()}" class="gift_list_element" data-giftid="{$gift->getId()}"
+					data-giftname="{$gift->name|escape}"
+					data-canmarkbought="{if $sessionOk && $user->canMarkGiftsForList($list->getId()) && !$gift->isBought}true{else}false{/if}"
+					data-canmarkreceived="{if $sessionOk && $user->isListOwner($list) && !$gift->isReceived}true{else}false{/if}"
+					data-canedit="{if $sessionOk && $user->canEditList($list->getId())}true{else}false{/if}"
+					>
 						{if $sessionOk}
-							{if $user->canEditList($list->getId())}
-							<a href="/" onclick="confirmDeleteGift({$gift->getId()}, {$list->getId()}); return false" title="{$lngDelete}"><img alt="{$lngDelete}" class="icon_text" src="{$themeWebDir}/img/delete.png" /></a>&nbsp;
-								{if $cfgMaxEdits && $gift->editsCount >= $cfgMaxEdits}
-									<a href="/" onclick="startEditGift(false); return false" title="{$lngCannotEditGift}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit_not.png" /></a>&nbsp;
-								{else}
-									<a id="actn_edit_gift_{$gift->getId()}" href="/" onclick="startEditGift(true, '{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$list->getId()}); return false" title="{$lngEditGift}"><img alt="{$lngEdit}" class="icon_text" src="{$themeWebDir}/img/edit.png" /></a>&nbsp;
-								{/if}
-							{else}
-								{if $userLastLoginTime < strtotime($gift->addedDate)}
-									<img alt="{$lngNewGift}" title="{$lngNewGift}" class="icon_text" src="{$themeWebDir}/img/new.png" />
-								{/if}
+							{if $userLastLoginTime < strtotime($gift->addedDate)}
+								<img alt="{$lngNewGift}" title="{$lngNewGift}" class="icon_text" src="{$themeWebDir}/img/new.png" />
 							{/if}
-							<span id="gif_name_{$gift->getId()}" class="gift_name{if $gift->isBought && !$user->isListOwner($list)} bought_gift{/if}" ondblclick="showGiftDetailsWindow({$gift->getId()}, {$list->getId()})">{$gift->name|ucfirst}</span>
-							{if $user->canMarkGiftsForList($list->getId()) && !$gift->isBought}
-							&nbsp;<a href="/" onclick="showBuyWindow('{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$list->getId()}); return false" title="{$lngMarkAsBought}"><img alt="{$lngMarkAsBought}" class="icon_text" src="{$themeWebDir}/img/gift_buy.png" /></a> 
-							{/if}
-							{if $user->isListOwner($list) && !$gift->isReceived}
-							&nbsp;<a href="/" onclick="confirmMarkGiftAsReceived({$gift->getId()}, {$list->getId()}); return false" title="{$lngMarkAsReceived}"><img alt="{$lngMarkAsReceived}" class="icon_text" src="{$themeWebDir}/img/gift_received.png" /></a> 
-							{/if}
+							<span id="gif_name_{$gift->getId()}" class="gift_name{if $gift->isBought && !$user->isListOwner($list)} bought_gift{/if}">{$gift->name|ucfirst}</span>
 							{if $gift->isBought && !$user->isListOwner($list)}
 								{if !empty($gift->purchaseComment)}
 								<img class="icon_text gift_status" alt="comment" title="{$lngHasComment}" src="{$themeWebDir}/img/comment.png" />
@@ -34,7 +21,7 @@
 								<img class="icon_text gift_status" alt="surprise" title="{$lngIsSurprise}" src="{$themeWebDir}/img/surprise.png" />
 							{/if}
 						{else}
-							<span id="gif_name_{$gift->getId()}" class="gift_name" ondblclick="showGiftDetailsWindow({$gift->getId()}, {$list->getId()})">{$gift->name|ucfirst}</span>
+							<span id="gif_name_{$gift->getId()}" class="gift_name">{$gift->name|ucfirst}</span>
 						{/if}
 					</div>
 				{/foreach}

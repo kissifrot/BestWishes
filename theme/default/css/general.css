@@ -135,11 +135,13 @@ a {
 }
 
 .selectedCat {
+	padding: 2px;
 	border: 2px dotted #A6C9E2;
 	background-color: #D3ECFF;
 }
 
 .selectedGift {
+	padding: 2px;
 	border: 2px solid #A6C9E2;
 	background-color: #D3ECFF;
 }
@@ -178,6 +180,10 @@ a {
 	/*height: 24px;*/
 	line-height: 24px;
 	margin: 2px;
+}
+
+.category_list_element {
+	margin-top: 5px;
 }
 
 #gift_actions_menu {
