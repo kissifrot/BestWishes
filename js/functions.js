@@ -222,14 +222,20 @@ function deleteGift(giftId, listId)
 	});
 }
 
+function moveCatGiftMenu() {
+	$('#gift_actions_menu').hide();
+	$('body').append($('#gift_actions_menu'));
+	$('#cat_actions_menu').hide();
+	$('body').append($('#cat_actions_menu'));
+}
+
 /**
  * Removes the gift element
  */
 function removeGiftElement() {
 	if(currentGiftElem != null) {
 		// Move the gift menu elsewhere
-		$('#gift_actions_menu').hide();
-		$('body').append($('#gift_actions_menu'));
+		moveCatGiftMenu();
 		// Remove the gift element
 		currentGiftElem.remove();
 		// Reset the variables
@@ -244,10 +250,7 @@ function removeGiftElement() {
 function removeCatElement() {
 	if(currentCatElem != null) {
 		// Move the cat and gift menu elsewhere
-		$('#cat_actions_menu').hide();
-		$('#gift_actions_menu').hide();
-		$('body').append($('#cat_actions_menu'));
-		$('body').append($('#gift_actions_menu'));
+		moveCatGiftMenu();
 		// Remove the gift element
 		currentCatElem.parent().remove();
 		// currentCatElem.remove();
@@ -614,6 +617,9 @@ function markGiftAsReceived()
 }
 
 function reloadList() {
+	// Move the menus away to not get them destroyed when rebuilding the list DOM
+	moveCatGiftMenu();
+
 	$.ajax({
 		type: 'GET',
 		cache: false,
