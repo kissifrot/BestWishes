@@ -577,7 +577,7 @@ class BwGift
 				),
 				array(
 					'parameter' => ':purchase_date',
-					'variable' => date('Y-m-d'),
+					'variable' => date('Y-m-d H:i:s'),
 					'data_type' => PDO::PARAM_STR
 				),
 				array(
