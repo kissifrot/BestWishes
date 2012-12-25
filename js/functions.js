@@ -16,6 +16,11 @@ function addGiftMenu(giftElem) {
 	} else {
 		$('#action_mark_received').hide();
 	}
+	if(giftElem.data('canmarkgiven')) {
+		$('#action_mark_given').show();
+	} else {
+		$('#action_mark_given').hide();
+	}
 	if(giftElem.data('canedit')) {
 		$('#action_edit_gift').show();
 		$('#action_delete_gift').show();
@@ -608,7 +613,53 @@ function markGiftAsReceived()
 		success: function(returnedData, textStatus, jqXHR) {
 			if(returnedData.status == 'success') {
 				showFlashMessage('info', returnedData.message);
-				reloadList();
+				removeGiftElement();
+			} else {
+				showFlashMessage('error', returnedData.message);
+			}
+		}
+	});
+}
+
+
+
+function confirmMarkGiftAsGiven() {
+	$('<div></div>')
+	.html(bwLng.confirmGiftGive)
+	.dialog({
+		title: bwLng.confirmation,
+		buttons: [
+			{
+				text: bwLng.confirm,
+				click: function() { 
+					markGiftAsGiven();
+					$(this).dialog('close');
+				}
+			},
+			{
+				text: bwLng.cancel,
+				click: function() { 
+					$(this).dialog('close');
+				}
+			}
+		]
+	});
+}
+
+function markGiftAsGiven()
+{
+	$.ajax({
+		type: 'POST',
+		url: bwURL + '/a_list_mgmt.php?listId=' + currentListId + '&action=mark_received_s',
+		data: {type: 'gift', id: currentGiftId},
+		dataType: 'json',
+		error: function(jqXHR, textStatus, errorThrown) {
+			showFlashMessage('error', 'An error occured: ' + errorThrown);
+		},
+		success: function(returnedData, textStatus, jqXHR) {
+			if(returnedData.status == 'success') {
+				showFlashMessage('info', returnedData.message);
+				removeGiftElement();
 			} else {
 				showFlashMessage('error', returnedData.message);
 			}

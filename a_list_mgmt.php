@@ -367,6 +367,52 @@ switch($action) {
 		}
 		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 	break;
+
+	case 'mark_received_s':
+		// Mark a surprise gift as given (equivalent to the received status)
+		if(!isset($_POST['id']) || empty($_POST['id'])) {
+			exit;
+		}
+		$giftId = intval($_POST['id']);
+		$gift = new BwGift($giftId);
+		$statusMessages = array(
+			0 => _('Gift marked as given'),
+			1 => _('Could not mark the gift as given'),
+			2 => _('Gift is already marked as given'),
+			99 => _('Internal error')
+		);
+		$statusCode = 99;
+		$status = 'error';
+		// Owner can't mark a surprise gift as received
+		if($user->isListOwner($list)) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		if(!$gift->load()) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		if(!$gift->isSurprise) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		$catId = $gift->getCategoryId();
+		$category = new BwCategory($catId);
+		if(!$category->load()) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		if($category->giftListId !== $listId) {
+			$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+			exit;
+		}
+		$statusCode = $gift->markAsReceived($listId);
+		if($statusCode == 0) {
+			$status = 'success';
+			$list->updateLastUpdate();
+		}
+		$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
+	break;
 	case 'move':
 		if($user->canEditList($listId) || $user->isListOwner($list)) {
 			// Move a gift to another category

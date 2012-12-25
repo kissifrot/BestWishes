@@ -103,6 +103,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngDeleteCategory', _('Delete category'));
 		$this->assign('lngMarkAsBought', _('Mark as bought'));
 		$this->assign('lngMarkAsReceived', _('Mark as received'));
+		$this->assign('lngMarkAsGiven', _('Mark as given'));
 		$this->assign('lngCannotEditGift', _('You cannot edit this gift name'));
 		$this->assign('lngEditGift', _('Edit this gift name'));
 		$this->assign('lngCannotEdit', _('You cannot edit this gift name'));
@@ -123,6 +124,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngGiftP', _('Gift:'));
 		$this->assign('lngPurchaseInformation', _('Purchase information'));
 		$this->assign('lngConfirmGiftReceive', _('Are you sure you want to mark this gift as received? The gift won\'t be visible after'));
+		$this->assign('lngConfirmGiftGive', _('Are you sure you want to mark this gift as given? The gift won\'t be visible after'));
 		$this->assign('lngAddedOnP', _('Added on:'));
 		$this->assign('lngPurchaseDateP', _('Purchase date:'));
 		$this->assign('lngPurchaseInfo', _('Purchase info'));

@@ -5,6 +5,7 @@
 					data-canmarkbought="{if $sessionOk && $user->canMarkGiftsForList($list->getId()) && !$gift->isBought}true{else}false{/if}"
 					data-canmarkreceived="{if $sessionOk && $user->isListOwner($list) && !$gift->isReceived}true{else}false{/if}"
 					data-canedit="{if $sessionOk && $user->canEditList($list->getId())}true{else}false{/if}"
+					data-canmarkgiven="{if $sessionOk && $user->getId() == $gift->boughtBy && $gift->isSurprise && $gift->isBought && !$gift->isReceived}true{else}false{/if}"
 					>
 						{if $sessionOk}
 							{if $userLastLoginTime < strtotime($gift->addedDate)}

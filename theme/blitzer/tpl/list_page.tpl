@@ -44,6 +44,7 @@ $(document).ready(function(){
 	<a href="/" id="action_details" onclick="showGiftDetailsWindow(); return false" title="{$lngDetails}"><img alt="{$lngDetails}" class="icon_text" src="{$themeWebDir}/img/information.png" />{$lngDetails}</a>
 	<a href="/" id="action_show_buy" onclick="showBuyWindow(); return false" title="{$lngMarkAsBought}"><img alt="{$lngMarkAsBought}" class="icon_text" src="{$themeWebDir}/img/gift_buy.png" />{$lngMarkAsBought}</a> 
 	<a href="/" id="action_mark_received" onclick="confirmMarkGiftAsReceived(); return false" title="{$lngMarkAsReceived}"><img alt="{$lngMarkAsReceived}" class="icon_text" src="{$themeWebDir}/img/gift_received.png" />{$lngMarkAsReceived}</a> 
+	<a href="/" id="action_mark_given" onclick="confirmMarkGiftAsGiven(); return false" title="{$lngMarkAsGiven}"><img alt="{$lngMarkAsGiven}" class="icon_text" src="{$themeWebDir}/img/gift_received.png" />{$lngMarkAsGiven}</a> 
 </div>
 
 <div id="cat_actions_menu" style="display:none">
