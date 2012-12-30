@@ -13,6 +13,8 @@ class BwDatabase
 
 	protected static $instance;
 
+	protected $statementCache;
+
 	protected $currentStatement = null;
 	protected $currentQueryType = null;
 	protected $queryAutoField = null;
@@ -39,6 +41,8 @@ class BwDatabase
 		$this->dbPort     = (!empty($confDBPort)) ? intval($confDBPort) : 0;
 		$this->dbName     = $confDBName;
 		$this->dbPrefix   = $confDBPrefix;
+
+		$this->statementCache = array();
 
 		$this->debugMode = BwDebug::getDebugMode();
 
@@ -193,7 +197,7 @@ class BwDatabase
 		// Prepare the PDO statement
 		try
 		{
-			$this->currentStatement = $this->db->prepare($query);
+			$this->prepare($query);
 			// Bind the params given
 			if(is_array($params['queryValues'])) {
 				if(!empty($params['queryValues'])) {
@@ -222,9 +226,28 @@ class BwDatabase
 	/**
 	 * Prepare a manual query
 	 */
-	public function prepare($query)
+	public function prepare($query, $cacheStatement = false)
 	{
-		$this->currentStatement = $this->db->prepare($query);
+		if($cacheStatement) {
+			$this->currentStatement = $this->db->prepare($query);
+		} else {
+			$this->currentStatement = $this->setCachedStatement($query);
+		}
+	}
+
+	/**
+	 * Create and store a prepared statement
+	 */
+	private function setCachedStatement($query) {
+		$cacheHash = md5(strtolower($query));
+		if(isset($this->statementCache[$cacheHash])) {
+			return $this->statementCache[$cacheHash];
+		}
+		$preparedStmt = $this->db->prepare($query);
+		if($preparedStmt !== false) {
+			$this->statementCache[$cacheHash] = $preparedStmt;
+		}
+		return $preparedStmt;
 	}
 
 	/**
