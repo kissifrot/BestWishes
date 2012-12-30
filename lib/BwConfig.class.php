@@ -63,7 +63,7 @@ class BwConfig
 		$db = BwDatabase::getInstance();
 		if(!$create) {
 			// Just update the value
-			if(!isset($config->configDirectives[$key])) {
+			if(!isset($this->configDirectives[$key])) {
 				return false;
 			}
 			if($this->configDirectives[$key]['type'] === 'email') {
@@ -156,7 +156,7 @@ class BwConfig
 	
 	private function create($key, $value = '', $type = 'string', $regex = '')
 	{
-		if(!isset($config->configDirectives[$key])) {
+		if(!isset($this->configDirectives[$key])) {
 			return false;
 		}
 		return $this->save($key, $value, true, $type, $regex);
