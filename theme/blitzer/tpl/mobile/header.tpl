@@ -13,9 +13,9 @@
 		<script src="{$webDir}/js/jquery.min.js" type="text/javascript"></script>
 		<script src="{$webDir}/js/jquery.mobile.min.js" type="text/javascript"></script>
 		<script src="{$webDir}/js/tools.min.js" type="text/javascript"></script>
-		<script src="{$webDir}/js/variables.js" type="text/javascript"></script>
-		<script src="{$webDir}/js/common_functions.js" type="text/javascript"></script>
+		<script src="{$webDir}/js/common.js" type="text/javascript"></script>
 		<script src="{$webDir}/js/functions.js" type="text/javascript"></script>
+		<script src="{$webDir}/js/mobile_functions.js" type="text/javascript"></script>
 	</head>
 
 	<body>

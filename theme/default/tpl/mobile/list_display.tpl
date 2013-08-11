@@ -6,7 +6,6 @@
 		<h2>{$category->name|ucfirst}</h2>
 		{/if}
 	{/if}
-</script>
 {foreachelse}
 	<i>{$lngInfoEmptyList}</i>
 {/foreach}

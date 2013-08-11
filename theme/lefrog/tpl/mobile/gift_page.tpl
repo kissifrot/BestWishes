@@ -18,15 +18,29 @@
 
 {if $sessionOk}
 	{if $user->canEditList($list->getId())}
-		<a href="/" onclick="confirmDeleteGift({$gift->getId()}, {$list->getId()}); return false" title="{$lngDelete}" data-rel="dialog" data-role="button">{$lngDelete}</a>
+		<a href="#popupConfirmDelete" data-rel="popup" data-role="button" data-transition="pop" data-icon="delete">{$lngDelete}</a>
 	{/if}
 	{if $user->canMarkGiftsForList($list->getId()) && !$gift->isBought}
-		<a href="/" onclick="showBuyWindow('{$gift->name|escape:'javascript'|escape}', {$gift->getId()}, {$list->getId()}); return false" title="{$lngMarkAsBought}" data-rel="dialog" data-role="button">{$lngMarkAsBought}</a> 
+		<a href="#popupPurchaseGift" data-rel="popup" data-role="button" data-transition="pop" >{$lngMarkAsBought}</a> 
 	{/if}
 	{if $user->isListOwner($list) && !$gift->isReceived}
 		<a href="/" onclick="markGiftAsReceived(); return false" title="{$lngMarkAsReceived}" data-rel="dialog" data-role="button">{$lngMarkAsReceived}</a> 
 	{/if}
+	<div data-role="popup" id="popupConfirmDelete">
+		<div data-role="header" data-theme="a" class="ui-corner-top">
+			<h1>{$lngConfirmation}</h1>
+		</div>
+		<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+			<h3 class="ui-title">{$lngConfirmGiftDeletion}</h3>
+			<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">{$lngCancel}</a>
+			<a href="{$webDir}/list/{$list->slug}" onclick="deleteGift({$gift->getId()}, {$list->getId()});" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-theme="b">{$lngDeleteIt}</a>
+		</div>
+	</div>
+{* Gift purchase indication form *}
+{include file='form_purchase_gift.tpl'}
+
 {/if}
+
 
 <a href="{$webDir}/list/{$list->slug}" data-role="button" data-icon="arrow-l">{$lngBackToList}</a> 
 
@@ -34,4 +48,6 @@
 {include file='list_translation_strings.tpl'}
 bwURL = '{$webDir}';
 var pageListId = {$list->getId()};
+currentListId = {$list->getId()};
+currentGiftId = {$gift->getId()};
 </script>
