@@ -1,3 +1,4 @@
+{if !empty($lists)}
 {foreach from=$lists item=list}
 	<div id="list_{$list->getId()}">
 		<span id="name_list_{$list->getId()}">{$list->name}</span>
@@ -6,17 +7,18 @@
 		&nbsp;<img alt="Rename" id="edit_list_btn_{$list->getId()}" title="Rename" src="{$themeWebDir}/img/edit.png" class="editList clickable" />
 		&nbsp;<img alt="Delete" id="delete_list_btn_{$list->getId()}" title="Delete" src="{$themeWebDir}/img/delete.png" class="deleteList clickable" />
 	</div>
-{foreachelse}
-<i>There are no lists yet</i><a href="#" id="add-list-link">Add one</a>
+{/foreach}
+{else}
+<i>There are no lists yet</i> <a href="#" id="add-list-link">Add one</a>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#add-list-link').click(function() {
-		tabsList.tabs('select', 2);
+	$('#add-list-link').button().click(function() {
+		tabsList.tabs( "option", "active", 1 );
 		return false;
 	});
 });
 </script>
-{/foreach}
+{/if}
 <script type="text/javascript">
 $(document).ready(function() {
 	$('.editList').click(function() {

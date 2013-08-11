@@ -14,8 +14,7 @@
 		<script src="{$webDir}/js/jquery.min.js" type="text/javascript"></script>
 		<script src="{$webDir}/js/jquery-ui.min.js" type="text/javascript"></script>
 		<script src="{$webDir}/js/tools.min.js" type="text/javascript"></script>
-		<script src="{$webDir}/js/variables.js" type="text/javascript"></script>
-		<script src="{$webDir}/js/common_functions.js" type="text/javascript"></script>
+		<script src="{$webDir}/js/common.js" type="text/javascript"></script>
 		<script src="{$webDir}/js/adm_functions.js" type="text/javascript"></script>
 	</head>
 

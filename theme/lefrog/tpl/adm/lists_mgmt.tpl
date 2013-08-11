@@ -62,8 +62,9 @@
 <script type="text/javascript">
 {include file='list_translation_strings.tpl'}
 bwAdminURL = '{$adminWebDir}';
+var tabsList;
 $(document).ready(function() {
-	var tabsList = $( '#list-tabs' ).tabs({
+	tabsList = $( '#list-tabs' ).tabs({
 		ajaxOptions: {
 			error: function( xhr, status, index, anchor ) {
 				$( anchor.hash ).html( bwLng.couldNotLoadTab );

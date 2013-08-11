@@ -47,16 +47,18 @@
 				<th>Addition alert</th>
 				<th>Purchase alert</th>
 			</tr>
-			{foreach $lists as $list}
-			<tr>
-				<td>{$list->name}</td>
-				<td><input type="checkbox" name="list_{$user->getId()}_{$list->getId()}_view" onclick="updateRight({$user->getId()}, {$list->getId()}, this, 'can_view')" id="list_{$user->getId()}_{$list->getId()}_view"{if $user->canViewList($list->getId())} checked="checked"{/if} /></td>
-				<td><input type="checkbox" name="list_{$user->getId()}_{$list->getId()}_edit" onclick="updateRight({$user->getId()}, {$list->getId()}, this, 'can_edit')" id="list_{$user->getId()}_{$list->getId()}_edit"{if $user->canEditList($list->getId())} checked="checked"{/if} /></td>
-				<td><input type="checkbox" name="list_{$user->getId()}_{$list->getId()}_mark" onclick="updateRight({$user->getId()}, {$list->getId()}, this, 'can_mark')" id="list_{$user->getId()}_{$list->getId()}_mark"{if $user->canMarkGiftsForList($list->getId())} checked="checked"{/if} /></td>
-				<td><input type="checkbox" name="list_{$user->getId()}_{$list->getId()}_add" onclick="updateRight({$user->getId()}, {$list->getId()}, this, 'alert_addition')" id="list_{$user->getId()}_{$list->getId()}_add"{if $user->hasAddAlertForList($list->getId())} checked="checked"{/if} /></td>
-				<td><input type="checkbox" name="list_{$user->getId()}_{$list->getId()}_purchase" onclick="updateRight({$user->getId()}, {$list->getId()}, this, 'alert_purchase')" id="list_{$user->getId()}_{$list->getId()}_purchase"{if $user->hasPurchaseAlertForList($list->getId())} checked="checked"{/if} /></td>
-			</tr>
-			{/foreach}
+			{if !empty($lists)}
+				{foreach $lists as $list}
+				<tr>
+					<td>{$list->name}</td>
+					<td><input type="checkbox" name="list_{$user->getId()}_{$list->getId()}_view" onclick="updateRight({$user->getId()}, {$list->getId()}, this, 'can_view')" id="list_{$user->getId()}_{$list->getId()}_view"{if $user->canViewList($list->getId())} checked="checked"{/if} /></td>
+					<td><input type="checkbox" name="list_{$user->getId()}_{$list->getId()}_edit" onclick="updateRight({$user->getId()}, {$list->getId()}, this, 'can_edit')" id="list_{$user->getId()}_{$list->getId()}_edit"{if $user->canEditList($list->getId())} checked="checked"{/if} /></td>
+					<td><input type="checkbox" name="list_{$user->getId()}_{$list->getId()}_mark" onclick="updateRight({$user->getId()}, {$list->getId()}, this, 'can_mark')" id="list_{$user->getId()}_{$list->getId()}_mark"{if $user->canMarkGiftsForList($list->getId())} checked="checked"{/if} /></td>
+					<td><input type="checkbox" name="list_{$user->getId()}_{$list->getId()}_add" onclick="updateRight({$user->getId()}, {$list->getId()}, this, 'alert_addition')" id="list_{$user->getId()}_{$list->getId()}_add"{if $user->hasAddAlertForList($list->getId())} checked="checked"{/if} /></td>
+					<td><input type="checkbox" name="list_{$user->getId()}_{$list->getId()}_purchase" onclick="updateRight({$user->getId()}, {$list->getId()}, this, 'alert_purchase')" id="list_{$user->getId()}_{$list->getId()}_purchase"{if $user->hasPurchaseAlertForList($list->getId())} checked="checked"{/if} /></td>
+				</tr>
+				{/foreach}
+			{/if}
 		</table>
 		<br />
 		{/foreach}
@@ -70,8 +72,9 @@
 <script type="text/javascript">
 bwAdminURL = '{$adminWebDir}';
 {include file='user_translation_strings.tpl'}
+var tabsList;
 $(document).ready(function() {
-	var tabsList = $( "#list-tabs" ).tabs({
+	tabsList = $( "#list-tabs" ).tabs({
 		ajaxOptions: {
 			error: function( xhr, status, index, anchor ) {
 				$( anchor.hash ).html( bwLng.couldNotLoadTab );

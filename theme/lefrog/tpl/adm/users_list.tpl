@@ -1,3 +1,4 @@
+{if !empty($users)}
 {foreach from=$users item=user}
 	<div id="user_{$user->getId()}">
 		<span id="username_user_{$user->getId()}">{$user->username}</span>
@@ -6,17 +7,18 @@
 		&nbsp;<img alt="Rename" id="edit_user_btn_{$user->getId()}" title="Rename" src="{$themeWebDir}/img/edit.png" class="editUser clickable" />
 		&nbsp;<img alt="Delete" id="delete_user_btn_{$user->getId()}" title="Delete" src="{$themeWebDir}/img/delete.png" class="deleteUser clickable" />
 	</div>
-{foreachelse}
-<i>There are no users yet</i><a href="#" id="add-user-link">Add one</a>
+{/foreach}
+{else}
+<i>There are no users yet</i> <a href="#" id="add-user-link">Add one</a>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#add-user-link').click(function() {
-		tabsList.tabs('select', 2);
+	$('#add-user-link').button().click(function() {
+		tabsList.tabs( "option", "active", 1 );
 		return false;
 	});
 });
 </script>
-{/foreach}
+{/if}
 <script type="text/javascript">
 $(document).ready(function() {
 	$('.editUser').click(function() {
