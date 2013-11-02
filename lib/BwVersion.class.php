@@ -1,7 +1,7 @@
 <?php
 final class BwVersion
 {
-	const VERSION = '0.71';
+	const VERSION = '0.72';
 
 	protected static $_lastestVersion;
 
