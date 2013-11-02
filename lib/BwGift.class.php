@@ -631,7 +631,8 @@ class BwGift
 			'tableName' => 'gift',
 			'queryType' => 'UPDATE',
 			'queryFields' => array(
-				'is_received' => ':is_received'
+				'is_received' => ':is_received',
+				'received_date' => ':received_date'
 			),
 			'queryCondition' => 'id = :id',
 			'queryValues' => array(
@@ -644,6 +645,11 @@ class BwGift
 					'parameter' => ':is_received',
 					'variable' => 1,
 					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':received_date',
+					'variable' => date('Y-m-d H:i:s'),
+					'data_type' => PDO::PARAM_STR
 				)
 			),
 			

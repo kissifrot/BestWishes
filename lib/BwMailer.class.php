@@ -73,7 +73,7 @@ class BwMailer
 
 		$replacedData = $this->templateData;
 		foreach($variables as $toReplace => $replace) {
-			$replacedData = mb_ereg_replace($toReplace , $replace, $replacedData);
+			$replacedData = mb_ereg_replace($toReplace, $replace, $replacedData);
 		}
 
 		return $replacedData;
@@ -291,12 +291,22 @@ class BwMailer
 			return false;
 		}
 
-		if(!$bwMailer->setTemplate('alert_add_' . $bwLang)) {
+		$allUsers = BwUser::getAll();
+
+		if(!$addingUser->isListOwner($addingList)) {
+			// An user other than the owner added the gift
+			$tplName = 'alert_add_other_' . $bwLang;
+			$addingListOnwer = $addingList->getOwner($allUsers);
+		} else {
+			$tplName = 'alert_add_' . $bwLang;
+			$addingListOnwer = '';
+		}
+		if(!$bwMailer->setTemplate($tplName)) {
 			return false;
 		}
 
 		// Now cycle through all users to send them an alert
-		$allUsers = BwUser::getAll();
+
 		$messagesToSend = array();
 
 		$variables = array(
@@ -304,26 +314,29 @@ class BwMailer
 			'__BW_URL__' => $bwURL,
 			'__BW_LIST_URL__' => $bwURL . '/list/' . $addingList->slug,
 			'__GIFT_NAME__' => $giftName,
-			'__ADDING_USER_NAME__' => $addingUser->name
+			'__ADDING_USER_NAME__' => $addingUser->name,
+			'__ADDING_LIST_OWNER__' => $addingListOnwer
 		);
 
 		foreach($allUsers as $anUser) {
-			// Check for users other than the owner who enabled the add alert for the list
-			if(!$anUser->isListOwner($addingList) && $anUser->hasAddAlertForList($addingList->getId())) {
-				$variables['__USER_NAME__'] = $anUser->name;
+			if($addingUser->getId() != $anUser->getId()) {
+				// Check for users other than the owner who enabled the add alert for the list
+				if(!$anUser->isListOwner($addingList) && $anUser->hasAddAlertForList($addingList->getId())) {
+					$variables['__USER_NAME__'] = $anUser->name;
 
-				// Prepare the mail data
-				$mailSubject = sprintf(_('Addition of a gift to the list %s'), $addingList->name);
-				$mailHtmlContent = $bwMailer->populateTemplate($variables);
-				$mailTextContent = strip_tags($mailHtmlContent);
+					// Prepare the mail data
+					$mailSubject = sprintf(_('Addition of a gift to the list %s'), $addingList->name);
+					$mailHtmlContent = $bwMailer->populateTemplate($variables);
+					$mailTextContent = strip_tags($mailHtmlContent);
 
-				if(!empty($anUser->email)) {
-					$messagesToSend[] = Swift_Message::newInstance()
-					->setSubject($mailSubject)
-					->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
-					->setTo($anUser->email)
-					->setBody($mailHtmlContent, 'text/html')
-					->addPart($mailTextContent, 'text/plain');
+					if(!empty($anUser->email)) {
+						$messagesToSend[] = Swift_Message::newInstance()
+						->setSubject($mailSubject)
+						->setFrom(empty($bwMailer->mailFromName) ? $bwMailer->mailFromAddress : array($bwMailer->mailFromAddress, $bwMailer->mailFromName))
+						->setTo($anUser->email)
+						->setBody($mailHtmlContent, 'text/html')
+						->addPart($mailTextContent, 'text/plain');
+					}
 				}
 			}
 		}

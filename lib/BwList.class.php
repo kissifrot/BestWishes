@@ -656,4 +656,21 @@ class BwList
 
 		return $nextEventData;
 	}
+
+	/**
+	 *
+	 */
+	public function getOwner($allUsers = array())
+	{
+		if(empty($allUsers)) {
+			return false;
+		}
+		foreach($allUsers as $anUser) {
+			if($this->ownerId === $anUser->getId()) {
+				return $anUser;
+			}
+		}
+
+		return false;
+	}
 }
