@@ -37,7 +37,7 @@ switch($action) {
 		if(!isset($_POST['uname']) || empty($_POST['uname'])) {
 			exit;
 		}
-		$username = $_POST['uname'];
+		$username = preg_replace('#[^a-z0-9_]#i', '', $_POST['uname']);
 		$userToWorkOn = new BwUser();
 		$statusMessages = array(
 			0 => _('An e-mail containing instructions was sent'),

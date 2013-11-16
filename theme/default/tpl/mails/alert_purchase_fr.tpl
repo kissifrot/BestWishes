@@ -21,7 +21,7 @@ a:hover {
 </style>
 <br />
 Bonjour __USER_NAME__,<br />
-Ceci est un message pour vous informer que le cadeau __GIFT_NAME__ de la liste <b>__LIST_NAME__</b> a été acheté par __BUYER_NAME__<br />
+Ceci est un message pour vous informer que le __GIFT_NAME__ de la liste <b>__LIST_NAME__</b> a été acheté par __BUYER_NAME__<br />
 __GIFT_COMMENT__
 <br />
 Vous pouvez consulter la liste en cliquant sur le lien suivant : <a href="__BW_LIST_URL__">__BW_LIST_URL__</a><br />
