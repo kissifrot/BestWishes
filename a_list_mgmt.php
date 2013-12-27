@@ -70,6 +70,7 @@ switch($action) {
 				}
 				$giftName = trim($_POST['name']);
 				$catId = intval($_POST['catId']);
+				$giftDetails = trim($_POST['details']);
 				$force = (bool)($_POST['force']);
 				$category = new BwCategory($catId);
 				$statusMessages = array(
@@ -91,7 +92,7 @@ switch($action) {
 					$disp->showJSONStatus($status, getStatusMessage($statusCode, $statusMessages));
 					exit;
 				}
-				$statusCode = BwGift::add($listId, $catId, $giftName, $user->getId(), $force);
+				$statusCode = BwGift::add($listId, $catId, $giftName, $user->getId(), $giftDetails, $force);
 				if($statusCode == 0) {
 					$status = 'success';
 					$list->updateLastUpdate();

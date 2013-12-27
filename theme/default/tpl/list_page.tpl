@@ -110,6 +110,12 @@ $(document).ready(function(){
 								</td>
 							</tr>
 							<tr>
+								<td>&nbsp;{$lngGiftMoreDetailP}&nbsp;</td>
+								<td>
+									<input type="text" id="gift_more_detail" name="gift_more_detail" size="55" maxlength="250" />
+								</td>
+							</tr>
+							<tr>
 								<td>&nbsp;{$lngGiftCategoryP}&nbsp;</td>
 								<td>
 									<select class="gift_cats_list" id="gift_cat" name="gift_cat">
@@ -171,7 +177,7 @@ $(document).ready(function(){
 		modal: true
 	});
 	$('input[type="submit"]').button();
-	giftDetailsDialog = $('#gift_details_dialog').dialog({autoOpen: false, title: bwLng.details});
+	giftDetailsDialog = $('#gift_details_dialog').dialog({autoOpen: false, resizable: true, width: 400, title: bwLng.details});
 });
 {/literal}
 </script>

@@ -78,6 +78,16 @@ function showGiftDetailsWindow()
 				var giftDetails = returnedData;
 				$('#gift_details_name').text(giftDetails.name);
 				$('#gift_details_added').text(date(bwLng.dateFormat, strtotime(giftDetails.addedDate)));
+				if(giftDetails.moreDetail.length > 0) {
+					$('#gift_details_more').show();
+					if(urlPattern.test(giftDetails.moreDetail)) {
+						$('#gift_details_more_text').html('<a id="gift_link_url" href="' + giftDetails.moreDetail + '" target="_blank">' + bwLng.visitGiftUrl + '</a>');
+						$('#gift_link_url').button();
+					} else {
+						$('#gift_details_more_text').text(giftDetails.moreDetail);
+					}
+
+				}
 				if(giftDetails.isBought) {
 					$('#gift_details_buy').show();
 					$('#gift_details_buy_who').text(giftDetails.boughtByName);
@@ -350,13 +360,14 @@ function addGift(detailedAdd, force) {
 			//giftName =  
 		} else {
 			giftName = $('#gift_name').val();
+			var giftDetails = $('#gift_more_detail').val();
 			if(giftName.length < 2) {
 				showFlashMessage('error', bwLng.giftNameTooShort);
 			} else {
 				if(force) {
-					giftData = {type: 'gift', catId: currentCatId, name: giftName, force: '1'};
+					giftData = {type: 'gift', catId: currentCatId, name: giftName, details: giftDetails, force: '1'};
 				} else {
-					giftData = {type: 'gift', catId: currentCatId, name: giftName, force: '0'};
+					giftData = {type: 'gift', catId: currentCatId, name: giftName, details: giftDetails, force: '0'};
 				}
 				$.ajax({
 					type: 'POST',

@@ -8,6 +8,8 @@ var currentGiftName = null;
 var currentGiftElem = null;
 var currentCatElem = null;
 
+var urlPattern = /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
+
 function showFlashMessage(type, message) {
 	var spanContent = '<span class="ui-icon floatingIcon ';
 	var $flashMessageDiv = $('#flash_message').find('> div');

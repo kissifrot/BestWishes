@@ -18,7 +18,7 @@ class BwGift
 	public $isSurprise;
 	public $purchaseComment;
 	public $imageFilename;
-	public $url;
+	public $moreDetail;
 	
 	public function __construct($id = null)
 	{
@@ -241,7 +241,7 @@ class BwGift
 			}
 		}
 		$this->isSurprise    = (bool)$sqlResult['is_surprise'];
-		$this->url           = $sqlResult['url'];
+		$this->moreDetail    = $sqlResult['more_detail'];
 		$this->imageFilename = $sqlResult['image_filename'];
 	}
 
@@ -261,7 +261,7 @@ class BwGift
 	/**
 	 *
 	 */
-	public static function add($listId = null, $catId = null, $name = '', $addingUserId = null, $forceAdd = false, $isSurprise = false) {
+	public static function add($listId = null, $catId = null, $name = '', $addingUserId = null, $moreDetail = '', $forceAdd = false, $isSurprise = false) {
 
 		$resultValue = 99;
 		if(empty($listId) || empty($catId) || empty($name) || empty($addingUserId)) {
@@ -283,6 +283,7 @@ class BwGift
 				'gift_list_id' => ':gift_list_id',
 				'category_id' => ':category_id',
 				'name' => ':name',
+				'more_detail' => ':more_detail',
 				'added_by' => ':added_by',
 				'added_date' => ':added_date',
 			),
@@ -301,6 +302,11 @@ class BwGift
 					'parameter' => ':name',
 					'variable' => $name,
 					'data_type' => PDO::PARAM_INT
+				),
+				array(
+					'parameter' => ':more_detail',
+					'variable' => $moreDetail,
+					'data_type' => empty($moreDetail) ? PDO::PARAM_NULL : PDO::PARAM_STR
 				),
 				array(
 					'parameter' => ':added_by',
@@ -344,7 +350,7 @@ class BwGift
 	 */
 	public static function addSurprise($listId = null, $catId = null, $name = '', $addingUserId = null, $forceAdd = false) {
 
-		return self::add($listId, $catId, $name, $addingUserId, $forceAdd, true);
+		return self::add($listId, $catId, $name, $addingUserId, '', $forceAdd, true);
 	}
 
 	/**

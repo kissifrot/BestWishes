@@ -4,6 +4,7 @@ bwLng = {
 	maxEditsReached     : '{$lngMaxEditsReached|escape:javascript}',
 	catNameTooShort     : '{$lngCatNameTooShort|escape:javascript}',
 	giftNameTooShort    : '{$lngGiftNameTooShort|escape:javascript}',
+	visitGiftUrl        : '{$lngVisitGiftUrl|escape:javascript}',
 	confirmGiftDeletion : '{$lngConfirmGiftDeletion|escape:javascript}',
 	deleteCategory      : '{$lngDeleteCategory|escape:javascript}',
 	deleteIt            : '{$lngDeleteIt|escape:javascript}',

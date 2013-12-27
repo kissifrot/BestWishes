@@ -110,6 +110,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngMaxEditsReached', _('The max edits count was reached for this gift, you cannot edit it anymore'));
 		$this->assign('lngCatNameTooShort', _('The category name is too short'));
 		$this->assign('lngGiftNameTooShort', _('The gift name is too short'));
+		$this->assign('lngVisitGiftUrl', _('Visit gift link'));
 		$this->assign('lngConfirmGiftDeletion', _('Are you sure you want to delete this gift? It cannot be undone'));
 		$this->assign('lngConfirmCategoryDeletion', _('Deleting this category will delete all its gifts too. Are you sure?'));
 		$this->assign('lngAddAnyway', _('Add anyway'));
@@ -131,6 +132,7 @@ class BwDisplay extends Smarty
 		$this->assign('lngBoughtByP', _('Bought by:'));
 		$this->assign('lngOnP', _('On:'));
 		$this->assign('lngCommentP', _('Comment:'));
+		$this->assign('lngGiftMoreDetailP', _('Gift details:'));
 		$this->assign('lngGiftNameP', _('Gift name:'));
 		$this->assign('lngCategoryNameP', _('Category name:'));
 		$this->assign('lngGiftCategoryP', _('Gift category:'));
@@ -141,7 +143,7 @@ class BwDisplay extends Smarty
 
 		// Explanation texts
 		$this->assign('lngAddCatExplanation', _('To add a category:<br />-&nbsp;Fill its name<br />-&nbsp;Click on the &#8220;Add the category&#8221; button below'));
-		$this->assign('lngAddGiftExplanation', _('To add a gift:<br />-&nbsp;Fill its name<br />-&nbsp;Choose its category<br />-&nbsp;If it does not exist, create it using &#8220;Add a category to the list&#8221; above<br />-&nbsp;Click on the &#8220;Add the gift&#8221; just below'));
+		$this->assign('lngAddGiftExplanation', _('To add a gift:<br />-&nbsp;Fill its name<br />-&nbsp;Fill a reference, link or additional detail (optional)<br />-&nbsp;Choose its category<br />-&nbsp;If it does not exist, create it using &#8220;Add a category to the list&#8221; above<br />-&nbsp;Click on the &#8220;Add the gift&#8221; just below'));
 		$this->assign('lngDeleteGiftExplanation', sprintf(_('To delete a gift, click on the %s icon next to it.'),
 			'<img class="icon_text" src="' . $this->themeWebDir . '/img/delete.png" alt="Del" />'));
 		$this->assign('lngDeleteCatExplanation', sprintf(_('To delete a category, click on the %s icon next to it.<br />%s Deleting a category will delete all its gifts.'),
