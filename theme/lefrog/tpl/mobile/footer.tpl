@@ -7,7 +7,7 @@
 			{/if}
 				</div>
 			</div><!-- /content -->
-			<div class="footer-docs ui-footer ui-bar-c" data-theme="c" data-role="footer" role="contentinfo">
+			<div class="footer-docs ui-footer ui-bar-c" data-theme="b" data-role="footer" role="contentinfo">
 				<p>Powered by BestWishes {$version}</p>
 			</div>
 		</div><!-- /page -->

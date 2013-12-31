@@ -32,7 +32,7 @@
 		</div>
 		<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
 			<h3 class="ui-title">{$lngConfirmGiftDeletion}</h3>
-			<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">{$lngCancel}</a>
+			<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="b">{$lngCancel}</a>
 			<a href="{$webDir}/list/{$list->slug}" onclick="deleteGift({$gift->getId()}, {$list->getId()});" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-theme="b">{$lngDeleteIt}</a>
 		</div>
 	</div>

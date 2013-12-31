@@ -19,8 +19,8 @@
 	</head>
 
 	<body>
-		<div data-role="page" data-theme="b">
-			<div data-role="header" data-theme="b">
+		<div data-role="page" data-theme="a">
+			<div data-role="header" data-theme="a">
 				<h1>{$siteName}</h1>
 			</div><!-- /header -->
 			<div data-role="content">
