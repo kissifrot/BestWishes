@@ -78,7 +78,7 @@ function showGiftDetailsWindow()
 				var giftDetails = returnedData;
 				$('#gift_details_name').text(giftDetails.name);
 				$('#gift_details_added').text(date(bwLng.dateFormat, strtotime(giftDetails.addedDate)));
-				if(giftDetails.moreDetail.length > 0) {
+				if(giftDetails.moreDetail != null && giftDetails.moreDetail.length > 0) {
 					$('#gift_details_more').show();
 					if(urlPattern.test(giftDetails.moreDetail)) {
 						$('#gift_details_more_text').html('<a id="gift_link_url" href="' + giftDetails.moreDetail + '" target="_blank">' + bwLng.visitGiftUrl + '</a>');
@@ -445,7 +445,7 @@ function addSurpriseGift(force) {
 						showFlashMessage('info', returnedData.message);
 						$('#surprise_gift_name').val('');
 						$('#section_add_surprise_gift').hide();
-						reloadCat(currentCatId, currentListId);
+						reloadList();
 					} else {
 						if(returnedData.status == 'confirm') {
 							// Show a confirmation dialog
