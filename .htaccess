@@ -1,9 +1,0 @@
-<IfModule mod_rewrite.c>
-Options +FollowSymlinks
-RewriteEngine On
-
-RewriteRule ^list/([A-za-z0-9]+)$ list_show.php?slug=$1 [L]
-RewriteRule ^list/pdf/list_([A-za-z0-9]+)$ pdf_list_show.php?slug=$1 [L]
-RewriteRule ^resetpwd/([a-z0-9]{40})$ pwdreset.php?token=$1 [L]
-RewriteRule ^gift/(show|markbought)/([A-za-z0-9]+)/([0-9]+)$ gifts_mgmt.php?action=$1&slug=$2&id=$3 [L]
-</IfModule>
