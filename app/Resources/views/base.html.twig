@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Bestwishes - {% block title %}Wishlist management{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}" sizes="32x32">
+        <link rel="icon" type="image/png" href="{{ asset('favicon-16x16.png') }}" sizes="16x16">
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
+        <link rel="mask-icon" href="{{ asset('safari-pinned-tab.svg') }}" color="#5bbad5">
+        <meta name="theme-color" content="#ffffff">
+        {% block javascripts_head %}{% endblock %}
+    </head>
+    <body>
+        {% block content %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+        <footer>
+            <p class="text-center">Powered by Bestwishes v{{ constant('\\AppBundle\\AppBundle::VERSION') }}</p>
+        </footer>
+        {% block javascripts_footer %}{% endblock %}
+    </body>
+</html>

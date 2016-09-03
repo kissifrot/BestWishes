@@ -1,0 +1,7 @@
+services:
+
+    bw.tblprefix_subscriber:
+        class: AppBundle\Subscriber\TablePrefixSubscriber
+        arguments: [ '%database_prefix%' ]
+        tags:
+            - { name: doctrine.event_subscriber }
