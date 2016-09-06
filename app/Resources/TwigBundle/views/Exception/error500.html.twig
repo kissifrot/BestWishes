@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Internal error{% endblock %}
+{% block content %}
+    <p>
+        The server encountered an internal error
+    </p>
+    <p>
+        Please <a href="{{ path('homepage') }}">return to the homepage</a>.
+    </p>
+{% endblock %}

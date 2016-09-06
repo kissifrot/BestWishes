@@ -100,6 +100,10 @@ class Gift
     public function __construct()
     {
         $this->addedDate = new \DateTime();
+        $this->editsCount = 0;
+        $this->bought = false;
+        $this->received = false;
+        $this->surprise = false;
     }
 
 

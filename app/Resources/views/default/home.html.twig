@@ -3,10 +3,80 @@
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
-    <p>
-        Cupcake ipsum dolor. Sit amet cupcake croissant. Biscuit sugar plum chocolate cake lemon drops cake jelly-o. Toffee macaroon ice cream biscuit. Cake cake dessert brownie donut cotton candy cupcake gummies. Cheesecake gingerbread chocolate cake. Biscuit chocolate bar jujubes marshmallow tart gingerbread caramels. Pastry fruitcake biscuit halvah icing lollipop tootsie roll chupa chups powder. Powder muffin cotton candy. Chocolate jelly beans sweet.
-    </p>
-    <p>
-        Ice cream oat cake lemon drops cake carrot cake pie chocolate bar lemon drops lemon drops. Sugar plum sesame snaps halvah fruitcake sweet croissant bear claw dragée. Tiramisu dessert pastry sugar plum bear claw cheesecake. Liquorice jelly-o tart chocolate cake candy canes sugar plum. Danish cupcake donut tootsie roll brownie marzipan jelly-o tootsie roll. Toffee jujubes gummi bears lollipop sweet powder sugar plum biscuit. Ice cream chocolate bar sugar plum chocolate toffee cupcake. Sesame snaps toffee powder ice cream. Gummi bears oat cake brownie chocolate ice cream chocolate bar toffee. Bear claw cookie topping croissant cake gummies.
-    </p>
+    <div class="container">
+        <h1>Liste 1</h1>
+
+        <div class="alert alert-danger">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Prochain évènement : anniversaire : 1 jour
+        </div>
+        ou
+        <div class="alert alert-warning">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Prochain évènement : anniversaire : 10 jours
+        </div>
+        ou
+        <div class="alert alert-info">
+            Prochain évènement : anniversaire : 255 jours
+        </div>
+
+        <ul class="list-group" id="cat-list">
+            <li class="list-group-item">
+                <span class="badge">14</span>
+                Catégorie 1
+            </li>
+            <li class="list-group-item">
+                <span class="badge">2</span>
+                Catégorie 2
+            </li>
+            <li class="list-group-item">
+                <span class="badge">1</span>
+                Catégorie 3
+            </li>
+        </ul>
+
+
+        <ol class="breadcrumb">
+            <li><a href="#">Liste 1</a></li>
+            <li class="active">Catégorie 1</li>
+        </ol>
+        <div class="panel panel-primary  hide" id="cat-content">
+            <div class="panel-heading">
+                <h3 class="panel-title">Catégorie 1</h3>
+            </div>
+            <div class="panel-body">
+                <ul class="list-group" id="cat-list">
+                    <li class="list-group-item">
+                        Cadeau 1
+                    </li>
+                    <li class="list-group-item">
+                        Cadeau 2
+                    </li>
+                    <li class="list-group-item list-group-item-success">
+
+                        <span class="glyphicon glyphicon-ok"></span> Cadeau 3
+                        <a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <ol class="breadcrumb">
+            <li><a href="#">Liste 1</a></li>
+            <li><a href="#">Catégorie 1</a></li>
+            <li class="active">Nom du cadeau</li>
+        </ol>
+        <h1>Nom du cadeau</h1>
+        <p>Détails</p>
+        <button class="btn btn-default">Marquer comme acheté</button>
+        <button class="btn btn-default">Marquer comme reçu</button>
+
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#cat-list .list-group-item').click(function() {
+                $('#cat-content').toggleClass('hide');
+            })
+        });
+    </script>
 {% endblock %}

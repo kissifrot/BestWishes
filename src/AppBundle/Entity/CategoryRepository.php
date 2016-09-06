@@ -12,4 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class CategoryRepository extends EntityRepository
 {
+    public function findByList(GiftList $list)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.list = :list')
+            ->setParameter('list', $list)
+            ->getQuery()
+            ->getResult();
+    }
 }

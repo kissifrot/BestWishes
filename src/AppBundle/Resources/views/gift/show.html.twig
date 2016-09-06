@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gift - {{ gift.name }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="{{ path('list_show', { id: gift.category.list.id }) }}">{{ gift.category.list.name }}</a></li>
+            <li><a href="{{ path('category_show', { id: gift.category.id }) }}">{{  gift.category.name }}</a></li>
+            <li class="active">{{ gift.name }}</li>
+        </ol>
+        <h1>{{ gift.name }}</h1>
+        <p>Details</p>
+        <button class="btn btn-default">Mark as bought</button>
+        <button class="btn btn-default">Mark as received</button>
+    </div>
+{% endblock %}

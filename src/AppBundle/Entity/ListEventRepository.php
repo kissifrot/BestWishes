@@ -14,7 +14,7 @@ class ListEventRepository extends EntityRepository
 {
     public function findAllActive() {
         return $this->createQueryBuilder('le')
-            ->where('le.isActive = true')
+            ->where('le.active = true')
             ->getQuery()
             ->useQueryCache(true)
             ->useResultCache(true)

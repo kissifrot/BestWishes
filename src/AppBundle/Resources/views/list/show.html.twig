@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List - {{ list.name }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ list.name }}</h1>
+
+        {% if list.categories is not empty %}
+            {% set categories = list.categories %}
+            <div class="list-group">
+            {% for category in categories %}
+                {% set giftsCount = category.gifts|length %}
+                <a href="{{ path('category_show', { id: category.id }) }}" class="list-group-item">
+                    {%  if giftsCount > 0 %}<span class="badge">{{ giftsCount }}</span>{% endif %}
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+            </div>
+        {% else %}
+            <em>No category found</em>
+        {% endif %}
+    </div>
+{% endblock %}

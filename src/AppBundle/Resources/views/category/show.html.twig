@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category - {{ category.name }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="{{ path('list_show', { id: category.list.id } ) }}">{{ category.list.name }}</a></li>
+            <li class="active">{{ category.name }}</li>
+        </ol>
+        <h1>{{ category.name }}</h1>
+
+        {% if category.gifts is not empty %}
+            <div class="list-group">
+            {% for gift in category.gifts %}
+                <a href="{{ path('gift_show', { id: gift.id }) }}" class="list-group-item">
+                    {{ gift.name }}
+                </a>
+            {% endfor %}
+            </div>
+        {% else %}
+            <em>No gifts found</em>
+        {% endif %}
+    </div>
+{% endblock %}
