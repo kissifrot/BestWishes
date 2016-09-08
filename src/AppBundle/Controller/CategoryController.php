@@ -25,7 +25,7 @@ class CategoryController extends Controller
     {
         $id = $request->get('id');
 
-        $category = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Category')->find($id);
+        $category = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Category')->findFullById($id);
         if(!$category) {
             throw $this->createNotFoundException();
         }

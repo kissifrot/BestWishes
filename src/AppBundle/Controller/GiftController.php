@@ -25,7 +25,7 @@ class GiftController extends Controller
     {
         $id = $request->get('id');
 
-        $gift = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Gift')->find($id);
+        $gift = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Gift')->findFullById($id);
         if(!$gift) {
             throw $this->createNotFoundException();
         }

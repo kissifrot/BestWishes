@@ -70,6 +70,14 @@ class ListEvent
      */
     private $permanent;
 
+    /**
+     * ListEvent constructor.
+     */
+    public function __construct()
+    {
+        $this->active = true;
+        $this->type = 'default';
+    }
 
     /**
      * Get id

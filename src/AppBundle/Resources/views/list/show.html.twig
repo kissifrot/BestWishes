@@ -5,6 +5,21 @@
 {% block content %}
     <div class="container">
         <h1>{{ list.name }}</h1>
+        {% if nextEventData %}
+            {% if nextEventData.daysLeft < 7 %}
+                <div class="alert alert-danger">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Next event ({{ nextEventData.name }}): {{  nextEventData.daysLeft }} days
+                </div>
+            {% elseif nextEventData.daysLeft < 14 %}
+                <div class="alert alert-warning">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Next event ({{ nextEventData.name }}): {{  nextEventData.daysLeft }} days
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    Next event ({{ nextEventData.name }}): {{  nextEventData.daysLeft }} days
+                </div>
+            {% endif %}
+        {% endif %}
 
         {% if list.categories is not empty %}
             {% set categories = list.categories %}

@@ -46,6 +46,7 @@ class ListEventManager
 
     /**
      * Get the nearest events of a birthdate
+     *
      * @param \DateTime $birthDate
      *
      * @return array|bool
@@ -98,7 +99,7 @@ class ListEventManager
 
         // And finally sort them
         usort($calculatedEvents, function ($a, $b) {
-            if ($a['time'] == $b['time']) {
+            if ($a['time'] === $b['time']) {
                 return 0;
             }
 
