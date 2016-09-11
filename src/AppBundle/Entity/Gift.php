@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Gift entity
@@ -23,6 +24,8 @@ class Gift
 
     /**
      * @var string
+     * @Assert\NotBlank()
+     * @Assert\Length(min = 2)
      *
      * @ORM\Column(name="name", type="string", length=150)
      */
@@ -80,14 +83,30 @@ class Gift
     /**
      * @var string
      *
-     * @ORM\Column(name="image_filename", type="string", length=150, nullable=true)
+     * @Assert\Url(checkDNS = true)
+     * @ORM\Column(name="image_url", type="string", length=255, nullable=true)
      */
-    private $imageFilename;
+    private $imageUrl;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="more_detail", type="string", length=255, nullable=true)
+     * @ORM\Column(name="image_extension", type="string", length=4, nullable=true)
+     */
+    private $imageExtension;
+
+    /**
+     * @var string
+     *
+     * @Assert\Url(checkDNS = true)
+     * @ORM\Column(name="more_detail_url", type="string", length=255, nullable=true)
+     */
+    private $moreDetailUrl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="more_detail", type="text", nullable=true)
      */
     private $moreDetail;
 
@@ -310,51 +329,51 @@ class Gift
     }
 
     /**
-     * Set imageFilename
+     * Set imageUrl
      *
-     * @param string $imageFilename
+     * @param string $imageUrl
      *
      * @return Gift
      */
-    public function setImageFilename($imageFilename)
+    public function setImageUrl($imageUrl)
     {
-        $this->imageFilename = $imageFilename;
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }
 
     /**
-     * Get imageFilename
+     * Get imageUrl
      *
      * @return string
      */
-    public function getImageFilename()
+    public function getImageUrl()
     {
-        return $this->imageFilename;
+        return $this->imageUrl;
     }
 
     /**
-     * Set moreDetail
+     * Set imageExtension
      *
-     * @param string $moreDetail
+     * @param string $imageExtension
      *
      * @return Gift
      */
-    public function setMoreDetail($moreDetail)
+    public function setImageExtension($imageExtension)
     {
-        $this->moreDetail = $moreDetail;
+        $this->imageExtension = $imageExtension;
 
         return $this;
     }
 
     /**
-     * Get moreDetail
+     * Get imageExtension
      *
      * @return string
      */
-    public function getMoreDetail()
+    public function getImageExtension()
     {
-        return $this->moreDetail;
+        return $this->imageExtension;
     }
 
     /**
@@ -379,5 +398,53 @@ class Gift
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Set moreDetailUrl
+     *
+     * @param string $moreDetailUrl
+     *
+     * @return Gift
+     */
+    public function setMoreDetailUrl($moreDetailUrl)
+    {
+        $this->moreDetailUrl = $moreDetailUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get moreDetailUrl
+     *
+     * @return string
+     */
+    public function getMoreDetailUrl()
+    {
+        return $this->moreDetailUrl;
+    }
+
+    /**
+     * Set moreDetail
+     *
+     * @param string $moreDetail
+     *
+     * @return Gift
+     */
+    public function setMoreDetail($moreDetail)
+    {
+        $this->moreDetail = $moreDetail;
+
+        return $this;
+    }
+
+    /**
+     * Get moreDetail
+     *
+     * @return string
+     */
+    public function getMoreDetail()
+    {
+        return $this->moreDetail;
     }
 }

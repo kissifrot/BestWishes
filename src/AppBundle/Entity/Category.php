@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category
@@ -25,6 +26,8 @@ class Category
     /**
      * @var string
      *
+     * @Assert\NotBlank()
+     * @Assert\Length(min = 2)
      * @ORM\Column(name="name", type="string", length=150)
      */
     private $name;
@@ -49,6 +52,14 @@ class Category
      */
     protected $list;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->gifts = new ArrayCollection();
+        $this->visible = true;
+    }
 
     /**
      * Get id
@@ -106,15 +117,6 @@ class Category
     public function isVisible()
     {
         return $this->visible;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->gifts = new ArrayCollection();
-        $this->visible = true;
     }
 
     /**

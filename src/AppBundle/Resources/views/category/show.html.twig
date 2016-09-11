@@ -10,6 +10,8 @@
         </ol>
         <h1>{{ category.name }}</h1>
 
+        {%- include '@App/default/flash_messages.html.twig' -%}
+
         {% if category.gifts is not empty %}
             <div class="list-group">
             {% for gift in category.gifts %}
@@ -19,7 +21,10 @@
             {% endfor %}
             </div>
         {% else %}
-            <em>No gifts found</em>
+            <p><em>No gifts found</em></p>
         {% endif %}
+        <a href="#" class="btn btn-primary">Delete</a>
+        <a href="{{ path('gift_create', { catId: category.id }) }}" class="btn btn-primary">Create a gift</a>
+        <a href="{{ path('gift_create', { catId: category.id, surprise: true }) }}" class="btn btn-primary">Create a surprise gift</a>
     </div>
 {% endblock %}

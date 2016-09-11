@@ -47,9 +47,6 @@
     </nav>
         {% block content %}{% endblock %}
         {% block javascripts %}{% endblock %}
-        <footer>
-            <p class="text-center">Powered by Bestwishes v{{ constant('\\AppBundle\\AppBundle::VERSION') }}</p>
-        </footer>
         <script src="{{ asset('bundles/app/js/bootstrap.min.js') }}"></script>
         {% block javascripts_footer %}{% endblock %}
     </body>

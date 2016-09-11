@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New {% if isSurprise %}surprise {% endif %}gift{% endblock %}
+
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <h1>New {% if isSurprise %}surprise {% endif %}gift</h1>
+        {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.imageUrl) }}
+        {{ form_row(form.moreDetail) }}
+        {{ form_row(form.moreDetailUrl) }}
+        {{ form_row(form.save) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

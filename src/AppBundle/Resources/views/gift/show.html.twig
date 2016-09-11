@@ -9,9 +9,12 @@
             <li><a href="{{ path('category_show', { id: gift.category.id }) }}">{{  gift.category.name }}</a></li>
             <li class="active">{{ gift.name }}</li>
         </ol>
+        {%- include '@App/default/flash_messages.html.twig' -%}
         <h1>{{ gift.name }}</h1>
-        <p>Details</p>
-        <button class="btn btn-default">Mark as bought</button>
-        <button class="btn btn-default">Mark as received</button>
+        {% if gift.addedDate is not empty %}<p>Added on {{ gift.addedDate|date('d/m/Y') }}</p>{% endif %}
+        {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
+        <a href="#" class="btn btn-primary">Delete</a>
+        <a href="#" class="btn btn-primary">Mark as bought</a>
+        <a href="#" class="btn btn-primary">Mark as received</a>
     </div>
 {% endblock %}

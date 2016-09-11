@@ -1,0 +1,13 @@
+{% if nextEventData.daysLeft < 7 %}
+    <div class="alert alert-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Next event ({{ nextEventData.name }}): {{  nextEventData.daysLeft }} days
+    </div>
+{% elseif nextEventData.daysLeft < 14 %}
+    <div class="alert alert-warning">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Next event ({{ nextEventData.name }}): {{  nextEventData.daysLeft }} days
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Next event ({{ nextEventData.name }}): {{  nextEventData.daysLeft }} days
+    </div>
+{% endif %}
