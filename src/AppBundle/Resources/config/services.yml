@@ -1,0 +1,11 @@
+services:
+
+    bw.tblprefix_subscriber:
+        class: AppBundle\Subscriber\TablePrefixSubscriber
+        arguments: [ '%database_prefix%' ]
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    bw.list_event_manager:
+        class: AppBundle\Manager\ListEventManager
+        arguments: ["@doctrine.orm.default_entity_manager"]

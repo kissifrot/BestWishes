@@ -1,1 +1,0 @@
-{ldelim}"status": "{$status}", "message": "{$message|escape}"{rdelim}
