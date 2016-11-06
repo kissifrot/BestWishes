@@ -6,6 +6,11 @@
 
 {% block content %}
     <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="{{ path('list_show', { id: category.list.id } ) }}">{{ category.list.name }}</a></li>
+            <li class="active">{{ category.name }}</li>
+        </ol>
+
         <h1>New {% if isSurprise %}surprise {% endif %}gift</h1>
         {{ form_start(form) }}
         {{ form_row(form.name) }}

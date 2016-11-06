@@ -6,15 +6,36 @@
     <div class="container">
         <ol class="breadcrumb">
             <li><a href="{{ path('list_show', { id: gift.category.list.id }) }}">{{ gift.category.list.name }}</a></li>
-            <li><a href="{{ path('category_show', { id: gift.category.id }) }}">{{  gift.category.name }}</a></li>
+            <li><a href="{{ path('category_show', { id: gift.category.id }) }}">{{ gift.category.name }}</a></li>
             <li class="active">{{ gift.name }}</li>
         </ol>
         {%- include '@App/default/flash_messages.html.twig' -%}
         <h1>{{ gift.name }}</h1>
         {% if gift.addedDate is not empty %}<p>Added on {{ gift.addedDate|date('d/m/Y') }}</p>{% endif %}
         {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
-        <a href="#" class="btn btn-primary">Delete</a>
-        <a href="#" class="btn btn-primary">Mark as bought</a>
-        <a href="#" class="btn btn-primary">Mark as received</a>
+        <a href="{{ path('gift_edit', { id: gift.id }) }}" class="btn btn-primary">Edit</a>
+        <button class="btn btn-primary js-gift-delete">Delete</button>
+        <button class="btn btn-primary js-gift-mark-bought">Mark as bought</button>
+        <button class="btn btn-primary js-gift-mark-received">Mark as received</button>
     </div>
+
+    {% include '@App/gift/confirm_modals.html.twig' with {deleteForm: deleteForm, markReceivedForm: markReceivedForm} only %}
+{% endblock %}
+
+{% block javascripts_footer %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.js-gift-delete').click(function () {
+                $('#modal-confirm-delete').modal();
+            });
+
+            $('.js-gift-mark-bought').click(function () {
+                alert('Not yet ready');
+            });
+
+            $('.js-gift-mark-received').click(function () {
+                $('#modal-confirm-mark-received').modal();
+            });
+        });
+    </script>
 {% endblock %}

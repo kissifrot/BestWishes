@@ -23,8 +23,21 @@
         {% else %}
             <p><em>No gifts found</em></p>
         {% endif %}
-        <a href="#" class="btn btn-primary">Delete</a>
+        <a href="{{ path('category_edit', { id: category.id }) }}" class="btn btn-primary">Edit</a>
+        <button class="btn btn-primary js-cat-delete">Delete</button>
         <a href="{{ path('gift_create', { catId: category.id }) }}" class="btn btn-primary">Create a gift</a>
         <a href="{{ path('gift_create', { catId: category.id, surprise: true }) }}" class="btn btn-primary">Create a surprise gift</a>
     </div>
+
+    {% include '@App/category/confirm_modals.html.twig' with {deleteForm: deleteForm} only %}
+{% endblock %}
+
+{% block javascripts_footer %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.js-cat-delete').click(function () {
+                $('#modal-confirm-delete').modal();
+            });
+        });
+    </script>
 {% endblock %}

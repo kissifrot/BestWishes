@@ -60,6 +60,13 @@ class Gift
     private $received;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="received_date", type="datetime", nullable=true)
+     */
+    private $receivedDate;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="is_surprise", type="boolean", options={"default":false})
@@ -254,6 +261,30 @@ class Gift
     public function isReceived()
     {
         return $this->received;
+    }
+
+    /**
+     * Set receivedDate
+     *
+     * @param \DateTime $receivedDate
+     *
+     * @return Gift
+     */
+    public function setReceivedDate($receivedDate)
+    {
+        $this->receivedDate = $receivedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get receivedDate
+     *
+     * @return \DateTime
+     */
+    public function getReceivedDate()
+    {
+        return $this->receivedDate;
     }
 
     /**
