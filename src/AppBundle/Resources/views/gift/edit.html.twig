@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit gift{% endblock %}
+
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        {% set gift = form.vars.value %}
+
+        <ol class="breadcrumb">
+            <li><a href="{{ path('list_show', { id: gift.category.list.id }) }}">{{ gift.category.list.name }}</a></li>
+            <li><a href="{{ path('category_show', { id: gift.category.id }) }}">{{ gift.category.name }}</a></li>
+            <li class="active">{{ gift.name }}</li>
+        </ol>
+
+        <h1>Edit gift</h1>
+        {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.imageUrl) }}
+        {{ form_row(form.moreDetail) }}
+        {{ form_row(form.moreDetailUrl) }}
+        {{ form_row(form.save) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

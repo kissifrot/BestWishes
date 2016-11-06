@@ -14,7 +14,7 @@
         <link rel="manifest" href="{{ asset('manifest.json') }}">
         <link rel="mask-icon" href="{{ asset('safari-pinned-tab.svg') }}" color="#5bbad5">
         <meta name="theme-color" content="#ffffff">
-        <script src="{{ asset('bundles/app/js/jquery-3.1.0.js') }}"></script>
+        <script src="{{ asset('bundles/app/js/jquery-3.11.min.js') }}"></script>
         {% block javascripts_head %}{% endblock %}
     </head>
     <body>
@@ -46,6 +46,7 @@
         </div><!-- /.container-fluid -->
     </nav>
         {% block content %}{% endblock %}
+        {% block footer %}{% endblock %}
         {% block javascripts %}{% endblock %}
         <script src="{{ asset('bundles/app/js/bootstrap.min.js') }}"></script>
         {% block javascripts_footer %}{% endblock %}
