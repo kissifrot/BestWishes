@@ -249,7 +249,7 @@ class ListEvent
     }
 
     /**
-     * Get isPermanent
+     * Get permanent
      *
      * @return boolean
      */

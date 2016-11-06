@@ -174,7 +174,7 @@ class Gift
      *
      * @return Gift
      */
-    public function setAddedDate($addedDate)
+    public function setAddedDate(\DateTime $addedDate)
     {
         $this->addedDate = $addedDate;
 
@@ -270,7 +270,7 @@ class Gift
      *
      * @return Gift
      */
-    public function setReceivedDate($receivedDate)
+    public function setReceivedDate(\DateTime $receivedDate = null)
     {
         $this->receivedDate = $receivedDate;
 
@@ -318,7 +318,7 @@ class Gift
      *
      * @return Gift
      */
-    public function setPurchaseDate($purchaseDate)
+    public function setPurchaseDate(\DateTime $purchaseDate = null)
     {
         $this->purchaseDate = $purchaseDate;
 

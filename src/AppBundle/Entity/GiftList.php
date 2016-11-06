@@ -140,7 +140,7 @@ class GiftList
      *
      * @return GiftList
      */
-    public function setLastUpdate($lastUpdate)
+    public function setLastUpdate(\DateTime $lastUpdate)
     {
         $this->lastUpdate = $lastUpdate;
 
@@ -164,7 +164,7 @@ class GiftList
      *
      * @return GiftList
      */
-    public function setBirthDate($birthDate)
+    public function setBirthDate(\DateTime $birthDate)
     {
         $this->birthDate = $birthDate;
 
@@ -215,7 +215,7 @@ class GiftList
     public function addCategory(Category $category)
     {
         if (!$this->categories->contains($category)) {
-            $this->categories[] = $category;
+            $this->categories->add($category);
         }
 
         return $this;

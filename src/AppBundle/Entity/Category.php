@@ -129,7 +129,7 @@ class Category
     public function addGift(Gift $gifts)
     {
         if (!$this->gifts->contains($gifts)) {
-            $this->gifts[] = $gifts;
+            $this->gifts->add($gifts);
         }
 
         return $this;

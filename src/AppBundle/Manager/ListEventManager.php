@@ -36,7 +36,8 @@ class ListEventManager
         }
 
         $nextEventData = end($calculatedEvents);
-        $currentTime = mktime(0, 1, 1); // Today at 00:01:01
+        // Today at 00:01:01
+        $currentTime = mktime(0, 1, 1);
         $timeLeft = $nextEventData['time'] - $currentTime;
         $daysLeft = round($timeLeft / 3600 / 24);
         $nextEventData['daysLeft'] = intval($daysLeft);
@@ -58,7 +59,8 @@ class ListEventManager
         }
 
         $activeEvents = $this->getAllActiveEvents();
-        $currentTime = mktime(0, 1, 1); // Today at 00:01:01
+        // Today at 00:01:01
+        $currentTime = mktime(0, 1, 1);
         // First update the "birthday" event with this list's birthdate
         /** @var ListEvent $activeEvent */
         foreach ($activeEvents as $activeEvent) {
@@ -71,14 +73,8 @@ class ListEventManager
         // Next create the dates corresponding to current year's events and next year's ones
         $calculatedEvents = [];
         foreach ($activeEvents as $activeEvent) {
-            $currentYear = $activeEvent->getYear();
-            if (empty($currentYear)) {
-                $currentYear = date('Y');
-            }
-            $currentMonth = $activeEvent->getMonth();
-            if (empty($currentMonth)) {
-                $currentMonth = date('n');
-            }
+            $currentYear = empty($activeEvent->getYear()) ? date('Y') : $activeEvent->getYear();
+            $currentMonth = empty($activeEvent->getMonth()) ? date('n') : $activeEvent->getMonth();
             $currentYearEvent = mktime(0, 1, 1, $currentMonth, $activeEvent->getDay(), $currentYear);
             if ($currentYearEvent >= $currentTime) {
                 $calculatedEvents[] = [
@@ -115,8 +111,6 @@ class ListEventManager
      */
     private function getAllActiveEvents()
     {
-        $activeListEvents = $this->em->getRepository('AppBundle:ListEvent')->findAllActive();
-
-        return $activeListEvents;
+        return $this->em->getRepository('AppBundle:ListEvent')->findAllActive();
     }
 }
