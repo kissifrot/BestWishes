@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ListController
- * @package AppBundle\Controller
+ * @Route("list")
  */
 class ListController extends Controller
 {
     /**
-     * @Route("/list", name="list_index")
+     * @Route("/", name="list_index")
      * @Method({"GET"})
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -24,12 +24,12 @@ class ListController extends Controller
     {
         $lists = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:GiftList')->findAll();
 
-        return $this->render('AppBundle:list:index.html.twig', ['lists' => $lists]);
+        return $this->render('AppBundle:list:index.html.twig', compact('lists'));
     }
 
     /**
      * @param Request $request
-     * @Route("/list/{id}", name="list_show", requirements={"id": "\d+"})
+     * @Route("/{id}", name="list_show", requirements={"id": "\d+"})
      * @Method({"GET"})
      *
      * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
