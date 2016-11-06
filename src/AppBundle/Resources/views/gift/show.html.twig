@@ -12,7 +12,9 @@
         {%- include '@App/default/flash_messages.html.twig' -%}
         <h1>{{ gift.name }}</h1>
         {% if gift.addedDate is not empty %}<p>Added on {{ gift.addedDate|date('d/m/Y') }}</p>{% endif %}
+        {% if gift.moreDetailUrl is not empty %}<p><a href="{{ gift.moreDetailUrl }}" target="_blank">More details</a></p>{% endif %}
         {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
+        {% if gift.bought %}<p>Bought on {{ gift.purchaseDate|date('d/m/Y') }}</p>{% endif %}
         <a href="{{ path('gift_edit', { id: gift.id }) }}" class="btn btn-primary">Edit</a>
         <button class="btn btn-primary js-gift-delete">Delete</button>
         <button class="btn btn-primary js-gift-mark-bought">Mark as bought</button>
