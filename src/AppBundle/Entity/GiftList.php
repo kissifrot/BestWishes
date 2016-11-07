@@ -55,7 +55,7 @@ class GiftList
     /**
      * @ORM\OneToOne(targetEntity="User")
      */
-    protected $user;
+    protected $owner;
 
     /**
      * @var ArrayCollection
@@ -182,27 +182,27 @@ class GiftList
     }
 
     /**
-     * Set user
+     * Set owner
      *
-     * @param User $user
+     * @param User $owner
      *
      * @return GiftList
      */
-    public function setUser(User $user = null)
+    public function setUser(User $owner)
     {
-        $this->user = $user;
+        $this->owner = $owner;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get owner
      *
      * @return User
      */
-    public function getUser()
+    public function getOwner()
     {
-        return $this->user;
+        return $this->owner;
     }
 
     /**

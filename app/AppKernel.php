@@ -17,6 +17,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             // StofDoctrineExtensionsBundle
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            // FOSUserBundle - https://symfony.com/doc/current/bundles/FOSUserBundle/index.html
+            new FOS\UserBundle\FOSUserBundle(),
             // BestWishes bundle
             new AppBundle\AppBundle(),
         ];
