@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\GiftList;
 use Doctrine\ORM\EntityRepository;
 
 /**

@@ -9,3 +9,9 @@ services:
     bw.list_event_manager:
         class: AppBundle\Manager\ListEventManager
         arguments: ["@doctrine.orm.default_entity_manager"]
+
+    bw.twig.security_extension:
+        class: AppBundle\Twig\Extension\BestWishesSecurityExtension
+        arguments: ["@security.authorization_checker"]
+        tags:
+            - { name: twig.extension }

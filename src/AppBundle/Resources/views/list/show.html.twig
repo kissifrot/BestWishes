@@ -26,6 +26,6 @@
         {% else %}
             <p><em>No category found</em></p>
         {% endif %}
-        <a href="{{ path('category_create', { listId: list.id }) }}" class="btn btn-primary">Create a category</a>
+        {% include '@App/list/show_actions.html.twig' with {list: list} only %}
     </div>
 {% endblock %}

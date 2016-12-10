@@ -61,6 +61,11 @@ class Category
         $this->visible = true;
     }
 
+    public function __toString()
+    {
+        return "Name: {$this->name}, Id: {$this->id}";
+    }
+
     /**
      * Get id
      *

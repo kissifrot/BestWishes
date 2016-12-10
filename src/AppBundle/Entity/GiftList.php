@@ -54,6 +54,7 @@ class GiftList
 
     /**
      * @ORM\OneToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected $owner;
 

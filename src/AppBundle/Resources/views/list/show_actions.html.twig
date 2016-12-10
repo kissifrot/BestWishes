@@ -1,0 +1,3 @@
+{% if is_multi_granted(['OWNER', 'EDIT'], list) %}
+    <a href="{{ path('category_create', { listId: list.id }) }}" class="btn btn-primary">Create a category</a>
+{% endif %}

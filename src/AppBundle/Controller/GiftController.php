@@ -9,14 +9,13 @@ use AppBundle\Form\Type\GiftType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class GiftController
  * @Route("gift")
  */
-class GiftController extends Controller
+class GiftController extends BwController
 {
     /**
      * @param Request $request
@@ -54,6 +53,9 @@ class GiftController extends Controller
     {
         $isSurprise = boolval($request->get('surprise', false));
 
+        // Access control
+        $this->checkAccess($isSurprise ? ['EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'], $category->getList());
+
         $gift = new Gift();
         $gift->setSurprise($isSurprise);
         $gift->setCategory($category);
@@ -86,6 +88,9 @@ class GiftController extends Controller
      */
     public function editAction(Request $request, Gift $gift)
     {
+        // Access control
+        $this->checkAccess($gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'], $gift->getCategory()->getList());
+
         $form = $this->createForm(GiftType::class, $gift);
 
         $form->handleRequest($request);
@@ -113,6 +118,9 @@ class GiftController extends Controller
      */
     public function deleteAction(Request $request, Gift $gift)
     {
+        // Access control
+        $this->checkAccess($gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'], $gift->getCategory()->getList());
+
         $form = $this->createSimpleActionForm($gift, 'delete');
         $form->handleRequest($request);
 
@@ -137,6 +145,9 @@ class GiftController extends Controller
      */
     public function markReceivedAction(Request $request, Gift $gift)
     {
+        // Access control
+        $this->checkAccess($gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'], $gift->getCategory()->getList());
+
         $form = $this->createSimpleActionForm($gift, 'mark_received');
         $form->handleRequest($request);
 
@@ -160,7 +171,7 @@ class GiftController extends Controller
      * @param Gift   $gift
      * @param string $action Chosen action
      *
-     * @return \Symfony\Component\Form\Form Delete form
+     * @return \Symfony\Component\Form\Form|\Symfony\Component\HttpFoundation\RedirectResponse Delete form or redirect
      */
     private function createSimpleActionForm(Gift $gift, $action = 'delete')
     {

@@ -5,14 +5,13 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ListController
  * @Route("list")
  */
-class ListController extends Controller
+class ListController extends BwController
 {
     /**
      * @Route("/", name="list_index")

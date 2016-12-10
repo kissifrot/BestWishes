@@ -1,0 +1,11 @@
+{% set attrib = gift.surprise ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'] %}
+{% if is_multi_granted(attrib, gift.category.list) %}
+    <a href="{{ path('gift_edit', { id: gift.id }) }}" class="btn btn-primary">Edit</a>
+    <button class="btn btn-primary js-gift-delete">Delete</button>
+{% endif %}
+{% if is_granted('SURPRISE_ADD', gift.category.list) %}
+    <button class="btn btn-primary js-gift-mark-bought">Mark as bought</button>
+{% endif %}
+{% if is_multi_granted(attrib, gift.category.list) %}
+    <button class="btn btn-primary js-gift-mark-received">Mark as received</button>
+{% endif %}

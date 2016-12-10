@@ -9,14 +9,13 @@ use AppBundle\Form\Type\CategoryType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class CategoryController
  * @Route("cat")
  */
-class CategoryController extends Controller
+class CategoryController extends BwController
 {
     /**
      * @param Request $request
@@ -50,6 +49,9 @@ class CategoryController extends Controller
      */
     public function createAction(Request $request, GiftList $list)
     {
+        // Access control
+        $this->checkAccess(['OWNER', 'EDIT'], $list);
+
         $category = new Category();
         $category->setList($list);
 
@@ -67,7 +69,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute('list_show', ['id' => $list->getId()]);
         }
 
-        return $this->render('AppBundle:category:create.html.twig', ['form' => $form->createView()]);
+        return $this->render('AppBundle:category:create.html.twig', ['list' => $list, 'form' => $form->createView()]);
     }
 
     /**
@@ -81,6 +83,9 @@ class CategoryController extends Controller
      */
     public function editAction(Request $request, Category $category)
     {
+        // Access control
+        $this->checkAccess(['OWNER', 'EDIT'], $category->getList());
+
         $form = $this->createForm(CategoryType::class, $category);
 
         $form->handleRequest($request);
@@ -108,6 +113,9 @@ class CategoryController extends Controller
      */
     public function deleteAction(Request $request, Category $category)
     {
+        // Access control
+        $this->checkAccess(['OWNER', 'EDIT'], $category->getList());
+
         $form = $this->createDeleteForm($category);
         $form->handleRequest($request);
 

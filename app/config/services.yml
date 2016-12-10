@@ -1,9 +1,13 @@
-# Learn more about services, parameters and containers at
-# http://symfony.com/doc/current/book/service_container.html
-parameters:
-#    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    # Override the system ACLs to be able to use our own permission masks
+    bw.acl.permission_map:
+        class: AppBundle\Security\Acl\Permissions\BestWishesPermissionMap
+
+    bw.acl.acl_voter:
+        class: AppBundle\Security\Acl\Voter\BestWishesAclVoter
+        parent: security.acl.voter.basic_permissions
+        arguments:
+            index_3: '@bw.acl.permission_map'
+        tags:
+            - { name: security.voter }

@@ -55,13 +55,15 @@ class GiftData extends AbstractFixture implements OrderedFixtureInterface
                 'category3'
             ]
         ];
-        foreach($data as $giftData) {
-            $gift = new Gift();
-            $gift->setName($giftData[0]);
-            /** @var Category $cat */
-            $cat = $this->getReference($giftData[1]);
-            $gift->setCategory($cat);
-            $manager->persist($gift);
+        for($i = 1; $i <= 2; $i++) {
+            foreach($data as $giftData) {
+                $gift = new Gift();
+                $gift->setName($giftData[0]);
+                /** @var Category $cat */
+                $cat = $this->getReference($giftData[1] . '-' . $i);
+                $gift->setCategory($cat);
+                $manager->persist($gift);
+            }
         }
 
         $manager->flush();
