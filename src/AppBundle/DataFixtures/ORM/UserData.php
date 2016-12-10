@@ -28,7 +28,7 @@ class UserData extends AbstractFixture implements OrderedFixtureInterface, Conta
         $adminUser->setUsername('admin');
         $adminUser->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
         $adminUser->setName('Admin user');
-        $adminUser->setEmail('kissifrot@gmail.com');
+        $adminUser->setEmail('admin-user@a-mailserever.com');
         $encoder = $this->container->get('security.password_encoder');
         $password = $encoder->encodePassword($adminUser, 'admin');
         $adminUser->setPassword($password);
@@ -36,7 +36,7 @@ class UserData extends AbstractFixture implements OrderedFixtureInterface, Conta
         $standardUser = new User();
         $standardUser->setUsername('user1');
         $standardUser->setName('Standard user');
-        $standardUser->setEmail('kissifrot@gmail.com');
+        $standardUser->setEmail('std-user@a-mailserever.com');
         $encoder = $this->container->get('security.password_encoder');
         $password = $encoder->encodePassword($standardUser, 'user1');
         $standardUser->setPassword($password);

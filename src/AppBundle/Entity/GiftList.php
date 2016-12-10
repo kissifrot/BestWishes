@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * GiftList
  *
  * @ORM\Table(indexes={@ORM\Index(name="list_slug_idx", columns={"slug"}),@ORM\Index(name="list_name_idx", columns={"name"})})
- * @ORM\Entity(repositoryClass="AppBundle\Entity\GiftListRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\GiftListRepository")
  */
 class GiftList
 {
