@@ -43,15 +43,99 @@ class GiftData extends AbstractFixture implements OrderedFixtureInterface
                 'category1'
             ],
             [
-                'Gift 5 - cat 2',
+                'Gift 5 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 6 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 7 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 8 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 9 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 10 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 11 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 12 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 13 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 14 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 15 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 16 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 17 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 18 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 19 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 20 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 21 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 22 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 23 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 24 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 25 - cat 1',
+                'category1'
+            ],
+            [
+                'Gift 26 - cat 2',
                 'category2'
             ],
             [
-                'Gift 6 - cat 2',
+                'Gift 27 - cat 2',
                 'category2'
             ],
             [
-                'Gift 7 - cat 3',
+                'Gift 28 - cat 3',
                 'category3'
             ]
         ];

@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Bestwishes - {% block title %}Wishlist management{% endblock %}</title>
         <link href="{{ asset('bundles/app/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/app/css/main.css') }}" rel="stylesheet">
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
@@ -35,9 +36,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lists <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">List 1</a></li>
-                            <li><a href="#">List 2</a></li>
-                            <li><a href="#">List 3</a></li>
+                            {{ render(controller('AppBundle:List:index')) }}
                         </ul>
                     </li>
                     <li><a href="#">Show PDF</a></li>
@@ -57,7 +56,11 @@
             {% block fos_user_content %}
             {% endblock fos_user_content %}
         {% endblock %}
-        {% block footer %}{% endblock %}
+        {% block footer %}
+            <nav class="navbar navbar-default navbar-fixed-bottom visible-xs-block">
+                <p class="text-center text-muted">Powered by BestWishes v{{ constant('\\AppBundle\\AppBundle::VERSION') }}</p>
+            </nav>
+        {% endblock %}
         {% block javascripts %}{% endblock %}
         <script src="{{ asset('bundles/app/js/bootstrap.min.js') }}"></script>
         {% block javascripts_footer %}{% endblock %}

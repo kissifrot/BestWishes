@@ -16,10 +16,19 @@
         {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
         {% if gift.bought %}<p>Bought on {{ gift.purchaseDate|date('d/m/Y') }}</p>{% endif %}
 
+        <div class="hidden-xs">
         {% include '@App/gift/show_actions.html.twig' with {gift: gift} only %}
+        </div>
     </div>
 
     {% include '@App/gift/confirm_modals.html.twig' with {deleteForm: deleteForm, markReceivedForm: markReceivedForm} only %}
+{% endblock %}
+
+
+{% block footer %}
+<nav class="navbar navbar-default navbar-fixed-bottom visible-xs-block">
+    {% include '@App/gift/show_actions_footer.html.twig' with {gift: gift} only %}
+</nav>
 {% endblock %}
 
 {% block javascripts_footer %}

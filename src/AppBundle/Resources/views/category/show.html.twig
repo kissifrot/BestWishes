@@ -23,10 +23,18 @@
         {% else %}
             <p><em>No gifts found</em></p>
         {% endif %}
-        {% include '@App/category/show_actions.html.twig' with {category: category} only %}
+            <div class="hidden-xs">
+            {% include '@App/category/show_actions.html.twig' with {category: category} only %}
+            </div>
         </div>
 
     {% include '@App/category/confirm_modals.html.twig' with {deleteForm: deleteForm} only %}
+{% endblock %}
+
+{% block footer %}
+<nav class="navbar navbar-default navbar-fixed-bottom visible-xs-block">
+    {% include '@App/category/show_actions_footer.html.twig' with {category: category} only %}
+</nav>
 {% endblock %}
 
 {% block javascripts_footer %}

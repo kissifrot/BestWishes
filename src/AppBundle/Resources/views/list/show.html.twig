@@ -26,6 +26,14 @@
         {% else %}
             <p><em>No category found</em></p>
         {% endif %}
+        <div class="hidden-xs">
         {% include '@App/list/show_actions.html.twig' with {list: list} only %}
+        </div>
     </div>
+{% endblock %}
+
+{% block footer %}
+    <nav class="navbar navbar-default navbar-fixed-bottom visible-xs-block">
+        {% include '@App/list/show_actions_footer.html.twig' with {list: list} only %}
+    </nav>
 {% endblock %}
