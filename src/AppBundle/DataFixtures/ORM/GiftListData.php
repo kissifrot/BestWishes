@@ -52,11 +52,15 @@ class GiftListData extends AbstractFixture implements OrderedFixtureInterface, C
         $acl->insertObjectAce($securityIdentity1, BestWishesMaskBuilder::MASK_OWNER);
         $securityIdentity2 = UserSecurityIdentity::fromAccount($stdUser3);
         $acl->insertObjectAce($securityIdentity2, BestWishesMaskBuilder::MASK_SURPRISE_ADD);
+        $securityIdentity2 = UserSecurityIdentity::fromAccount($stdUser3);
+        $acl->insertObjectAce($securityIdentity2, BestWishesMaskBuilder::MASK_ALERT_ADD);
         $aclProvider->updateAcl($acl);
 
         $aclProvider = $this->container->get('security.acl.provider');
         $objectIdentity = ObjectIdentity::fromDomainObject($standardUserList2);
         $acl = $aclProvider->createAcl($objectIdentity);
+        $securityIdentity1 = UserSecurityIdentity::fromAccount($stdUser1);
+        $acl->insertObjectAce($securityIdentity1, BestWishesMaskBuilder::MASK_ALERT_ADD);
         $securityIdentity1 = UserSecurityIdentity::fromAccount($stdUser2);
         $acl->insertObjectAce($securityIdentity1, BestWishesMaskBuilder::MASK_OWNER);
         $securityIdentity2 = UserSecurityIdentity::fromAccount($stdUser3);

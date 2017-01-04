@@ -13,9 +13,12 @@ class BestWishesMaskBuilder extends MaskBuilder
     const MASK_ALERT_ADD = 512;        // 1 << 9
     const MASK_ALERT_PURCHASE = 1024;        // 1 << 10
     const MASK_ALERT_EDIT = 2048;        // 1 << 11
+    const MASK_ALERT_DELETE = 4096;        // 1 << 12
 
-    const CODE_SURPRISE_ADD         = 'S';
-    const CODE_ALERT_ADD       = 'A';
-    const CODE_ALERT_PURCHASE       = 'P';
-    const CODE_ALERT_EDIT       = 'I';
+    // Stupid codes...
+    const CODE_SURPRISE_ADD = 'S';
+    const CODE_ALERT_ADD = 'A';
+    const CODE_ALERT_PURCHASE = 'P';
+    const CODE_ALERT_EDIT = 'I';
+    const CODE_ALERT_DELETE = 'T';
 }

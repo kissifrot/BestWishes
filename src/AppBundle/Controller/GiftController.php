@@ -5,6 +5,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Gift;
+use AppBundle\Event\GiftCreatedEvent;
+use AppBundle\Event\GiftDeletedEvent;
+use AppBundle\Event\GiftEditedEvent;
 use AppBundle\Form\Type\GiftType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -69,6 +72,10 @@ class GiftController extends BwController
             $em->persist($gift);
             $em->flush();
 
+            // Dispatch the creation event
+            $event =  new GiftCreatedEvent($gift, $this->getUser());
+            $this->get('event_dispatcher')->dispatch(GiftCreatedEvent::NAME, $event);
+
             $this->addFlash('notice', sprintf('Gift "%s" added', $gift->getName()));
 
             return $this->redirectToRoute('category_show', ['id' => $category->getId()]);
@@ -91,6 +98,7 @@ class GiftController extends BwController
         // Access control
         $this->checkAccess($gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'], $gift->getCategory()->getList());
 
+        $originGift = clone $gift;
         $form = $this->createForm(GiftType::class, $gift);
 
         $form->handleRequest($request);
@@ -99,6 +107,10 @@ class GiftController extends BwController
             $em = $this->get('doctrine.orm.entity_manager');
             $em->persist($gift);
             $em->flush();
+
+            // Dispatch the edition event
+            $event =  new GiftEditedEvent($originGift, $gift, $this->getUser());
+            $this->get('event_dispatcher')->dispatch(GiftEditedEvent::NAME, $event);
 
             $this->addFlash('notice', sprintf('Gift "%s" updated', $gift->getName()));
 
@@ -128,6 +140,10 @@ class GiftController extends BwController
             $em = $this->getDoctrine()->getManager();
             $em->remove($gift);
             $em->flush();
+
+            // Dispatch the deletion event
+            $event =  new GiftDeletedEvent($gift, $this->getUser());
+            $this->get('event_dispatcher')->dispatch(GiftDeletedEvent::NAME, $event);
 
             $this->addFlash('notice', sprintf('Gift "%s" deleted', $gift->getName()));
         }

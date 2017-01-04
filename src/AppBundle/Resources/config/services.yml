@@ -15,3 +15,15 @@ services:
         arguments: ["@security.authorization_checker"]
         tags:
             - { name: twig.extension }
+
+    bw.security_context:
+        class: AppBundle\Security\Core\BestWishesSecurityContext
+        arguments: [ "@security.acl.provider" ]
+
+    bw.gift_subscriber:
+        class: AppBundle\Subscriber\GiftSubscriber
+        arguments:
+            - "@fos_user.user_manager"
+            - "@bw.security_context"
+        tags:
+            - { name: kernel.event_subscriber }
