@@ -10,14 +10,14 @@
             </button>
         </div>
     {% endif %}
-    {% if is_granted('SURPRISE_ADD', gift.category.list) %}
+    {% if is_granted('SURPRISE_ADD', gift.category.list) and not gift.bought %}
         <div class="btn-group btn-group-lg" role="group">
             <button class="btn btn-primary js-gift-mark-bought" title="Mark as bought" aria-label="Mark as bought">
                 <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
             </button>
         </div>
     {% endif %}
-    {% if is_multi_granted(attrib, gift.category.list) %}
+    {% if is_multi_granted(attrib, gift.category.list) and not gift.received %}
         <div class="btn-group btn-group-lg" role="group">
             <button class="btn btn-primary js-gift-mark-received" title="Mark as received" aria-label="Mark as received">
                 <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>

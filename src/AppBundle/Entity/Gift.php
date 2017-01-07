@@ -53,6 +53,12 @@ class Gift
     private $bought;
 
     /**
+     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="buyer_id", referencedColumnName="id", nullable=true)
+     */
+    protected $buyer;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="is_received", type="boolean", options={"default":false})
@@ -333,6 +339,30 @@ class Gift
     public function getPurchaseDate()
     {
         return $this->purchaseDate;
+    }
+
+    /**
+     * Set buyer
+     *
+     * @param User $buyer
+     *
+     * @return Gift
+     */
+    public function setBuyer($buyer)
+    {
+        $this->buyer = $buyer;
+
+        return $this;
+    }
+
+    /**
+     * Get buyer
+     *
+     * @return User
+     */
+    public function getBuyer()
+    {
+        return $this->buyer;
     }
 
     /**

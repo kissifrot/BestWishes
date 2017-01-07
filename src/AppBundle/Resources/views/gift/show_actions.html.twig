@@ -7,12 +7,12 @@
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;Delete
     </button>
 {% endif %}
-{% if is_granted('SURPRISE_ADD', gift.category.list) %}
+{% if is_granted('SURPRISE_ADD', gift.category.list) and not gift.bought %}
     <button class="btn btn-primary js-gift-mark-bought">
         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Mark as bought
     </button>
 {% endif %}
-{% if is_multi_granted(attrib, gift.category.list) %}
+{% if is_multi_granted(attrib, gift.category.list) and not gift.received %}
     <button class="btn btn-primary js-gift-mark-received">
         <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>&nbsp;Mark as received
     </button>

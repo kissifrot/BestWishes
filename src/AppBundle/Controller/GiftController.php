@@ -8,11 +8,14 @@ use AppBundle\Entity\Gift;
 use AppBundle\Event\GiftCreatedEvent;
 use AppBundle\Event\GiftDeletedEvent;
 use AppBundle\Event\GiftEditedEvent;
+use AppBundle\Event\GiftPurchasedEvent;
 use AppBundle\Form\Type\GiftType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Class GiftController
@@ -38,8 +41,10 @@ class GiftController extends BwController
 
         $deleteForm = $this->createSimpleActionForm($gift, 'delete')->createView();
         $markReceivedForm = $this->createSimpleActionForm($gift, 'mark_received')->createView();
+        $markBoughtForm = $this->createPurchaseForm($gift)->createView();
 
-        return $this->render('AppBundle:gift:show.html.twig', compact('gift', 'deleteForm', 'markReceivedForm'));
+        return $this->render('AppBundle:gift:show.html.twig',
+            compact('gift', 'deleteForm', 'markReceivedForm', 'markBoughtForm'));
     }
 
     /**
@@ -57,7 +62,10 @@ class GiftController extends BwController
         $isSurprise = boolval($request->get('surprise', false));
 
         // Access control
-        $this->checkAccess($isSurprise ? ['EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'], $category->getList());
+        $this->checkAccess(
+            $isSurprise ? ['EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
+            $category->getList()
+        );
 
         $gift = new Gift();
         $gift->setSurprise($isSurprise);
@@ -73,7 +81,7 @@ class GiftController extends BwController
             $em->flush();
 
             // Dispatch the creation event
-            $event =  new GiftCreatedEvent($gift, $this->getUser());
+            $event = new GiftCreatedEvent($gift, $this->getUser());
             $this->get('event_dispatcher')->dispatch(GiftCreatedEvent::NAME, $event);
 
             $this->addFlash('notice', sprintf('Gift "%s" added', $gift->getName()));
@@ -81,7 +89,8 @@ class GiftController extends BwController
             return $this->redirectToRoute('category_show', ['id' => $category->getId()]);
         }
 
-        return $this->render('AppBundle:gift:create.html.twig', ['form' => $form->createView(), 'category' => $category, 'isSurprise' => $isSurprise]);
+        return $this->render('AppBundle:gift:create.html.twig',
+            ['form' => $form->createView(), 'category' => $category, 'isSurprise' => $isSurprise]);
     }
 
     /**
@@ -96,7 +105,10 @@ class GiftController extends BwController
     public function editAction(Request $request, Gift $gift)
     {
         // Access control
-        $this->checkAccess($gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'], $gift->getCategory()->getList());
+        $this->checkAccess(
+            $gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
+            $gift->getCategory()->getList()
+        );
 
         $originGift = clone $gift;
         $form = $this->createForm(GiftType::class, $gift);
@@ -109,7 +121,7 @@ class GiftController extends BwController
             $em->flush();
 
             // Dispatch the edition event
-            $event =  new GiftEditedEvent($originGift, $gift, $this->getUser());
+            $event = new GiftEditedEvent($originGift, $gift, $this->getUser());
             $this->get('event_dispatcher')->dispatch(GiftEditedEvent::NAME, $event);
 
             $this->addFlash('notice', sprintf('Gift "%s" updated', $gift->getName()));
@@ -131,7 +143,10 @@ class GiftController extends BwController
     public function deleteAction(Request $request, Gift $gift)
     {
         // Access control
-        $this->checkAccess($gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'], $gift->getCategory()->getList());
+        $this->checkAccess(
+            $gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
+            $gift->getCategory()->getList()
+        );
 
         $form = $this->createSimpleActionForm($gift, 'delete');
         $form->handleRequest($request);
@@ -142,7 +157,7 @@ class GiftController extends BwController
             $em->flush();
 
             // Dispatch the deletion event
-            $event =  new GiftDeletedEvent($gift, $this->getUser());
+            $event = new GiftDeletedEvent($gift, $this->getUser());
             $this->get('event_dispatcher')->dispatch(GiftDeletedEvent::NAME, $event);
 
             $this->addFlash('notice', sprintf('Gift "%s" deleted', $gift->getName()));
@@ -162,7 +177,10 @@ class GiftController extends BwController
     public function markReceivedAction(Request $request, Gift $gift)
     {
         // Access control
-        $this->checkAccess($gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'], $gift->getCategory()->getList());
+        $this->checkAccess(
+            $gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
+            $gift->getCategory()->getList()
+        );
 
         $form = $this->createSimpleActionForm($gift, 'mark_received');
         $form->handleRequest($request);
@@ -179,6 +197,46 @@ class GiftController extends BwController
         }
 
         return $this->redirectToRoute('category_show', ['id' => $gift->getCategory()->getId()]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Gift    $gift
+     * @Route("/{id}/mark-bought", name="gift_mark_bought", requirements={"id": "\d+"})
+     * @Method({"POST"})
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function markBoughtAction(Request $request, Gift $gift)
+    {
+        // Access control
+        $this->checkAccess('SURPRISE_ADD', $gift->getCategory()->getList());
+
+        $form = $this->createPurchaseForm($gift);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $purchaseComment = $data['purchaseComment'];
+            $gift
+                ->setBought(true)
+                ->setBuyer($this->getUser())
+                ->setPurchaseDate(new \DateTime());
+            if (!empty($purchaseComment)) {
+                $gift->setPurchaseComment($purchaseComment);
+            }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($gift);
+            $em->flush();
+
+            // Dispatch the purchase event
+            $event = new GiftPurchasedEvent($gift, $this->getUser(), $purchaseComment);
+            $this->get('event_dispatcher')->dispatch(GiftPurchasedEvent::NAME, $event);
+
+            $this->addFlash('notice', sprintf('Gift "%s" marked as bought', $gift->getName()));
+        }
+
+        return $this->redirectToRoute('gift_show', ['id' => $gift->getId()]);
     }
 
     /**
@@ -207,6 +265,20 @@ class GiftController extends BwController
         return $this->createFormBuilder()
             ->setAction($url)
             ->setMethod($method)
+            ->getForm();
+    }
+
+    /**
+     * Creates a form for the purchase action
+     * @param Gift $gift
+     * @return \Symfony\Component\Form\Form
+     */
+    private function createPurchaseForm(Gift $gift)
+    {
+        return $this->createFormBuilder()
+            ->add('purchaseComment', TextareaType::class, ['constraints' => [ new Length(['max' => 1000])]])
+            ->setAction($this->generateUrl('gift_mark_bought', ['id' => $gift->getId()]))
+            ->setMethod('POST')
             ->getForm();
     }
 }

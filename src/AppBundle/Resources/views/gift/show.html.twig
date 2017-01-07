@@ -14,14 +14,21 @@
         {% if gift.addedDate is not empty %}<p>Added on {{ gift.addedDate|date('d/m/Y') }}</p>{% endif %}
         {% if gift.moreDetailUrl is not empty %}<p><a href="{{ gift.moreDetailUrl }}" target="_blank">More details</a></p>{% endif %}
         {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
-        {% if gift.bought %}<p>Bought on {{ gift.purchaseDate|date('d/m/Y') }}</p>{% endif %}
+        {% if gift.bought %}
+            <p>
+                Bought on {{ gift.purchaseDate|date('d/m/Y') }} by {{ gift.buyer.name }}
+                {% if gift.purchaseComment is not empty %}
+                    with the following comment: {{ gift.purchaseComment }}
+                {% endif %}
+            </p>
+        {% endif %}
 
         <div class="hidden-xs">
         {% include '@App/gift/show_actions.html.twig' with {gift: gift} only %}
         </div>
     </div>
 
-    {% include '@App/gift/confirm_modals.html.twig' with {deleteForm: deleteForm, markReceivedForm: markReceivedForm} only %}
+    {% include '@App/gift/confirm_modals.html.twig' with {deleteForm: deleteForm, markReceivedForm: markReceivedForm, markBoughtForm: markBoughtForm} only %}
 {% endblock %}
 
 
@@ -39,7 +46,7 @@
             });
 
             $('.js-gift-mark-bought').click(function () {
-                alert('Not yet ready');
+                $('#modal-confirm-mark-bought').modal();
             });
 
             $('.js-gift-mark-received').click(function () {

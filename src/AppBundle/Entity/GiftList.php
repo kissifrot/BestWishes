@@ -189,7 +189,7 @@ class GiftList
      *
      * @return GiftList
      */
-    public function setUser(User $owner)
+    public function setOwner(User $owner)
     {
         $this->owner = $owner;
 
