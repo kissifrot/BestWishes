@@ -25,5 +25,14 @@ services:
         arguments:
             - "@fos_user.user_manager"
             - "@bw.security_context"
+            - "@bw.mailer"
         tags:
             - { name: kernel.event_subscriber }
+
+    bw.mailer:
+        class: AppBundle\Mailer\Mailer
+        arguments:
+            - "@mailer"
+            - "@router"
+            - "@templating"
+            - "%global_from_email_address%"

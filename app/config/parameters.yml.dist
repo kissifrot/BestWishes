@@ -17,5 +17,9 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
+    # Global e-mail from: address and name
+    global_from_email_address:  mysite@example.com
+    global_from_email_name:     "Bw Admin"
+
     # A secret key that's used to generate certain security-related tokens
     secret:            PleaseChangeThisSecretToken
