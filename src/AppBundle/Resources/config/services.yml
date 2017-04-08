@@ -12,12 +12,18 @@ services:
 
     bw.twig.security_extension:
         class: AppBundle\Twig\Extension\BestWishesSecurityExtension
-        arguments: ["@security.authorization_checker"]
+        arguments:
+            - "@security.authorization_checker"
+            - "@bw.security_context"
         tags:
             - { name: twig.extension }
 
     bw.security_context:
         class: AppBundle\Security\Core\BestWishesSecurityContext
+        arguments: [ "@security.acl.provider" ]
+
+    bw.security_acl_manager:
+        class: AppBundle\Security\AclManager
         arguments: [ "@security.acl.provider" ]
 
     bw.gift_subscriber:

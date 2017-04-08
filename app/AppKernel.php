@@ -19,6 +19,8 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             // FOSUserBundle - https://symfony.com/doc/current/bundles/FOSUserBundle/index.html
             new FOS\UserBundle\FOSUserBundle(),
+            //  FOSJsRoutingBundle - https://symfony.com/doc/current/bundles/FOSJsRoutingBundle/index.html
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             // BestWishes application bundle
             new AppBundle\AppBundle(),
         ];

@@ -1,0 +1,70 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Lists{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="#">(admin)</a></li>
+            <li class="active">Lists</li>
+        </ol>
+        {%- include '@App/default/flash_messages.html.twig' -%}
+
+        <h1>Lists management</h1>
+
+        {% if lists is not empty %}
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>List name</th>
+                <th>Birthdate</th>
+                <th>Owner</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for list in lists %}
+                <tr>
+                    <td>{{ list.name }}</td>
+                    <td>{{ list.birthdate|date('Y-m-d') }}</td>
+                    <td>{{ list.owner }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="{{ path('admin_list_edit', { 'id': list.id }) }}" title="Edit list"
+                           aria-label="Edit list">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        </a>
+                        <a class="btn btn-primary btn-sm" href="{{ path('admin_lists_rights') }}" title="Edit rights"
+                           aria-label="Edit rights">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        </a>
+                        <button type="button" class="btn btn-primary btn-sm js-list-delete" data-listid="{{ list.id }}" title="Delete list"
+                           aria-label="Delete list">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p><i>There are no lists available, you should create one</i></p>
+        {% endif %}
+        <p>
+            <a class="btn btn-primary" href="{{ path('admin_list_create') }}" title="New list">New list</a>
+        </p>
+
+        {% include '@App/admin/confirm_modals.html.twig' %}
+
+        <script type="text/javascript">
+            var deleteListUrl = '{{ path('admin_list_delete', { id: 99999999999999 }) }}';
+            $(document).ready(function () {
+                $('.js-list-delete').click(function () {
+                    var currentData = $(this).data();
+                    $('#formListDelete').attr('action', deleteListUrl.replace('99999999999999', currentData.listid));
+                    $('#deleteListId').val(currentData.listid);
+                    $('#modal-confirm-delete').modal();
+                });
+            });
+        </script>
+    </div>
+{% endblock %}

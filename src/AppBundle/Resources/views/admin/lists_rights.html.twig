@@ -1,0 +1,68 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Lists{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="#">(admin)</a></li>
+            <li><a href="{{ path('admin_lists') }}">Lists</a></li>
+            <li class="active">Rights</li>
+        </ol>
+
+        <h1>Lists rights management</h1>
+
+        {% for list in lists %}
+            <h3>{{ list.name }}</h3>
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>User</th>
+                    {% for permission in availablePermissions %}
+                        <th>{{ permission }}{% if permission == 'OWNER' %} *{% endif %}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        {% for permission in availablePermissions %}
+                            <td>
+                                <span {% if permission != 'OWNER' %}style="cursor: pointer"{% endif %} class="js-permission-check {% if permission == 'OWNER' %}disabled {% endif %}glyphicon {% if is_user_granted(permission, list, user ) %}text-success glyphicon-ok{% else %}text-danger glyphicon-remove{% endif %}" data-list="{{ list.id }}" data-role="{{ permission }}" data-user="{{ user.id }}">&nbsp;</span>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+        <p><i>* owner can only be changed on the list edition page</i></p>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.js-permission-check:not(.disabled)').click(function(evt) {
+                    evt.preventDefault();
+                    var elem = $(this);
+                    var currData = $(this).data();
+                    var currUrl = Routing.generate('admin_update_list_perm', { id: currData.list });
+                    $.ajax({
+                        url: currUrl,
+                        method: 'POST',
+                        data: {
+                            perm: currData.role,
+                            userId: currData.user
+                        },
+                        dataType: 'json',
+                        error: function(jqXHR, textStatus, errorThrown) {
+
+                        },
+                        success: function(data, textStatus, jqXHR) {
+                            elem.toggleClass('text-success glyphicon-ok').toggleClass('text-danger glyphicon-remove');
+                        }
+                    });
+                })
+            })
+        </script>
+
+    </div>
+{% endblock %}

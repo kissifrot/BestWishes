@@ -2,19 +2,47 @@
 
 namespace AppBundle\Twig\Extension;
 
+use AppBundle\Security\Core\BestWishesSecurityContext;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 class BestWishesSecurityExtension extends \Twig_Extension
 {
+    /**
+     * @var AuthorizationCheckerInterface
+     */
     private $securityChecker;
 
-    public function __construct(AuthorizationCheckerInterface $securityChecker = null)
+    /**
+     * @var BestWishesSecurityContext
+     */
+    private $securityContext;
+
+    public function __construct(AuthorizationCheckerInterface $securityChecker = null, BestWishesSecurityContext $securityContext)
     {
         $this->securityChecker = $securityChecker;
+        $this->securityContext = $securityContext;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getFunctions()
+    {
+        return array(
+            new \Twig_SimpleFunction('is_multi_granted', array($this, 'isMultiGranted')),
+            new \Twig_SimpleFunction('is_user_granted', array($this, 'isUserGranted')),
+        );
+    }
+
+    /**
+     * Checks if current user has the specified roles granted
+     * @param      $roles
+     * @param null $object
+     * @param null $field
+     * @return bool
+     */
     public function isMultiGranted($roles, $object = null, $field = null)
     {
         if (null === $this->securityChecker) {
@@ -41,13 +69,15 @@ class BestWishesSecurityExtension extends \Twig_Extension
     }
 
     /**
-     * {@inheritdoc}
+     * Checks if specified user has the specified role granted
+     * @param      $role
+     * @param null $object
+     * @param      $user
+     * @return bool
      */
-    public function getFunctions()
+    public function isUserGranted($role, $object = null, $user)
     {
-        return array(
-            new \Twig_SimpleFunction('is_multi_granted', array($this, 'isMultiGranted')),
-        );
+        return $this->securityContext->isGranted($role, $object, $user);
     }
 
     /**

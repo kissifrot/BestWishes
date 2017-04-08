@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts_head %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+{% endblock %}
+
+{% block navbar %}
+    <li><a href="{{ path('admin_lists') }}">Lists</a></li>
+    <li><a href="#">Users</a></li>
+{% endblock %}
