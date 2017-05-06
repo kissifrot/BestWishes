@@ -7,6 +7,7 @@ use AppBundle\Entity\Gift;
 use AppBundle\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class Mailer
 {
@@ -35,37 +36,53 @@ class Mailer
         $this->fromAddress = $fromAddress;
     }
 
-    public function sendPurchaseAlertMessage(User $user, Gift $purchasedGift)
+    public function sendPurchaseAlertMessage(User $user, Gift $purchasedGift, UserInterface $buyer)
     {
         $templateFile = 'AppBundle:emails:alert_purchase.txt.twig';
         $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $rendered = $this->templating->render($templateFile, array(
             'user' => $user,
+            'buyer' => $buyer,
             'purchasedGift' => $purchasedGift,
             'home' => $home,
         ));
         $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
     }
 
-    public function sendCreationAlertMessage(User $user, Gift $createdGift)
+    public function sendCreationAlertMessage(User $user, Gift $createdGift, UserInterface $creator)
     {
         $templateFile = 'AppBundle:emails:alert_creation.txt.twig';
         $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $rendered = $this->templating->render($templateFile, array(
             'user' => $user,
+            'creator' => $creator,
             'createdGift' => $createdGift,
             'home' => $home,
         ));
         $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
     }
 
-    public function sendEditionAlertMessage(User $user, Gift $editeddGift)
+    public function sendEditionAlertMessage(User $user, Gift $editedGift, UserInterface $editor)
     {
         $templateFile = 'AppBundle:emails:alert_edition.txt.twig';
         $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $rendered = $this->templating->render($templateFile, array(
             'user' => $user,
-            'editeddGift' => $editeddGift,
+            'editor' => $editor,
+            'editedGift' => $editedGift,
+            'home' => $home,
+        ));
+        $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
+    }
+
+    public function sendDeletionAlertMessage(User $user, Gift $deletedGift, UserInterface $deleter)
+    {
+        $templateFile = 'AppBundle:emails:alert_deletion.txt.twig';
+        $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $rendered = $this->templating->render($templateFile, array(
+            'user' => $user,
+            'deleter' => $deleter,
+            'deletedGift' => $deletedGift,
             'home' => $home,
         ));
         $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());

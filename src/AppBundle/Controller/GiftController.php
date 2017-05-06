@@ -153,14 +153,15 @@ class GiftController extends BwController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $deletedGift = clone $gift;
             $em->remove($gift);
             $em->flush();
 
             // Dispatch the deletion event
-            $event = new GiftDeletedEvent($gift, $this->getUser());
+            $event = new GiftDeletedEvent($deletedGift, $this->getUser());
             $this->get('event_dispatcher')->dispatch(GiftDeletedEvent::NAME, $event);
 
-            $this->addFlash('notice', sprintf('Gift "%s" deleted', $gift->getName()));
+            $this->addFlash('notice', sprintf('Gift "%s" deleted', $deletedGift->getName()));
         }
 
         return $this->redirectToRoute('category_show', ['id' => $gift->getCategory()->getId()]);

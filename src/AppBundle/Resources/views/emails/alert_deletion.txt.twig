@@ -1,11 +1,11 @@
 {% block subject %}
 {%- autoescape false -%}
-Alert purchase
+Alert deletion
 {%- endautoescape -%}
 {% endblock %}
 
 {% block body_text %}
-Hello {{ user.name }}, the gift {{ editedGift.name }} of the list {{ editedGift.category.list.name }} was bought by {{ buyer.name }}.
+Hello {{ user.name }}, the gift {{ deletedGift.name }} of the list {{ deletedGift.category.list.name }} was deleted by {{ deleter.name }}.
 
 Regards,
 BestWishes admin - {{ home }}

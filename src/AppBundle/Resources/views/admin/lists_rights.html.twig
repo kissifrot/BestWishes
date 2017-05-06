@@ -13,29 +13,7 @@
         <h1>Lists rights management</h1>
 
         {% for list in lists %}
-            <h3>{{ list.name }}</h3>
-            <table class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>User</th>
-                    {% for permission in availablePermissions %}
-                        <th>{{ permission }}{% if permission == 'OWNER' %} *{% endif %}</th>
-                    {% endfor %}
-                </tr>
-                </thead>
-                <tbody>
-                {% for user in users %}
-                    <tr>
-                        <td>{{ user.name }}</td>
-                        {% for permission in availablePermissions %}
-                            <td>
-                                <span {% if permission != 'OWNER' %}style="cursor: pointer"{% endif %} class="js-permission-check {% if permission == 'OWNER' %}disabled {% endif %}glyphicon {% if is_user_granted(permission, list, user ) %}text-success glyphicon-ok{% else %}text-danger glyphicon-remove{% endif %}" data-list="{{ list.id }}" data-role="{{ permission }}" data-user="{{ user.id }}">&nbsp;</span>
-                            </td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% include '@App/admin/lists_rights_table.html.twig' %}
         {% endfor %}
         <p><i>* owner can only be changed on the list edition page</i></p>
         <script type="text/javascript">

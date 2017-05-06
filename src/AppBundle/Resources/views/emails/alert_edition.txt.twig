@@ -5,8 +5,9 @@ Alert edition
 {% endblock %}
 
 {% block body_text %}
-{% autoescape false %}
-Alert edition
-{% endautoescape %}
+Hello {{ user.name }}, the gift {{ editedGift.name }} of the list {{ editedGift.category.list.name }} was edited by {{ editor.name }}.
+
+Regards,
+BestWishes admin - {{ home }}
 {% endblock %}
 {% block body_html %}{% endblock %}

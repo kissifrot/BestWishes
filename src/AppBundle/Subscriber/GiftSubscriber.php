@@ -74,7 +74,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
         if (!empty($mailedUsers)) {
             foreach($mailedUsers as $mailedUser) {
-                $this->mailer->sendCreationAlertMessage($mailedUser, $event->getGift());
+                $this->mailer->sendCreationAlertMessage($mailedUser, $event->getGift(), $event->getCreator());
             }
         }
     }
@@ -96,6 +96,12 @@ class GiftSubscriber implements EventSubscriberInterface
             }
             if ($this->securityContext->isGranted('ALERT_DELETE', $list, $anUser)) {
                 $mailedUsers[] = $anUser;
+            }
+        }
+
+        if (!empty($mailedUsers)) {
+            foreach($mailedUsers as $mailedUser) {
+                $this->mailer->sendDeletionAlertMessage($mailedUser, $event->getGift(), $event->getDeleter());
             }
         }
     }
@@ -122,7 +128,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
         if (!empty($mailedUsers)) {
             foreach($mailedUsers as $mailedUser) {
-                $this->mailer->sendPurchaseAlertMessage($mailedUser, $event->getGift());
+                $this->mailer->sendPurchaseAlertMessage($mailedUser, $event->getGift(), $event->getBuyer());
             }
         }
     }
@@ -149,7 +155,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
         if (!empty($mailedUsers)) {
             foreach($mailedUsers as $mailedUser) {
-                $this->mailer->sendEditionAlertMessage($mailedUser, $event->getEditedGift());
+                $this->mailer->sendEditionAlertMessage($mailedUser, $event->getEditedGift(), $event->getEditor());
             }
         }
     }
