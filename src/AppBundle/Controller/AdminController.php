@@ -3,8 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\GiftList;
+use AppBundle\Entity\User;
 use AppBundle\Form\Type\GiftListType;
+use AppBundle\Form\Type\UserType;
 use AppBundle\Security\Acl\Permissions\BestWishesMaskBuilder;
+use FOS\UserBundle\Model\UserManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,7 +32,6 @@ class AdminController extends Controller
         $lists = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:GiftList')->findAll();
 
         $deleteForm = $this->createSimpleActionForm(new GiftList(), 'delete')->createView();
-        $url = $this->generateUrl('admin_list_delete', ['id' => 99999999999999]);
 
         return $this->render('AppBundle:admin:lists.html.twig', compact('lists', 'deleteForm'));
     }
@@ -222,6 +224,9 @@ class AdminController extends Controller
             case GiftList::class:
                 $routePart = 'list';
                 break;
+            case User::class:
+                $routePart = 'user';
+                break;
             default:
                 throw new \RuntimeException(sprintf('The "%s" type is not supported', get_class($entity)));
                 break;
@@ -240,5 +245,93 @@ class AdminController extends Controller
             ->setAction($url)
             ->setMethod($method)
             ->getForm();
+    }
+
+    /**
+     * @Route("/users", name="admin_users")
+     * @Method({"GET"})
+     */
+    public function usersAction()
+    {
+        $users = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:User')->findAll();
+
+        $deleteForm = $this->createSimpleActionForm(new User(), 'delete')->createView();
+
+        return $this->render('AppBundle:admin:users.html.twig', compact('users', 'deleteForm'));
+    }
+
+    /**
+     * @param Request  $request
+     * @param User $user
+     * @Route("/user/{id}", name="admin_user_delete", requirements={"id": "\d+"})
+     * @Method({"DELETE"})
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function userDeleteAction(Request $request, User $user)
+    {
+        $form = $this->createSimpleActionForm($user, 'delete');
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($user);
+            $em->flush();
+
+            $this->addFlash('notice', sprintf('User "%s" deleted', $user->getName()));
+        } else {
+            $this->addFlash('error', sprintf('Could not delete user "%s"', $user->getName()));
+        }
+
+        return $this->redirectToRoute('admin_users');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/user/create", name="admin_user_create")
+     * @Method({"GET", "POST"})
+     *
+     */
+    public function userCreateAction(Request $request)
+    {
+        /** @var $userManager UserManagerInterface */
+        $userManager = $this->get('fos_user.user_manager');
+
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->get('doctrine.orm.entity_manager');
+            $userManager->updatePassword($user);
+            $em->persist($user);
+            try {
+                $em->flush();
+
+                /** @var GiftList $chosenList */
+                $chosenList = $user->getList();
+                if ($chosenList->getOwner()->getId() !== $user->getId()) {
+                    // Add the correct ACL for the new onwer
+                    $permMask = BestWishesMaskBuilder::MASK_OWNER;
+                    $this->get('bw.security_acl_manager')->grant($chosenList, $user, $permMask);
+                    // Remove the owner ACL for the old owner
+                    $this->get('bw.security_acl_manager')->revoke($chosenList, $chosenList->getOwner(), $permMask);
+                }
+
+                $this->addFlash('notice', sprintf('User "%s" created', $user->getUsername()));
+
+                return $this->redirectToRoute('admin_users');
+            } catch (\Exception $e) {
+                $this->addFlash('error', sprintf('Error creating "%s": %s', $user->getUsername(), $e->getMessage()));
+            }
+        }
+
+        return $this->render('AppBundle:admin:user_create.html.twig',
+            ['form' => $form->createView()]);
     }
 }

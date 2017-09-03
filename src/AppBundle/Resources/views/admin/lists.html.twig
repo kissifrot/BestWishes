@@ -53,7 +53,7 @@
             <a class="btn btn-primary" href="{{ path('admin_list_create') }}" title="New list">New list</a>
         </p>
 
-        {% include '@App/admin/confirm_modals.html.twig' %}
+        {% include '@App/admin/list_confirm_modals.html.twig' %}
 
         <script type="text/javascript">
             var deleteListUrl = '{{ path('admin_list_delete', { id: 99999999999999 }) }}';

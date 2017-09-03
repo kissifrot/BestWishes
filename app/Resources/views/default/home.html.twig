@@ -4,7 +4,15 @@
 
 {% block content %}
     <div class="container">
-        <h1>Welcome</h1>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+
+            <h1>Welcome {{ app.user.username }},</h1>
+            <p>Please use the menu on the top to navigate, or <a href="{{ path('fos_user_security_logout') }}">logout</a></p>
+        {% else %}
+            <h1>Welcome</h1>
+            <p>Please use the menu on the top to navigate</p>
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Unknown user, please <a href="{{ path('fos_user_security_login') }}">login</a>
+        {% endif %}
 
     </div>
 {% endblock %}

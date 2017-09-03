@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{%  block site_name %}{{ parent() }} Admin{% endblock %}
 
 {% block javascripts_head %}
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
@@ -7,5 +8,5 @@
 
 {% block navbar %}
     <li><a href="{{ path('admin_lists') }}">Lists</a></li>
-    <li><a href="#">Users</a></li>
+    <li><a href="{{ path('admin_users') }}">Users</a></li>
 {% endblock %}
