@@ -38,7 +38,8 @@ class AclManager
      * @param int           $mask The mask to grant
      * @return mixed
      */
-    public function grant($entity, UserInterface $user, $mask = BestWishesMaskBuilder::MASK_EDIT) {
+    public function grant($entity, UserInterface $user, $mask = BestWishesMaskBuilder::MASK_EDIT)
+    {
         $acl = $this->getAcl($entity);
 
         $securityIdentity = UserSecurityIdentity::fromAccount($user);
@@ -47,6 +48,22 @@ class AclManager
 
         return $entity;
     }
+
+    /**
+     * Shortcut method to exchange a permission
+     * @param mixed         $entity DomainObject that we are adding the permission to
+     * @param UserInterface $newGranted User we're granting the permission to
+     * @param UserInterface $oldGranted User we're revoking the permission from
+     * @param int           $mask The mask to exchange
+     */
+    public function exchangePerms($entity, UserInterface $newGranted, UserInterface $oldGranted, $mask = BestWishesMaskBuilder::MASK_EDIT)
+    {
+        // Add the correct ACL for the new onwer
+        $this->grant($entity, $newGranted, $mask);
+        // Remove the owner ACL for the old owner
+        $this->revoke($entity, $oldGranted, $mask);
+    }
+
 
     /**
      * Revoke a permission

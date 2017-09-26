@@ -22,8 +22,8 @@ class UserType extends AbstractType
             ->add('username', TextType::class)
             ->add('email', EmailType::class)
             ->add('name', TextType::class)
-            ->add('plainPassword', PasswordType::class, ['constraints' => new Length(['min' => 6])])
-            ->add('list', EntityType::class, ['class' => GiftList::class, 'choice_label' => 'name'])
+            ->add('plainPassword', PasswordType::class, ['constraints' => new Length(['min' => 6]), 'required' => !$options['isEditing']])
+            ->add('list', EntityType::class, ['class' => GiftList::class, 'choice_label' => 'name', 'required' => !$options['isEditing']])
             ->add('save', SubmitType::class);
     }
 
@@ -31,6 +31,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => User::class,
+            'isEditing' => false
         ));
     }
 }

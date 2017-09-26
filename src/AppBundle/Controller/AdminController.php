@@ -192,11 +192,13 @@ class AdminController extends Controller
                 $em->flush();
 
                 if ($originGiftList->getOwner() !== $giftList->getOwner()) {
-                    // Add the correct ACL for the new onwer
-                    $permMask = BestWishesMaskBuilder::MASK_OWNER;
-                    $this->get('bw.security_acl_manager')->grant($giftList, $giftList->getOwner(), $permMask);
-                    // Remove the owner ACL for the old owner
-                    $this->get('bw.security_acl_manager')->revoke($giftList, $originGiftList->getOwner(), $permMask);
+                    // Exchange permisions
+                    $this->get('bw.security_acl_manager')->exchangePerms(
+                        $giftList,
+                        $giftList->getOwner(),
+                        $originGiftList->getOwner(),
+                        BestWishesMaskBuilder::MASK_OWNER
+                    );
                 }
                 $this->addFlash('notice', sprintf('List "%s" updated', $giftList->getName()));
 
@@ -316,11 +318,13 @@ class AdminController extends Controller
                 /** @var GiftList $chosenList */
                 $chosenList = $user->getList();
                 if ($chosenList->getOwner()->getId() !== $user->getId()) {
-                    // Add the correct ACL for the new onwer
-                    $permMask = BestWishesMaskBuilder::MASK_OWNER;
-                    $this->get('bw.security_acl_manager')->grant($chosenList, $user, $permMask);
-                    // Remove the owner ACL for the old owner
-                    $this->get('bw.security_acl_manager')->revoke($chosenList, $chosenList->getOwner(), $permMask);
+                    // Exchange permisions
+                    $this->get('bw.security_acl_manager')->exchangePerms(
+                        $chosenList,
+                        $user,
+                        $chosenList->getOwner(),
+                        BestWishesMaskBuilder::MASK_OWNER
+                    );
                 }
 
                 $this->addFlash('notice', sprintf('User "%s" created', $user->getUsername()));
@@ -331,7 +335,53 @@ class AdminController extends Controller
             }
         }
 
-        return $this->render('AppBundle:admin:user_create.html.twig',
-            ['form' => $form->createView()]);
+        return $this->render('AppBundle:admin:user_create.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @param Request  $request
+     * @param User $user
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/user/{id}/edit", name="admin_user_edit", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     */
+    public function userEditAction(Request $request, User $user)
+    {
+        /** @var $userManager UserManagerInterface */
+        $userManager = $this->get('fos_user.user_manager');
+
+        $form = $this->createForm(UserType::class, $user, ['isEditing' => true]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->get('doctrine.orm.entity_manager');
+            $userManager->updatePassword($user);
+            $em->persist($user);
+            try {
+                $em->flush();
+
+                /** @var GiftList|null $chosenList */
+                $chosenList = $user->getList();
+                if (null !== $chosenList && $chosenList->getOwner()->getId() !== $user->getId()) {
+                    // Exchange permisions
+                    $this->get('bw.security_acl_manager')->exchangePerms(
+                        $chosenList,
+                        $user,
+                        $chosenList->getOwner(),
+                        BestWishesMaskBuilder::MASK_OWNER
+                    );
+                }
+
+                $this->addFlash('notice', sprintf('User "%s" updated', $user->getUsername()));
+
+                return $this->redirectToRoute('admin_users');
+            } catch (\Exception $e) {
+                $this->addFlash('error', sprintf('Error editing "%s": %s', $user->getUsername(), $e->getMessage()));
+            }
+        }
+
+        return $this->render('AppBundle:admin:user_edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
     }
 }
