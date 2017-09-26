@@ -42,3 +42,10 @@ services:
             - "@router"
             - "@templating"
             - "%global_from_email_address%"
+
+    bw.util.user_manipulator:
+        class: AppBundle\Util\UserManipulator
+        arguments:
+            - "@fos_user.user_manager"
+            - "@event_dispatcher"
+            - "@request_stack"
