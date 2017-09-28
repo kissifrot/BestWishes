@@ -315,9 +315,9 @@ class AdminController extends Controller
             try {
                 $em->flush();
 
-                /** @var GiftList $chosenList */
+                /** @var GiftList|null $chosenList */
                 $chosenList = $user->getList();
-                if ($chosenList->getOwner()->getId() !== $user->getId()) {
+                if (null !== $chosenList && $chosenList->getOwner()->getId() !== $user->getId()) {
                     // Exchange permisions
                     $this->get('bw.security_acl_manager')->exchangePerms(
                         $chosenList,

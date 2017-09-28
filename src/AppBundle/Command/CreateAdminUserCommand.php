@@ -40,7 +40,7 @@ class CreateAdminUserCommand extends ContainerAwareCommand
         $manipulator = $this->getContainer()->get('bw.util.user_manipulator');
         $manipulator->create($username, $name, $password, $email, true, true);
 
-        $output->writeln(sprintf('Created admin user <comment>%s</comment>', $username));
+        $output->writeln(sprintf('<info>Successfully created admin user </info><comment>%s</comment>', $username));
     }
 
     /**
