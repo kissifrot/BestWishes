@@ -15,12 +15,10 @@
         {% if gift.moreDetailUrl is not empty %}<p><a href="{{ gift.moreDetailUrl }}" target="_blank">More details</a></p>{% endif %}
         {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
         {% if gift.bought %}
-            <p>
-                Bought on {{ gift.purchaseDate|date('d/m/Y') }} by {{ gift.buyer.name }}
-                {% if gift.purchaseComment is not empty %}
-                    with the following comment: {{ gift.purchaseComment }}
-                {% endif %}
-            </p>
+            <p>Bought on {{ gift.purchaseDate|date('d/m/Y') }} by {{ gift.buyer.name }}</p>
+            {% if gift.purchaseComment is not empty %}
+                <p>who made this comment:</p> <blockquote>{{ gift.purchaseComment }}</blockquote>
+            {% endif %}
         {% endif %}
 
         <div class="hidden-xs">
