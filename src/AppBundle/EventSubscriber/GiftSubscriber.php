@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Subscriber;
+namespace AppBundle\EventSubscriber;
 
 use AppBundle\Event\GiftCreatedEvent;
 use AppBundle\Event\GiftDeletedEvent;

@@ -25,7 +25,7 @@ class UserController extends Controller
 
     /**
      * @Route("/change-options", name="user_change_options")
-     * @Method({"GET", "POST"})
+     * @Method({"GET"})
      */
     public function changeOptionsAction()
     {

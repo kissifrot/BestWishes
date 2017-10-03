@@ -1,13 +1,8 @@
 {% block subject %}
-{%- autoescape false -%}
-[BestWishes] Deletion alert
-{%- endautoescape -%}
+{{ 'mail.alert_deletion.title'|trans({ '%siteName%': site_name }) }}
 {% endblock %}
 
 {% block body_text %}
-Hello {{ user.name }}, the gift {{ deletedGift.name }} of the list {{ deletedGift.category.list.name }} was deleted by {{ deleter.name }}.
-
-Regards,
-BestWishes admin - {{ home }}
+{{ 'mail.alert_creation.body_text'|trans({ '%siteName%': site_name, '%userName%': user.name, '%deletedGiftName%': deletedGift.name, '%deleterName%': deleter.name, '%listName%': deletedGift.category.list.name, '%siteUrl%': home }) }}
 {% endblock %}
 {% block body_html %}{% endblock %}

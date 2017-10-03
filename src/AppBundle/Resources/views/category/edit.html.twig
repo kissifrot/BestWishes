@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit category{% endblock %}
+{% block title %}{{ 'category.title.edit'|trans }}{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -10,7 +10,7 @@
             <li class="active">{{ category.name }}</li>
         </ol>
 
-        <h1>Edit category</h1>
+        <h1>{{ 'category.title.edit'|trans }}</h1>
         {{ form_start(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.save) }}

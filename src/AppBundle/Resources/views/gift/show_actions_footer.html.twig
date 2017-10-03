@@ -1,25 +1,25 @@
 {% set attrib = gift.surprise ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'] %}
-<div class="btn-group btn-group-lg btn-group-justified" role="group" aria-label="Actions">
+<div class="btn-group btn-group-lg btn-group-justified" role="group" aria-label="{{ 'gift.actions.text'|trans }}">
     {% if is_multi_granted(attrib, gift.category.list) %}
-        <a href="{{ path('gift_edit', { id: gift.id }) }}" class="btn btn-primary" title="Edit" aria-label="Edit">
+        <a href="{{ path('gift_edit', { id: gift.id }) }}" class="btn btn-primary" title="{{ 'gift.action.edit'|trans }}" aria-label="{{ 'gift.action.edit'|trans }}">
             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
         </a>
         <div class="btn-group btn-group-lg" role="group">
-            <button class="btn btn-primary js-gift-delete" title="Delete" aria-label="Delete">
+            <button class="btn btn-primary js-gift-delete" title="{{ 'gift.action.delete'|trans }}" aria-label="{{ 'gift.action.delete'|trans }}">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
             </button>
         </div>
     {% endif %}
     {% if is_granted('SURPRISE_ADD', gift.category.list) and not gift.bought %}
         <div class="btn-group btn-group-lg" role="group">
-            <button class="btn btn-primary js-gift-mark-bought" title="Mark as bought" aria-label="Mark as bought">
+            <button class="btn btn-primary js-gift-mark-bought" title="{{ 'gift.action.mark_bought'|trans }}" aria-label="{{ 'gift.action.mark_bought'|trans }}">
                 <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
             </button>
         </div>
     {% endif %}
     {% if is_multi_granted(attrib, gift.category.list) and not gift.received %}
         <div class="btn-group btn-group-lg" role="group">
-            <button class="btn btn-primary js-gift-mark-received" title="Mark as received" aria-label="Mark as received">
+            <button class="btn btn-primary js-gift-mark-received" title="{{ 'gift.action.mark_received'|trans }}" aria-label="{{ 'gift.action.mark_received'|trans }}">
                 <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
             </button>
         </div>

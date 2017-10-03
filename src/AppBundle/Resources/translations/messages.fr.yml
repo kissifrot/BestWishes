@@ -1,0 +1,84 @@
+gift_list.next_event.text: '{0} Prochain évènement (%eventName%) : aujourd''hui day|{1} Prochain évènement (%eventName%) : %count% jour |]1,Inf[ Prochain évènement (%eventName%) : %count% jours'
+gift_list.title: 'Liste - %listName%'
+gift_list.no_category.guest: 'Aucune catégorie trouvée'
+gift_list.no_category.logged_can_edit: 'Aucune catégorie trouvée, cliquez sur le bouton <b>Créer une catégorie</b> ci-dessous pour en créer une'
+gift_list.actions.text: 'Actions'
+gift_list.action.export_pdf: 'Exporter en PDF'
+gift_list.action.create_category: 'Créer une catégorie'
+gift.breadcrumb.create: 'Nouveau cadeau'
+gift.breadcrumb.create_surprise: 'Nouveau cadeau surprise'
+gift.title.create: 'Nouveau cadeau'
+gift.title.create_surprise: 'Nouveau cadeau surprise'
+gift.title.edit: 'Modifier un cadeau'
+gift.title: 'Cadeau - %giftName%'
+gift.added_on.text: 'Ajouté le %addedDate%'
+gift.more_details.text: 'Plus de détails'
+gift.bought_by.text: 'Acheté le %purchaseDate% par %buyerName%'
+gift.comment.text: 'qui laise ce commentaire :'
+gift.actions.text: 'Actions'
+gift.action.delete: 'Supprimer'
+gift.action.edit: 'Modifier'
+gift.action.mark_bought: 'Marquer comme acheté'
+gift.action.mark_received: 'Marquer comme reçu'
+gift.modal.confirmation.text: 'Confirmation'
+gift.modal.confirm.text: 'Confirmer'
+gift.modal.close.text: 'Fermer'
+gift.modal.delete_confirmation.text: 'Êtes-vous sûr(e) de vouloir supprimer ce cadeau ?'
+gift.modal.mark_received.text: 'Êtes-vous sûr(e) de vouloir marquer ce cadeau comme reçu ?'
+gift.modal.mark_bought.text: 'Êtes-vous sûr(e) de vouloir marquer ce cadeau comme acheté ?'
+gift.message.deleted: 'Cadeau "%giftName%" supprimé'
+gift.message.updated: 'Cadeau "%giftName%" modifié'
+gift.message.created: 'Cadeau "%giftName%" créé'
+gift.message.marked_received: 'Cadeau "%giftName%" marqué comme reçu'
+gift.message.marked_bought: 'Cadeau "%giftName%" marqué comme acheté'
+category.title: 'Catégorie - %categoryName%'
+category.title.create: 'Nouvelle catégorie'
+category.title.edit: 'Modifier catégorie'
+category.no_gift.guest: 'Aucun cadeau trouvé'
+category.no_gift.logged_can_edit: 'Aucun cadeau trouvé, cliquez sur le bouton <b>Créer un cadeau</b> ci-dessous pour en créer un'
+category.actions.text: 'Actions'
+category.action.delete: 'Supprimer'
+category.action.edit: 'Modifier'
+category.action.create_gift: 'Créer un cadeau'
+category.action.create_surprise_gift: 'Créer un cadeau surprise'
+category.modal.confirmation.text: 'Confirmation'
+category.modal.confirm.text: 'Confirmer'
+category.modal.close.text: 'Fermer'
+category.modal.delete_confirmation.text:  'Êtes-vous sûr(e) de vouloir supprimer cette catégorie ?'
+category.modal.delete_confirmation.text.second_line: 'Les cadeaux associés seront aussi supprimés'
+category.message.deleted: 'Catégorie "%categoryName%" supprimée'
+category.message.updated: 'Catégorie "%categoryName%" modifiée'
+category.message.created: 'Catégorie "%categoryName%" créée'
+form.save: 'Enregistrer'
+form.gift_list.name: 'Nom'
+form.gift_list.owner: 'Propriétaire'
+form.gift_list.birthDate: 'Date de naissance'
+form.gift.name: 'Nom'
+form.gift.imageUrl: 'URL de l''image'
+form.gift.moreDetailUrl: 'URL vers des détails'
+form.gift.moreDetail: 'Plus de détails'
+form.category.name: 'Nom'
+mail.alert_creation.title: '[%siteName%] - Alerte création'
+mail.alert_creation.body_text: |
+  Bonjour %userName%, le cadeau %createdGiftName% a été ajouté par %creatorName% à la liste %listName% dans la catégorie %categoryName%.
+
+  Cordialement,
+  l'admin de %siteName% - %siteUrl%
+mail.alert_deletion.title: '[%siteName%] - Deletion alert'
+mail.alert_deletion.body_text: |
+  Bonjour %userName%, le cadeau %deletedGiftName% de la liste %listName% a été supprimé par %deleterName%.
+
+  Cordialement,
+  l'admin de %siteName% - %siteUrl%
+mail.alert_edition.title: '[%siteName%] - Alerte modification'
+mail.alert_edition.body_text: |
+  Bonjour %userName%, le cadeau %editedGiftName% de la liste %listName% a été modifié par %editorName%.
+
+  Cordialement,
+  l'admin de %siteName% - %siteUrl%
+mail.alert_purchase.title: '[%siteName%] - Alerte achat'
+mail.alert_purchase.body_text: |
+  Bonjour %userName%, le cadeau %purchasedGiftName% de la liste %listName% a été acheté par %buyerName%.
+
+  Cordialement,
+  l'admin de %siteName% - %siteUrl%

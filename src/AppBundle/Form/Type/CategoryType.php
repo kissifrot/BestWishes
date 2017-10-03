@@ -15,13 +15,14 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('save', SubmitType::class);
+            ->add('save', SubmitType::class, ['label_format' => 'form.save']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => Category::class,
+            'label_format' => 'form.category.%name%'
         ));
     }
 }

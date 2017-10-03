@@ -64,7 +64,7 @@ class CategoryController extends BwController
             $em->persist($category);
             $em->flush();
 
-            $this->addFlash('notice', sprintf('Category "%s" added',$category->getName()));
+            $this->addFlash('notice', $this->get('translator')->trans('category.message.updated', ['%categoryName%' => $category->getName()]));
 
             return $this->redirectToRoute('list_show', ['id' => $list->getId()]);
         }
@@ -95,7 +95,7 @@ class CategoryController extends BwController
             $em->persist($category);
             $em->flush();
 
-            $this->addFlash('notice', sprintf('Category "%s" updated', $category->getName()));
+            $this->addFlash('notice', $this->get('translator')->trans('category.message.updated', ['%categoryName%' => $category->getName()]));
 
             return $this->redirectToRoute('category_show', ['id' => $category->getId()]);
         }
@@ -124,7 +124,7 @@ class CategoryController extends BwController
             $em->remove($category);
             $em->flush();
 
-            $this->addFlash('notice', sprintf('Category "%s" deleted', $category->getName()));
+            $this->addFlash('notice', $this->get('translator')->trans('category.message.deleted', ['%categoryName%' => $category->getName()]));
         }
 
         return $this->redirectToRoute('list_show', ['id' => $category->getList()->getId()]);

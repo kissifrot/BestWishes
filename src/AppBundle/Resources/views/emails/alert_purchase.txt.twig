@@ -1,13 +1,8 @@
 {% block subject %}
-{%- autoescape false -%}
-[BestWishes] Purchase alert
-{%- endautoescape -%}
+{{ 'mail.alert_purchase.title'|trans({ '%siteName%': site_name }) }}
 {% endblock %}
 
 {% block body_text %}
-Hello {{ user.name }}, the gift {{ editedGift.name }} of the list {{ editedGift.category.list.name }} was bought by {{ buyer.name }}.
-
-Regards,
-BestWishes admin - {{ home }}
+{{ 'mail.alert_purchase.body_text'|trans({ '%siteName%': site_name, '%userName%': user.name, '%purchasedGiftName%': purchasedGift.name, '%buyerName%': buyer.name, '%listName%': purchasedGift.category.list.name, '%siteUrl%': home }) }}
 {% endblock %}
 {% block body_html %}{% endblock %}

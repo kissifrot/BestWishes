@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Category - {{ category.name }}{% endblock %}
+{% block title %}{{ 'category.title'|trans({ '%categoryName%': category.name }) }}{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -21,7 +21,7 @@
             {% endfor %}
             </div>
         {% else %}
-            <p><em>No gifts found{% if is_multi_granted(['OWNER', 'EDIT'], list) %}, click on the <b>Create a gif</b> button below to create one{% endif %}</em></p>
+            <p><em>{% if is_multi_granted(['OWNER', 'EDIT'], category.list) %}{{ 'category.no_gift.logged_can_edit'|trans|raw }}{% else %}{{ 'category.no_gift.guest'|trans }}{% endif %}</em></p>
         {% endif %}
             <div class="hidden-xs">
             {% include '@App/category/show_actions.html.twig' with {category: category} only %}
@@ -32,6 +32,7 @@
 {% endblock %}
 
 {% block footer %}
+{# Mobile-only-visible actions #}
 <nav class="navbar navbar-default navbar-fixed-bottom visible-xs-block">
     {% include '@App/category/show_actions_footer.html.twig' with {category: category} only %}
 </nav>

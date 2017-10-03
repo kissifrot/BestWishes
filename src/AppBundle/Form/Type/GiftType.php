@@ -20,13 +20,14 @@ class GiftType extends AbstractType
             ->add('imageUrl', UrlType::class, ['required' => false])
             ->add('moreDetailUrl', UrlType::class, ['required' => false])
             ->add('moreDetail', TextareaType::class, ['required' => false])
-            ->add('save', SubmitType::class);
+            ->add('save', SubmitType::class, ['label_format' => 'form.save']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => Gift::class,
+            'label_format' => 'form.gift.%name%'
         ));
     }
 }

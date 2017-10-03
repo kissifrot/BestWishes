@@ -23,3 +23,5 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            PleaseChangeThisSecretToken
+    # Site name, leave defaults to show support ;)
+    site_name: BestWishes

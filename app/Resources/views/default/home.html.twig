@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Welcome{% endblock %}
+{% block title %}{{ 'global.welcome.title'|trans }}{% endblock %}
 
 {% block content %}
     <div class="container">
         {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 
-            <h1>Welcome {{ app.user.username }},</h1>
-            <p>Please use the menu on the top to navigate, or <a href="{{ path('fos_user_security_logout') }}">logout</a></p>
+            <h1>{{ 'home.welcome.title.logged'|trans({ '%username%': app.user.username }) }}</h1>
+            <p>{{ 'home.welcome.text.logged'|trans({ '%logoutUrl%': path('fos_user_security_logout') })|raw }}</p>
         {% else %}
-            <h1>Welcome</h1>
-            <p>Please use the menu on the top to navigate</p>
-            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Unknown user, please <a href="{{ path('fos_user_security_login') }}">login</a>
+            <h1>{{ 'home.welcome.title.guest'|trans }}</h1>
+            <p>{{ 'home.welcome.text.guest'|trans }}</p>
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;{{ 'home.welcome.text_user_not_logged'|trans({ '%loginUrl%': path('fos_user_security_login') })|raw }}
         {% endif %}
 
     </div>

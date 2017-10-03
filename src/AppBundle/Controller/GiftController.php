@@ -84,7 +84,7 @@ class GiftController extends BwController
             $event = new GiftCreatedEvent($gift, $this->getUser());
             $this->get('event_dispatcher')->dispatch(GiftCreatedEvent::NAME, $event);
 
-            $this->addFlash('notice', sprintf('Gift "%s" added', $gift->getName()));
+            $this->addFlash('notice', $this->get('translator')->trans('gift.message.created', ['%giftName%' => $gift->getName()]));
 
             return $this->redirectToRoute('category_show', ['id' => $category->getId()]);
         }
@@ -124,7 +124,7 @@ class GiftController extends BwController
             $event = new GiftEditedEvent($originGift, $gift, $this->getUser());
             $this->get('event_dispatcher')->dispatch(GiftEditedEvent::NAME, $event);
 
-            $this->addFlash('notice', sprintf('Gift "%s" updated', $gift->getName()));
+            $this->addFlash('notice', $this->get('translator')->trans('gift.message.updated', ['%giftName%' => $gift->getName()]));
 
             return $this->redirectToRoute('gift_show', ['id' => $gift->getId()]);
         }
@@ -161,7 +161,7 @@ class GiftController extends BwController
             $event = new GiftDeletedEvent($deletedGift, $this->getUser());
             $this->get('event_dispatcher')->dispatch(GiftDeletedEvent::NAME, $event);
 
-            $this->addFlash('notice', sprintf('Gift "%s" deleted', $deletedGift->getName()));
+            $this->addFlash('notice', $this->get('translator')->trans('gift.message.deleted', ['%giftName%' => $deletedGift->getName()]));
         }
 
         return $this->redirectToRoute('category_show', ['id' => $gift->getCategory()->getId()]);
@@ -194,7 +194,7 @@ class GiftController extends BwController
             $em->persist($gift);
             $em->flush();
 
-            $this->addFlash('notice', sprintf('Gift "%s" marked as received', $gift->getName()));
+            $this->addFlash('notice', $this->get('translator')->trans('gift.message.marked_received', ['%giftName%' => $gift->getName()]));
         }
 
         return $this->redirectToRoute('category_show', ['id' => $gift->getCategory()->getId()]);
@@ -234,7 +234,7 @@ class GiftController extends BwController
             $event = new GiftPurchasedEvent($gift, $this->getUser(), $purchaseComment);
             $this->get('event_dispatcher')->dispatch(GiftPurchasedEvent::NAME, $event);
 
-            $this->addFlash('notice', sprintf('Gift "%s" marked as bought', $gift->getName()));
+            $this->addFlash('notice', $this->get('translator')->trans('gift.message.marked_bought', ['%giftName%' => $gift->getName()]));
         }
 
         return $this->redirectToRoute('gift_show', ['id' => $gift->getId()]);

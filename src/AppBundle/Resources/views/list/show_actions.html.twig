@@ -1,8 +1,8 @@
 <a href="#" class="btn btn-primary">
-    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;Export as PDF
+    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;{{ 'gift_list.action.export_pdf'|trans }}
 </a>
 {% if is_multi_granted(['OWNER', 'EDIT'], list) %}
     <a href="{{ path('category_create', { listId: list.id }) }}" class="btn btn-primary">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Create a category
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;{{ 'gift_list.action.create_category'|trans }}
     </a>
 {% endif %}

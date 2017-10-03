@@ -5,15 +5,15 @@
         <div class="modal-content">
             {{ form_start(deleteForm) }}
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Confirmation</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete this gift?</p>
+                <p>{{ 'gift.modal.delete_confirmation.text'|trans }}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'gift.modal.close.text'|trans }}</button>
+                <button type="submit" class="btn btn-primary">{{ 'gift.modal.confirm.text'|trans }}</button>
             </div>
             {{ form_end(deleteForm) }}
         </div>
@@ -25,15 +25,15 @@
         <div class="modal-content">
             {{ form_start(markReceivedForm) }}
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Confirmation</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to mark this gift as received?</p>
+                <p>{{ 'gift.modal.mark_received.text'|trans }}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'gift.modal.close.text'|trans }}</button>
+                <button type="submit" class="btn btn-primary">{{ 'gift.modal.confirm.text'|trans }}</button>
             </div>
             {{ form_end(markReceivedForm) }}
         </div>
@@ -45,16 +45,16 @@
         <div class="modal-content">
             {{ form_start(markBoughtForm) }}
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Confirmation</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to mark this gift as bought?</p>
+                <p>{{ 'gift.modal.mark_bought.text'|trans }}</p>
                 {{ form_row(markBoughtForm.purchaseComment) }}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'gift.modal.close.text'|trans }}</button>
+                <button type="submit" class="btn btn-primary">{{ 'gift.modal.confirm.text'|trans }}</button>
             </div>
             {{ form_end(markBoughtForm) }}
         </div>

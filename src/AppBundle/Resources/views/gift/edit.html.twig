@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit gift{% endblock %}
+{% block title %}{{ 'gift.title.edit'|trans }}{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -12,7 +12,7 @@
             <li class="active">{{ gift.name }}</li>
         </ol>
 
-        <h1>Edit gift</h1>
+        <h1>{{ 'gift.title.edit'|trans }}</h1>
         {{ form_start(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.imageUrl) }}

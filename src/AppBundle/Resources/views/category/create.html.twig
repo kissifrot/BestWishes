@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New category{% endblock %}
+{% block title %}{{ 'category.title.create'|trans }}{% endblock %}
 
 {% block content %}
     <div class="container">
         <ol class="breadcrumb">
             <li><a href="{{ path('list_show', { id: list.id } ) }}">{{ list.name }}</a></li>
-            <li class="active">New category</li>
+            <li class="active">{{ 'category.title.create'|trans }}</li>
         </ol>
 
-        <h1>New category</h1>
+        <h1>{{ 'category.title.create'|trans }}</h1>
         {{ form_start(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.save) }}

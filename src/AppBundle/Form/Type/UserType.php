@@ -24,7 +24,7 @@ class UserType extends AbstractType
             ->add('name', TextType::class)
             ->add('plainPassword', PasswordType::class, ['constraints' => new Length(['min' => 6]), 'required' => !$options['isEditing']])
             ->add('list', EntityType::class, ['class' => GiftList::class, 'choice_label' => 'name', 'required' => false])
-            ->add('save', SubmitType::class);
+            ->add('save', SubmitType::class, ['label_format' => 'form.save']);
     }
 
     public function configureOptions(OptionsResolver $resolver)

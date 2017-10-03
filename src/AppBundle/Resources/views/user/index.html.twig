@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Options{% endblock %}
+{% block title %}{{ 'global.navbar.options'|trans }}{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1>Options</h1>
+    <h1>{{ 'global.navbar.options'|trans }}</h1>
     <p><a href="{{ path('fos_user_change_password') }}">Change your password</a></p>
 
 </div>

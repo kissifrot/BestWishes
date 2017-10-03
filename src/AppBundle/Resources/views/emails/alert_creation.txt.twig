@@ -1,13 +1,8 @@
 {% block subject %}
-{%- autoescape false -%}
-[BestWishes] Creation alert
-{%- endautoescape -%}
+{{ 'mail.alert_creation.title'|trans({ '%siteName%': site_name }) }}
 {% endblock %}
 
 {% block body_text %}
-Hello {{ user.name }}, the gift {{ createdGift.name }} was added by {{ creator.name }} to the list {{ createdGift.category.list.name }} in the category {{ createdGift.category.name }}.
-
-Regards,
-BestWishes admin - {{ home }}
+{{ 'mail.alert_creation.body_text'|trans({ '%siteName%': site_name, '%userName%': user.name, '%createdGiftName%': createdGift.name, '%creatorName%': creator.name, '%listName%': createdGift.category.list.name, '%categoryName%': createdGift.category.name, '%siteUrl%': home }) }}
 {% endblock %}
 {% block body_html %}{% endblock %}

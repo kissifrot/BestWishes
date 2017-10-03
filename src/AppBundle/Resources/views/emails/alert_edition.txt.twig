@@ -1,13 +1,10 @@
 {% block subject %}
 {%- autoescape false -%}
-[BestWishes] Edition alert
+{{ 'mail.alert_edition.title'|trans({ '%siteName%': site_name }) }}
 {%- endautoescape -%}
 {% endblock %}
 
 {% block body_text %}
-Hello {{ user.name }}, the gift {{ editedGift.name }} of the list {{ editedGift.category.list.name }} was edited by {{ editor.name }}.
-
-Regards,
-BestWishes admin - {{ home }}
+{{ 'mail.alert_edition.body_text'|trans({ '%siteName%': site_name, '%userName%': user.name, '%editedGiftName%': editedGift.name, '%editorName%': editor.name, '%listName%': editedGift.category.list.name, '%siteUrl%': home }) }}
 {% endblock %}
 {% block body_html %}{% endblock %}

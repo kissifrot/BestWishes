@@ -1,11 +1,5 @@
 services:
 
-    bw.tblprefix_subscriber:
-        class: AppBundle\Subscriber\TablePrefixSubscriber
-        arguments: [ '%database_prefix%' ]
-        tags:
-            - { name: doctrine.event_subscriber }
-
     bw.list_event_manager:
         class: AppBundle\Manager\ListEventManager
         arguments: ["@doctrine.orm.default_entity_manager"]
@@ -26,15 +20,6 @@ services:
         class: AppBundle\Security\AclManager
         arguments: [ "@security.acl.provider" ]
 
-    bw.gift_subscriber:
-        class: AppBundle\Subscriber\GiftSubscriber
-        arguments:
-            - "@fos_user.user_manager"
-            - "@bw.security_context"
-            - "@bw.mailer"
-        tags:
-            - { name: kernel.event_subscriber }
-
     bw.mailer:
         class: AppBundle\Mailer\Mailer
         arguments:
@@ -49,3 +34,24 @@ services:
             - "@fos_user.user_manager"
             - "@event_dispatcher"
             - "@request_stack"
+
+    bw.gift_subscriber:
+        class: AppBundle\EventSubscriber\GiftSubscriber
+        arguments:
+            - "@fos_user.user_manager"
+            - "@bw.security_context"
+            - "@bw.mailer"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    bw.tblprefix_subscriber:
+        class: AppBundle\EventSubscriber\TablePrefixSubscriber
+        arguments: [ '%database_prefix%' ]
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    bw.locale_subscriber:
+        class: AppBundle\EventSubscriber\LocaleSubscriber
+        arguments: [ '%kernel.default_locale%' ]
+        tags:
+            - { name: kernel.event_subscriber }

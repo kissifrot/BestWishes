@@ -29,5 +29,5 @@
     <div class="form-group">
         <input type="submit" id="_submit" name="_submit" class="btn-default btn" value="{{ 'security.login.submit'|trans }}" />
     </div>
-    <p><a href="{{ path('fos_user_resetting_request') }}">Lost your password?</a></p>
+    <p><a href="{{ path('fos_user_resetting_request') }}">{{ 'security.login.lost_password.text'|trans({}, 'messages') }}</a></p>
 </form>

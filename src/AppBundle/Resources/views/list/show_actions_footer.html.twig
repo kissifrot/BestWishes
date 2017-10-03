@@ -1,9 +1,9 @@
-<div class="btn-group btn-group-lg btn-group-justified" role="group" aria-label="Actions">
-    <a href="#" class="btn btn-primary" title="Export as PDF" aria-label="Export as PDF">
+<div class="btn-group btn-group-lg btn-group-justified" role="group" aria-label="{{ 'gift_list.actions.text'|trans }}">
+    <a href="#" class="btn btn-primary" title="{{ 'gift_list.action.export_pdf'|trans }}" aria-label="{{ 'gift_list.action.export_pdf'|trans }}">
         <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
     </a>
     {% if is_multi_granted(['OWNER', 'EDIT'], list) %}
-        <a href="{{ path('category_create', { listId: list.id }) }}" class="btn btn-primary" title="Create a category" aria-label="Create a category">
+        <a href="{{ path('category_create', { listId: list.id }) }}" class="btn btn-primary" title="{{ 'gift_list.action.create_category'|trans }}" aria-label="{{ 'gift_list.action.create_category'|trans }}">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </a>
     {% endif %}

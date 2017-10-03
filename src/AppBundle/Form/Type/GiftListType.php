@@ -20,13 +20,14 @@ class GiftListType extends AbstractType
             ->add('name', TextType::class)
             ->add('owner', EntityType::class, ['class' => User::class, 'choice_label' => 'name'])
             ->add('birthDate', DateType::class, ['years' => range(date('Y') - 120, date('Y'))])
-            ->add('save', SubmitType::class);
+            ->add('save', SubmitType::class, ['label_format' => 'form.save']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => GiftList::class,
+            'label_format' => 'form.gift_list.%name%'
         ));
     }
 }

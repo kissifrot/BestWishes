@@ -1,18 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New {% if isSurprise %}surprise {% endif %}gift{% endblock %}
-
-{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% block title %}{% if isSurprise %}{{ 'gift.title.create_surprise'|trans }}{% else %}{{ 'gift.title.create'|trans }}{% endif %}{% endblock %}
 
 {% block content %}
     <div class="container">
         <ol class="breadcrumb">
             <li><a href="{{ path('list_show', { id: category.list.id } ) }}">{{ category.list.name }}</a></li>
             <li><a href="{{ path('category_show', { id: category.id } ) }}">{{ category.name }}</a></li>
-            <li class="active">New {% if isSurprise %}surprise {% endif %}gift</li>
+            <li class="active">{% if isSurprise %}{{ 'gift.breadcrumb.create_surprise'|trans }}{% else %}{{ 'gift.breadcrumb.create'|trans }}{% endif %}</li>
         </ol>
 
-        <h1>New {% if isSurprise %}surprise {% endif %}gift</h1>
+        <h1>{% if isSurprise %}{{ 'gift.title.create_surprise'|trans }}{% else %}{{ 'gift.title.create'|trans }}{% endif %}</h1>
         {{ form_start(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.imageUrl) }}
