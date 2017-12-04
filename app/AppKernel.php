@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             //  FOSJsRoutingBundle - https://symfony.com/doc/current/bundles/FOSJsRoutingBundle/index.html
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Symfony\Bundle\AclBundle\AclBundle(),
             // BestWishes application bundle
             new AppBundle\AppBundle(),
         ];

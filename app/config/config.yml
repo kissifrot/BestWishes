@@ -91,3 +91,13 @@ fos_user:
     from_email:
         address:        "%global_from_email_address%"
         sender_name:    "%global_from_email_name%"
+
+# ACL Bundle configuration
+acl:
+    connection: default
+    tables:
+        class:                '%database_prefix%acl_classes'
+        entry:                '%database_prefix%acl_entries'
+        object_identity:      '%database_prefix%acl_object_identities'
+        object_identity_ancestors:  '%database_prefix%acl_object_identity_ancestors'
+        security_identity:    '%database_prefix%acl_security_identities'
