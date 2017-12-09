@@ -16,7 +16,7 @@
             <div class="list-group">
             {% for gift in category.gifts %}
                 <a href="{{ path('gift_show', { id: gift.id }) }}" class="list-group-item">
-                    {{ gift.name }}
+                    {{ gift.name }} <span class="badge"><span class="glyphicon glyphicon-info-sign"></span></span>
                 </a>
             {% endfor %}
             </div>
