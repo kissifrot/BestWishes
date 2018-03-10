@@ -14,8 +14,10 @@ parameters:
     # Mailer configuration for mail alerts and password resets
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
+    mailer_port:       25
     mailer_user:       ~
     mailer_password:   ~
+    mailer_encryption: ~
 
     # Global e-mail from: address and name
     global_from_email_address:  mysite@example.com
