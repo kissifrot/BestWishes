@@ -5,7 +5,8 @@
 {% block content %}
 <div class="container">
     <h1>{{ 'global.navbar.options'|trans }}</h1>
-    <p><a href="{{ path('fos_user_change_password') }}">Change your password</a></p>
+    <p><a href="{{ path('fos_user_change_password') }}">{{ 'user.change_password.title'|trans }}</a></p>
+    <p><a href="{{ path('user_manage_alerts') }}">{{ 'user.manage_alerts.title'|trans }}</a></p>
 
 </div>
 {% endblock %}

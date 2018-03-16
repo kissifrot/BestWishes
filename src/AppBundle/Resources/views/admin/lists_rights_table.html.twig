@@ -14,7 +14,7 @@
     <tr>
         <th>User</th>
         {% for permission in availablePermissions %}
-            <th>{{ permission }}{% if permission == 'OWNER' %} *{% endif %}</th>
+            <th>{{ ('global.permission.' ~ permission)|trans }}{% if permission == 'OWNER' %} *{% endif %}</th>
         {% endfor %}
     </tr>
     </thead>
