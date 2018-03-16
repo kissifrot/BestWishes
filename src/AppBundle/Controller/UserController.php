@@ -45,7 +45,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/updateAlert", name="user_update_list_alert", requirements={"id": "\d+"}, options = { "expose" = true })
+     * @Route("/{id}/updateAlert", name="user_update_list_alert", requirements={"id": "\d+"}, options = { "expose" = true })
      * @Method({"POST"})
      * @param Request  $request
      * @param GiftList $giftList
