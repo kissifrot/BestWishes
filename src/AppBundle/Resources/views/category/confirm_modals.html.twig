@@ -3,8 +3,8 @@
         <div class="modal-content">
             {{ form_start(deleteForm) }}
             <div class="modal-header">
+                <h5 class="modal-title">{{ 'category.modal.confirmation.text'|trans }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'category.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{{ 'category.modal.confirmation.text'|trans }}</h4>
             </div>
             <div class="modal-body">
                 <p>{{ 'category.modal.delete_confirmation.text'|trans }}<br>{{ 'category.modal.delete_confirmation.text.second_line'|trans }}</p>

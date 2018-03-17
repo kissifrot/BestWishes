@@ -5,8 +5,8 @@
 {% block content %}
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="#">(admin)</a></li>
-            <li class="active">Lists</li>
+            <li class="breadcrumb-item"><a href="#">(admin)</a></li>
+            <li  class="breadcrumb-item active">Lists</li>
         </ol>
         {%- include '@App/default/flash_messages.html.twig' -%}
 
@@ -31,15 +31,15 @@
                     <td>
                         <a class="btn btn-primary btn-sm" href="{{ path('admin_list_edit', { 'id': list.id }) }}" title="Edit list"
                            aria-label="Edit list">
-                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            <i class="fas fa-pencil-alt" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-primary btn-sm" href="{{ path('admin_lists_rights') }}" title="Edit rights"
                            aria-label="Edit rights">
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            <i class="fas fa-user" aria-hidden="true"></i>
                         </a>
                         <button type="button" class="btn btn-primary btn-sm js-list-delete" data-listid="{{ list.id }}" title="Delete list"
                            aria-label="Delete list">
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            <i class="fas fa-trash" aria-hidden="true"></i>
                         </button>
                     </td>
                 </tr>
@@ -62,7 +62,7 @@
                     var currentData = $(this).data();
                     $('#formListDelete').attr('action', deleteListUrl.replace('99999999999999', currentData.listid));
                     $('#deleteListId').val(currentData.listid);
-                    $('#modal-confirm-delete').modal();
+                    $('#modal-confirm-list-delete').modal();
                 });
             });
         </script>

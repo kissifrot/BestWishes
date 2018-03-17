@@ -10,7 +10,7 @@
 {% macro permissionLine(availableAlerts, list, user ) %}
     {% for alert in availableAlerts %}
         <td>
-            <span style="cursor: pointer" class="js-alert-check glyphicon {% if is_user_granted(alert, list, user ) %}text-success glyphicon-ok{% else %}text-danger glyphicon-remove{% endif %}" data-list="{{ list.id }}" data-alert="{{ alert }}">&nbsp;</span>
+            <span style="cursor: pointer" class="js-alert-check fas {% if is_user_granted(alert, list, user ) %}text-success fa-check{% else %}text-danger fa-times{% endif %}" data-list="{{ list.id }}" data-alert="{{ alert }}">&nbsp;</span>
         </td>
     {% endfor %}
 {% endmacro %}
@@ -21,8 +21,8 @@
 <div class="container">
 
     <ol class="breadcrumb">
-        <li><a href="{{ path('user_home') }}">{{ 'global.navbar.options'|trans }}</a></li>
-        <li class="active">{{ 'user.manage_alerts.title'|trans }}</li>
+        <li class="breadcrumb-item"><a href="{{ path('user_home') }}">{{ 'global.navbar.options'|trans }}</a></li>
+        <li class="breadcrumb-item active">{{ 'user.manage_alerts.title'|trans }}</li>
     </ol>
 
     <h1>{{ 'user.manage_alerts.title'|trans }}</h1>

@@ -14,18 +14,18 @@
 
         {% if list.categories is not empty %}
             {% set categories = list.categories %}
-            <div class="list-group">
+            <ul class="list-group">
             {% for category in categories %}
-                <a href="{{ path('category_show', { id: category.id }) }}" class="list-group-item">
-                    {% if category.gifts|length > 0 %}<span class="badge">{{ category.gifts|length }}</span>{% endif %}
+                <a href="{{ path('category_show', { id: category.id }) }}" class="list-group-item list-group-item-action">
+                    {% if category.gifts|length > 0 %}<span class="badge badge-primary badge-pill">{{ category.gifts|length }}</span>{% endif %}
                     {{ category.name }}
                 </a>
             {% endfor %}
-            </div>
+            </ul>
         {% else %}
             <p><em>{% if is_multi_granted(['OWNER', 'EDIT'], list) %}{{ 'gift_list.no_category.logged_can_edit'|trans|raw }}{% else %}{{ 'gift_list.no_category.guest'|trans }}{% endif %}</em></p>
         {% endif %}
-        <div class="hidden-xs">
+        <div class="d-none d-sm-block">
         {% include '@App/list/show_actions.html.twig' with {list: list} only %}
         </div>
     </div>
@@ -33,7 +33,7 @@
 
 {% block footer %}
 {# Mobile-only-visible actions #}
-<nav class="navbar navbar-default navbar-fixed-bottom visible-xs-block">
+<nav class="navbar fixed-bottom navbar-light d-sm-none">
     {% include '@App/list/show_actions_footer.html.twig' with {list: list} only %}
 </nav>
 {% endblock %}

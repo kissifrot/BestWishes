@@ -5,9 +5,9 @@
 {% block content %}
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="{{ path('list_show', { id: category.list.id } ) }}">{{ category.list.name }}</a></li>
-            <li><a href="{{ path('category_show', { id: category.id } ) }}">{{ category.name }}</a></li>
-            <li class="active">{% if isSurprise %}{{ 'gift.breadcrumb.create_surprise'|trans }}{% else %}{{ 'gift.breadcrumb.create'|trans }}{% endif %}</li>
+            <li class="breadcrumb-item"><a href="{{ path('list_show', { id: category.list.id } ) }}">{{ category.list.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('category_show', { id: category.id } ) }}">{{ category.name }}</a></li>
+            <li  class="breadcrumb-item active">{% if isSurprise %}{{ 'gift.breadcrumb.create_surprise'|trans }}{% else %}{{ 'gift.breadcrumb.create'|trans }}{% endif %}</li>
         </ol>
 
         <h1>{% if isSurprise %}{{ 'gift.title.create_surprise'|trans }}{% else %}{{ 'gift.title.create'|trans }}{% endif %}</h1>

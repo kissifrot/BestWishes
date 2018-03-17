@@ -5,8 +5,8 @@
 {% block content %}
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="#">(admin)</a></li>
-            <li class="active">Users</li>
+            <li class="breadcrumb-item"><a href="#">(admin)</a></li>
+            <li class="breadcrumb-item active">Users</li>
         </ol>
         {%- include '@App/default/flash_messages.html.twig' -%}
 
@@ -29,11 +29,11 @@
                     <td>
                         <a class="btn btn-primary btn-sm" href="{{ path('admin_user_edit', { 'id': user.id }) }}" title="Edit user"
                            aria-label="Edit user">
-                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            <i class="fas fa-pencil-alt" aria-hidden="true"></i>
                         </a>
                         <button type="button" class="btn btn-primary btn-sm js-user-delete" data-userid="{{ user.id }}" title="Delete user"
                            aria-label="Delete user">
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            <i class="fas fa-trash" aria-hidden="true"></i>
                         </button>
                     </td>
                 </tr>
@@ -56,7 +56,7 @@
                     var currentData = $(this).data();
                     $('#formUserDelete').attr('action', deleteUserUrl.replace('99999999999999', currentData.userid));
                     $('#deleteUserId').val(currentData.userid);
-                    $('#modal-confirm-delete').modal();
+                    $('#modal-confirm-user-delete').modal();
                 });
             });
         </script>

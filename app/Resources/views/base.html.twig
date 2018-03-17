@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ site_name }} - {% block title %}Wishlist management{% endblock %}</title>
         <link href="{{ asset('bundles/app/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/app/css/fontawesome-all.min.css') }}" rel="stylesheet">
         <link href="{{ asset('bundles/app/css/main.css') }}" rel="stylesheet">
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -15,56 +16,51 @@
         <link rel="manifest" href="{{ asset('manifest.json') }}">
         <link rel="mask-icon" href="{{ asset('safari-pinned-tab.svg') }}" color="#5bbad5">
         <meta name="theme-color" content="#ffffff">
-        <script src="{{ asset('bundles/app/js/jquery-3.2.1.min.js') }}"></script>
+        <script src="{{ asset('bundles/app/js/jquery-3.3.1.min.js') }}"></script>
         {% block javascripts_head %}{% endblock %}
     </head>
     <body>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bw-navbar-collapse" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{{ path('homepage') }}">{{ site_name }}</a>
-            </div>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ path('homepage') }}">{{ site_name }}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse" id="bw-navbar-collapse">
-                <ul class="nav navbar-nav">
-                    {% block navbar %}
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ 'global.navbar.lists'|trans }} <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {% block navbar %}
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ 'global.navbar.lists'|trans }} <span class="caret"></span></a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {{ render(controller('AppBundle:List:index')) }}
-                        </ul>
+                        </div>
                     </li>
                     {% block navbar_extra %}{% endblock %}
                     {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        <li><a href="{{ path('user_home') }}">{{ 'global.navbar.options'|trans }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('user_home') }}">{{ 'global.navbar.options'|trans }}</a></li>
                     {% endif %}
-                    {% endblock %}
-                </ul>
-                <p class="navbar-text navbar-right">
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        {{ 'global.navbar.text.logged'|trans({ '%username%': app.user.username, '%logoutUrl%': path('fos_user_security_logout') })|raw }}
-                        {% if is_granted('ROLE_ADMIN') %}&nbsp;<a href="{{ path('admin_lists') }}">{{  'global.navbar.admin_access'|trans }}</a>{% endif %}
-                    {% else %}
-                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;{{ 'global.navbar.text.guest'|trans({ '%loginUrl%': path('fos_user_security_login') })|raw }}
-                    {% endif %}
-                </p>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
+                {% endblock %}
+            </ul>
+            <span class="navbar-text">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    {{ 'global.navbar.text.logged'|trans({ '%username%': app.user.username, '%logoutUrl%': path('fos_user_security_logout') })|raw }}
+                    {% if is_granted('ROLE_ADMIN') %}&nbsp;<a href="{{ path('admin_lists') }}">{{  'global.navbar.admin_access'|trans }}</a>{% endif %}
+                {% else %}
+                    <i class="far fa-user" aria-hidden="true"></i>&nbsp;{{ 'global.navbar.text.guest'|trans({ '%loginUrl%': path('fos_user_security_login') })|raw }}
+                {% endif %}
+            </span>
+        </div>
     </nav>
         {% block content %}
             {% block fos_user_content %}
             {% endblock fos_user_content %}
         {% endblock %}
         {% block footer %}
-            <nav class="navbar navbar-default navbar-fixed-bottom visible-xs-block">
-                <p class="text-center text-muted">Powered by BestWishes v{{ constant('\\AppBundle\\AppBundle::VERSION') }}</p>
-            </nav>
+        <nav class="navbar fixed-bottom navbar-light d-sm-none">
+            <p class="text-center">
+                <small class="text-muted ">Powered by BestWishes v{{ constant('\\AppBundle\\AppBundle::VERSION') }}</small>
+            </p>
+        </nav>
         {% endblock %}
         {% block javascripts %}{% endblock %}
         <script src="{{ asset('bundles/app/js/bootstrap.min.js') }}"></script>

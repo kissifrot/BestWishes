@@ -5,8 +5,8 @@
 {% block content %}
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="{{ path('list_show', { id: list.id } ) }}">{{ list.name }}</a></li>
-            <li class="active">{{ 'category.title.create'|trans }}</li>
+            <li class="breadcrumb-item"><a href="{{ path('list_show', { id: list.id } ) }}">{{ list.name }}</a></li>
+            <li class="breadcrumb-item active">{{ 'category.title.create'|trans }}</li>
         </ol>
 
         <h1>{{ 'category.title.create'|trans }}</h1>

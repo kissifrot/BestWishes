@@ -1,7 +1,7 @@
 {% macro permissionLine(availablePermissions, list, user ) %}
     {% for permission in availablePermissions %}
         <td>
-            <span {% if permission != 'OWNER' %}style="cursor: pointer"{% endif %} class="js-permission-check {% if permission == 'OWNER' %}disabled {% endif %}glyphicon {% if is_user_granted(permission, list, user ) %}text-success glyphicon-ok{% else %}text-danger glyphicon-remove{% endif %}" data-list="{{ list.id }}" data-role="{{ permission }}" data-user="{{ user.id }}">&nbsp;</span>
+            <span {% if permission != 'OWNER' %}style="cursor: pointer"{% endif %} class="js-permission-check {% if permission == 'OWNER' %}disabled {% endif %}fas {% if is_user_granted(permission, list, user ) %}text-success fa-check{% else %}text-danger fa-times{% endif %}" data-list="{{ list.id }}" data-role="{{ permission }}" data-user="{{ user.id }}">&nbsp;</span>
         </td>
     {% endfor %}
 {% endmacro %}
@@ -9,7 +9,7 @@
 {% import _self as utils %}
 
 <h3>{{ list.name }}</h3>
-<table class="table table-striped table-hover">
+<table class="table table-striped table-hover table-sm">
     <thead>
     <tr>
         <th>User</th>

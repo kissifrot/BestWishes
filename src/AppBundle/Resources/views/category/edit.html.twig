@@ -6,8 +6,9 @@
     <div class="container">
         {% set category = form.vars.value %}
         <ol class="breadcrumb">
-            <li><a href="{{ path('list_show', { id: category.list.id } ) }}">{{ category.list.name }}</a></li>
-            <li class="active">{{ category.name }}</li>
+            <li class="breadcrumb-item"><a href="{{ path('list_show', { id: category.list.id } ) }}">{{ category.list.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('category_show', { id: category.id } ) }}">{{ category.name }}</a></li>
+            <li class="breadcrumb-item active">{{ 'category.title.edit'|trans }}</li>
         </ol>
 
         <h1>{{ 'category.title.edit'|trans }}</h1>

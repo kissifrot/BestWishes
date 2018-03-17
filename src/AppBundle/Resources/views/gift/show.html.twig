@@ -5,9 +5,9 @@
 {% block content %}
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="{{ path('list_show', { id: gift.category.list.id }) }}">{{ gift.category.list.name }}</a></li>
-            <li><a href="{{ path('category_show', { id: gift.category.id }) }}">{{ gift.category.name }}</a></li>
-            <li class="active">{{ gift.name }}</li>
+            <li class="breadcrumb-item"><a href="{{ path('list_show', { id: gift.category.list.id }) }}">{{ gift.category.list.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('category_show', { id: gift.category.id }) }}">{{ gift.category.name }}</a></li>
+            <li class="breadcrumb-item active">{{ gift.name }}</li>
         </ol>
         {%- include '@App/default/flash_messages.html.twig' -%}
         <h1>{{ gift.name }}</h1>
@@ -21,7 +21,7 @@
             {% endif %}
         {% endif %}
 
-        <div class="hidden-xs">
+        <div class="d-none d-sm-block">
         {% include '@App/gift/show_actions.html.twig' with {gift: gift} only %}
         </div>
     </div>
@@ -32,7 +32,7 @@
 
 {% block footer %}
 {# Mobile-only-visible actions #}
-<nav class="navbar navbar-default navbar-fixed-bottom visible-xs-block">
+<nav class="navbar fixed-bottom navbar-light d-sm-none">
     {% include '@App/gift/show_actions_footer.html.twig' with {gift: gift} only %}
 </nav>
 {% endblock %}

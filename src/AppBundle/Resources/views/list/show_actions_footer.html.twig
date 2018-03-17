@@ -1,10 +1,10 @@
 <div class="btn-group btn-group-lg btn-group-justified" role="group" aria-label="{{ 'gift_list.actions.text'|trans }}">
-    <a href="#" class="btn btn-primary" title="{{ 'gift_list.action.export_pdf'|trans }}" aria-label="{{ 'gift_list.action.export_pdf'|trans }}">
-        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+    <a href="#" class="btn btn-primary disabled" title="{{ 'gift_list.action.export_pdf'|trans }}" aria-label="{{ 'gift_list.action.export_pdf'|trans }}">
+        <i class="fas fa-file-pdf" aria-hidden="true"></i>
     </a>
     {% if is_multi_granted(['OWNER', 'EDIT'], list) %}
         <a href="{{ path('category_create', { listId: list.id }) }}" class="btn btn-primary" title="{{ 'gift_list.action.create_category'|trans }}" aria-label="{{ 'gift_list.action.create_category'|trans }}">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            <i class="fas fa-plus-circle" aria-hidden="true"></i>
         </a>
     {% endif %}
 </div>

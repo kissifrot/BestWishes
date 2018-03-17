@@ -7,9 +7,9 @@
         {% set gift = form.vars.value %}
 
         <ol class="breadcrumb">
-            <li><a href="{{ path('list_show', { id: gift.category.list.id }) }}">{{ gift.category.list.name }}</a></li>
-            <li><a href="{{ path('category_show', { id: gift.category.id }) }}">{{ gift.category.name }}</a></li>
-            <li class="active">{{ gift.name }}</li>
+            <li class="breadcrumb-item"><a href="{{ path('list_show', { id: gift.category.list.id }) }}">{{ gift.category.list.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('category_show', { id: gift.category.id }) }}">{{ gift.category.name }}</a></li>
+            <li class="breadcrumb-item active">{{ gift.name }}</li>
         </ol>
 
         <h1>{{ 'gift.title.edit'|trans }}</h1>

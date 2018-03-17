@@ -1,12 +1,12 @@
-{% form_theme markBoughtForm 'bootstrap_3_layout.html.twig' %}
+{% form_theme markBoughtForm 'bootstrap_4_layout.html.twig' %}
 
 <div id="modal-confirm-delete" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             {{ form_start(deleteForm) }}
             <div class="modal-header">
+                <h5 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h4>
             </div>
             <div class="modal-body">
                 <p>{{ 'gift.modal.delete_confirmation.text'|trans }}</p>
@@ -25,8 +25,8 @@
         <div class="modal-content">
             {{ form_start(markReceivedForm) }}
             <div class="modal-header">
+                <h5 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h4>
             </div>
             <div class="modal-body">
                 <p>{{ 'gift.modal.mark_received.text'|trans }}</p>
@@ -45,8 +45,8 @@
         <div class="modal-content">
             {{ form_start(markBoughtForm) }}
             <div class="modal-header">
+                <h5 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h4>
             </div>
             <div class="modal-body">
                 <p>{{ 'gift.modal.mark_bought.text'|trans }}</p>
