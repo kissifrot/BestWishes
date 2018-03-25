@@ -5,3 +5,8 @@ body {
 body {
     padding-top: 60px;
 }
+
+label.form-control-label.required:after {
+    content:" *";
+    color:red;
+}

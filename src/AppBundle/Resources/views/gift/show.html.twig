@@ -12,6 +12,7 @@
         {%- include '@App/default/flash_messages.html.twig' -%}
         <h1>{{ gift.name }}</h1>
         {% if gift.addedDate is not empty %}<p>{{ 'gift.added_on.text'|trans({ '%addedDate%': gift.addedDate|date('d/m/Y')}) }}</p>{% endif %}
+        {% if gift.imageUrl is not empty %}<p><img src="{{ gift.imageUrl }}" alt="Image" class="img-fluid" style="max-height: 500px"></p>{% endif %}
         {% if gift.moreDetailUrl is not empty %}<p><a href="{{ gift.moreDetailUrl }}" target="_blank">{{ 'gift.more_details.text'|trans }}</a></p>{% endif %}
         {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
         {% if gift.bought %}
