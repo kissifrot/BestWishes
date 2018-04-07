@@ -3,14 +3,17 @@
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\User;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class UserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class UserData extends Fixture
 {
+    public const ADMIN_USER_REFERENCE = 'admin-user';
+    public const USER1_USER_REFERENCE = 'standard-user1';
+    public const USER2_USER_REFERENCE = 'standard-user2';
+    public const USER3_USER_REFERENCE = 'standard-user3';
+
     /**
      * @var ContainerInterface
      */
@@ -67,14 +70,9 @@ class UserData extends AbstractFixture implements OrderedFixtureInterface, Conta
         $manager->persist($standardUser3);
         $manager->flush();
 
-        $this->addReference('admin-user', $adminUser);
-        $this->addReference('standard-user1', $standardUser1);
-        $this->addReference('standard-user2', $standardUser2);
-        $this->addReference('standard-user3', $standardUser3);
-    }
-
-    public function getOrder()
-    {
-        return 1;
+        $this->addReference(self::ADMIN_USER_REFERENCE, $adminUser);
+        $this->addReference(self::USER1_USER_REFERENCE, $standardUser1);
+        $this->addReference(self::USER2_USER_REFERENCE, $standardUser2);
+        $this->addReference(self::USER3_USER_REFERENCE, $standardUser3);
     }
 }

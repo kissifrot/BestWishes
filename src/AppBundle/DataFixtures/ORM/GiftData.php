@@ -4,25 +4,12 @@ namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Gift;
-use AppBundle\Entity\GiftList;
-use AppBundle\Entity\User;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class GiftData extends AbstractFixture implements OrderedFixtureInterface
+class GiftData extends Fixture implements DependentFixtureInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     public function load(ObjectManager $manager)
     {
         $data = [
@@ -153,8 +140,14 @@ class GiftData extends AbstractFixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
-    public function getOrder()
+    /**
+     * @inheritdoc
+     */
+    function getDependencies()
     {
-        return 4;
+        return [
+            GiftListData::class,
+            CategoryData::class
+        ];
     }
 }

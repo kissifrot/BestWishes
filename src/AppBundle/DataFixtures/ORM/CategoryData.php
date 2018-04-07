@@ -3,38 +3,27 @@
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\Category;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class CategoryData extends AbstractFixture implements OrderedFixtureInterface
+class CategoryData extends Fixture implements DependentFixtureInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     public function load(ObjectManager $manager)
     {
         // List 1
         $category1 = new Category();
         $category1->setName('Category 1-1');
-        $category1->setList($this->getReference('standard-user-list1'));
+        $category1->setList($this->getReference(GiftListData::USER1_LIST_REFERENCE));
         $category2 = new Category();
         $category2->setName('Category 2-1');
-        $category2->setList($this->getReference('standard-user-list1'));
+        $category2->setList($this->getReference(GiftListData::USER1_LIST_REFERENCE));
         $category3 = new Category();
         $category3->setName('Category 3-1');
-        $category3->setList($this->getReference('standard-user-list1'));
+        $category3->setList($this->getReference(GiftListData::USER1_LIST_REFERENCE));
         $category4 = new Category();
         $category4->setName('Category 4-1');
-        $category4->setList($this->getReference('standard-user-list1'));
+        $category4->setList($this->getReference(GiftListData::USER1_LIST_REFERENCE));
 
         $manager->persist($category1);
         $manager->persist($category2);
@@ -51,16 +40,16 @@ class CategoryData extends AbstractFixture implements OrderedFixtureInterface
         // List 2
         $category12 = new Category();
         $category12->setName('Category 1-2');
-        $category12->setList($this->getReference('standard-user-list2'));
+        $category12->setList($this->getReference(GiftListData::USER2_LIST_REFERENCE));
         $category22 = new Category();
         $category22->setName('Category 2-2');
-        $category22->setList($this->getReference('standard-user-list2'));
+        $category22->setList($this->getReference(GiftListData::USER2_LIST_REFERENCE));
         $category32 = new Category();
         $category32->setName('Category 3-2');
-        $category32->setList($this->getReference('standard-user-list2'));
+        $category32->setList($this->getReference(GiftListData::USER2_LIST_REFERENCE));
         $category42 = new Category();
         $category42->setName('Category 4-2');
-        $category42->setList($this->getReference('standard-user-list2'));
+        $category42->setList($this->getReference(GiftListData::USER2_LIST_REFERENCE));
 
         $manager->persist($category12);
         $manager->persist($category22);
@@ -75,8 +64,14 @@ class CategoryData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('category4-2', $category42);
     }
 
-    public function getOrder()
+    /**
+     * @inheritdoc
+     */
+    function getDependencies()
     {
-        return 3;
+        return [
+            UserData::class,
+            GiftListData::class
+        ];
     }
 }

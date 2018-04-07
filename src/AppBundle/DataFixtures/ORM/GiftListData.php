@@ -4,16 +4,17 @@ namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\GiftList;
 use AppBundle\Security\Acl\Permissions\BestWishesMaskBuilder;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 
-class GiftListData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class GiftListData extends Fixture implements DependentFixtureInterface
 {
+    public const USER1_LIST_REFERENCE = 'standard-user-list1';
+    public const USER2_LIST_REFERENCE = 'standard-user-list2';
     /**
      * @var ContainerInterface
      */
@@ -27,14 +28,14 @@ class GiftListData extends AbstractFixture implements OrderedFixtureInterface, C
     public function load(ObjectManager $manager)
     {
         $standardUserList1 = new GiftList();
-        $stdUser1 = $this->getReference('standard-user1');
+        $stdUser1 = $this->getReference(UserData::USER1_USER_REFERENCE);
         $standardUserList1->setOwner($stdUser1);
         $standardUserList1->setName($stdUser1->getName());
         $standardUserList1->setBirthDate(\DateTime::createFromFormat('Y-m-d', '2010-01-01'));
 
 
         $standardUserList2 = new GiftList();
-        $stdUser2 = $this->getReference('standard-user2');
+        $stdUser2 = $this->getReference(UserData::USER2_USER_REFERENCE);
         $standardUserList2->setOwner($stdUser2);
         $standardUserList2->setName($stdUser2->getName());
         $standardUserList2->setBirthDate(\DateTime::createFromFormat('Y-m-d', '2010-04-01'));
@@ -50,7 +51,7 @@ class GiftListData extends AbstractFixture implements OrderedFixtureInterface, C
             ->add(BestWishesMaskBuilder::MASK_ALERT_ADD);
         $maskSurpriseAndAlert = $maskBuilder->get();
 
-        $stdUser3 = $this->getReference('standard-user3');
+        $stdUser3 = $this->getReference(UserData::USER3_USER_REFERENCE);
         $aclProvider = $this->container->get('security.acl.provider');
         $objectIdentity = ObjectIdentity::fromDomainObject($standardUserList1);
         $acl = $aclProvider->createAcl($objectIdentity);
@@ -71,12 +72,17 @@ class GiftListData extends AbstractFixture implements OrderedFixtureInterface, C
         $acl->insertObjectAce($securityIdentity2, $maskSurpriseAndAlert);
         $aclProvider->updateAcl($acl);
 
-        $this->addReference('standard-user-list1', $standardUserList1);
-        $this->addReference('standard-user-list2', $standardUserList2);
+        $this->addReference(self::USER1_LIST_REFERENCE, $standardUserList1);
+        $this->addReference(self::USER2_LIST_REFERENCE, $standardUserList2);
     }
 
-    public function getOrder()
+    /**
+     * @inheritdoc
+     */
+    function getDependencies()
     {
-        return 2;
+        return [
+            UserData::class
+        ];
     }
 }
