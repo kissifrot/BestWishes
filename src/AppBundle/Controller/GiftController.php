@@ -277,7 +277,7 @@ class GiftController extends BwController
     private function createPurchaseForm(Gift $gift)
     {
         return $this->createFormBuilder()
-            ->add('purchaseComment', TextareaType::class, ['constraints' => [ new Length(['max' => 1000])]])
+            ->add('purchaseComment', TextareaType::class, ['label_format' => 'form.gift.purchaseComment', 'constraints' => [ new Length(['max' => 1000])]])
             ->setAction($this->generateUrl('gift_mark_bought', ['id' => $gift->getId()]))
             ->setMethod('POST')
             ->getForm();

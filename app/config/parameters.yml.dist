@@ -11,6 +11,9 @@ parameters:
     # This is your database server version
     database_server_version:   5.6
 
+    # Locale to use (currently only "en" or "fr" are available)
+    locale: en
+
     # Mailer configuration for mail alerts and password resets
     mailer_transport:  smtp
     mailer_host:       127.0.0.1

@@ -6,5 +6,5 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class AppBundle extends Bundle
 {
-    const VERSION = '0.2';
+    const VERSION = '0.2.1';
 }
