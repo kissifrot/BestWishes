@@ -52,14 +52,15 @@ class GiftController extends BwController
      * @param Category $category
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @Route("/create/{catId}", name="gift_create", requirements={"catId": "\d+"})
      * @ParamConverter("category", options={"id" = "catId"})
      * @Method({"GET", "POST"})
-     *
      */
-    public function createAction(Request $request, Category $category)
+    public function createAction(Request $request, Category $category): \Symfony\Component\HttpFoundation\Response
     {
-        $isSurprise = boolval($request->get('surprise', false));
+        $isSurprise = (bool)$request->query->getBoolean('surprise');
 
         // Access control
         $this->checkAccess(
@@ -98,11 +99,12 @@ class GiftController extends BwController
      * @param Gift    $gift
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @Route("{id}/edit", name="gift_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
-     *
      */
-    public function editAction(Request $request, Gift $gift)
+    public function editAction(Request $request, Gift $gift): \Symfony\Component\HttpFoundation\Response
     {
         // Access control
         $this->checkAccess(
@@ -140,7 +142,7 @@ class GiftController extends BwController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function deleteAction(Request $request, Gift $gift)
+    public function deleteAction(Request $request, Gift $gift): \Symfony\Component\HttpFoundation\Response
     {
         // Access control
         $this->checkAccess(
@@ -175,7 +177,7 @@ class GiftController extends BwController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function markReceivedAction(Request $request, Gift $gift)
+    public function markReceivedAction(Request $request, Gift $gift): \Symfony\Component\HttpFoundation\Response
     {
         // Access control
         $this->checkAccess(
@@ -208,7 +210,7 @@ class GiftController extends BwController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function markBoughtAction(Request $request, Gift $gift)
+    public function markBoughtAction(Request $request, Gift $gift): \Symfony\Component\HttpFoundation\Response
     {
         // Access control
         $this->checkAccess('SURPRISE_ADD', $gift->getCategory()->getList());
@@ -272,9 +274,9 @@ class GiftController extends BwController
     /**
      * Creates a form for the purchase action
      * @param Gift $gift
-     * @return \Symfony\Component\Form\Form
+     * @return \Symfony\Component\Form\FormInterface
      */
-    private function createPurchaseForm(Gift $gift)
+    private function createPurchaseForm(Gift $gift): \Symfony\Component\Form\FormInterface
     {
         return $this->createFormBuilder()
             ->add('purchaseComment', TextareaType::class, ['label_format' => 'form.gift.purchaseComment', 'constraints' => [ new Length(['max' => 1000])]])

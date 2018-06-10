@@ -36,7 +36,7 @@ class Mailer
         $this->fromAddress = $fromAddress;
     }
 
-    public function sendPurchaseAlertMessage(User $user, Gift $purchasedGift, UserInterface $buyer)
+    public function sendPurchaseAlertMessage(User $user, Gift $purchasedGift, UserInterface $buyer): void
     {
         $templateFile = 'AppBundle:emails:alert_purchase.txt.twig';
         $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -49,7 +49,7 @@ class Mailer
         $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
     }
 
-    public function sendCreationAlertMessage(User $user, Gift $createdGift, UserInterface $creator)
+    public function sendCreationAlertMessage(User $user, Gift $createdGift, UserInterface $creator): void
     {
         $templateFile = 'AppBundle:emails:alert_creation.txt.twig';
         $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -62,7 +62,7 @@ class Mailer
         $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
     }
 
-    public function sendEditionAlertMessage(User $user, Gift $editedGift, UserInterface $editor)
+    public function sendEditionAlertMessage(User $user, Gift $editedGift, UserInterface $editor): void
     {
         $templateFile = 'AppBundle:emails:alert_edition.txt.twig';
         $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -75,7 +75,7 @@ class Mailer
         $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
     }
 
-    public function sendDeletionAlertMessage(User $user, Gift $deletedGift, UserInterface $deleter)
+    public function sendDeletionAlertMessage(User $user, Gift $deletedGift, UserInterface $deleter): void
     {
         $templateFile = 'AppBundle:emails:alert_deletion.txt.twig';
         $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -93,7 +93,7 @@ class Mailer
      * @param string $fromEmail
      * @param string $toEmail
      */
-    protected function sendEmailMessage($renderedTemplate, $fromEmail, $toEmail)
+    protected function sendEmailMessage($renderedTemplate, $fromEmail, $toEmail): void
     {
         // Render the email, use the first line as the subject, and the rest as the body
         $renderedLines = explode("\n", trim($renderedTemplate));

@@ -56,7 +56,7 @@ class AclManager
      * @param UserInterface $oldGranted User we're revoking the permission from
      * @param int           $mask The mask to exchange
      */
-    public function exchangePerms($entity, UserInterface $newGranted, UserInterface $oldGranted, $mask = BestWishesMaskBuilder::MASK_EDIT)
+    public function exchangePerms($entity, UserInterface $newGranted, UserInterface $oldGranted, $mask = BestWishesMaskBuilder::MASK_EDIT): void
     {
         // Add the correct ACL for the new onwer
         $this->grant($entity, $newGranted, $mask);
@@ -73,7 +73,7 @@ class AclManager
      * @param int|string    $mask The mask to revoke
      * @return $this
      */
-    public function revoke($entity, UserInterface $user, $mask = BestWishesMaskBuilder::MASK_EDIT)
+    public function revoke($entity, UserInterface $user, $mask = BestWishesMaskBuilder::MASK_EDIT): self
     {
         $acl = $this->getAcl($entity);
         $aces = $acl->getObjectAces();
@@ -120,7 +120,7 @@ class AclManager
      * @param int                     $mask Mask to remove
      * @return $this
      */
-    private function revokeMask($index, MutableAclInterface $acl, AuditableEntryInterface $ace, $mask)
+    private function revokeMask($index, MutableAclInterface $acl, AuditableEntryInterface $ace, $mask): self
     {
         $acl->updateObjectAce($index, $ace->getMask() & ~$mask);
 
@@ -135,7 +135,7 @@ class AclManager
      * @param MutableAclInterface   $acl ACL to update
      * @return $this
      */
-    private function addMask(SecurityIdentityInterface $securityIdentity, $mask, MutableAclInterface $acl)
+    private function addMask(SecurityIdentityInterface $securityIdentity, $mask, MutableAclInterface $acl): self
     {
         $acl->insertObjectAce($securityIdentity, $mask);
         $this->provider->updateAcl($acl);

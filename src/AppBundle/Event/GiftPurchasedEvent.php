@@ -30,7 +30,7 @@ class GiftPurchasedEvent extends Event
      * @param UserInterface $buyer
      * @param string        $purchaseComment
      */
-    public function __construct(Gift $gift, UserInterface $buyer, $purchaseComment = '')
+    public function __construct(Gift $gift, UserInterface $buyer, string $purchaseComment = '')
     {
         $this->gift = $gift;
         $this->buyer = $buyer;
@@ -40,7 +40,7 @@ class GiftPurchasedEvent extends Event
     /**
      * @return Gift
      */
-    public function getGift()
+    public function getGift(): Gift
     {
         return $this->gift;
     }
@@ -48,7 +48,7 @@ class GiftPurchasedEvent extends Event
     /**
      * @return UserInterface
      */
-    public function getBuyer()
+    public function getBuyer(): UserInterface
     {
         return $this->buyer;
     }
@@ -56,7 +56,7 @@ class GiftPurchasedEvent extends Event
     /**
      * @return string
      */
-    public function getPurchaseComment()
+    public function getPurchaseComment(): string
     {
         return $this->purchaseComment;
     }

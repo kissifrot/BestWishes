@@ -39,11 +39,11 @@ class User extends BaseUser
     /**
      * Set list
      *
-     * @param GiftList $list
+     * @param null|GiftList $list
      *
      * @return User
      */
-    public function setList(GiftList $list = null)
+    public function setList(?GiftList $list): User
     {
         $this->list = $list;
 
@@ -53,9 +53,9 @@ class User extends BaseUser
     /**
      * Get list
      *
-     * @return GiftList
+     * @return null|GiftList
      */
-    public function getList()
+    public function getList(): ?GiftList
     {
         return $this->list;
     }
@@ -67,7 +67,7 @@ class User extends BaseUser
      *
      * @return User
      */
-    public function setName($name)
+    public function setName(string $name): User
     {
         $this->name = $name;
 
@@ -79,7 +79,7 @@ class User extends BaseUser
      *
      * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }

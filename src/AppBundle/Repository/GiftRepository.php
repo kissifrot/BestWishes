@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Gift;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -10,7 +11,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class GiftRepository extends EntityRepository
 {
-    public function findFullById($id)
+    /**
+     * @param int $id
+     * @return null|Gift
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findFullById(int $id): ?Gift
     {
         return $this->createQueryBuilder('g')
             ->where('g.id = :id')

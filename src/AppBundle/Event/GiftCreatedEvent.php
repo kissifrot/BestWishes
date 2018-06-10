@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class GiftCreatedEvent extends Event
 {
-    const NAME = 'gift.created';
+    public const NAME = 'gift.created';
 
     /**
      * @var Gift
@@ -29,7 +29,7 @@ class GiftCreatedEvent extends Event
     /**
      * @return Gift
      */
-    public function getGift()
+    public function getGift(): Gift
     {
         return $this->gift;
     }
@@ -37,7 +37,7 @@ class GiftCreatedEvent extends Event
     /**
      * @return UserInterface
      */
-    public function getCreator()
+    public function getCreator(): UserInterface
     {
         return $this->creator;
     }

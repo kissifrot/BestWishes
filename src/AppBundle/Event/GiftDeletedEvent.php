@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class GiftDeletedEvent extends Event
 {
-    const NAME = 'gift.deleted';
+    public const NAME = 'gift.deleted';
 
     /**
      * @var Gift
@@ -29,7 +29,7 @@ class GiftDeletedEvent extends Event
     /**
      * @return Gift
      */
-    public function getGift()
+    public function getGift(): Gift
     {
         return $this->gift;
     }
@@ -37,7 +37,7 @@ class GiftDeletedEvent extends Event
     /**
      * @return UserInterface
      */
-    public function getDeleter()
+    public function getDeleter(): UserInterface
     {
         return $this->deleter;
     }

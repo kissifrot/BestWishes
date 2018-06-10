@@ -19,12 +19,12 @@ class UserData extends Fixture
      */
     private $container;
 
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(ContainerInterface $container = null): void
     {
         $this->container = $container;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $adminUser = new User();
         $adminUser->setUsername('admin');

@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class UserType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('username', TextType::class)
@@ -27,7 +27,7 @@ class UserType extends AbstractType
             ->add('save', SubmitType::class, ['label_format' => 'form.save']);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'data_class' => User::class,

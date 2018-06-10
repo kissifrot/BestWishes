@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ListEvent
 {
     /**
-     * @var integer
+     * @var null|integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -22,7 +22,7 @@ class ListEvent
     private $id;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @ORM\Column(name="name", type="string", length=60)
      */
@@ -36,21 +36,21 @@ class ListEvent
     private $type;
 
     /**
-     * @var integer
+     * @var null|integer
      *
      * @ORM\Column(name="event_day", type="smallint", nullable=true)
      */
     private $day;
 
     /**
-     * @var integer
+     * @var null|integer
      *
      * @ORM\Column(name="event_month", type="smallint", nullable=true)
      */
     private $month;
 
     /**
-     * @var integer
+     * @var null|integer
      *
      * @ORM\Column(name="event_year", type="smallint", nullable=true)
      */
@@ -76,27 +76,31 @@ class ListEvent
     public function __construct()
     {
         $this->active = true;
+        $this->permanent = false;
         $this->type = 'default';
     }
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
+     * @return null|string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param null|string $name
      * @return ListEvent
      */
-    public function setName($name)
+    public function setName(?string $name): ListEvent
     {
         $this->name = $name;
 
@@ -104,23 +108,18 @@ class ListEvent
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
-    public function getName()
+    public function getType(): string
     {
-        return $this->name;
+        return $this->type;
     }
 
     /**
-     * Set type
-     *
      * @param string $type
-     *
      * @return ListEvent
      */
-    public function setType($type)
+    public function setType(string $type): ListEvent
     {
         $this->type = $type;
 
@@ -128,23 +127,18 @@ class ListEvent
     }
 
     /**
-     * Get type
-     *
-     * @return string
+     * @return int|null
      */
-    public function getType()
+    public function getDay(): ?int
     {
-        return $this->type;
+        return $this->day;
     }
 
     /**
-     * Set day
-     *
-     * @param integer $day
-     *
+     * @param int|null $day
      * @return ListEvent
      */
-    public function setDay($day)
+    public function setDay(?int $day): ListEvent
     {
         $this->day = $day;
 
@@ -152,23 +146,18 @@ class ListEvent
     }
 
     /**
-     * Get day
-     *
-     * @return integer
+     * @return int|null
      */
-    public function getDay()
+    public function getMonth(): ?int
     {
-        return $this->day;
+        return $this->month;
     }
 
     /**
-     * Set month
-     *
-     * @param integer $month
-     *
+     * @param int|null $month
      * @return ListEvent
      */
-    public function setMonth($month)
+    public function setMonth(?int $month): ListEvent
     {
         $this->month = $month;
 
@@ -176,24 +165,18 @@ class ListEvent
     }
 
     /**
-     * Get month
-     *
-     * @return integer
+     * @return int|null
      */
-    public function getMonth()
+    public function getYear(): ?int
     {
-        return $this->month;
+        return $this->year;
     }
 
-
     /**
-     * Set year
-     *
-     * @param integer $year
-     *
+     * @param int|null $year
      * @return ListEvent
      */
-    public function setYear($year)
+    public function setYear(?int $year): ListEvent
     {
         $this->year = $year;
 
@@ -201,23 +184,18 @@ class ListEvent
     }
 
     /**
-     * Get year
-     *
-     * @return integer
+     * @return bool
      */
-    public function getYear()
+    public function isActive(): bool
     {
-        return $this->year;
+        return $this->active;
     }
 
     /**
-     * Set active
-     *
-     * @param boolean $active
-     *
+     * @param bool $active
      * @return ListEvent
      */
-    public function setActive($active)
+    public function setActive(bool $active): ListEvent
     {
         $this->active = $active;
 
@@ -225,36 +203,21 @@ class ListEvent
     }
 
     /**
-     * Get active
-     *
-     * @return boolean
+     * @return bool
      */
-    public function isActive()
+    public function isPermanent(): bool
     {
-        return $this->active;
+        return $this->permanent;
     }
 
     /**
-     * Set permanent
-     *
-     * @param boolean $permanent
-     *
+     * @param bool $permanent
      * @return ListEvent
      */
-    public function setPermanent($permanent)
+    public function setPermanent(bool $permanent): ListEvent
     {
         $this->permanent = $permanent;
 
         return $this;
-    }
-
-    /**
-     * Get permanent
-     *
-     * @return boolean
-     */
-    public function isPermanent()
-    {
-        return $this->permanent;
     }
 }

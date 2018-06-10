@@ -42,7 +42,7 @@ class GiftSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             GiftCreatedEvent::NAME   => 'onGiftCreation',
@@ -52,7 +52,7 @@ class GiftSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onGiftCreation(GiftCreatedEvent $event)
+    public function onGiftCreation(GiftCreatedEvent $event): void
     {
         $list  = $event->getGift()->getCategory()->getList();
         $users = $this->userManager->findUsers();
@@ -79,7 +79,7 @@ class GiftSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onGiftDeletion(GiftDeletedEvent $event)
+    public function onGiftDeletion(GiftDeletedEvent $event): void
     {
         $list  = $event->getGift()->getCategory()->getList();
         $users = $this->userManager->findUsers();
@@ -106,7 +106,7 @@ class GiftSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onGiftPurchase(GiftPurchasedEvent $event)
+    public function onGiftPurchase(GiftPurchasedEvent $event): void
     {
         $list  = $event->getGift()->getCategory()->getList();
         $users = $this->userManager->findUsers();
@@ -133,7 +133,7 @@ class GiftSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onGiftEdition(GiftEditedEvent $event)
+    public function onGiftEdition(GiftEditedEvent $event): void
     {
         $list  = $event->getEditedGift()->getCategory()->getList();
         $users = $this->userManager->findUsers();

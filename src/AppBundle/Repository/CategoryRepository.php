@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Category;
 use AppBundle\Entity\GiftList;
 use Doctrine\ORM\EntityRepository;
 
@@ -11,6 +12,10 @@ use Doctrine\ORM\EntityRepository;
  */
 class CategoryRepository extends EntityRepository
 {
+    /**
+     * @param GiftList $list
+     * @return mixed
+     */
     public function findByList(GiftList $list)
     {
         return $this->createQueryBuilder('c')
@@ -20,7 +25,12 @@ class CategoryRepository extends EntityRepository
             ->getResult();
     }
 
-    public function findById($id)
+    /**
+     * @param int $id
+     * @return Category|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findById(int $id): ?Category
     {
         return $this->createQueryBuilder('c')
             ->where('c.id = :id')
@@ -31,7 +41,12 @@ class CategoryRepository extends EntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findFullById($id)
+    /**
+     * @param int $id
+     * @return Category|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findFullById(int $id): ?Category
     {
         return $this->createQueryBuilder('c')
             ->where('c.id = :id')

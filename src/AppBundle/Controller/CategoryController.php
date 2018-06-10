@@ -39,15 +39,17 @@ class CategoryController extends BwController
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param GiftList $list
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @Route("/create/{listId}", name="category_create", requirements={"listId": "\d+"})
      * @ParamConverter("list", class="AppBundle:GiftList", options={"id" = "listId"})
      * @Method({"GET", "POST"})
      *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function createAction(Request $request, GiftList $list)
+    public function createAction(Request $request, GiftList $list): \Symfony\Component\HttpFoundation\Response
     {
         // Access control
         $this->checkAccess(['OWNER', 'EDIT'], $list);
@@ -73,15 +75,16 @@ class CategoryController extends BwController
     }
 
     /**
-     * @param Request $request
-     * @param Category    $category
+     * @param Request  $request
+     * @param Category $category
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @Route("{id}/edit", name="category_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
-     *
      */
-    public function editAction(Request $request, Category $category)
+    public function editAction(Request $request, Category $category): \Symfony\Component\HttpFoundation\Response
     {
         // Access control
         $this->checkAccess(['OWNER', 'EDIT'], $category->getList());
@@ -111,7 +114,7 @@ class CategoryController extends BwController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function deleteAction(Request $request, Category $category)
+    public function deleteAction(Request $request, Category $category): \Symfony\Component\HttpFoundation\Response
     {
         // Access control
         $this->checkAccess(['OWNER', 'EDIT'], $category->getList());
@@ -135,9 +138,9 @@ class CategoryController extends BwController
      *
      * @param Category   $category
      *
-     * @return \Symfony\Component\Form\Form Delete form
+     * @return \Symfony\Component\Form\FormInterface Delete form
      */
-    private function createDeleteForm(Category $category)
+    private function createDeleteForm(Category $category): \Symfony\Component\Form\FormInterface
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('category_delete', ['id' => $category->getId()]))

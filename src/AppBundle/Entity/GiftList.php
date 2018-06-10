@@ -15,7 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class GiftList
 {
     /**
-     * @var integer
+     * @var null|integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -59,7 +59,7 @@ class GiftList
     private $owner;
 
     /**
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="Category", mappedBy="list")
      */
@@ -75,25 +75,27 @@ class GiftList
         $this->lastUpdate = new \DateTime();
     }
 
-
     /**
-     * Get id
-     *
-     * @return integer
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set name
-     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
      * @param string $name
-     *
      * @return GiftList
      */
-    public function setName($name)
+    public function setName(string $name): GiftList
     {
         $this->name = $name;
 
@@ -101,23 +103,18 @@ class GiftList
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
-    public function getName()
+    public function getSlug(): string
     {
-        return $this->name;
+        return $this->slug;
     }
 
     /**
-     * Set slug
-     *
      * @param string $slug
-     *
      * @return GiftList
      */
-    public function setSlug($slug)
+    public function setSlug(string $slug): GiftList
     {
         $this->slug = $slug;
 
@@ -125,23 +122,18 @@ class GiftList
     }
 
     /**
-     * Get slug
-     *
-     * @return string
+     * @return \DateTime
      */
-    public function getSlug()
+    public function getLastUpdate(): \DateTime
     {
-        return $this->slug;
+        return $this->lastUpdate;
     }
 
     /**
-     * Set lastUpdate
-     *
      * @param \DateTime $lastUpdate
-     *
      * @return GiftList
      */
-    public function setLastUpdate(\DateTime $lastUpdate)
+    public function setLastUpdate(\DateTime $lastUpdate): GiftList
     {
         $this->lastUpdate = $lastUpdate;
 
@@ -149,23 +141,18 @@ class GiftList
     }
 
     /**
-     * Get lastUpdate
-     *
      * @return \DateTime
      */
-    public function getLastUpdate()
+    public function getBirthDate(): \DateTime
     {
-        return $this->lastUpdate;
+        return $this->birthDate;
     }
 
     /**
-     * Set birthDate
-     *
      * @param \DateTime $birthDate
-     *
      * @return GiftList
      */
-    public function setBirthDate(\DateTime $birthDate)
+    public function setBirthDate(\DateTime $birthDate): GiftList
     {
         $this->birthDate = $birthDate;
 
@@ -173,33 +160,7 @@ class GiftList
     }
 
     /**
-     * Get birthDate
-     *
-     * @return \DateTime
-     */
-    public function getBirthDate()
-    {
-        return $this->birthDate;
-    }
-
-    /**
-     * Set owner
-     *
-     * @param User $owner
-     *
-     * @return GiftList
-     */
-    public function setOwner(User $owner)
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
-
-    /**
-     * Get owner
-     *
-     * @return User
+     * @return mixed
      */
     public function getOwner()
     {
@@ -207,38 +168,32 @@ class GiftList
     }
 
     /**
-     * Add $ategory
-     *
-     * @param Category $category
-     *
+     * @param mixed $owner
      * @return GiftList
      */
-    public function addCategory(Category $category)
+    public function setOwner($owner): GiftList
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-        }
+        $this->owner = $owner;
 
         return $this;
     }
 
     /**
-     * Remove category
-     *
-     * @param Category $category
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function removeCategory(Category $category)
+    public function getCategories(): \Doctrine\Common\Collections\Collection
     {
-        $this->categories->removeElement($category);
+        return $this->categories;
     }
 
     /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \Doctrine\Common\Collections\Collection $categories
+     * @return GiftList
      */
-    public function getCategories()
+    public function setCategories(\Doctrine\Common\Collections\Collection $categories): GiftList
     {
-        return $this->categories;
+        $this->categories = $categories;
+
+        return $this;
     }
 }

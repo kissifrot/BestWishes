@@ -6,11 +6,11 @@ use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 
 class BestWishesPermissionMap extends BasicPermissionMap
 {
-    const PERMISSION_SURPRISE_ADD = 'SURPRISE_ADD';
-    const PERMISSION_ALERT_ADD = 'ALERT_ADD';
-    const PERMISSION_ALERT_PURCHASE = 'ALERT_PURCHASE';
-    const PERMISSION_ALERT_EDIT = 'ALERT_EDIT';
-    const PERMISSION_ALERT_DELETE = 'ALERT_DELETE';
+    public const PERMISSION_SURPRISE_ADD = 'SURPRISE_ADD';
+    public const PERMISSION_ALERT_ADD = 'ALERT_ADD';
+    public const PERMISSION_ALERT_PURCHASE = 'ALERT_PURCHASE';
+    public const PERMISSION_ALERT_EDIT = 'ALERT_EDIT';
+    public const PERMISSION_ALERT_DELETE = 'ALERT_DELETE';
 
     public function __construct()
     {

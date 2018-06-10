@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Gift
 {
     /**
-     * @var integer
+     * @var null|integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,7 +23,7 @@ class Gift
     private $id;
 
     /**
-     * @var string
+     * @var null|string
      * @Assert\NotBlank()
      * @Assert\Length(min = 2)
      *
@@ -110,7 +110,7 @@ class Gift
     private $imageExtension;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @Assert\Url(checkDNS = true)
      * @ORM\Column(name="more_detail_url", type="string", length=255, nullable=true)
@@ -125,6 +125,7 @@ class Gift
     private $moreDetail;
 
     /**
+     * null|Category
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="gifts")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
@@ -139,25 +140,27 @@ class Gift
         $this->surprise = false;
     }
 
-
     /**
-     * Get id
-     *
-     * @return integer
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
+     * @return null|string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param null|string $name
      * @return Gift
      */
-    public function setName($name)
+    public function setName(?string $name): Gift
     {
         $this->name = $name;
 
@@ -165,23 +168,18 @@ class Gift
     }
 
     /**
-     * Get name
-     *
-     * @return string
+     * @return \DateTime
      */
-    public function getName()
+    public function getAddedDate(): \DateTime
     {
-        return $this->name;
+        return $this->addedDate;
     }
 
     /**
-     * Set addedDate
-     *
      * @param \DateTime $addedDate
-     *
      * @return Gift
      */
-    public function setAddedDate(\DateTime $addedDate)
+    public function setAddedDate(\DateTime $addedDate): Gift
     {
         $this->addedDate = $addedDate;
 
@@ -189,23 +187,18 @@ class Gift
     }
 
     /**
-     * Get addedDate
-     *
-     * @return \DateTime
+     * @return int
      */
-    public function getAddedDate()
+    public function getEditsCount(): int
     {
-        return $this->addedDate;
+        return $this->editsCount;
     }
 
     /**
-     * Set editsCount
-     *
-     * @param integer $editsCount
-     *
+     * @param int $editsCount
      * @return Gift
      */
-    public function setEditsCount($editsCount)
+    public function setEditsCount(int $editsCount): Gift
     {
         $this->editsCount = $editsCount;
 
@@ -213,23 +206,18 @@ class Gift
     }
 
     /**
-     * Get editsCount
-     *
-     * @return integer
+     * @return bool
      */
-    public function getEditsCount()
+    public function isBought(): bool
     {
-        return $this->editsCount;
+        return $this->bought;
     }
 
     /**
-     * Set bought
-     *
-     * @param boolean $bought
-     *
+     * @param bool $bought
      * @return Gift
      */
-    public function setBought($bought)
+    public function setBought(bool $bought): Gift
     {
         $this->bought = $bought;
 
@@ -237,119 +225,18 @@ class Gift
     }
 
     /**
-     * Get bought
-     *
-     * @return boolean
+     * @return User|null
      */
-    public function isBought()
+    public function getBuyer(): ?User
     {
-        return $this->bought;
+        return $this->buyer;
     }
 
     /**
-     * Set received
-     *
-     * @param boolean $received
-     *
+     * @param User|null $buyer
      * @return Gift
      */
-    public function setReceived($received)
-    {
-        $this->received = $received;
-
-        return $this;
-    }
-
-    /**
-     * Get received
-     *
-     * @return boolean
-     */
-    public function isReceived()
-    {
-        return $this->received;
-    }
-
-    /**
-     * Set receivedDate
-     *
-     * @param \DateTime $receivedDate
-     *
-     * @return Gift
-     */
-    public function setReceivedDate(\DateTime $receivedDate = null)
-    {
-        $this->receivedDate = $receivedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get receivedDate
-     *
-     * @return \DateTime
-     */
-    public function getReceivedDate()
-    {
-        return $this->receivedDate;
-    }
-
-    /**
-     * Set surprise
-     *
-     * @param boolean $surprise
-     *
-     * @return Gift
-     */
-    public function setSurprise($surprise)
-    {
-        $this->surprise = $surprise;
-
-        return $this;
-    }
-
-    /**
-     * Get surprise
-     *
-     * @return boolean
-     */
-    public function isSurprise()
-    {
-        return $this->surprise;
-    }
-
-    /**
-     * Set purchaseDate
-     *
-     * @param \DateTime $purchaseDate
-     *
-     * @return Gift
-     */
-    public function setPurchaseDate(\DateTime $purchaseDate = null)
-    {
-        $this->purchaseDate = $purchaseDate;
-
-        return $this;
-    }
-
-    /**
-     * Get purchaseDate
-     *
-     * @return \DateTime
-     */
-    public function getPurchaseDate()
-    {
-        return $this->purchaseDate;
-    }
-
-    /**
-     * Set buyer
-     *
-     * @param User $buyer
-     *
-     * @return Gift
-     */
-    public function setBuyer($buyer)
+    public function setBuyer(?User $buyer): Gift
     {
         $this->buyer = $buyer;
 
@@ -357,23 +244,94 @@ class Gift
     }
 
     /**
-     * Get buyer
-     *
-     * @return User
+     * @return bool
      */
-    public function getBuyer()
+    public function isReceived(): bool
     {
-        return $this->buyer;
+        return $this->received;
     }
 
     /**
-     * Set purchaseComment
-     *
-     * @param string $purchaseComment
-     *
+     * @param bool $received
      * @return Gift
      */
-    public function setPurchaseComment($purchaseComment)
+    public function setReceived(bool $received): Gift
+    {
+        $this->received = $received;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getReceivedDate(): ?\DateTime
+    {
+        return $this->receivedDate;
+    }
+
+    /**
+     * @param \DateTime|null $receivedDate
+     * @return Gift
+     */
+    public function setReceivedDate(?\DateTime $receivedDate): Gift
+    {
+        $this->receivedDate = $receivedDate;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSurprise(): bool
+    {
+        return $this->surprise;
+    }
+
+    /**
+     * @param bool $surprise
+     * @return Gift
+     */
+    public function setSurprise(bool $surprise): Gift
+    {
+        $this->surprise = $surprise;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getPurchaseDate(): ?\DateTime
+    {
+        return $this->purchaseDate;
+    }
+
+    /**
+     * @param \DateTime|null $purchaseDate
+     * @return Gift
+     */
+    public function setPurchaseDate(?\DateTime $purchaseDate): Gift
+    {
+        $this->purchaseDate = $purchaseDate;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPurchaseComment(): ?string
+    {
+        return $this->purchaseComment;
+    }
+
+    /**
+     * @param null|string $purchaseComment
+     * @return Gift
+     */
+    public function setPurchaseComment(?string $purchaseComment): Gift
     {
         $this->purchaseComment = $purchaseComment;
 
@@ -381,23 +339,18 @@ class Gift
     }
 
     /**
-     * Get purchaseComment
-     *
-     * @return string
+     * @return null|string
      */
-    public function getPurchaseComment()
+    public function getImageUrl(): ?string
     {
-        return $this->purchaseComment;
+        return $this->imageUrl;
     }
 
     /**
-     * Set imageUrl
-     *
-     * @param string $imageUrl
-     *
+     * @param null|string $imageUrl
      * @return Gift
      */
-    public function setImageUrl($imageUrl)
+    public function setImageUrl(?string $imageUrl): Gift
     {
         $this->imageUrl = $imageUrl;
 
@@ -405,23 +358,18 @@ class Gift
     }
 
     /**
-     * Get imageUrl
-     *
-     * @return string
+     * @return null|string
      */
-    public function getImageUrl()
+    public function getImageExtension(): ?string
     {
-        return $this->imageUrl;
+        return $this->imageExtension;
     }
 
     /**
-     * Set imageExtension
-     *
-     * @param string $imageExtension
-     *
+     * @param null|string $imageExtension
      * @return Gift
      */
-    public function setImageExtension($imageExtension)
+    public function setImageExtension(?string $imageExtension): Gift
     {
         $this->imageExtension = $imageExtension;
 
@@ -429,47 +377,18 @@ class Gift
     }
 
     /**
-     * Get imageExtension
-     *
      * @return string
      */
-    public function getImageExtension()
+    public function getMoreDetailUrl(): ?string
     {
-        return $this->imageExtension;
+        return $this->moreDetailUrl;
     }
 
     /**
-     * Set category
-     *
-     * @param Category $category
-     *
-     * @return Gift
-     */
-    public function setCategory(Category $category = null)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return Category
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * Set moreDetailUrl
-     *
      * @param string $moreDetailUrl
-     *
      * @return Gift
      */
-    public function setMoreDetailUrl($moreDetailUrl)
+    public function setMoreDetailUrl(?string $moreDetailUrl): Gift
     {
         $this->moreDetailUrl = $moreDetailUrl;
 
@@ -477,23 +396,18 @@ class Gift
     }
 
     /**
-     * Get moreDetailUrl
-     *
-     * @return string
+     * @return null|string
      */
-    public function getMoreDetailUrl()
+    public function getMoreDetail(): ?string
     {
-        return $this->moreDetailUrl;
+        return $this->moreDetail;
     }
 
     /**
-     * Set moreDetail
-     *
-     * @param string $moreDetail
-     *
+     * @param null|string $moreDetail
      * @return Gift
      */
-    public function setMoreDetail($moreDetail)
+    public function setMoreDetail(?string $moreDetail): Gift
     {
         $this->moreDetail = $moreDetail;
 
@@ -501,12 +415,21 @@ class Gift
     }
 
     /**
-     * Get moreDetail
-     *
-     * @return null|string
+     * @return null|Category
      */
-    public function getMoreDetail()
+    public function getCategory(): ?Category
     {
-        return $this->moreDetail;
+        return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     * @return Gift
+     */
+    public function setCategory(Category $category): Gift
+    {
+        $this->category = $category;
+
+        return $this;
     }
 }

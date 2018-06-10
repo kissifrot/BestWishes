@@ -10,6 +10,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class ListEventRepository extends EntityRepository
 {
+    /**
+     * @return mixed
+     */
     public function findAllActive() {
         return $this->createQueryBuilder('le')
             ->where('le.active = true')

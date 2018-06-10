@@ -28,12 +28,12 @@ class BestWishesSecurityExtension extends \Twig_Extension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
-        return array(
-            new \Twig_SimpleFunction('is_multi_granted', array($this, 'isMultiGranted')),
-            new \Twig_SimpleFunction('is_user_granted', array($this, 'isUserGranted')),
-        );
+        return [
+            new \Twig_SimpleFunction('is_multi_granted', [$this, 'isMultiGranted']),
+            new \Twig_SimpleFunction('is_user_granted', [$this, 'isUserGranted']),
+        ];
     }
 
     /**
@@ -43,7 +43,7 @@ class BestWishesSecurityExtension extends \Twig_Extension
      * @param null $field
      * @return bool
      */
-    public function isMultiGranted($roles, $object = null, $field = null)
+    public function isMultiGranted($roles, $object = null, $field = null): bool
     {
         if (null === $this->securityChecker) {
             return false;
@@ -54,14 +54,15 @@ class BestWishesSecurityExtension extends \Twig_Extension
         }
 
         try {
-            if (!is_array($roles)) {
+            if (!\is_array($roles)) {
                 $roles = [$roles];
             }
-            foreach($roles as $role) {
-                if($this->securityChecker->isGranted($role, $object)) {
+            foreach ($roles as $role) {
+                if ($this->securityChecker->isGranted($role, $object)) {
                     return true;
                 }
             }
+
             return false;
         } catch (AuthenticationCredentialsNotFoundException $e) {
             return false;
@@ -75,7 +76,7 @@ class BestWishesSecurityExtension extends \Twig_Extension
      * @param      $user
      * @return bool
      */
-    public function isUserGranted($role, $object = null, $user)
+    public function isUserGranted($role, $object = null, $user): bool
     {
         return $this->securityContext->isGranted($role, $object, $user);
     }
@@ -83,7 +84,7 @@ class BestWishesSecurityExtension extends \Twig_Extension
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'bw_security';
     }

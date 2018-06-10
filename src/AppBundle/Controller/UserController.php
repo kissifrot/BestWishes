@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class UserController
@@ -30,7 +31,7 @@ class UserController extends Controller
      * @Route("/manage-alerts", name="user_manage_alerts")
      * @Method({"GET"})
      */
-    public function manageAlertsAction()
+    public function manageAlertsAction(): Response
     {
         $availableAlerts = [
             'ALERT_ADD',
@@ -51,7 +52,7 @@ class UserController extends Controller
      * @param GiftList $giftList
      * @return JsonResponse
      */
-    public function updateAlertnAction(Request $request, GiftList $giftList)
+    public function updateAlertAction(Request $request, GiftList $giftList): JsonResponse
     {
         $defaultData = [
             'sucess'  => false,
@@ -68,13 +69,13 @@ class UserController extends Controller
             'ALERT_EDIT',
             'ALERT_DELETE'
         ];
-        if (!in_array($alert, $availableAlerts)) {
+        if (!\in_array($alert, $availableAlerts, true)) {
             return new JsonResponse($defaultData);
         }
         $user = $this->getUser();
 
         // Build the mask to update
-        $alertMask = constant('AppBundle\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_' . $alert);
+        $alertMask = \constant('AppBundle\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_' . $alert);
         $hadAlert = $this->get('bw.security_context')->isGranted($alert, $giftList, $user);
 
         if ($hadAlert) {

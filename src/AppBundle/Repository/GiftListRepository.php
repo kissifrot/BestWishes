@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\GiftList;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -10,7 +11,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class GiftListRepository extends EntityRepository
 {
-    public function findFullBySlug($slug)
+    /**
+     * @param string $slug
+     * @return null|GiftList
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findFullBySlug(string $slug): ?GiftList
     {
         return $this->createQueryBuilder('l')
             ->where('l.slug = :slug')
@@ -25,7 +31,12 @@ class GiftListRepository extends EntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findFullById($id)
+    /**
+     * @param int $id
+     * @return GiftList|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findFullById(int $id): ?GiftList
     {
         return $this->createQueryBuilder('l')
             ->where('l.id = :id')

@@ -9,7 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class CategoryData extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         // List 1
         $category1 = new Category();
@@ -67,7 +67,7 @@ class CategoryData extends Fixture implements DependentFixtureInterface
     /**
      * @inheritdoc
      */
-    function getDependencies()
+    public function getDependencies(): array
     {
         return [
             UserData::class,

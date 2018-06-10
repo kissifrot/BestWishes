@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class GiftEditedEvent extends Event
 {
-    const NAME = 'gift.edited';
+    public const NAME = 'gift.edited';
 
     /**
      * @var Gift
@@ -35,7 +35,7 @@ class GiftEditedEvent extends Event
     /**
      * @return Gift
      */
-    public function getOriginGift()
+    public function getOriginGift(): Gift
     {
         return $this->originGift;
     }
@@ -43,7 +43,7 @@ class GiftEditedEvent extends Event
     /**
      * @return Gift
      */
-    public function getEditedGift()
+    public function getEditedGift(): Gift
     {
         return $this->editedGift;
     }
@@ -51,7 +51,7 @@ class GiftEditedEvent extends Event
     /**
      * @return UserInterface
      */
-    public function getEditor()
+    public function getEditor(): UserInterface
     {
         return $this->editor;
     }

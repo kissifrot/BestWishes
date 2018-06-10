@@ -40,7 +40,7 @@ class ListEventManager
         $currentTime = mktime(0, 1, 1);
         $timeLeft = $nextEventData['time'] - $currentTime;
         $daysLeft = round($timeLeft / 3600 / 24);
-        $nextEventData['daysLeft'] = intval($daysLeft);
+        $nextEventData['daysLeft'] = (int)$daysLeft;
 
         return $nextEventData;
     }
@@ -73,8 +73,8 @@ class ListEventManager
         // Next create the dates corresponding to current year's events and next year's ones
         $calculatedEvents = [];
         foreach ($activeEvents as $activeEvent) {
-            $currentYear = empty($activeEvent->getYear()) ? date('Y') : $activeEvent->getYear();
-            $currentMonth = empty($activeEvent->getMonth()) ? date('n') : $activeEvent->getMonth();
+            $currentYear = $activeEvent->getYear() ?? date('Y');
+            $currentMonth = $activeEvent->getMonth() ?? date('n');
             $currentYearEvent = mktime(0, 1, 1, $currentMonth, $activeEvent->getDay(), $currentYear);
             if ($currentYearEvent >= $currentTime) {
                 $calculatedEvents[] = [
@@ -83,7 +83,7 @@ class ListEventManager
                 ];
             }
             if ($activeEvent->isPermanent()) {
-                $nextYearEvent = mktime(0, 1, 1, $currentMonth, $activeEvent->getDay(), ($currentYear + 1));
+                $nextYearEvent = mktime(0, 1, 1, $currentMonth, $activeEvent->getDay(), $currentYear + 1);
                 if ($nextYearEvent >= $currentTime) {
                     $calculatedEvents[] = [
                         'name' => $activeEvent->getName(),
@@ -109,7 +109,7 @@ class ListEventManager
      * Get a list of all active events
      * @return array
      */
-    private function getAllActiveEvents()
+    private function getAllActiveEvents(): array
     {
         return $this->em->getRepository('AppBundle:ListEvent')->findAllActive();
     }

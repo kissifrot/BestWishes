@@ -8,6 +8,7 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -60,7 +61,7 @@ class UserManipulator
      *
      * @return \FOS\UserBundle\Model\UserInterface
      */
-    public function create($username, $name, $password, $email, $active, $superadmin)
+    public function create($username, $name, $password, $email, $active, $superadmin): UserInterface
     {
         $user = $this->userManager->createUser();
         $user->setUsername($username);
@@ -82,7 +83,7 @@ class UserManipulator
      *
      * @param string $username
      */
-    public function activate($username)
+    public function activate(string $username): void
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         $user->setEnabled(true);
@@ -97,7 +98,7 @@ class UserManipulator
      *
      * @param string $username
      */
-    public function deactivate($username)
+    public function deactivate(string $username): void
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         $user->setEnabled(false);
@@ -113,7 +114,7 @@ class UserManipulator
      * @param string $username
      * @param string $password
      */
-    public function changePassword($username, $password)
+    public function changePassword(string $username, string $password): void
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         $user->setPlainPassword($password);
@@ -128,7 +129,7 @@ class UserManipulator
      *
      * @param string $username
      */
-    public function promote($username)
+    public function promote(string $username): void
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         $user->setSuperAdmin(true);
@@ -143,7 +144,7 @@ class UserManipulator
      *
      * @param string $username
      */
-    public function demote($username)
+    public function demote(string $username): void
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         $user->setSuperAdmin(false);
@@ -161,7 +162,7 @@ class UserManipulator
      *
      * @return bool true if role was added, false if user already had the role
      */
-    public function addRole($username, $role)
+    public function addRole(string $username, $role): bool
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         if ($user->hasRole($role)) {
@@ -181,7 +182,7 @@ class UserManipulator
      *
      * @return bool true if role was removed, false if user didn't have the role
      */
-    public function removeRole($username, $role)
+    public function removeRole(string $username, $role): bool
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         if (!$user->hasRole($role)) {
@@ -202,7 +203,7 @@ class UserManipulator
      *
      * @return UserInterface
      */
-    private function findUserByUsernameOrThrowException($username)
+    private function findUserByUsernameOrThrowException(string $username): UserInterface
     {
         $user = $this->userManager->findUserByUsername($username);
 
@@ -216,7 +217,7 @@ class UserManipulator
     /**
      * @return Request
      */
-    private function getRequest()
+    private function getRequest(): Request
     {
         return $this->requestStack->getCurrentRequest();
     }

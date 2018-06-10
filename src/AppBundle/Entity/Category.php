@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Category
 {
     /**
-     * @var integer
+     * @var null|integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -24,7 +24,7 @@ class Category
     private $id;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @Assert\NotBlank()
      * @Assert\Length(min = 2)
@@ -40,7 +40,7 @@ class Category
     private $visible;
 
     /**
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="Gift", mappedBy="category")
      */
@@ -72,7 +72,7 @@ class Category
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -84,7 +84,7 @@ class Category
      *
      * @return Category
      */
-    public function setName($name)
+    public function setName($name): Category
     {
         $this->name = $name;
 
@@ -94,9 +94,9 @@ class Category
     /**
      * Get name
      *
-     * @return string
+     * @return null|string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -108,7 +108,7 @@ class Category
      *
      * @return Category
      */
-    public function setVisible($visible)
+    public function setVisible(bool $visible): Category
     {
         $this->visible = $visible;
 
@@ -120,7 +120,7 @@ class Category
      *
      * @return boolean
      */
-    public function isVisible()
+    public function isVisible(): bool
     {
         return $this->visible;
     }
@@ -132,7 +132,7 @@ class Category
      *
      * @return Category
      */
-    public function addGift(Gift $gifts)
+    public function addGift(Gift $gifts): Category
     {
         if (!$this->gifts->contains($gifts)) {
             $this->gifts->add($gifts);
@@ -146,7 +146,7 @@ class Category
      *
      * @param Gift $gifts
      */
-    public function removeGift(Gift $gifts)
+    public function removeGift(Gift $gifts): void
     {
         $this->gifts->removeElement($gifts);
     }
@@ -156,7 +156,7 @@ class Category
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getGifts()
+    public function getGifts(): \Doctrine\Common\Collections\Collection
     {
         return $this->gifts;
     }
@@ -168,7 +168,7 @@ class Category
      *
      * @return Category
      */
-    public function setList(GiftList $list = null)
+    public function setList(?GiftList $list): Category
     {
         $this->list = $list;
 
@@ -180,7 +180,7 @@ class Category
      *
      * @return GiftList
      */
-    public function getList()
+    public function getList(): GiftList
     {
         return $this->list;
     }

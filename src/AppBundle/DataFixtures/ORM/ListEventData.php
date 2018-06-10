@@ -8,7 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class ListEventData extends Fixture
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $listEvt1 = new ListEvent();
         $listEvt1

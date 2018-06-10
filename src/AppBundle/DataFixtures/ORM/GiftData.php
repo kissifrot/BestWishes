@@ -10,7 +10,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class GiftData extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $data = [
             [
@@ -143,7 +143,7 @@ class GiftData extends Fixture implements DependentFixtureInterface
     /**
      * @inheritdoc
      */
-    function getDependencies()
+    function getDependencies(): array
     {
         return [
             GiftListData::class,

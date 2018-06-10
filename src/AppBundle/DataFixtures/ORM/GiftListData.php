@@ -20,12 +20,12 @@ class GiftListData extends Fixture implements DependentFixtureInterface
      */
     private $container;
 
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(ContainerInterface $container = null): void
     {
         $this->container = $container;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $standardUserList1 = new GiftList();
         $stdUser1 = $this->getReference(UserData::USER1_USER_REFERENCE);
@@ -79,7 +79,7 @@ class GiftListData extends Fixture implements DependentFixtureInterface
     /**
      * @inheritdoc
      */
-    function getDependencies()
+    function getDependencies(): array
     {
         return [
             UserData::class

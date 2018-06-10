@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AdminController
@@ -27,7 +28,7 @@ class AdminController extends Controller
      * @Route("/lists", name="admin_lists")
      * @Method({"GET"})
      */
-    public function listsAction()
+    public function listsAction(): Response
     {
         $lists = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:GiftList')->findAll();
 
@@ -40,7 +41,7 @@ class AdminController extends Controller
      * @Route("/lists/rights", name="admin_lists_rights")
      * @Method({"GET"})
      */
-    public function listsRightsAction()
+    public function listsRightsAction(): Response
     {
         $lists = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:GiftList')->findAll();
         $users = $this->get('fos_user.user_manager')->findUsers();
@@ -65,7 +66,7 @@ class AdminController extends Controller
      * @param GiftList $giftList
      * @return JsonResponse
      */
-    public function updatePermisionAction(Request $request, GiftList $giftList)
+    public function updatePermisionAction(Request $request, GiftList $giftList): JsonResponse
     {
         $defaultData = [
             'sucess'  => false,
@@ -78,7 +79,7 @@ class AdminController extends Controller
             new JsonResponse($defaultData);
         }
         $availablePermissions = ['EDIT', 'SURPRISE_ADD', 'ALERT_ADD', 'ALERT_PURCHASE', 'ALERT_EDIT', 'ALERT_DELETE'];
-        if (!in_array($perm, $availablePermissions)) {
+        if (!\in_array($perm, $availablePermissions, true)) {
             return new JsonResponse($defaultData);
         }
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($userId);
@@ -87,7 +88,7 @@ class AdminController extends Controller
         }
 
         // Build the mask to update
-        $permMask = constant('AppBundle\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_' . $perm);
+        $permMask = \constant('AppBundle\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_' . $perm);
         $hadPerm = $this->get('bw.security_context')->isGranted($perm, $giftList, $user);
 
         if ($hadPerm) {
@@ -114,7 +115,7 @@ class AdminController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listDeleteAction(Request $request, GiftList $giftList)
+    public function listDeleteAction(Request $request, GiftList $giftList): Response
     {
         $form = $this->createSimpleActionForm($giftList, 'delete');
         $form->handleRequest($request);
@@ -139,8 +140,9 @@ class AdminController extends Controller
      * @Route("/list/create", name="admin_list_create")
      * @Method({"GET", "POST"})
      *
+     * @throws \Doctrine\ORM\ORMException
      */
-    public function listCreateAction(Request $request)
+    public function listCreateAction(Request $request): Response
     {
         $giftList = new GiftList();
 
@@ -175,10 +177,11 @@ class AdminController extends Controller
      * @param GiftList $giftList
      * @return \Symfony\Component\HttpFoundation\Response
      *
+     * @throws \Doctrine\ORM\ORMException
      * @Route("/list/{id}/edit", name="admin_list_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      */
-    public function listEditAction(Request $request, GiftList $giftList)
+    public function listEditAction(Request $request, GiftList $giftList): Response
     {
         $originGiftList = clone $giftList;
         $form = $this->createForm(GiftListType::class, $giftList);
@@ -218,11 +221,11 @@ class AdminController extends Controller
      * @param mixed  $entity
      * @param string $action Chosen action
      *
-     * @return \Symfony\Component\Form\Form|\Symfony\Component\HttpFoundation\RedirectResponse Delete form or redirect
+     * @return \Symfony\Component\Form\FormInterface|\Symfony\Component\HttpFoundation\RedirectResponse Delete form or redirect
      */
     private function createSimpleActionForm($entity, $action = 'delete')
     {
-        switch (get_class($entity)) {
+        switch (\get_class($entity)) {
             case GiftList::class:
                 $routePart = 'list';
                 break;
@@ -230,7 +233,7 @@ class AdminController extends Controller
                 $routePart = 'user';
                 break;
             default:
-                throw new \RuntimeException(sprintf('The "%s" type is not supported', get_class($entity)));
+                throw new \RuntimeException(sprintf('The "%s" type is not supported', \get_class($entity)));
                 break;
         }
         switch ($action) {
@@ -252,8 +255,9 @@ class AdminController extends Controller
     /**
      * @Route("/users", name="admin_users")
      * @Method({"GET"})
+     * @return Response
      */
-    public function usersAction()
+    public function usersAction(): Response
     {
         $users = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:User')->findAll();
 
@@ -270,7 +274,7 @@ class AdminController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function userDeleteAction(Request $request, User $user)
+    public function userDeleteAction(Request $request, User $user): Response
     {
         $form = $this->createSimpleActionForm($user, 'delete');
         $form->handleRequest($request);
@@ -292,11 +296,11 @@ class AdminController extends Controller
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\ORMException
      * @Route("/user/create", name="admin_user_create")
      * @Method({"GET", "POST"})
-     *
      */
-    public function userCreateAction(Request $request)
+    public function userCreateAction(Request $request): Response
     {
         /** @var $userManager UserManagerInterface */
         $userManager = $this->get('fos_user.user_manager');
@@ -339,14 +343,15 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Request  $request
-     * @param User $user
+     * @param Request $request
+     * @param User    $user
      * @return \Symfony\Component\HttpFoundation\Response
      *
+     * @throws \Doctrine\ORM\ORMException
      * @Route("/user/{id}/edit", name="admin_user_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      */
-    public function userEditAction(Request $request, User $user)
+    public function userEditAction(Request $request, User $user): Response
     {
         /** @var $userManager UserManagerInterface */
         $userManager = $this->get('fos_user.user_manager');

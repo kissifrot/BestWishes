@@ -12,10 +12,10 @@ class BwController extends Controller
      * @param mixed $attributes Attritude to check, e.g 'OWNER'
      * @param GiftList $list
      */
-    protected function checkAccess($attributes, GiftList $list)
+    protected function checkAccess($attributes, GiftList $list): void
     {
         $authorizationChecker = $this->get('security.authorization_checker');
-        if (!is_array($attributes)) {
+        if (!\is_array($attributes)) {
             $attributes = [$attributes];
         }
         foreach ($attributes as $attribute) {
