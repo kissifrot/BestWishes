@@ -53,10 +53,11 @@ class Gift
     private $bought;
 
     /**
-     * @ORM\OneToOne(targetEntity="User")
+     * @var null|User
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="buyer_id", referencedColumnName="id", nullable=true)
      */
-    protected $buyer;
+    private $buyer;
 
     /**
      * @var boolean
@@ -66,7 +67,7 @@ class Gift
     private $received;
 
     /**
-     * @var \DateTime
+     * @var null|\DateTime
      *
      * @ORM\Column(name="received_date", type="datetime", nullable=true)
      */
@@ -80,21 +81,21 @@ class Gift
     private $surprise;
 
     /**
-     * @var \DateTime
+     * @var null|\DateTime
      *
      * @ORM\Column(name="purchase_date", type="date", nullable=true)
      */
     private $purchaseDate;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @ORM\Column(name="purchase_comment", type="text", nullable=true)
      */
     private $purchaseComment;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @Assert\Url(checkDNS = true)
      * @ORM\Column(name="image_url", type="string", length=255, nullable=true)
@@ -102,7 +103,7 @@ class Gift
     private $imageUrl;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @ORM\Column(name="image_extension", type="string", length=4, nullable=true)
      */
@@ -117,7 +118,7 @@ class Gift
     private $moreDetailUrl;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @ORM\Column(name="more_detail", type="text", nullable=true)
      */
@@ -127,7 +128,7 @@ class Gift
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="gifts")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $category;
+    private $category;
 
     public function __construct()
     {
@@ -502,7 +503,7 @@ class Gift
     /**
      * Get moreDetail
      *
-     * @return string
+     * @return null|string
      */
     public function getMoreDetail()
     {

@@ -34,12 +34,7 @@ class User extends BaseUser
     /**
      * @ORM\OneToOne(targetEntity="GiftList", cascade={"remove"})
      */
-    protected $list;
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    private $list;
 
     /**
      * Set list

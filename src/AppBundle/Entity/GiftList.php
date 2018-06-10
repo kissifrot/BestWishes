@@ -56,14 +56,14 @@ class GiftList
      * @ORM\OneToOne(targetEntity="User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $owner;
+    private $owner;
 
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Category", mappedBy="list")
      */
-    protected $categories;
+    private $categories;
 
 
     /**

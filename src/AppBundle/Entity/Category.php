@@ -44,13 +44,14 @@ class Category
      *
      * @ORM\OneToMany(targetEntity="Gift", mappedBy="category")
      */
-    protected $gifts;
+    private $gifts;
 
     /**
+     * @var GiftList
      * @ORM\ManyToOne(targetEntity="GiftList", inversedBy="categories")
      * @ORM\JoinColumn(name="list_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $list;
+    private $list;
 
     /**
      * Constructor
