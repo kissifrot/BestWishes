@@ -34,9 +34,11 @@ class CategoryRepository extends EntityRepository
     {
         return $this->createQueryBuilder('c')
             ->where('c.id = :id')
+            ->andWhere('g.received = :received')
             ->leftJoin('c.gifts', 'g')
             ->addSelect('g')
             ->setParameter('id', $id)
+            ->setParameter('received', false)
             ->getQuery()
             ->getOneOrNullResult();
     }
@@ -50,10 +52,12 @@ class CategoryRepository extends EntityRepository
     {
         return $this->createQueryBuilder('c')
             ->where('c.id = :id')
+            ->andWhere('g.received = :received')
             ->leftJoin('c.gifts', 'g')
             ->leftJoin('c.list', 'l')
             ->addSelect('g', 'l')
             ->setParameter('id', $id)
+            ->setParameter('received', false)
             ->getQuery()
             ->getOneOrNullResult();
     }

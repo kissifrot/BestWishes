@@ -21,6 +21,9 @@
                 <p>{{ 'gift.comment.text'|trans }}</p> <blockquote class="blockquote">{{ gift.purchaseComment }}</blockquote>
             {% endif %}
         {% endif %}
+        {% if gift.received %}
+            <p>{{ 'gift.received.text'|trans({ '%receivedDate%':gift.receivedDate|date('d/m/Y')})|raw }}</p>
+        {% endif %}
 
         <div class="d-none d-sm-block">
         {% include '@App/gift/show_actions.html.twig' with {gift: gift} only %}
