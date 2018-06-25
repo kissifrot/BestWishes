@@ -4,6 +4,7 @@ namespace AppBundle\Repository;
 
 use AppBundle\Entity\GiftList;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class GiftListRepository
@@ -20,9 +21,8 @@ class GiftListRepository extends EntityRepository
     {
         return $this->createQueryBuilder('l')
             ->where('l.slug = :slug')
-            ->andWhere('g.received = :received')
             ->leftJoin('l.categories', 'c')
-            ->leftJoin('c.gifts', 'g')
+            ->leftJoin('c.gifts', 'g', Join::WITH, 'g.received = :received')
             ->addSelect('c', 'g')
             ->setParameter('slug', $slug)
             ->setParameter('received', false)
@@ -42,9 +42,8 @@ class GiftListRepository extends EntityRepository
     {
         return $this->createQueryBuilder('l')
             ->where('l.id = :id')
-            ->andWhere('g.received = :received')
             ->leftJoin('l.categories', 'c')
-            ->leftJoin('c.gifts', 'g')
+            ->leftJoin('c.gifts', 'g', Join::WITH, 'g.received = :received')
             ->addSelect('c', 'g')
             ->setParameter('id', $id)
             ->setParameter('received', false)
