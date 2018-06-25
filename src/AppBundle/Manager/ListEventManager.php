@@ -15,6 +15,8 @@ class ListEventManager
 {
     private $em;
 
+    public const BIRTHDAY_TYPE = 'birthday';
+
     /**
      * @param EntityManager $em
      */
@@ -64,7 +66,7 @@ class ListEventManager
         // First update the "birthday" event with this list's birthdate
         /** @var ListEvent $activeEvent */
         foreach ($activeEvents as $activeEvent) {
-            if ($activeEvent->getType() === 'birthday') {
+            if ($activeEvent->getType() === self::BIRTHDAY_TYPE) {
                 $activeEvent->setDay($birthDate->format('j'))->setMonth($birthDate->format('n'));
                 break;
             }

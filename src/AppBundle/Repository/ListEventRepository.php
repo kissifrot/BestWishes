@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Manager\ListEventManager;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,7 +14,8 @@ class ListEventRepository extends EntityRepository
     /**
      * @return mixed
      */
-    public function findAllActive() {
+    public function findAllActive()
+    {
         return $this->createQueryBuilder('le')
             ->where('le.active = true')
             ->getQuery()
@@ -21,5 +23,20 @@ class ListEventRepository extends EntityRepository
             ->useResultCache(true, 'all_active')
             ->setResultCacheLifetime(3600)
             ->getResult();
+    }
+
+    /**
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findBirthdate()
+    {
+        return $this->createQueryBuilder('le')
+            ->where('le.type = :type')
+            ->setParameter('type', ListEventManager::BIRTHDAY_TYPE)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->useQueryCache(true)
+            ->getOneOrNullResult();
     }
 }

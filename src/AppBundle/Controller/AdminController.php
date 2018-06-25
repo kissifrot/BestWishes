@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\GiftList;
 use AppBundle\Entity\User;
+use AppBundle\Event\GiftListCreatedEvent;
 use AppBundle\Form\Type\GiftListType;
 use AppBundle\Form\Type\UserType;
 use AppBundle\Security\Acl\Permissions\BestWishesMaskBuilder;
@@ -161,6 +162,10 @@ class AdminController extends Controller
                 $this->get('bw.security_acl_manager')->grant($giftList, $giftList->getOwner(), $permMask);
 
                 $this->addFlash('notice', sprintf('List "%s" created', $giftList->getName()));
+
+                // Dispatch the creation event
+                $event = new GiftListCreatedEvent();
+                $this->get('event_dispatcher')->dispatch(GiftListCreatedEvent::NAME, $event);
 
                 return $this->redirectToRoute('admin_lists');
             } catch (\Exception $e) {

@@ -44,6 +44,13 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    bw.gift_list_subscriber:
+        class: AppBundle\EventSubscriber\GiftListSubscriber
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+        tags:
+            - { name: kernel.event_subscriber }
+
     bw.tblprefix_subscriber:
         class: AppBundle\EventSubscriber\TablePrefixSubscriber
         arguments: [ '%database_prefix%' ]

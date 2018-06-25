@@ -38,7 +38,7 @@ class ListController extends BwController
         $id = $request->get('id');
 
         $list = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:GiftList')->findFullById($id);
-        if(!$list) {
+        if (!$list) {
             throw $this->createNotFoundException();
         }
 
