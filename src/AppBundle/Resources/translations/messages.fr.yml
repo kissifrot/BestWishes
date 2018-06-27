@@ -68,7 +68,7 @@ mail.alert_creation.body_text: |
 
   Cordialement,
   l'admin de %siteName% - %siteUrl%
-mail.alert_deletion.title: '[%siteName%] - Deletion alert'
+mail.alert_deletion.title: '[%siteName%] - Alerte suppression'
 mail.alert_deletion.body_text: |
   Bonjour %userName%, le cadeau %deletedGiftName% de la liste %listName% a été supprimé par %deleterName%.
 
