@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ListEvent
 {
+    public const BIRTHDAY_TYPE = 'birthday';
+
     /**
      * @var null|integer
      *
@@ -70,13 +72,10 @@ class ListEvent
      */
     private $permanent;
 
-    /**
-     * ListEvent constructor.
-     */
-    public function __construct()
+    public function __construct(bool $isPermanent = false)
     {
         $this->active = true;
-        $this->permanent = false;
+        $this->permanent = $isPermanent;
         $this->type = 'default';
     }
 
@@ -122,6 +121,9 @@ class ListEvent
     public function setType(string $type): ListEvent
     {
         $this->type = $type;
+        if ($type === self::BIRTHDAY_TYPE) {
+            $this->permanent = true;
+        }
 
         return $this;
     }

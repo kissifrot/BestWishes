@@ -133,7 +133,7 @@ class Gift
 
     public function __construct(bool $isSurprise, Category $category)
     {
-        $this->addedDate = new \DateTime();
+        $this->addedDate = \DateTime::createFromFormat('U', time());
         $this->editsCount = 0;
         $this->bought = false;
         $this->received = false;
@@ -447,13 +447,13 @@ class Gift
     public function markReceived(): void
     {
         $this->received = true;
-        $this->receivedDate = new \DateTime();
+        $this->receivedDate = \DateTime::createFromFormat('U', time());
     }
 
     public function markPurchasedBy(User $user, ?string $purchasedComment): void
     {
         $this->bought = true;
-        $this->purchaseDate = new \DateTime();
+        $this->purchaseDate = \DateTime::createFromFormat('U', time());
         $this->buyer = $user;
         $this->purchaseComment = $purchasedComment;
     }

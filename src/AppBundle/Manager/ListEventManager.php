@@ -2,10 +2,9 @@
 
 namespace AppBundle\Manager;
 
-
-use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\ListEvent;
 use AppBundle\Entity\GiftList;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class ListEventManager
@@ -15,12 +14,10 @@ class ListEventManager
 {
     private $em;
 
-    public const BIRTHDAY_TYPE = 'birthday';
-
     /**
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
@@ -48,7 +45,7 @@ class ListEventManager
     }
 
     /**
-     * Get the nearest events of a birth date
+     * Get the nearest events of a list
      *
      * @param \DateTime $birthDate
      *
@@ -66,7 +63,7 @@ class ListEventManager
         // First update the "birthday" event with this list's birthdate
         /** @var ListEvent $activeEvent */
         foreach ($activeEvents as $activeEvent) {
-            if ($activeEvent->getType() === self::BIRTHDAY_TYPE) {
+            if ($activeEvent->getType() === ListEvent::BIRTHDAY_TYPE) {
                 $activeEvent->setDay($birthDate->format('j'))->setMonth($birthDate->format('n'));
                 break;
             }

@@ -53,13 +53,12 @@ class Category
      */
     private $list;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
+
+    public function __construct(int $givenId = null)
     {
         $this->gifts = new ArrayCollection();
         $this->visible = true;
+        $this->id = $givenId;
     }
 
     public function __toString()

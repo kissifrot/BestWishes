@@ -42,7 +42,7 @@ class ListController extends BwController
             throw $this->createNotFoundException();
         }
 
-        $nextEventData = $this->container->get('bw.list_event_manager')->getNearestEventData($list);
+        $nextEventData = $this->get('bw.list_event_manager')->getNearestEventData($list);
 
         return $this->render('AppBundle:list:show.html.twig', compact('list', 'nextEventData'));
     }

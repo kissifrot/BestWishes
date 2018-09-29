@@ -164,8 +164,7 @@ class AdminController extends Controller
                 $this->addFlash('notice', sprintf('List "%s" created', $giftList->getName()));
 
                 // Dispatch the creation event
-                $event = new GiftListCreatedEvent();
-                $this->get('event_dispatcher')->dispatch(GiftListCreatedEvent::NAME, $event);
+                $this->get('event_dispatcher')->dispatch(GiftListCreatedEvent::NAME, new GiftListCreatedEvent());
 
                 return $this->redirectToRoute('admin_lists');
             } catch (\Exception $e) {
