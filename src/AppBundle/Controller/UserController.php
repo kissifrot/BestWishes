@@ -39,7 +39,7 @@ class UserController extends Controller
             'ALERT_EDIT',
             'ALERT_DELETE'
         ];
-        $lists = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:GiftList')->findAll();
+        $lists = $this->getDoctrine()->getManager()->getRepository('AppBundle:GiftList')->findAll();
         $user = $this->getUser();
         return $this->render('AppBundle:user:manage_alerts.html.twig',
             compact('lists', 'availableAlerts', 'user'));
@@ -55,7 +55,7 @@ class UserController extends Controller
     public function updateAlertAction(Request $request, GiftList $giftList): JsonResponse
     {
         $defaultData = [
-            'sucess'  => false,
+            'success'  => false,
             'message' => 'An error occurred'
         ];
         $alert = $request->request->get('alert');
@@ -77,17 +77,11 @@ class UserController extends Controller
         // Build the mask to update
         $alertMask = \constant('AppBundle\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_' . $alert);
         $hadAlert = $this->get('bw.security_context')->isGranted($alert, $giftList, $user);
-
-        if ($hadAlert) {
-            // Remove the specified alert
-            $this->get('bw.security_acl_manager')->revoke($giftList, $user, $alertMask);
-        } else {
-            // Add the specified alert
-            $this->get('bw.security_acl_manager')->grant($giftList, $user, $alertMask);
-        }
+        $action = $hadAlert ? 'revoke' : 'grant';
+        $this->get('bw.security_acl_manager')->$action($giftList, $user, $alertMask);
 
         $successData = [
-            'sucess'  => true,
+            'success'  => true,
             'message' => sprintf('Alert updated for "%s"', $giftList->getName())
         ];
 

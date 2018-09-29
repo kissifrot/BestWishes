@@ -48,7 +48,7 @@ class ListEventManager
     }
 
     /**
-     * Get the nearest events of a birthdate
+     * Get the nearest events of a birth date
      *
      * @param \DateTime $birthDate
      *

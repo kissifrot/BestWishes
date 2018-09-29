@@ -21,7 +21,7 @@ class ListController extends BwController
      */
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
-        $lists = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:GiftList')->findAll();
+        $lists = $this->getDoctrine()->getManager()->getRepository('AppBundle:GiftList')->findAll();
 
         return $this->render('AppBundle:list:index.html.twig', compact('lists'));
     }
@@ -37,7 +37,7 @@ class ListController extends BwController
     {
         $id = $request->get('id');
 
-        $list = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:GiftList')->findFullById($id);
+        $list = $this->getDoctrine()->getManager()->getRepository('AppBundle:GiftList')->findFullById($id);
         if (!$list) {
             throw $this->createNotFoundException();
         }

@@ -28,7 +28,7 @@ class CategoryController extends BwController
     {
         $id = $request->get('id');
 
-        $category = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Category')->findFullById($id);
+        $category = $this->getDoctrine()->getManager()->getRepository('AppBundle:Category')->findFullById($id);
         if (!$category) {
             throw $this->createNotFoundException();
         }
@@ -62,7 +62,7 @@ class CategoryController extends BwController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
+            $em = $this->getDoctrine()->getManager();
             $em->persist($category);
             $em->flush();
 
@@ -94,7 +94,7 @@ class CategoryController extends BwController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
+            $em = $this->getDoctrine()->getManager();
             $em->persist($category);
             $em->flush();
 

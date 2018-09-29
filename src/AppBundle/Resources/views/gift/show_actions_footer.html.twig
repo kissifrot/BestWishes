@@ -1,6 +1,6 @@
 {% set attrib = gift.surprise ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'] %}
 <div class="btn-group btn-group-lg btn-group-justified" role="group" aria-label="{{ 'gift.actions.text'|trans }}">
-    {% if is_multi_granted(attrib, gift.category.list) %}
+    {% if is_multi_granted(attrib, gift.list) %}
         <a href="{{ path('gift_edit', { id: gift.id }) }}" class="btn btn-primary" title="{{ 'gift.action.edit'|trans }}" aria-label="{{ 'gift.action.edit'|trans }}">
             <i class="fas fa-pencil-alt" aria-hidden="true"></i>
         </a>
@@ -10,14 +10,14 @@
             </button>
         </div>
     {% endif %}
-    {% if is_granted('SURPRISE_ADD', gift.category.list) and not gift.bought %}
+    {% if is_granted('SURPRISE_ADD', gift.list) and not gift.bought %}
         <div class="btn-group btn-group-lg" role="group">
             <button class="btn btn-primary js-gift-mark-bought" title="{{ 'gift.action.mark_bought'|trans }}" aria-label="{{ 'gift.action.mark_bought'|trans }}">
                 <i class="fas fa-shopping-cart" aria-hidden="true"></i>
             </button>
         </div>
     {% endif %}
-    {% if is_multi_granted(attrib, gift.category.list) and not gift.received %}
+    {% if is_multi_granted(attrib, gift.list) and not gift.received %}
         <div class="btn-group btn-group-lg" role="group">
             <button class="btn btn-primary js-gift-mark-received" title="{{ 'gift.action.mark_received'|trans }}" aria-label="{{ 'gift.action.mark_received'|trans }}">
                 <i class="fas fa-gift" aria-hidden="true"></i>

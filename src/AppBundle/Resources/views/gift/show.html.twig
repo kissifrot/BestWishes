@@ -5,7 +5,7 @@
 {% block content %}
     <div class="container">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ path('list_show', { id: gift.category.list.id }) }}">{{ gift.category.list.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('list_show', { id: gift.list.id }) }}">{{ gift.ist.name }}</a></li>
             <li class="breadcrumb-item"><a href="{{ path('category_show', { id: gift.category.id }) }}">{{ gift.category.name }}</a></li>
             <li class="breadcrumb-item active">{{ gift.name }}</li>
         </ol>

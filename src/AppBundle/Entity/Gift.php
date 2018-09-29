@@ -131,13 +131,14 @@ class Gift
      */
     private $category;
 
-    public function __construct()
+    public function __construct(bool $isSurprise, Category $category)
     {
         $this->addedDate = new \DateTime();
         $this->editsCount = 0;
         $this->bought = false;
         $this->received = false;
-        $this->surprise = false;
+        $this->surprise = $isSurprise;
+        $this->category = $category;
     }
 
     /**
@@ -431,5 +432,29 @@ class Gift
         $this->category = $category;
 
         return $this;
+    }
+
+    public function getCategoryId(): int
+    {
+        return $this->category->getId();
+    }
+
+    public function getList(): GiftList
+    {
+        return $this->category->getList();
+    }
+
+    public function markReceived(): void
+    {
+        $this->received = true;
+        $this->receivedDate = new \DateTime();
+    }
+
+    public function markPurchasedBy(User $user, ?string $purchasedComment): void
+    {
+        $this->bought = true;
+        $this->purchaseDate = new \DateTime();
+        $this->buyer = $user;
+        $this->purchaseComment = $purchasedComment;
     }
 }

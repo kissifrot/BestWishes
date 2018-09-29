@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class GiftPurchasedEvent extends Event
 {
-    const NAME = 'gift.purchased';
+    public const NAME = 'gift.purchased';
 
     /**
      * @var Gift

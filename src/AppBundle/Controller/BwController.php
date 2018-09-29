@@ -8,8 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class BwController extends Controller
 {
     /**
-     * Check if current user has specifc for a specific GiftList
-     * @param mixed $attributes Attritude to check, e.g 'OWNER'
+     * Check if current user has specific for a specific GiftList
+     * @param mixed $attributes Attribute to check, e.g 'OWNER'
      * @param GiftList $list
      */
     protected function checkAccess($attributes, GiftList $list): void

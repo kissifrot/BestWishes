@@ -32,7 +32,7 @@
                         },
                         dataType: 'json',
                         error: function(jqXHR, textStatus, errorThrown) {
-
+                            alert(errorThrown + '(' + textStatus + ')');
                         },
                         success: function(data, textStatus, jqXHR) {
                             elem.toggleClass('text-success glyphicon-ok').toggleClass('text-danger glyphicon-remove');

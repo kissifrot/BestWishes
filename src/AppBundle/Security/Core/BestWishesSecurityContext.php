@@ -2,7 +2,6 @@
 
 namespace AppBundle\Security\Core;
 
-
 use AppBundle\Entity\User;
 use AppBundle\Security\Acl\Permissions\BestWishesMaskBuilder;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
@@ -56,7 +55,7 @@ class BestWishesSecurityContext
             }
         }
 
-        if (!is_int($mask)) {
+        if (!\is_int($mask)) {
             $builder = new BestWishesMaskBuilder();
             $builder->add($mask);
 

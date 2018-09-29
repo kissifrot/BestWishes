@@ -58,7 +58,7 @@ class AclManager
      */
     public function exchangePerms($entity, UserInterface $newGranted, UserInterface $oldGranted, $mask = BestWishesMaskBuilder::MASK_EDIT): void
     {
-        // Add the correct ACL for the new onwer
+        // Add the correct ACL for the new owner
         $this->grant($entity, $newGranted, $mask);
         // Remove the owner ACL for the old owner
         $this->revoke($entity, $oldGranted, $mask);
@@ -95,7 +95,7 @@ class AclManager
 
 
     /**
-     * Get ACL of an entiry
+     * Get ACL of an entry
      * @param mixed $entity Entity to get the ACL from
      * @return \Symfony\Component\Security\Acl\Model\AclInterface|MutableAclInterface
      */

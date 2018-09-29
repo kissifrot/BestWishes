@@ -31,7 +31,7 @@ class AdminController extends Controller
      */
     public function listsAction(): Response
     {
-        $lists = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:GiftList')->findAll();
+        $lists = $this->getDoctrine()->getManager()->getRepository('AppBundle:GiftList')->findAll();
 
         $deleteForm = $this->createSimpleActionForm(new GiftList(), 'delete')->createView();
 
@@ -44,7 +44,7 @@ class AdminController extends Controller
      */
     public function listsRightsAction(): Response
     {
-        $lists = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:GiftList')->findAll();
+        $lists = $this->getDoctrine()->getManager()->getRepository('AppBundle:GiftList')->findAll();
         $users = $this->get('fos_user.user_manager')->findUsers();
         $availablePermissions = [
             'OWNER',
@@ -67,10 +67,10 @@ class AdminController extends Controller
      * @param GiftList $giftList
      * @return JsonResponse
      */
-    public function updatePermisionAction(Request $request, GiftList $giftList): JsonResponse
+    public function updatePermissionAction(Request $request, GiftList $giftList): JsonResponse
     {
         $defaultData = [
-            'sucess'  => false,
+            'success'  => false,
             'message' => 'An error occurred'
         ];
         $userId = $request->request->getInt('userId');
@@ -101,7 +101,7 @@ class AdminController extends Controller
         }
 
         $successData = [
-            'sucess'  => true,
+            'success'  => true,
             'message' => sprintf('Permission updated for "%s"', $giftList->getName())
         ];
 
@@ -152,12 +152,12 @@ class AdminController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
+            $em = $this->getDoctrine()->getManager();
             $em->persist($giftList);
             try {
                 $em->flush();
 
-                // Add the correct ACL for the onwer
+                // Add the correct ACL for the owner
                 $permMask = BestWishesMaskBuilder::MASK_OWNER;
                 $this->get('bw.security_acl_manager')->grant($giftList, $giftList->getOwner(), $permMask);
 
@@ -194,13 +194,13 @@ class AdminController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
+            $em = $this->getDoctrine()->getManager();
             $em->persist($giftList);
             try {
                 $em->flush();
 
                 if ($originGiftList->getOwner() !== $giftList->getOwner()) {
-                    // Exchange permisions
+                    // Exchange permissions
                     $this->get('bw.security_acl_manager')->exchangePerms(
                         $giftList,
                         $giftList->getOwner(),
@@ -264,7 +264,7 @@ class AdminController extends Controller
      */
     public function usersAction(): Response
     {
-        $users = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:User')->findAll();
+        $users = $this->getDoctrine()->getManager()->getRepository('AppBundle:User')->findAll();
 
         $deleteForm = $this->createSimpleActionForm(new User(), 'delete')->createView();
 
@@ -318,7 +318,7 @@ class AdminController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
+            $em = $this->getDoctrine()->getManager();
             $userManager->updatePassword($user);
             $em->persist($user);
             try {
@@ -327,7 +327,7 @@ class AdminController extends Controller
                 /** @var GiftList|null $chosenList */
                 $chosenList = $user->getList();
                 if (null !== $chosenList && $chosenList->getOwner()->getId() !== $user->getId()) {
-                    // Exchange permisions
+                    // Exchange permissions
                     $this->get('bw.security_acl_manager')->exchangePerms(
                         $chosenList,
                         $user,
@@ -366,7 +366,7 @@ class AdminController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
+            $em = $this->getDoctrine()->getManager();
             $userManager->updatePassword($user);
             $em->persist($user);
             try {
@@ -375,7 +375,7 @@ class AdminController extends Controller
                 /** @var GiftList|null $chosenList */
                 $chosenList = $user->getList();
                 if (null !== $chosenList && $chosenList->getOwner()->getId() !== $user->getId()) {
-                    // Exchange permisions
+                    // Exchange permissions
                     $this->get('bw.security_acl_manager')->exchangePerms(
                         $chosenList,
                         $user,

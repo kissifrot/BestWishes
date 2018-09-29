@@ -79,7 +79,7 @@ class GiftListData extends Fixture implements DependentFixtureInterface
     /**
      * @inheritdoc
      */
-    function getDependencies(): array
+    public function getDependencies(): array
     {
         return [
             UserData::class

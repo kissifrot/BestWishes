@@ -35,7 +35,7 @@ class GiftListSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Ensure there's at least the birthdate event
+     * Ensure there's at least the birth date event
      *
      * @param GiftListCreatedEvent $event
      * @throws \Doctrine\ORM\NonUniqueResultException

@@ -34,7 +34,7 @@ class GiftController extends BwController
     {
         $id = $request->get('id');
 
-        $gift = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Gift')->findFullById($id);
+        $gift = $this->getDoctrine()->getManager()->getRepository('AppBundle:Gift')->findFullById($id);
         if (!$gift) {
             throw $this->createNotFoundException();
         }
@@ -68,22 +68,19 @@ class GiftController extends BwController
             $category->getList()
         );
 
-        $gift = new Gift();
-        $gift->setSurprise($isSurprise);
-        $gift->setCategory($category);
+        $gift = new Gift($isSurprise, $category);
 
         $form = $this->createForm(GiftType::class, $gift);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
+            $em = $this->getDoctrine()->getManager();
             $em->persist($gift);
             $em->flush();
 
             // Dispatch the creation event
-            $event = new GiftCreatedEvent($gift, $this->getUser());
-            $this->get('event_dispatcher')->dispatch(GiftCreatedEvent::NAME, $event);
+            $this->get('event_dispatcher')->dispatch(GiftCreatedEvent::NAME, new GiftCreatedEvent($gift, $this->getUser()));
 
             $this->addFlash('notice', $this->get('translator')->trans('gift.message.created', ['%giftName%' => $gift->getName()]));
 
@@ -109,7 +106,7 @@ class GiftController extends BwController
         // Access control
         $this->checkAccess(
             $gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
-            $gift->getCategory()->getList()
+            $gift->getList()
         );
 
         $originGift = clone $gift;
@@ -118,13 +115,12 @@ class GiftController extends BwController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
+            $em = $this->getDoctrine()->getManager();
             $em->persist($gift);
             $em->flush();
 
             // Dispatch the edition event
-            $event = new GiftEditedEvent($originGift, $gift, $this->getUser());
-            $this->get('event_dispatcher')->dispatch(GiftEditedEvent::NAME, $event);
+            $this->get('event_dispatcher')->dispatch(GiftEditedEvent::NAME, new GiftEditedEvent($originGift, $gift, $this->getUser()));
 
             $this->addFlash('notice', $this->get('translator')->trans('gift.message.updated', ['%giftName%' => $gift->getName()]));
 
@@ -147,7 +143,7 @@ class GiftController extends BwController
         // Access control
         $this->checkAccess(
             $gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
-            $gift->getCategory()->getList()
+            $gift->getList()
         );
 
         $form = $this->createSimpleActionForm($gift, 'delete');
@@ -160,13 +156,12 @@ class GiftController extends BwController
             $em->flush();
 
             // Dispatch the deletion event
-            $event = new GiftDeletedEvent($deletedGift, $this->getUser());
-            $this->get('event_dispatcher')->dispatch(GiftDeletedEvent::NAME, $event);
+            $this->get('event_dispatcher')->dispatch(GiftDeletedEvent::NAME, new GiftDeletedEvent($deletedGift, $this->getUser()));
 
             $this->addFlash('notice', $this->get('translator')->trans('gift.message.deleted', ['%giftName%' => $deletedGift->getName()]));
         }
 
-        return $this->redirectToRoute('category_show', ['id' => $gift->getCategory()->getId()]);
+        return $this->redirectToRoute('category_show', ['id' => $gift->getCategoryId()]);
     }
 
     /**
@@ -182,16 +177,14 @@ class GiftController extends BwController
         // Access control
         $this->checkAccess(
             $gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
-            $gift->getCategory()->getList()
+            $gift->getList()
         );
 
         $form = $this->createSimpleActionForm($gift, 'mark_received');
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $gift
-                ->setReceived(true)
-                ->setReceivedDate(new \DateTime());
+            $gift->markReceived();
             $em = $this->getDoctrine()->getManager();
             $em->persist($gift);
             $em->flush();
@@ -199,7 +192,7 @@ class GiftController extends BwController
             $this->addFlash('notice', $this->get('translator')->trans('gift.message.marked_received', ['%giftName%' => $gift->getName()]));
         }
 
-        return $this->redirectToRoute('category_show', ['id' => $gift->getCategory()->getId()]);
+        return $this->redirectToRoute('category_show', ['id' => $gift->getCategoryId()]);
     }
 
     /**
@@ -213,7 +206,7 @@ class GiftController extends BwController
     public function markBoughtAction(Request $request, Gift $gift): \Symfony\Component\HttpFoundation\Response
     {
         // Access control
-        $this->checkAccess('SURPRISE_ADD', $gift->getCategory()->getList());
+        $this->checkAccess('SURPRISE_ADD', $gift->getList());
 
         $form = $this->createPurchaseForm($gift);
         $form->handleRequest($request);
@@ -221,20 +214,14 @@ class GiftController extends BwController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $purchaseComment = $data['purchaseComment'];
-            $gift
-                ->setBought(true)
-                ->setBuyer($this->getUser())
-                ->setPurchaseDate(new \DateTime());
-            if (!empty($purchaseComment)) {
-                $gift->setPurchaseComment($purchaseComment);
-            }
+
+            $gift->markPurchasedBy($this->getUser(), $data['purchaseComment']);
             $em = $this->getDoctrine()->getManager();
             $em->persist($gift);
             $em->flush();
 
             // Dispatch the purchase event
-            $event = new GiftPurchasedEvent($gift, $this->getUser(), $purchaseComment);
-            $this->get('event_dispatcher')->dispatch(GiftPurchasedEvent::NAME, $event);
+            $this->get('event_dispatcher')->dispatch(GiftPurchasedEvent::NAME, new GiftPurchasedEvent($gift, $this->getUser(), $purchaseComment));
 
             $this->addFlash('notice', $this->get('translator')->trans('gift.message.marked_bought', ['%giftName%' => $gift->getName()]));
         }
@@ -262,7 +249,7 @@ class GiftController extends BwController
                 $url = $this->generateUrl('gift_mark_received', ['id' => $gift->getId()]);
                 break;
             default:
-                return $this->redirectToRoute('category_show', ['id' => $gift->getCategory()->getId()]);
+                return $this->redirectToRoute('category_show', ['id' => $gift->getCategoryId()]);
         }
 
         return $this->createFormBuilder()

@@ -54,7 +54,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
     public function onGiftCreation(GiftCreatedEvent $event): void
     {
-        $list  = $event->getGift()->getCategory()->getList();
+        $list  = $event->getGift()->getList();
         $users = $this->userManager->findUsers();
 
         $mailedUsers = [];
@@ -81,7 +81,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
     public function onGiftDeletion(GiftDeletedEvent $event): void
     {
-        $list  = $event->getGift()->getCategory()->getList();
+        $list  = $event->getGift()->getList();
         $users = $this->userManager->findUsers();
 
         $mailedUsers = [];
@@ -108,7 +108,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
     public function onGiftPurchase(GiftPurchasedEvent $event): void
     {
-        $list  = $event->getGift()->getCategory()->getList();
+        $list  = $event->getGift()->getList();
         $users = $this->userManager->findUsers();
 
         $mailedUsers = [];
@@ -135,7 +135,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
     public function onGiftEdition(GiftEditedEvent $event): void
     {
-        $list  = $event->getEditedGift()->getCategory()->getList();
+        $list  = $event->getEditedGift()->getList();
         $users = $this->userManager->findUsers();
 
         $mailedUsers = [];
