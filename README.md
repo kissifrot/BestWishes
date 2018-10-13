@@ -1,6 +1,9 @@
 BestWishes
 =============
 
+
+[![Build Status](https://travis-ci.org/kissifrot/BestWishes.svg?branch=master)](https://travis-ci.org/travis-ci-examples/php)
+
 BestWishes is a multilanguage wishlist application allowing users to manage their wishlist and indicate who have bought what to avoid receiving the same gift for Christmas (for example).
 
 Users can also add surprise gifts and manage additions and purchase alerts.
