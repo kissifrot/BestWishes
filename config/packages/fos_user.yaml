@@ -1,0 +1,8 @@
+# FOSUser config
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: BestWishes\Entity\User
+    from_email:
+        address:        "%env(GLOBAL_FROM_EMAIL_ADDRESS)%"
+        sender_name:    "%env(GLOBAL_FROM_EMAIL_NAME)%"

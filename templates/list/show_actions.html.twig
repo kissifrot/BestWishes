@@ -1,0 +1,8 @@
+<a href="#" class="btn btn-primary disabled" tabindex="-1" aria-label="{{ 'gift_list.action.export_pdf'|trans }}">
+    <i class="fas fa-file-pdf" aria-hidden="true"></i>&nbsp;{{ 'gift_list.action.export_pdf'|trans }}
+</a>
+{% if is_multi_granted(['OWNER', 'EDIT'], list) %}
+    <a href="{{ path('category_create', { listId: list.id }) }}" class="btn btn-primary">
+        <i class="fas fa-plus-circle" aria-hidden="true"></i>&nbsp;{{ 'gift_list.action.create_category'|trans }}
+    </a>
+{% endif %}

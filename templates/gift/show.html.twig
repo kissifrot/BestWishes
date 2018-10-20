@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'gift.title'|trans({ '%giftName%': gift.name }) }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('list_show', { id: gift.list.id }) }}">{{ gift.list.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('category_show', { id: gift.category.id }) }}">{{ gift.category.name }}</a></li>
+            <li class="breadcrumb-item active">{{ gift.name }}</li>
+        </ol>
+        {%- include 'default/flash_messages.html.twig' -%}
+        <h1>{{ gift.name }}</h1>
+        {% if gift.addedDate is not empty %}<p>{{ 'gift.added_on.text'|trans({ '%addedDate%': gift.addedDate|date('d/m/Y')})|raw }}</p>{% endif %}
+        {% if gift.image.url is not empty  %}<p><img src="{{ gift.image.url }}" alt="Image" class="img-fluid" style="max-height: 500px"></p>{% endif %}
+        {% if gift.moreDetailUrl is not empty %}<p><a href="{{ gift.moreDetailUrl }}" target="_blank">{{ 'gift.more_details.text'|trans }}</a></p>{% endif %}
+        {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
+        {% if gift.bought and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <p>{{ 'gift.bought_by.text'|trans({ '%purchaseDate%':gift.purchaseDate|date('d/m/Y') , '%buyerName%': gift.buyer.name})|raw }}</p>
+            {% if gift.purchaseComment is not empty %}
+                <p>{{ 'gift.comment.text'|trans }}</p> <blockquote class="blockquote">{{ gift.purchaseComment }}</blockquote>
+            {% endif %}
+        {% endif %}
+        {% if gift.received %}
+            <p>{{ 'gift.received.text'|trans({ '%receivedDate%':gift.receivedDate|date('d/m/Y')})|raw }}</p>
+        {% endif %}
+
+        <div class="d-none d-sm-block">
+        {% include 'gift/show_actions.html.twig' with {gift: gift} only %}
+        </div>
+    </div>
+
+    {% include 'gift/confirm_modals.html.twig' with {deleteForm: deleteForm, markReceivedForm: markReceivedForm, markBoughtForm: markBoughtForm} only %}
+{% endblock %}
+
+
+{% block footer %}
+{# Mobile-only-visible actions #}
+<nav class="navbar fixed-bottom navbar-light d-sm-none">
+    {% include 'gift/show_actions_footer.html.twig' with {gift: gift} only %}
+</nav>
+{% endblock %}
+
+{% block javascripts_footer %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.js-gift-delete').click(function () {
+                $('#modal-confirm-delete').modal();
+            });
+
+            $('.js-gift-mark-bought').click(function () {
+                $('#modal-confirm-mark-bought').modal();
+            });
+
+            $('.js-gift-mark-received').click(function () {
+                $('#modal-confirm-mark-received').modal();
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block title %}{{ 'security.login.title'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h3>{{ 'security.login.title'|trans }}</h3>
+        {% block fos_user_content %}
+            {{ include('@FOSUser/Security/login_content.html.twig') }}
+        {% endblock fos_user_content %}
+    </div>
+{% endblock %}

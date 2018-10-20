@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'gift_list.title'|trans({ '%listName%': list.name }) }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ list.name }}</h1>
+
+        {% if nextEventData %}
+            {%- include 'list/event_info.html.twig' with { nextEventData: nextEventData } only -%}
+        {% endif %}
+
+        {%- include 'default/flash_messages.html.twig' -%}
+
+        {% if list.categories is not empty %}
+            <ul class="list-group">
+            {% for category in list.categories %}
+                <a href="{{ path('category_show', { id: category.id }) }}" class="list-group-item list-group-item-action">
+                    {% if not is_granted('OWNER', list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        {% if category.totalGiftsCount > 0 %}<span class="badge badge-primary badge-pill">{{ category.totalGiftsCount }}</span>{% endif %}
+                    {% else %}
+                        {% if category.viewableGiftsCount > 0 %}<span class="badge badge-primary badge-pill">{{ category.viewableGiftsCount }}</span>{% endif %}
+                    {% endif %}
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p><em>{% if is_multi_granted(['OWNER', 'EDIT'], list) %}{{ 'gift_list.no_category.logged_can_edit'|trans|raw }}{% else %}{{ 'gift_list.no_category.guest'|trans }}{% endif %}</em></p>
+        {% endif %}
+        <div class="d-none d-sm-block">
+        {% include 'list/show_actions.html.twig' with {list: list} only %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+{# Mobile-only-visible actions #}
+<nav class="navbar fixed-bottom navbar-light d-sm-none">
+    {% include 'list/show_actions_footer.html.twig' with {list: list} only %}
+</nav>
+{% endblock %}

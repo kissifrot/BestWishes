@@ -1,0 +1,21 @@
+@import "~bootstrap/scss/bootstrap";
+
+@import "variables";
+@import "bootswatch";
+
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+
+html,
+body {
+  height: 100%;
+}
+body {
+  padding-top: 60px;
+}
+
+label.form-control-label.required:after {
+  content:" *";
+  color:red;
+}

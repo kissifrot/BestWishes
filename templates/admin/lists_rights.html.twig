@@ -1,0 +1,46 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Lists{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">(admin)</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('admin_lists') }}">Lists</a></li>
+            <li class="breadcrumb-item active">Rights</li>
+        </ol>
+
+        <h1>Lists rights management</h1>
+
+        {% for list in lists %}
+            {% include 'admin/lists_rights_table.html.twig' %}
+        {% endfor %}
+        <p><i>* owner can only be changed on the list edition page</i></p>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.js-permission-check:not(.disabled)').click(function(evt) {
+                    evt.preventDefault();
+                    var elem = $(this);
+                    var currData = $(this).data();
+                    var currUrl = Routing.generate('admin_update_list_perm', { id: currData.list });
+                    $.ajax({
+                        url: currUrl,
+                        method: 'POST',
+                        data: {
+                            perm: currData.role,
+                            userId: currData.user
+                        },
+                        dataType: 'json',
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown + '(' + textStatus + ')');
+                        },
+                        success: function(data, textStatus, jqXHR) {
+                            elem.toggleClass('text-success fa-check').toggleClass('text-danger fa-times');
+                        }
+                    });
+                })
+            })
+        </script>
+
+    </div>
+{% endblock %}
