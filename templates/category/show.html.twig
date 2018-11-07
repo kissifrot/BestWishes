@@ -15,15 +15,22 @@
         {% if category.gifts is not empty %}
             <div class="list-group">
             {% for gift in category.gifts %}
-                <a href="{{ path('gift_show', { id: gift.id }) }}" class="list-group-item list-group-item-action">
-                    {{ gift.name }} <span class="badge"><i class="fas fa-info-circle fa-lg"></i></span>
+                <a href="{{ path('gift_show', { id: gift.id }) }}" class="list-group-item list-group-item-action d-flex">
+                    <div>
+                        {{ gift.name }}<span class="badge"><i class="fas fa-info-circle fa-lg"></i></span>
+                    </div>
+                    {% if gift.bought and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <div class="ml-auto">
+                        <i class="ml-auto fas fa-gift fa-lg" title="{{ 'gift.bought_by.text'|trans({ '%purchaseDate%':gift.purchaseDate|date('d/m/Y') , '%buyerName%': gift.buyer.name})|raw }}"></i>
+                    </div>
+                    {% endif %}
                 </a>
             {% endfor %}
             </div>
         {% else %}
             <p><em>{% if is_multi_granted(['OWNER', 'EDIT'], category.list) %}{{ 'category.no_gift.logged_can_edit'|trans|raw }}{% else %}{{ 'category.no_gift.guest'|trans }}{% endif %}</em></p>
         {% endif %}
-            <div class="d-none d-sm-block">
+            <div class="d-none d-sm-block mt-2">
             {% include 'category/show_actions.html.twig' with {category: category} only %}
             </div>
         </div>
