@@ -25,7 +25,7 @@
             <p>{{ 'gift.received.text'|trans({ '%receivedDate%':gift.receivedDate|date('d/m/Y')})|raw }}</p>
         {% endif %}
 
-        <div class="d-none d-sm-block">
+        <div class="d-none d-sm-block mt-2">
         {% include 'gift/show_actions.html.twig' with {gift: gift} only %}
         </div>
     </div>

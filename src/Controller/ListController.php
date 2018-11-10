@@ -2,9 +2,10 @@
 
 namespace BestWishes\Controller;
 
-
 use BestWishes\Entity\GiftList;
 use BestWishes\Manager\ListEventManager;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Knp\Snappy\Pdf;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,17 +18,17 @@ use Symfony\Component\HttpFoundation\Request;
 class ListController extends AbstractController
 {
     private $listEventManager;
+    private $pdf;
 
-    public function __construct(ListEventManager $listEventManager)
+    public function __construct(ListEventManager $listEventManager, Pdf $pdf)
     {
         $this->listEventManager = $listEventManager;
+        $this->pdf = $pdf;
     }
 
     /**
      * @Route("/", name="list_index")
      * @Method({"GET"})
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index(): \Symfony\Component\HttpFoundation\Response
     {
@@ -37,7 +38,6 @@ class ListController extends AbstractController
     }
 
     /**
-     * @param Request $request
      * @Route("/{id}", name="list_show", requirements={"id": "\d+"})
      * @Method({"GET"})
      *
@@ -57,5 +57,31 @@ class ListController extends AbstractController
         $nextEventData = $this->listEventManager->getNearestEventData($list);
 
         return $this->render('list/show.html.twig', compact('list', 'nextEventData'));
+    }
+
+    /**
+     * @Route("/export/{id}", name="list_export_pdf", requirements={"id": "\d+"})
+     * @Method({"GET"})
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function pdfExport(Request $request)
+    {
+        $id = $request->attributes->getInt('id');
+        $list = $this->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            ? $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findFullById($id)
+            : $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findFullSurpriseExcludedById($id)
+        ;
+        if (!$list) {
+            throw $this->createNotFoundException();
+        }
+        $nextEventData = $this->listEventManager->getNearestEventData($list);
+
+        $html = $this->renderView('list/export.pdf.twig', compact('list', 'nextEventData'));
+
+        return new PdfResponse(
+            $this->pdf->getOutputFromHtml($html),
+            sprintf('list_%s.pdf', $list->getSlug())
+        );
     }
 }

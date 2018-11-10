@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ site_name }} - {% block title %}Wishlist management{% endblock %}</title>
+        <link href="{{ absolute_url(asset('build/css/app.css')) }}" rel="stylesheet">
+        {% block stylesheets %}{% endblock %}
+        <meta name="theme-color" content="#ffffff">
+        {% block javascripts_head %}{% endblock %}
+    </head>
+    <body class="pdf">
+        {% block content %}
+        {% endblock %}
+        {% block footer %}
+            <p class="text-center">
+                <small class="text-muted ">Powered by BestWishes v{{ constant('\\BestWishes\\AppVersion::VERSION') }}</small>
+            </p>
+        {% endblock %}
+        {% block javascripts %}{% endblock %}
+        {% block javascripts_footer %}{% endblock %}
+    </body>
+</html>

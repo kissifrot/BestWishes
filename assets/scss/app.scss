@@ -14,6 +14,23 @@ body {
 body {
   padding-top: 60px;
 }
+body.pdf {
+  padding-top: 10px;
+}
+
+div.pdf {
+  padding-bottom: 10px;
+}
+
+h3.pdf {
+  margin-top: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+div.pdf p {
+  margin-bottom: 0.1rem;
+  font-style: italic;
+}
 
 label.form-control-label.required:after {
   content:" *";

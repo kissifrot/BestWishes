@@ -2,7 +2,6 @@
 
 namespace BestWishes\Manager;
 
-
 use BestWishes\Entity\GiftList;
 use Doctrine\ORM\EntityManagerInterface;
 
