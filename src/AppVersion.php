@@ -4,5 +4,5 @@ namespace BestWishes;
 
 interface AppVersion
 {
-    public const VERSION = '1.2';
+    public const VERSION = '1.2.1';
 }
