@@ -21,7 +21,7 @@ home.welcome.text.logged: 'Utilisez le menu du haut pour naviguer, ou <a href="%
 home.welcome.text.guest: 'Utilisez le menu du haut pour naviguer'
 home.welcome.text_user_not_logged:  'Utilisateur inconnu, veuillez vous <a href="%loginUrl%">connecter</a>'
 
-gift_list.next_event.text: '{0} Prochain évènement (%eventName%) : aujourd''hui day|{1} Prochain évènement (%eventName%) : %count% jour |]1,Inf[ Prochain évènement (%eventName%) : %count% jours'
+gift_list.next_event.text: '{0} Prochain évènement (%eventName%) : aujourd''hui|{1} Prochain évènement (%eventName%) : %count% jour |]1,Inf[ Prochain évènement (%eventName%) : %count% jours'
 gift_list.title: 'Liste - %listName%'
 gift_list.no_category.guest: 'Aucune catégorie trouvée'
 gift_list.no_category.logged_can_edit: 'Aucune catégorie trouvée, cliquez sur le bouton <b>Créer une catégorie</b> ci-dessous pour en créer une'
