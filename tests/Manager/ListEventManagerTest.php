@@ -70,9 +70,9 @@ class ListEventManagerTest extends TestCase
 
         $listEventTday = new ListEvent();
         $listEventTday->setName('An event of today');
-        $listEventTday->setDay(date('j'));
-        $listEventTday->setMonth(date('n'));
-        $listEventTday->setYear(date('Y'));
+        $listEventTday->setDay((int) date('j'));
+        $listEventTday->setMonth((int) date('n'));
+        $listEventTday->setYear((int) date('Y'));
 
         $refTime = mktime(0, 1, 1, $listEventTday->getMonth(), $listEventTday->getDay(), date('Y'));
 
@@ -106,9 +106,9 @@ class ListEventManagerTest extends TestCase
 
         $listEventAfterTomorrow = new ListEvent();
         $listEventAfterTomorrow->setName('An event after tomorrow');
-        $listEventAfterTomorrow->setDay($afterTomorrow->format('j'));
-        $listEventAfterTomorrow->setMonth($afterTomorrow->format('n'));
-        $listEventAfterTomorrow->setYear($afterTomorrow->format('Y'));
+        $listEventAfterTomorrow->setDay((int) $afterTomorrow->format('j'));
+        $listEventAfterTomorrow->setMonth((int) $afterTomorrow->format('n'));
+        $listEventAfterTomorrow->setYear((int) $afterTomorrow->format('Y'));
 
         $refTime = mktime(0, 1, 1, $listEventTomorrow->getMonth(), $listEventTomorrow->getDay(), $tomorrow->format('Y'));
 
@@ -195,7 +195,7 @@ class ListEventManagerTest extends TestCase
         $this->assertEquals([
             'name' => 'Next year event',
             'time' => $refTime,
-            'daysLeft' => date('L') ? 363 : 364
+            'daysLeft' => date('L') ? 364 : 365
         ], $res);
     }
 
@@ -219,7 +219,7 @@ class ListEventManagerTest extends TestCase
         $this->assertEquals([
             'name' => 'Birthday',
             'time' => $refTime,
-            'daysLeft' => date('L') ? 363 : 364
+            'daysLeft' => date('L') ? 364 : 365
         ], $res);
     }
 }

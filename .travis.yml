@@ -1,14 +1,14 @@
 language: php
 
-dist: trusty
+dist: xenial
 
 matrix:
   include:
-  - php: 7.1
   - php: 7.2
+  - php: 7.3
 
   fast_finish: true
 
 install: composer install
 
-script: phpunit --coverage-text
+script: vendor/bin/simple-phpunit --coverage-text
