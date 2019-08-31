@@ -15,10 +15,6 @@ class GiftListSubscriber implements EventSubscriberInterface
      */
     private $entityManager;
 
-    /**
-     * GiftSubscriber constructor.
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -37,7 +33,6 @@ class GiftListSubscriber implements EventSubscriberInterface
     /**
      * Ensure there's at least the birth date event
      *
-     * @param GiftListCreatedEvent $event
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function onGiftListCreation(GiftListCreatedEvent $event): void
@@ -46,7 +41,7 @@ class GiftListSubscriber implements EventSubscriberInterface
         if (null !== $birthdateEvent) {
             return;
         }
-        $birthdateEvent = new ListEvent(true, ListEventManager::BIRTHDAY_TYPE);
+        $birthdateEvent = new ListEvent(true, ListEvent::BIRTHDAY_TYPE);
         $this->entityManager->persist($birthdateEvent);
         $this->entityManager->flush();
     }

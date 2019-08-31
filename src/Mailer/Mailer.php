@@ -25,62 +25,50 @@ class Mailer
 
     public function sendPurchaseAlertMessage(User $user, Gift $purchasedGift, UserInterface $buyer): void
     {
-        $templateFile = 'emails/alert_purchase.txt.twig';
-        $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $rendered = $this->templating->render($templateFile, array(
-            'user' => $user,
+        $rendered = $this->renderMailTemplate('emails/alert_purchase.txt.twig', $user, [
             'buyer' => $buyer,
             'purchasedGift' => $purchasedGift,
-            'home' => $home,
-        ));
+        ]);
         $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
     }
 
     public function sendCreationAlertMessage(User $user, Gift $createdGift, UserInterface $creator): void
     {
-        $templateFile = 'emails/alert_creation.txt.twig';
-        $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $rendered = $this->templating->render($templateFile, array(
-            'user' => $user,
+        $rendered = $this->renderMailTemplate('emails/alert_creation.txt.twig', $user, [
             'creator' => $creator,
             'createdGift' => $createdGift,
-            'home' => $home,
-        ));
+        ]);
         $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
     }
 
     public function sendEditionAlertMessage(User $user, Gift $editedGift, UserInterface $editor): void
     {
-        $templateFile = 'emails/alert_edition.txt.twig';
-        $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $rendered = $this->templating->render($templateFile, array(
-            'user' => $user,
+        $rendered = $this->renderMailTemplate('emails/alert_edition.txt.twig', $user, [
             'editor' => $editor,
-            'editedGift' => $editedGift,
-            'home' => $home,
-        ));
+            'editedGift' => $editedGift
+        ]);
         $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
     }
 
     public function sendDeletionAlertMessage(User $user, Gift $deletedGift, UserInterface $deleter): void
     {
-        $templateFile = 'emails/alert_deletion.txt.twig';
-        $home = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $rendered = $this->templating->render($templateFile, array(
-            'user' => $user,
+        $rendered = $this->renderMailTemplate('emails/alert_deletion.txt.twig', $user, [
             'deleter' => $deleter,
-            'deletedGift' => $deletedGift,
-            'home' => $home,
-        ));
+            'deletedGift' => $deletedGift
+        ]);
         $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
     }
 
-    /**
-     * @param string $renderedTemplate
-     * @param string $fromEmail
-     * @param string $toEmail
-     */
-    protected function sendEmailMessage($renderedTemplate, $fromEmail, $toEmail): void
+    private function renderMailTemplate(string $templateFile, User $user, array $data): string
+    {
+        $data = array_merge($data, [
+            'home' => $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'user' => $user,
+        ]);
+        return $this->templating->render($templateFile, $data);
+    }
+
+    protected function sendEmailMessage(string $renderedTemplate, string $fromEmail, string $toEmail): void
     {
         // Render the email, use the first line as the subject, and the rest as the body
         $renderedLines = explode("\n", trim($renderedTemplate));

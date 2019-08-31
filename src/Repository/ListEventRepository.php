@@ -2,16 +2,19 @@
 
 namespace BestWishes\Repository;
 
-use BestWishes\Manager\ListEventManager;
-use Doctrine\ORM\EntityRepository;
+use BestWishes\Entity\ListEvent;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
-/**
- * Class ListEventRepository
- */
-class ListEventRepository extends EntityRepository
+class ListEventRepository extends ServiceEntityRepository
 {
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, ListEvent::class);
+    }
+
     /**
-     * @return mixed
+     * @return ListEvent[]
      */
     public function findAllActive()
     {
@@ -25,14 +28,13 @@ class ListEventRepository extends EntityRepository
     }
 
     /**
-     * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findBirthdate()
+    public function findBirthdate(): ?ListEvent
     {
         return $this->createQueryBuilder('le')
             ->where('le.type = :type')
-            ->setParameter('type', ListEventManager::BIRTHDAY_TYPE)
+            ->setParameter('type', ListEvent::BIRTHDAY_TYPE)
             ->setMaxResults(1)
             ->getQuery()
             ->useQueryCache(true)

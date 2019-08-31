@@ -4,14 +4,17 @@ namespace BestWishes\Repository;
 
 use BestWishes\Entity\Category;
 use BestWishes\Entity\GiftList;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
-/**
- * Class CategoryRepository
- */
-class CategoryRepository extends EntityRepository
+class CategoryRepository extends ServiceEntityRepository
 {
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, Category::class);
+    }
+
     /**
      * @param GiftList $list
      * @return mixed

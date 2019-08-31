@@ -3,14 +3,17 @@
 namespace BestWishes\Repository;
 
 use BestWishes\Entity\GiftList;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
-/**
- * Class GiftListRepository
- */
-class GiftListRepository extends EntityRepository
+class GiftListRepository extends ServiceEntityRepository
 {
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, GiftList::class);
+    }
+
     /**
      * @throws \Doctrine\ORM\NonUniqueResultException
      */

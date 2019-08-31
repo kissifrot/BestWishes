@@ -3,16 +3,18 @@
 namespace BestWishes\Repository;
 
 use BestWishes\Entity\Gift;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
-/**
- * Class GiftRepository
- */
-class GiftRepository extends EntityRepository
+
+class GiftRepository extends ServiceEntityRepository
 {
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, Gift::class);
+    }
+
     /**
-     * @param int $id
-     * @return null|Gift
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findFullById(int $id): ?Gift
@@ -29,8 +31,6 @@ class GiftRepository extends EntityRepository
     }
 
     /**
-     * @param int $id
-     * @return null|Gift
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findFullSurpriseExcludedById(int $id): ?Gift

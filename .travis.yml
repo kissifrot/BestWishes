@@ -11,4 +11,4 @@ matrix:
 
 install: composer install
 
-script: vendor/bin/simple-phpunit --coverage-text
+script: bin/phpunit --coverage-text
