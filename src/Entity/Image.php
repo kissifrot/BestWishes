@@ -13,7 +13,7 @@ class Image
     /**
      * @var null|string
      *
-     * @Assert\Url(checkDNS = true)
+     * @Assert\Url()
      * @ORM\Column(name="url", length=255, nullable=true)
      */
     private $url;

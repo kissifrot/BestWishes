@@ -5,13 +5,12 @@ namespace BestWishes\Controller;
 use BestWishes\Entity\GiftList;
 use BestWishes\Security\AclManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class UserController
@@ -31,7 +30,6 @@ class UserController extends AbstractController
 
     /**
      * @Route("/", name="user_home")
-     * @Method({"GET"})
      */
     public function index(): Response
     {
@@ -40,7 +38,6 @@ class UserController extends AbstractController
 
     /**
      * @Route("/manage-alerts", name="user_manage_alerts")
-     * @Method({"GET"})
      */
     public function manageAlerts(): Response
     {
@@ -57,8 +54,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/updateAlert", name="user_update_list_alert", requirements={"id": "\d+"}, options = { "expose" = true })
-     * @Method({"POST"})
+     * @Route("/{id}/updateAlert", name="user_update_list_alert", requirements={"id": "\d+"}, options = { "expose" = true }, methods={"POST"})
      * @param Request  $request
      * @param GiftList $giftList
      * @return JsonResponse

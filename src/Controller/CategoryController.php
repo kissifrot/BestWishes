@@ -9,13 +9,14 @@ use BestWishes\Event\CategoryDeletedEvent;
 use BestWishes\Event\CategoryEditedEvent;
 use BestWishes\Form\Type\CategoryType;
 use BestWishes\Manager\SecurityManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class CategoryController
@@ -36,10 +37,9 @@ class CategoryController extends AbstractController
 
     /**
      * @param Request $request
-     * @Route("/{id}", name="category_show", requirements={"id": "\d+"})
-     * @Method({"GET"})
+     * @Route("/{id}", name="category_show", requirements={"id": "\d+"}, methods={"GET"})
      *
-     * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function show(Request $request)
@@ -79,15 +79,14 @@ class CategoryController extends AbstractController
     /**
      * @param Request  $request
      * @param GiftList $list
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("/create/{listId}", name="category_create", requirements={"listId": "\d+"})
+     * @Route("/create/{listId}", name="category_create", requirements={"listId": "\d+"}, methods={"GET", "POST"})
      * @ParamConverter("list", options={"id" = "listId"})
-     * @Method({"GET", "POST"})
      *
      */
-    public function create(Request $request, GiftList $list): \Symfony\Component\HttpFoundation\Response
+    public function create(Request $request, GiftList $list): Response
     {
         $this->securityManager->checkAccess(['OWNER', 'EDIT'], $list);
 
@@ -103,7 +102,7 @@ class CategoryController extends AbstractController
             $em->persist($category);
             $em->flush();
 
-            $this->eventDispatcher->dispatch(CategoryCreatedEvent::NAME, new CategoryCreatedEvent($category));
+            $this->eventDispatcher->dispatch( new CategoryCreatedEvent($category), CategoryCreatedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('category.message.created', ['%categoryName%' => $category->getName()]));
 
@@ -117,13 +116,12 @@ class CategoryController extends AbstractController
      * @param Request  $request
      * @param Category $category
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("{id}/edit", name="category_edit", requirements={"id": "\d+"})
-     * @Method({"GET", "POST"})
+     * @Route("{id}/edit", name="category_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
-    public function edit(Request $request, Category $category): \Symfony\Component\HttpFoundation\Response
+    public function edit(Request $request, Category $category): Response
     {
         $this->securityManager->checkAccess(['OWNER', 'EDIT'], $category->getList());
 
@@ -136,7 +134,7 @@ class CategoryController extends AbstractController
             $em->persist($category);
             $em->flush();
 
-            $this->eventDispatcher->dispatch(CategoryEditedEvent::NAME, new CategoryEditedEvent($category));
+            $this->eventDispatcher->dispatch(new CategoryEditedEvent($category), CategoryEditedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('category.message.updated', ['%categoryName%' => $category->getName()]));
 
@@ -149,12 +147,11 @@ class CategoryController extends AbstractController
     /**
      * @param Request $request
      * @param Category    $category
-     * @Route("/{id}/delete", name="category_delete", requirements={"id": "\d+"})
-     * @Method({"POST"})
+     * @Route("/{id}/delete", name="category_delete", requirements={"id": "\d+"}, methods={"POST"})
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function delete(Request $request, Category $category): \Symfony\Component\HttpFoundation\Response
+    public function delete(Request $request, Category $category): Response
     {
         $this->securityManager->checkAccess(['OWNER', 'EDIT'], $category->getList());
 
@@ -167,7 +164,7 @@ class CategoryController extends AbstractController
             $em->remove($category);
             $em->flush();
 
-            $this->eventDispatcher->dispatch(CategoryDeletedEvent::NAME, new CategoryDeletedEvent($deletedCategory));
+            $this->eventDispatcher->dispatch(new CategoryDeletedEvent($deletedCategory), CategoryDeletedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('category.message.deleted', ['%categoryName%' => $category->getName()]));
         }
@@ -180,9 +177,9 @@ class CategoryController extends AbstractController
      *
      * @param Category   $category
      *
-     * @return \Symfony\Component\Form\FormInterface Delete form
+     * @return FormInterface Delete form
      */
-    private function createDeleteForm(Category $category): \Symfony\Component\Form\FormInterface
+    private function createDeleteForm(Category $category): FormInterface
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('category_delete', ['id' => $category->getId()]))

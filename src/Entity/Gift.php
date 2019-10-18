@@ -104,7 +104,7 @@ class Gift
     /**
      * @var null|string
      *
-     * @Assert\Url(checkDNS = true)
+     * @Assert\Url()
      * @ORM\Column(name="more_detail_url", length=255, nullable=true)
      */
     private $moreDetailUrl;

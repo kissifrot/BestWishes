@@ -11,14 +11,15 @@ use BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder;
 use BestWishes\Security\AclManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
 use FOS\UserBundle\Model\UserManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class AdminController
@@ -43,7 +44,6 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/lists", name="admin_lists")
-     * @Method({"GET"})
      */
     public function lists(): Response
     {
@@ -56,7 +56,6 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/lists/rights", name="admin_lists_rights")
-     * @Method({"GET"})
      */
     public function listsRights(): Response
     {
@@ -77,8 +76,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/list/{id}/updatePerm", name="admin_update_list_perm", requirements={"id": "\d+"}, options = { "expose" = true })
-     * @Method({"POST"})
+     * @Route("/list/{id}/updatePerm", name="admin_update_list_perm", requirements={"id": "\d+"}, options = { "expose" = true }, methods={"POST"})
      * @param Request  $request
      * @param GiftList $giftList
      * @return JsonResponse
@@ -127,10 +125,9 @@ class AdminController extends AbstractController
     /**
      * @param Request  $request
      * @param GiftList $giftList
-     * @Route("/list/{id}", name="admin_list_delete", requirements={"id": "\d+"})
-     * @Method({"DELETE"})
+     * @Route("/list/{id}", name="admin_list_delete", requirements={"id": "\d+"}, methods={"DELETE"})
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listDelete(Request $request, GiftList $giftList): Response
     {
@@ -153,9 +150,8 @@ class AdminController extends AbstractController
     /**
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/list/create", name="admin_list_create")
-     * @Method({"GET", "POST"})
+     * @return Response
+     * @Route("/list/create", name="admin_list_create", methods={"GET", "POST"})
      *
      * @throws \Doctrine\ORM\ORMException
      */
@@ -195,11 +191,10 @@ class AdminController extends AbstractController
     /**
      * @param Request  $request
      * @param GiftList $giftList
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      *
      * @throws \Doctrine\ORM\ORMException
-     * @Route("/list/{id}/edit", name="admin_list_edit", requirements={"id": "\d+"})
-     * @Method({"GET", "POST"})
+     * @Route("/list/{id}/edit", name="admin_list_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     public function listEdit(Request $request, GiftList $giftList): Response
     {
@@ -241,7 +236,7 @@ class AdminController extends AbstractController
      * @param mixed  $entity
      * @param string $action Chosen action
      *
-     * @return \Symfony\Component\Form\FormInterface|\Symfony\Component\HttpFoundation\RedirectResponse Delete form or redirect
+     * @return FormInterface|RedirectResponse Delete form or redirect
      */
     private function createSimpleActionForm($entity, $action = 'delete')
     {
@@ -274,7 +269,6 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/users", name="admin_users")
-     * @Method({"GET"})
      * @return Response
      */
     public function users(): Response
@@ -289,10 +283,9 @@ class AdminController extends AbstractController
     /**
      * @param Request  $request
      * @param User $user
-     * @Route("/user/{id}", name="admin_user_delete", requirements={"id": "\d+"})
-     * @Method({"DELETE"})
+     * @Route("/user/{id}", name="admin_user_delete", requirements={"id": "\d+"}, methods={"DELETE"})
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function userDelete(Request $request, User $user): Response
     {
@@ -315,10 +308,9 @@ class AdminController extends AbstractController
     /**
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      * @throws \Doctrine\ORM\ORMException
-     * @Route("/user/create", name="admin_user_create")
-     * @Method({"GET", "POST"})
+     * @Route("/user/create", name="admin_user_create", methods={"GET", "POST"})
      */
     public function userCreate(Request $request): Response
     {
@@ -365,11 +357,10 @@ class AdminController extends AbstractController
     /**
      * @param Request $request
      * @param User    $user
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      *
      * @throws \Doctrine\ORM\ORMException
-     * @Route("/user/{id}/edit", name="admin_user_edit", requirements={"id": "\d+"})
-     * @Method({"GET", "POST"})
+     * @Route("/user/{id}/edit", name="admin_user_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     public function userEdit(Request $request, User $user): Response
     {

@@ -6,10 +6,10 @@ use BestWishes\Entity\GiftList;
 use BestWishes\Manager\ListEventManager;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class ListController
@@ -28,9 +28,8 @@ class ListController extends AbstractController
 
     /**
      * @Route("/", name="list_index")
-     * @Method({"GET"})
      */
-    public function index(): \Symfony\Component\HttpFoundation\Response
+    public function index(): Response
     {
         $lists = $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findAll();
 
@@ -39,9 +38,8 @@ class ListController extends AbstractController
 
     /**
      * @Route("/{id}", name="list_show", requirements={"id": "\d+"})
-     * @Method({"GET"})
      *
-     * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function show(Request $request)
@@ -61,11 +59,10 @@ class ListController extends AbstractController
 
     /**
      * @Route("/export/{id}", name="list_export_pdf", requirements={"id": "\d+"})
-     * @Method({"GET"})
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function pdfExport(Request $request)
+    public function pdfExport(Request $request): PdfResponse
     {
         $id = $request->attributes->getInt('id');
         $list = $this->isGranted('IS_AUTHENTICATED_REMEMBERED')

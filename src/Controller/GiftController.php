@@ -11,16 +11,18 @@ use BestWishes\Event\GiftEditedEvent;
 use BestWishes\Event\GiftPurchasedEvent;
 use BestWishes\Form\Type\GiftType;
 use BestWishes\Manager\SecurityManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class GiftController
@@ -40,10 +42,9 @@ class GiftController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="gift_show", requirements={"id": "\d+"})
-     * @Method({"GET"})
+     * @Route("/{id}", name="gift_show", requirements={"id": "\d+"}, methods={"GET"})
      *
-     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @return Response|NotFoundHttpException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function show(Request $request)
@@ -67,9 +68,8 @@ class GiftController extends AbstractController
     /**
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("/create/{catId}", name="gift_create", requirements={"catId": "\d+"})
+     * @Route("/create/{catId}", name="gift_create", requirements={"catId": "\d+"}, methods={"GET", "POST"})
      * @ParamConverter("category", options={"id" = "catId"})
-     * @Method({"GET", "POST"})
      */
     public function create(Request $request, Category $category): Response
     {
@@ -92,7 +92,7 @@ class GiftController extends AbstractController
             $em->flush();
 
             // Dispatch the creation event
-            $this->eventDispatcher->dispatch(GiftCreatedEvent::NAME, new GiftCreatedEvent($gift, $this->getUser()));
+            $this->eventDispatcher->dispatch(new GiftCreatedEvent($gift, $this->getUser()), GiftCreatedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('gift.message.created', ['%giftName%' => $gift->getName()]));
 
@@ -106,8 +106,7 @@ class GiftController extends AbstractController
     /**
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("{id}/edit", name="gift_edit", requirements={"id": "\d+"})
-     * @Method({"GET", "POST"})
+     * @Route("{id}/edit", name="gift_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     public function edit(Request $request, Gift $gift): Response
     {
@@ -127,7 +126,7 @@ class GiftController extends AbstractController
             $em->flush();
 
             // Dispatch the edition event
-            $this->eventDispatcher->dispatch(GiftEditedEvent::NAME, new GiftEditedEvent($originGift, $gift, $this->getUser()));
+            $this->eventDispatcher->dispatch(new GiftEditedEvent($originGift, $gift, $this->getUser()), GiftEditedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('gift.message.updated', ['%giftName%' => $gift->getName()]));
 
@@ -140,8 +139,7 @@ class GiftController extends AbstractController
     /**
      * @param Request $request
      * @param Gift    $gift
-     * @Route("/{id}/delete", name="gift_delete", requirements={"id": "\d+"})
-     * @Method({"POST"})
+     * @Route("/{id}/delete", name="gift_delete", requirements={"id": "\d+"}, methods={"POST"})
      */
     public function delete(Request $request, Gift $gift): Response
     {
@@ -160,7 +158,7 @@ class GiftController extends AbstractController
             $em->flush();
 
             // Dispatch the deletion event
-            $this->eventDispatcher->dispatch(GiftDeletedEvent::NAME, new GiftDeletedEvent($deletedGift, $this->getUser()));
+            $this->eventDispatcher->dispatch(new GiftDeletedEvent($deletedGift, $this->getUser()), GiftDeletedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('gift.message.deleted', ['%giftName%' => $deletedGift->getName()]));
         }
@@ -171,8 +169,7 @@ class GiftController extends AbstractController
     /**
      * @param Request $request
      * @param Gift    $gift
-     * @Route("/{id}/mark-received", name="gift_mark_received", requirements={"id": "\d+"})
-     * @Method({"POST"})
+     * @Route("/{id}/mark-received", name="gift_mark_received", requirements={"id": "\d+"}, methods={"POST"})
      */
     public function markReceived(Request $request, Gift $gift): Response
     {
@@ -199,8 +196,7 @@ class GiftController extends AbstractController
     /**
      * @param Request $request
      * @param Gift    $gift
-     * @Route("/{id}/mark-bought", name="gift_mark_bought", requirements={"id": "\d+"})
-     * @Method({"POST"})
+     * @Route("/{id}/mark-bought", name="gift_mark_bought", requirements={"id": "\d+"}, methods={"POST"})
      *
      * @return Response
      */
@@ -221,7 +217,7 @@ class GiftController extends AbstractController
             $em->flush();
 
             // Dispatch the purchase event
-            $this->eventDispatcher->dispatch(GiftPurchasedEvent::NAME, new GiftPurchasedEvent($gift, $this->getUser(), $purchaseComment));
+            $this->eventDispatcher->dispatch(new GiftPurchasedEvent($gift, $this->getUser(), $purchaseComment), GiftPurchasedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('gift.message.marked_bought', ['%giftName%' => $gift->getName()]));
         }
@@ -235,7 +231,7 @@ class GiftController extends AbstractController
      * @param Gift   $gift
      * @param string $action Chosen action
      *
-     * @return \Symfony\Component\Form\FormInterface|\Symfony\Component\HttpFoundation\RedirectResponse Delete form or redirect
+     * @return FormInterface|RedirectResponse Delete form or redirect
      */
     private function createSimpleActionForm(Gift $gift, $action = 'delete')
     {
@@ -261,9 +257,9 @@ class GiftController extends AbstractController
     /**
      * Creates a form for the purchase action
      * @param Gift $gift
-     * @return \Symfony\Component\Form\FormInterface
+     * @return FormInterface
      */
-    private function createPurchaseForm(Gift $gift): \Symfony\Component\Form\FormInterface
+    private function createPurchaseForm(Gift $gift): FormInterface
     {
         return $this->createFormBuilder()
             ->add('purchaseComment', TextareaType::class, ['label_format' => 'form.gift.purchaseComment', 'constraints' => [ new Length(['max' => 1000])]])
