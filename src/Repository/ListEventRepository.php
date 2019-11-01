@@ -16,7 +16,7 @@ class ListEventRepository extends ServiceEntityRepository
     /**
      * @return ListEvent[]
      */
-    public function findAllActive()
+    public function findAllActive(): array
     {
         return $this->createQueryBuilder('le')
             ->where('le.active = true')

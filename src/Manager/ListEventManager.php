@@ -6,9 +6,6 @@ use BestWishes\Entity\GiftList;
 use BestWishes\Entity\ListEvent;
 use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * Class ListEventManager
- */
 class ListEventManager
 {
     private $em;
@@ -94,11 +91,7 @@ class ListEventManager
 
         // And finally sort them
         usort($calculatedEvents, function ($a, $b) {
-            if ($a['time'] === $b['time']) {
-                return 0;
-            }
-
-            return ($a['time'] > $b['time']) ? -1 : 1;
+            return $a['time'] <=> $b['time'];
         });
 
         return $calculatedEvents;
