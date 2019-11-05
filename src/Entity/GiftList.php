@@ -3,6 +3,7 @@
 namespace BestWishes\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -39,16 +40,16 @@ class GiftList
     private $slug;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      *
-     * @ORM\Column(name="last_update", type="date")
+     * @ORM\Column(name="last_update", type="date_immutable")
      */
     private $lastUpdate;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      *
-     * @ORM\Column(name="birthdate", type="date")
+     * @ORM\Column(name="birthdate", type="date_immutable")
      */
     private $birthDate;
 
@@ -59,7 +60,7 @@ class GiftList
     private $owner;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Category", mappedBy="list")
      */
@@ -68,7 +69,7 @@ class GiftList
     public function __construct()
     {
         $this->categories = new ArrayCollection();
-        $this->lastUpdate = new \DateTime();
+        $this->lastUpdate = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -96,22 +97,22 @@ class GiftList
         $this->slug = $slug;
     }
 
-    public function getLastUpdate(): \DateTime
+    public function getLastUpdate(): \DateTimeImmutable
     {
         return $this->lastUpdate;
     }
 
-    public function setLastUpdate(\DateTime $lastUpdate): void
+    public function setLastUpdate(\DateTimeImmutable $lastUpdate): void
     {
         $this->lastUpdate = $lastUpdate;
     }
 
-    public function getBirthDate(): \DateTime
+    public function getBirthDate(): \DateTimeImmutable
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate(\DateTime $birthDate): void
+    public function setBirthDate(\DateTimeImmutable $birthDate): void
     {
         $this->birthDate = $birthDate;
     }
@@ -126,12 +127,12 @@ class GiftList
         $this->owner = $owner;
     }
 
-    public function getCategories(): \Doctrine\Common\Collections\Collection
+    public function getCategories(): Collection
     {
         return $this->categories;
     }
 
-    public function setCategories(\Doctrine\Common\Collections\Collection $categories): void
+    public function setCategories(Collection $categories): void
     {
         $this->categories = $categories;
     }

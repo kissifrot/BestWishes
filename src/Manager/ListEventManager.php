@@ -30,9 +30,9 @@ class ListEventManager
             return false;
         }
 
-        $nextEventData = end($calculatedEvents);
-        // Today at 00:01:01
-        $currentTime = mktime(0, 1, 1);
+        $nextEventData = reset($calculatedEvents);
+        // Today at 00:00:01
+        $currentTime = \DateTimeImmutable::createFromFormat('U', time())->setTime(0,0,1)->getTimestamp();
         $timeLeft = $nextEventData['time'] - $currentTime;
         $daysLeft = round($timeLeft / 3600 / 24);
         $nextEventData['daysLeft'] = (int)$daysLeft;
@@ -42,20 +42,16 @@ class ListEventManager
 
     /**
      * Get the nearest events of a list
-     *
-     * @param \DateTime $birthDate
-     *
-     * @return array
      */
-    private function getNearestEvents(\DateTime $birthDate = null): array
+    private function getNearestEvents(\DateTimeImmutable $birthDate = null): array
     {
         if (null === $birthDate) {
             return [];
         }
 
         $activeEvents = $this->getAllActiveEvents();
-        // Today at 00:01:01
-        $currentTime = mktime(0, 1, 1);
+        $todayAtMidnight = \DateTimeImmutable::createFromFormat('U', time())->setTime(0,0,1);
+        $currentTime = $todayAtMidnight->getTimestamp();
         // First update the "birthday" event with this list's birthdate
         /** @var ListEvent $activeEvent */
         foreach ($activeEvents as $activeEvent) {
@@ -69,9 +65,9 @@ class ListEventManager
         // Next create the dates corresponding to current year's events and next year's ones
         $calculatedEvents = [];
         foreach ($activeEvents as $activeEvent) {
-            $currentYear = $activeEvent->getYear() ?? date('Y');
-            $currentMonth = $activeEvent->getMonth() ?? date('n');
-            $currentYearEvent = mktime(0, 1, 1, $currentMonth, $activeEvent->getDay(), $currentYear);
+            $currentYear = $activeEvent->getYear() ?? $todayAtMidnight->format('Y');
+            $currentMonth = $activeEvent->getMonth() ?? $todayAtMidnight->format('n');
+            $currentYearEvent = $todayAtMidnight->setDate($currentYear, $currentMonth, $activeEvent->getDay())->getTimestamp();
             if ($currentYearEvent >= $currentTime) {
                 $calculatedEvents[] = [
                     'name' => $activeEvent->getName(),
@@ -79,7 +75,7 @@ class ListEventManager
                 ];
             }
             if ($activeEvent->isPermanent()) {
-                $nextYearEvent = mktime(0, 1, 1, $currentMonth, $activeEvent->getDay(), $currentYear + 1);
+                $nextYearEvent = $todayAtMidnight->setDate($currentYear + 1, $currentMonth, $activeEvent->getDay())->getTimestamp();
                 if ($nextYearEvent >= $currentTime) {
                     $calculatedEvents[] = [
                         'name' => $activeEvent->getName(),

@@ -9,6 +9,7 @@ use BestWishes\Repository\ListEventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Bridge\PhpUnit\ClockMock;
 
 /**
  * @group time-sensitive
@@ -22,6 +23,8 @@ class ListEventManagerTest extends TestCase
 
     public function setUp()
     {
+        date_default_timezone_set('UTC');
+
         $this->em = $this->createMock(EntityManagerInterface::class);
         $this->repo = $this->createMock(ListEventRepository::class);
         $this->em->method('getRepository')->with(ListEvent::class)->willReturn($this->repo);
@@ -32,7 +35,7 @@ class ListEventManagerTest extends TestCase
         $this->repo->expects($this->once())->method('findAllActive')->willReturn([]);
         $listEventManager = new ListEventManager($this->em);
         $gitList = new GiftList();
-        $today = \DateTime::createFromFormat('U', time());
+        $today = \DateTimeImmutable::createFromFormat('U', time());
         $gitList->setBirthDate($today);
 
         $res = $listEventManager->getNearestEventData($gitList);
@@ -41,11 +44,16 @@ class ListEventManagerTest extends TestCase
 
     public function testTodayBirthdayEvent(): void
     {
+        ClockMock::withClockMock(strtotime('2019-11-05 20:00:00'));
+        ClockMock::register(ListEventManager::class);
+
+        $now = \DateTimeImmutable::createFromFormat('U', time());
+
         $listEventBdate = new ListEvent();
         $listEventBdate->setName('Birthday');
         $listEventBdate->setType('birthday');
-        $refTime = mktime(0, 1, 1, date('n'), date('j') , date('Y'));
-        $today = \DateTime::createFromFormat('U', time())->setTime(0,1,1);
+        $refTime = mktime(0, 0, 1, $now->format('n'), $now->format('j') , $now->format('Y'));
+        $today = $now->setTime(0,0,1);
 
         $this->repo->expects($this->once())->method('findAllActive')->willReturn([$listEventBdate]);
         $listEventManager = new ListEventManager($this->em);
@@ -60,9 +68,36 @@ class ListEventManagerTest extends TestCase
         ], $res);
     }
 
+    public function testChristmasEvent(): void
+    {
+        ClockMock::withClockMock(strtotime('2019-11-05 20:00:00'));
+        ClockMock::register(ListEventManager::class);
+
+        $listEventChristmas = new ListEvent();
+        $listEventChristmas->setName('Christmas');
+        $listEventChristmas->setDay(25);
+        $listEventChristmas->setMonth(12);
+        $today = \DateTimeImmutable::createFromFormat('U', time())->setTime(0,0,1);
+
+        $this->repo->expects($this->once())->method('findAllActive')->willReturn([$listEventChristmas]);
+        $listEventManager = new ListEventManager($this->em);
+        $gitList = new GiftList();
+        $gitList->setBirthDate($today);
+
+        $res = $listEventManager->getNearestEventData($gitList);
+        $this->assertEquals([
+            'name' => 'Christmas',
+            'time' => 1577232001,
+            'daysLeft' => 50
+        ], $res);
+    }
+
     public function testTwoEventsToday(): void
     {
-        $today = \DateTime::createFromFormat('U', time());
+        ClockMock::withClockMock(strtotime('2019-11-05 20:00:00'));
+        ClockMock::register(ListEventManager::class);
+
+        $now = \DateTimeImmutable::createFromFormat('U', time());
 
         $listEventBdate = new ListEvent();
         $listEventBdate->setName('Birthday');
@@ -70,30 +105,29 @@ class ListEventManagerTest extends TestCase
 
         $listEventTday = new ListEvent();
         $listEventTday->setName('An event of today');
-        $listEventTday->setDay((int) date('j'));
-        $listEventTday->setMonth((int) date('n'));
-        $listEventTday->setYear((int) date('Y'));
-
-        $refTime = mktime(0, 1, 1, $listEventTday->getMonth(), $listEventTday->getDay(), date('Y'));
+        $listEventTday->setDay((int) $now->format('j'));
+        $listEventTday->setMonth((int) $now->format('n'));
+        $listEventTday->setYear((int) $now->format('Y'));
 
         $this->repo->expects($this->once())->method('findAllActive')->willReturn([$listEventBdate, $listEventTday]);
         $listEventManager = new ListEventManager($this->em);
         $gitList = new GiftList();
-        $gitList->setBirthDate($today);
+        $gitList->setBirthDate($now);
 
         $res = $listEventManager->getNearestEventData($gitList);
         $this->assertEquals([
-            'name' => 'An event of today',
-            'time' => $refTime,
+            'name' => 'Birthday',
+            'time' => 1572912001,
             'daysLeft' => 0
         ], $res);
     }
 
     public function testTwoNextEvents(): void
     {
-        $inThreeMonths= \DateTime::createFromFormat('U', time())->add(new \DateInterval('P3M'));
-        $tomorrow = \DateTime::createFromFormat('U', time())->add(new \DateInterval('P1D'));
-        $afterTomorrow = \DateTime::createFromFormat('U', time())->add(new \DateInterval('P2D'));
+        $now = \DateTimeImmutable::createFromFormat('U', time());
+        $inThreeMonths = $now->add(new \DateInterval('P3M'));
+        $tomorrow = $now->add(new \DateInterval('P1D'));
+        $afterTomorrow = $now->add(new \DateInterval('P2D'));
 
         $listEventBdate = new ListEvent(true);
         $listEventBdate->setName('Birthday');
@@ -110,7 +144,7 @@ class ListEventManagerTest extends TestCase
         $listEventAfterTomorrow->setMonth((int) $afterTomorrow->format('n'));
         $listEventAfterTomorrow->setYear((int) $afterTomorrow->format('Y'));
 
-        $refTime = mktime(0, 1, 1, $listEventTomorrow->getMonth(), $listEventTomorrow->getDay(), $tomorrow->format('Y'));
+        $refTime = mktime(0, 0, 1, $listEventTomorrow->getMonth(), $listEventTomorrow->getDay(), $tomorrow->format('Y'));
 
         $this->repo->expects($this->once())->method('findAllActive')->willReturn([$listEventBdate, $listEventAfterTomorrow, $listEventTomorrow]);
         $listEventManager = new ListEventManager($this->em);
@@ -127,9 +161,8 @@ class ListEventManagerTest extends TestCase
 
     public function testEventInThreeDays(): void
     {
-        $today = \DateTime::createFromFormat('U', time());
-        $nextThreeDays = \DateTime::createFromFormat('U', time());
-        $nextThreeDays->add(new \DateInterval('P3D'));
+        $now = \DateTimeImmutable::createFromFormat('U', time());
+        $nextThreeDays = $now->add(new \DateInterval('P3D'));
 
         $listEvent = new ListEvent();
         $listEvent->setName('Next three days event');
@@ -137,12 +170,12 @@ class ListEventManagerTest extends TestCase
         $listEvent->setMonth($nextThreeDays->format('n'));
         $listEvent->setYear($nextThreeDays->format('Y'));
 
-        $refTime = mktime(0, 1, 1, $nextThreeDays->format('n'), $nextThreeDays->format('j'), $nextThreeDays->format('Y'));
+        $refTime = mktime(0, 0, 1, $nextThreeDays->format('n'), $nextThreeDays->format('j'), $nextThreeDays->format('Y'));
 
         $this->repo->expects($this->once())->method('findAllActive')->willReturn([$listEvent]);
         $listEventManager = new ListEventManager($this->em);
         $gitList = new GiftList();
-        $gitList->setBirthDate($today);
+        $gitList->setBirthDate($now);
 
         $res = $listEventManager->getNearestEventData($gitList);
         $this->assertEquals([
@@ -154,9 +187,10 @@ class ListEventManagerTest extends TestCase
 
     public function testYesterdayEvent(): void
     {
-        $today = \DateTime::createFromFormat('U', time());
-        $yesterday = \DateTime::createFromFormat('U', time());
-        $yesterday->sub(new \DateInterval('P1D'));
+        ClockMock::withClockMock(strtotime('2019-11-05 20:00:00'));
+
+        $now = \DateTimeImmutable::createFromFormat('U', time());
+        $yesterday = $now->sub(new \DateInterval('P1D'));
 
         $listEvent = new ListEvent();
         $listEvent->setName('Yesterday event');
@@ -167,7 +201,7 @@ class ListEventManagerTest extends TestCase
         $this->repo->expects($this->once())->method('findAllActive')->willReturn([$listEvent]);
         $listEventManager = new ListEventManager($this->em);
         $gitList = new GiftList();
-        $gitList->setBirthDate($today);
+        $gitList->setBirthDate($now);
 
         $res = $listEventManager->getNearestEventData($gitList);
         $this->assertEquals(false, $res);
@@ -175,40 +209,39 @@ class ListEventManagerTest extends TestCase
 
     public function testNextYearEvent(): void
     {
-        $today = \DateTime::createFromFormat('U', time());
-        $yesterday = \DateTime::createFromFormat('U', time());
-        $yesterday->sub(new \DateInterval('P1D'));
+        $now = \DateTimeImmutable::createFromFormat('U', time());
+        $yesterday = $now->sub(new \DateInterval('P1D'));
 
         $listEvent = new ListEvent(true);
         $listEvent->setName('Next year event');
         $listEvent->setDay($yesterday->format('j'));
         $listEvent->setMonth($yesterday->format('n'));
 
-        $refTime = mktime(0, 1, 1, $yesterday->format('n'), $yesterday->format('j'), (int) $yesterday->format('Y') + 1);
+        $refTime = mktime(0, 0, 1, $yesterday->format('n'), $yesterday->format('j'), (int) $yesterday->format('Y') + 1);
 
         $this->repo->expects($this->once())->method('findAllActive')->willReturn([$listEvent]);
         $listEventManager = new ListEventManager($this->em);
         $gitList = new GiftList();
-        $gitList->setBirthDate($today);
+        $gitList->setBirthDate($now);
 
         $res = $listEventManager->getNearestEventData($gitList);
         $this->assertEquals([
             'name' => 'Next year event',
             'time' => $refTime,
-            'daysLeft' => date('L') ? 364 : 365
+            'daysLeft' => $now->format('L') ? 364 : 365
         ], $res);
     }
 
     public function testNextYearBirthday(): void
     {
-        $today = \DateTime::createFromFormat('U', time());
-        $yesterday = \DateTime::createFromFormat('U', time())->sub(new \DateInterval('P1D'));
+        $now = \DateTimeImmutable::createFromFormat('U', time());
+        $yesterday = $now->sub(new \DateInterval('P1D'));
 
         $listEventBdate = new ListEvent(true);
         $listEventBdate->setName('Birthday');
         $listEventBdate->setType('birthday');
 
-        $refTime = mktime(0, 1, 1, $yesterday->format('n'), $yesterday->format('j'), (int) $yesterday->format('Y') + 1);
+        $refTime = mktime(0, 0, 1, $yesterday->format('n'), $yesterday->format('j'), (int) $yesterday->format('Y') + 1);
 
         $this->repo->expects($this->once())->method('findAllActive')->willReturn([$listEventBdate]);
         $listEventManager = new ListEventManager($this->em);
@@ -219,7 +252,7 @@ class ListEventManagerTest extends TestCase
         $this->assertEquals([
             'name' => 'Birthday',
             'time' => $refTime,
-            'daysLeft' => date('L') ? 364 : 365
+            'daysLeft' =>  $now->format('L') ? 364 : 365
         ], $res);
     }
 }
