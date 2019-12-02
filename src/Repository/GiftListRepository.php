@@ -4,12 +4,12 @@ namespace BestWishes\Repository;
 
 use BestWishes\Entity\GiftList;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr\Join;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class GiftListRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, GiftList::class);
     }
@@ -28,7 +28,7 @@ class GiftListRepository extends ServiceEntityRepository
             ->setParameter('received', false)
             ->getQuery()
             ->useQueryCache(true)
-            ->useResultCache(true, 600, 'giftlist_full_slug_' . $slug)
+            ->enableResultCache( 600, 'giftlist_full_slug_' . $slug)
             ->getOneOrNullResult();
     }
 
@@ -57,7 +57,7 @@ class GiftListRepository extends ServiceEntityRepository
             ->setParameter('received', false)
             ->getQuery()
             ->useQueryCache(true)
-            ->useResultCache(true, 600, 'giftlist_full_' . $id)
+            ->enableResultCache(600, 'giftlist_full_' . $id)
             ->getOneOrNullResult();
     }
 
@@ -76,7 +76,7 @@ class GiftListRepository extends ServiceEntityRepository
             ->setParameter('surprise', false)
             ->getQuery()
             ->useQueryCache(true)
-            ->useResultCache(true, 600, 'giftlist_full_surpr_excl_' . $id)
+            ->enableResultCache(600, 'giftlist_full_surpr_excl_' . $id)
             ->setResultCacheLifetime(600)
             ->getOneOrNullResult();
     }

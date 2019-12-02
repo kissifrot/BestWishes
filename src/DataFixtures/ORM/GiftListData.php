@@ -29,14 +29,14 @@ class GiftListData extends Fixture implements DependentFixtureInterface
         $stdUser1 = $this->getReference(UserData::USER1_USER_REFERENCE);
         $standardUserList1->setOwner($stdUser1);
         $standardUserList1->setName($stdUser1->getName());
-        $standardUserList1->setBirthDate(\DateTime::createFromFormat('Y-m-d', '2010-01-01'));
+        $standardUserList1->setBirthDate(\DateTimeImmutable::createFromFormat('Y-m-d', '2010-01-01'));
 
 
         $standardUserList2 = new GiftList();
         $stdUser2 = $this->getReference(UserData::USER2_USER_REFERENCE);
         $standardUserList2->setOwner($stdUser2);
         $standardUserList2->setName($stdUser2->getName());
-        $standardUserList2->setBirthDate(\DateTime::createFromFormat('Y-m-d', '2010-04-01'));
+        $standardUserList2->setBirthDate(\DateTimeImmutable::createFromFormat('Y-m-d', '2010-04-01'));
 
         $manager->persist($standardUserList1);
         $manager->persist($standardUserList2);

@@ -4,11 +4,11 @@ namespace BestWishes\Repository;
 
 use BestWishes\Entity\ListEvent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 class ListEventRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ListEvent::class);
     }
@@ -22,8 +22,7 @@ class ListEventRepository extends ServiceEntityRepository
             ->where('le.active = true')
             ->getQuery()
             ->useQueryCache(true)
-            ->useResultCache(true, 'all_active')
-            ->setResultCacheLifetime(3600)
+            ->enableResultCache(3600, 'all_active')
             ->getResult();
     }
 

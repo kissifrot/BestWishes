@@ -65,8 +65,8 @@ class ListEventManager
         // Next create the dates corresponding to current year's events and next year's ones
         $calculatedEvents = [];
         foreach ($activeEvents as $activeEvent) {
-            $currentYear = $activeEvent->getYear() ?? $todayAtMidnight->format('Y');
-            $currentMonth = $activeEvent->getMonth() ?? $todayAtMidnight->format('n');
+            $currentYear = $activeEvent->getYear() ?? (int) $todayAtMidnight->format('Y');
+            $currentMonth = $activeEvent->getMonth() ?? (int) $todayAtMidnight->format('n');
             $currentYearEvent = $todayAtMidnight->setDate($currentYear, $currentMonth, $activeEvent->getDay())->getTimestamp();
             if ($currentYearEvent >= $currentTime) {
                 $calculatedEvents[] = [
