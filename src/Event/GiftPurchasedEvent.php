@@ -3,8 +3,8 @@
 namespace BestWishes\Event;
 
 use BestWishes\Entity\Gift;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class GiftPurchasedEvent extends Event
 {

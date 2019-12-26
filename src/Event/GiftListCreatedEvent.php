@@ -3,8 +3,7 @@
 
 namespace BestWishes\Event;
 
-
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class GiftListCreatedEvent extends Event
 {

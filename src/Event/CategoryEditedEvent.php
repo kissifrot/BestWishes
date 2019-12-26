@@ -3,7 +3,7 @@
 namespace BestWishes\Event;
 
 use BestWishes\Entity\Category;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class CategoryEditedEvent extends Event
 {

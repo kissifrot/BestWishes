@@ -9,6 +9,7 @@ use BestWishes\Event\GiftCreatedEvent;
 use BestWishes\Event\GiftDeletedEvent;
 use BestWishes\Event\GiftEditedEvent;
 use BestWishes\Event\GiftPurchasedEvent;
+use BestWishes\Event\GiftReceivedEvent;
 use BestWishes\Form\Type\GiftType;
 use BestWishes\Manager\SecurityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -184,8 +185,12 @@ class GiftController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $gift->markReceived();
             $em = $this->getDoctrine()->getManager();
+            $receivedGift = clone $gift;
             $em->persist($gift);
             $em->flush();
+
+            // Dispatch the received event
+            $this->eventDispatcher->dispatch(new GiftReceivedEvent($receivedGift), GiftReceivedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('gift.message.marked_received', ['%giftName%' => $gift->getName()]));
         }

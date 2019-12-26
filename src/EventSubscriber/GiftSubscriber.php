@@ -6,6 +6,7 @@ use BestWishes\Event\GiftCreatedEvent;
 use BestWishes\Event\GiftDeletedEvent;
 use BestWishes\Event\GiftEditedEvent;
 use BestWishes\Event\GiftPurchasedEvent;
+use BestWishes\Event\GiftReceivedEvent;
 use BestWishes\Mailer\Mailer;
 use BestWishes\Manager\DoctrineCacheManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
@@ -36,7 +37,8 @@ class GiftSubscriber implements EventSubscriberInterface
             GiftCreatedEvent::NAME   => 'onGiftCreation',
             GiftDeletedEvent::NAME   => 'onGiftDeletion',
             GiftPurchasedEvent::NAME => 'onGiftPurchase',
-            GiftEditedEvent::NAME    => 'onGiftEdition'
+            GiftEditedEvent::NAME    => 'onGiftEdition',
+            GiftReceivedEvent::NAME  => 'onGiftReceived',
         ];
     }
 
@@ -76,7 +78,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
         $mailedUsers = [];
         foreach ($users as $anUser) {
-            if ($anUser === $event->getDeleter()) {
+            if ($anUser === $event->getReceiver()) {
                 // Skip current user
                 continue;
             }
@@ -93,7 +95,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
         if (!empty($mailedUsers)) {
             foreach($mailedUsers as $mailedUser) {
-                $this->mailer->sendDeletionAlertMessage($mailedUser, $event->getGift(), $event->getDeleter());
+                $this->mailer->sendDeletionAlertMessage($mailedUser, $event->getGift(), $event->getReceiver());
             }
         }
     }
@@ -123,6 +125,11 @@ class GiftSubscriber implements EventSubscriberInterface
                 $this->mailer->sendPurchaseAlertMessage($mailedUser, $event->getGift(), $event->getBuyer());
             }
         }
+    }
+
+    public function onGiftReceived(GiftReceivedEvent $event): void
+    {
+        $this->cacheManager->clearGiftListCache($event->getGift()->getList());
     }
 
     public function onGiftEdition(GiftEditedEvent $event): void

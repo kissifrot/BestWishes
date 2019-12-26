@@ -3,14 +3,24 @@
 
 namespace BestWishes\Command;
 
+use BestWishes\Util\UserManipulator;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
-class CreateAdminUserCommand extends ContainerAwareCommand
+class CreateAdminUserCommand extends Command
 {
+    private $userManipulator;
+
+    public function __construct(UserManipulator $userManipulator)
+    {
+        parent::__construct();
+        $this->userManipulator = $userManipulator;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -37,8 +47,7 @@ class CreateAdminUserCommand extends ContainerAwareCommand
         $email = $input->getArgument('email');
         $password = $input->getArgument('password');
 
-        $manipulator = $this->getContainer()->get('bw.util.user_manipulator');
-        $manipulator->create($username, $name, $password, $email, true, true);
+        $this->userManipulator->create($username, $name, $password, $email, true, true);
 
         $output->writeln(sprintf('<info>Successfully created admin user </info><comment>%s</comment>', $username));
     }
