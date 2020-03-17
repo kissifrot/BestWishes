@@ -4,22 +4,24 @@ namespace BestWishes\Mailer;
 
 use BestWishes\Entity\Gift;
 use BestWishes\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Twig\Environment;
 
 class Mailer
 {
     private $mailer;
     private $router;
-    private $templating;
+    private $twig;
     private $fromAddress;
 
-    public function __construct(\Swift_Mailer $mailer, UrlGeneratorInterface $router, EngineInterface $templating, string $fromAddress)
+    public function __construct(MailerInterface $mailer, UrlGeneratorInterface $router, Environment $twig, string $fromAddress)
     {
         $this->mailer = $mailer;
         $this->router = $router;
-        $this->templating = $templating;
+        $this->twig = $twig;
         $this->fromAddress = $fromAddress;
     }
 
@@ -65,7 +67,7 @@ class Mailer
             'home' => $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'user' => $user,
         ]);
-        return $this->templating->render($templateFile, $data);
+        return $this->twig->render($templateFile, $data);
     }
 
     protected function sendEmailMessage(string $renderedTemplate, string $fromEmail, string $toEmail): void
@@ -75,11 +77,12 @@ class Mailer
         $subject = array_shift($renderedLines);
         $body = implode("\n", $renderedLines);
 
-        $message = new \Swift_Message($subject, $body);
-        $message
-            ->setFrom($fromEmail)
-            ->setTo($toEmail);
+        $email = (new Email())
+            ->subject($subject)
+            ->text($body)
+            ->from($fromEmail)
+            ->to($toEmail);
 
-        $this->mailer->send($message);
+        $this->mailer->send($email);
     }
 }

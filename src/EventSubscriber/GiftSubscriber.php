@@ -65,7 +65,7 @@ class GiftSubscriber implements EventSubscriberInterface
         $this->cacheManager->clearGiftListCache($list);
 
         if (!empty($mailedUsers)) {
-            foreach($mailedUsers as $mailedUser) {
+            foreach ($mailedUsers as $mailedUser) {
                 $this->mailer->sendCreationAlertMessage($mailedUser, $event->getGift(), $event->getCreator());
             }
         }
@@ -94,7 +94,7 @@ class GiftSubscriber implements EventSubscriberInterface
         $this->cacheManager->clearGiftListCache($list);
 
         if (!empty($mailedUsers)) {
-            foreach($mailedUsers as $mailedUser) {
+            foreach ($mailedUsers as $mailedUser) {
                 $this->mailer->sendDeletionAlertMessage($mailedUser, $event->getGift(), $event->getDeleter());
             }
         }
@@ -121,7 +121,7 @@ class GiftSubscriber implements EventSubscriberInterface
         }
 
         if (!empty($mailedUsers)) {
-            foreach($mailedUsers as $mailedUser) {
+            foreach ($mailedUsers as $mailedUser) {
                 $this->mailer->sendPurchaseAlertMessage($mailedUser, $event->getGift(), $event->getBuyer());
             }
         }
@@ -153,7 +153,7 @@ class GiftSubscriber implements EventSubscriberInterface
         }
 
         if (!empty($mailedUsers)) {
-            foreach($mailedUsers as $mailedUser) {
+            foreach ($mailedUsers as $mailedUser) {
                 $this->mailer->sendEditionAlertMessage($mailedUser, $event->getEditedGift(), $event->getEditor());
             }
         }
