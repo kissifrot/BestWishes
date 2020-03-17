@@ -21,7 +21,7 @@ class GiftTest extends TestCase
     /** @var User */
     private $buyer;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->now = \DateTime::createFromFormat('U', time());
         $this->category = new Category(1);
