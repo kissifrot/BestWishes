@@ -78,7 +78,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
         $mailedUsers = [];
         foreach ($users as $anUser) {
-            if ($anUser === $event->getReceiver()) {
+            if ($anUser === $event->getDeleter()) {
                 // Skip current user
                 continue;
             }
@@ -95,7 +95,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
         if (!empty($mailedUsers)) {
             foreach($mailedUsers as $mailedUser) {
-                $this->mailer->sendDeletionAlertMessage($mailedUser, $event->getGift(), $event->getReceiver());
+                $this->mailer->sendDeletionAlertMessage($mailedUser, $event->getGift(), $event->getDeleter());
             }
         }
     }
