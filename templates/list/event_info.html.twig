@@ -1,13 +1,13 @@
 {% if nextEventData.daysLeft < 7 %}
     <div class="alert alert-danger">
-        <span class="fas fa-exclamation-triangle" aria-hidden="true"></span>&nbsp;{{ 'gift_list.next_event.text'|transchoice(nextEventData.daysLeft, {'%eventName%': nextEventData.name}) }}
+        <span class="fas fa-exclamation-triangle" aria-hidden="true"></span>&nbsp;{{ 'gift_list.next_event.text'|trans({'%count%': nextEventData.daysLeft, '%eventName%': nextEventData.name}) }}
     </div>
 {% elseif nextEventData.daysLeft < 14 %}
     <div class="alert alert-warning">
-        <span class="fas fa-exclamation-triangle" aria-hidden="true"></span>&nbsp;{{ 'gift_list.next_event.text'|transchoice(nextEventData.daysLeft, {'%eventName%': nextEventData.name}) }}
+        <span class="fas fa-exclamation-triangle" aria-hidden="true"></span>&nbsp;{{ 'gift_list.next_event.text'|trans({'%count%': nextEventData.daysLeft, '%eventName%': nextEventData.name}) }}
     </div>
 {% else %}
     <div class="alert alert-info">
-        {{ 'gift_list.next_event.text'|transchoice(nextEventData.daysLeft, {'%eventName%': nextEventData.name}) }}
+        {{ 'gift_list.next_event.text'|trans({'%count%': nextEventData.daysLeft, '%eventName%': nextEventData.name}) }}
     </div>
 {% endif %}
