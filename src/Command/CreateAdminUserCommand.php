@@ -4,7 +4,6 @@
 namespace BestWishes\Command;
 
 use BestWishes\Util\UserManipulator;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
