@@ -7,11 +7,11 @@ use BestWishes\Entity\User;
 use BestWishes\Event\GiftListCreatedEvent;
 use BestWishes\Form\Type\GiftListType;
 use BestWishes\Form\Type\UserType;
+use BestWishes\Manager\UserManager;
 use BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder;
 use BestWishes\Security\AclManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
-use FOS\UserBundle\Model\UserManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
@@ -22,10 +22,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class AdminController
  * @Route("admin")
- * @Security("has_role('ROLE_ADMIN')")
- *
+ * @IsGranted("ROLE_ADMIN")
  */
 class AdminController extends AbstractController
 {
@@ -34,7 +32,7 @@ class AdminController extends AbstractController
     private $eventDispatcher;
     private $userManager;
 
-    public function __construct(BestWishesSecurityContext $securityContext, AclManager $aclManager, EventDispatcherInterface $eventDispatcher, UserManagerInterface $userManager)
+    public function __construct(BestWishesSecurityContext $securityContext, AclManager $aclManager, EventDispatcherInterface $eventDispatcher, UserManager $userManager)
     {
         $this->securityContext = $securityContext;
         $this->aclManager = $aclManager;
@@ -314,11 +312,7 @@ class AdminController extends AbstractController
      */
     public function userCreate(Request $request): Response
     {
-        /** @var $userManager UserManagerInterface */
-        $userManager = $this->userManager;
-
-        $user = $userManager->createUser();
-        $user->setEnabled(true);
+        $user = $this->userManager->createUser();
 
         $form = $this->createForm(UserType::class, $user);
 
@@ -326,7 +320,7 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $userManager->updatePassword($user);
+            $this->userManager->updatePassword($user, $form->get('plainPassword')->getData());
             $em->persist($user);
             try {
                 $em->flush();
@@ -364,16 +358,13 @@ class AdminController extends AbstractController
      */
     public function userEdit(Request $request, User $user): Response
     {
-        /** @var $userManager UserManagerInterface */
-        $userManager = $this->userManager;
-
         $form = $this->createForm(UserType::class, $user, ['isEditing' => true]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $userManager->updatePassword($user);
+            $this->userManager->updatePassword($user, $form->get('plainPassword')->getData());
             $em->persist($user);
             try {
                 $em->flush();

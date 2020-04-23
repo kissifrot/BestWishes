@@ -22,7 +22,7 @@ class UserType extends AbstractType
             ->add('username', TextType::class)
             ->add('email', EmailType::class)
             ->add('name', TextType::class)
-            ->add('plainPassword', PasswordType::class, ['constraints' => new Length(['min' => 6]), 'required' => !$options['isEditing']])
+            ->add('plainPassword', PasswordType::class, ['constraints' => new Length(['min' => 6]), 'required' => !$options['isEditing'], 'mapped' => false])
             ->add('list', EntityType::class, ['class' => GiftList::class, 'choice_label' => 'name', 'required' => false])
             ->add('save', SubmitType::class, ['label_format' => 'form.save']);
     }

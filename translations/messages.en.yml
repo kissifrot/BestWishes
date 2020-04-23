@@ -15,6 +15,37 @@ global.permission.ALERT_DELETE: 'Delete alert'
 security.login.title: 'Login'
 security.login.lost_password.text: 'Lost your password?'
 security.login.lost_password.title: 'Password recovery'
+security.login.lost_password.content: 'Enter your email address and we we will send you a link to reset your password.'
+security.login.form.email: 'E-mail address'
+change_password.submit: 'Change password'
+change_password.flash.success: 'The password has been changed.'
+resetting.request.submit: 'Reset password'
+resetting.request.check_email.title: 'Password Reset Email Sent'
+resetting.request.check_email.content: |
+  <p>An email has been sent that contains a link that you can click to reset your password. This link will expire in %tokenLifetime% hour(s).</p>
+  <p>If you don't receive an email please check your spam folder or <a href="%passwordRequestLink%">try again</a>.</p>
+resetting.request.mail.title: Your password reset request
+resetting.request.mail.content: |
+  <h1>Password reset</h1>
+
+  <p>
+  To reset your password, please visit <a href="%resetTokenLink%">here</a>.<br>
+  This link will expire in %tokenLifetime% hour(s)..
+  </p>
+
+  <p>
+  Regards,<br>
+  <a href="%siteUrl%">%siteName%</a> admin
+  </p>
+resetting.reset.title: 'Reset your password'
+resetting.reset.submit: 'Change password'
+resetting.change.form.new_password: 'New password'
+resetting.change.form.new_password_repeat: 'Repeat Password'
+security.no_login_password: 'Username could not be found.'
+security.login.username: Username
+security.login.password: Password
+security.login.remember_me: 'Remember me'
+security.login.submit: 'Log in'
 home.welcome.title.logged: 'Welcome %username%,'
 home.welcome.title.guest: 'Welcome,'
 home.welcome.text.logged: 'Please use the menu on the top to navigate, or <a href="%logoutUrl%">logout</a>'

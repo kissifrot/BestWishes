@@ -1,0 +1,1 @@
+{% trans with {'%tokenLifetime%': tokenLifetime|date('g'), '%resetTokenLink%': url('app_reset_password', {token: resetToken.token}), '%siteName%': site_name, '%siteUrl%': url('homepage')} %}resetting.request.mail.content{% endtrans %}

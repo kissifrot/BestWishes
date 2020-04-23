@@ -7,11 +7,11 @@
         {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 
             <h1>{{ 'home.welcome.title.logged'|trans({ '%username%': app.user.username }) }}</h1>
-            <p>{{ 'home.welcome.text.logged'|trans({ '%logoutUrl%': path('fos_user_security_logout') })|raw }}</p>
+            <p>{{ 'home.welcome.text.logged'|trans({ '%logoutUrl%': path('app_logout') })|raw }}</p>
         {% else %}
             <h1>{{ 'home.welcome.title.guest'|trans }}</h1>
             <p>{{ 'home.welcome.text.guest'|trans }}</p>
-            <span class="far fa-user" aria-hidden="true"></span>&nbsp;{{ 'home.welcome.text_user_not_logged'|trans({ '%loginUrl%': path('fos_user_security_login') })|raw }}
+            <span class="far fa-user" aria-hidden="true"></span>&nbsp;{{ 'home.welcome.text_user_not_logged'|trans({ '%loginUrl%': path('app_login') })|raw }}
         {% endif %}
 
     </div>

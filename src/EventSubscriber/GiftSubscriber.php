@@ -9,8 +9,8 @@ use BestWishes\Event\GiftPurchasedEvent;
 use BestWishes\Event\GiftReceivedEvent;
 use BestWishes\Mailer\Mailer;
 use BestWishes\Manager\DoctrineCacheManager;
+use BestWishes\Manager\UserManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
-use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class GiftSubscriber implements EventSubscriberInterface
@@ -20,7 +20,7 @@ class GiftSubscriber implements EventSubscriberInterface
     private $mailer;
     private $cacheManager;
 
-    public function __construct(UserManagerInterface $userManager, BestWishesSecurityContext $securityContext, Mailer $mailer, DoctrineCacheManager $cacheManager)
+    public function __construct(UserManager $userManager, BestWishesSecurityContext $securityContext, Mailer $mailer, DoctrineCacheManager $cacheManager)
     {
         $this->userManager     = $userManager;
         $this->securityContext = $securityContext;

@@ -1,0 +1,4 @@
+resetting.request.blank_email: 'Please enter your email'
+resetting.change.new_password.blank: 'Please enter a password'
+resetting.change.new_password.min_length: 'Your password should be at least {{ limit }} characters'
+resetting.change.new_password.invalid: 'The password fields must match.'

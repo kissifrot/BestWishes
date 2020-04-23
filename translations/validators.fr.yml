@@ -1,0 +1,4 @@
+resetting.request.blank_email: 'Veuillez entrer votre e-mail'
+resetting.change.new_password.blank: 'Veuillez entrer un mot de passe'
+resetting.change.new_password.min_length: 'Votre mot de passe doit comporter au moins {{ limit }} caractères'
+resetting.change.new_password.invalid: 'Vous devez répéter le même mot de passe.'
