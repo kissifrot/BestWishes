@@ -20,7 +20,7 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     BestWishes\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Security,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -28,18 +28,18 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    BestWishes\Controller\ResetPasswordController:
+        arguments:
+            $fromAddress: '%env(GLOBAL_FROM_EMAIL_ADDRESS)%'
 
     BestWishes\Mailer\Mailer:
         arguments:
             $fromAddress: '%env(GLOBAL_FROM_EMAIL_ADDRESS)%'
-
-    BestWishes\Security\AclManager: ~
-
-    BestWishes\Security\Core\BestWishesSecurityContext: ~
-
-    BestWishes\Security\Acl\Permissions\BestWishesPermissionMap: ~
 
     BestWishes\Security\Acl\Voter\BestWishesAclVoter:
         arguments:

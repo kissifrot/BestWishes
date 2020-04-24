@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'resetting.request.check_email.title'|trans }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% trans with {'%tokenLifetime%': tokenLifetime|date('g'), '%passwordRequestLink%': path('app_forgot_password_request')} %}resetting.request.check_email.content{% endtrans %}
+</div>
+{% endblock %}
