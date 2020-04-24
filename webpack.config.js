@@ -17,8 +17,8 @@ Encore
      * ENTRY CONFIG
      *
      */
-    .addEntry('js/app', './assets/js/app.js')
-    .addStyleEntry('css/app', './assets/scss/app.scss')
+    .addEntry('app', './assets/js/app.js')
+    //.addStyleEntry('app', './assets/scss/app.scss')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
