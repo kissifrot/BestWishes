@@ -119,25 +119,25 @@ form.gift.purchaseComment: 'Commentaire d''achat'
 form.category.name: 'Nom'
 mail.alert_creation.title: '[%siteName%] - Alerte création'
 mail.alert_creation.body_text: |
-  Bonjour %userName%, le cadeau %createdGiftName% a été ajouté par %creatorName% à la liste %listName% dans la catégorie %categoryName%.
+  Bonjour %userName%, le cadeau "%createdGiftName% "a été ajouté par %creatorName% à la liste %listName% dans la catégorie %categoryName%.
 
   Cordialement,
   l'admin de %siteName% - %siteUrl%
 mail.alert_deletion.title: '[%siteName%] - Alerte suppression'
 mail.alert_deletion.body_text: |
-  Bonjour %userName%, le cadeau %deletedGiftName% de la liste %listName% a été supprimé par %deleterName%.
+  Bonjour %userName%, le cadeau "%deletedGiftName%" de la liste %listName% a été supprimé par %deleterName%.
 
   Cordialement,
   l'admin de %siteName% - %siteUrl%
 mail.alert_edition.title: '[%siteName%] - Alerte modification'
 mail.alert_edition.body_text: |
-  Bonjour %userName%, le cadeau %editedGiftName% de la liste %listName% a été modifié par %editorName%.
+  Bonjour %userName%, le cadeau "%editedGiftName%" de la liste %listName% a été modifié par %editorName%.
 
   Cordialement,
   l'admin de %siteName% - %siteUrl%
 mail.alert_purchase.title: '[%siteName%] - Alerte achat'
 mail.alert_purchase.body_text: |
-  Bonjour %userName%, le cadeau %purchasedGiftName% de la liste %listName% a été acheté par %buyerName%.
+  Bonjour %userName%, le cadeau "%purchasedGiftName%" de la liste %listName% a été acheté par %buyerName%.
 
   Cordialement,
   l'admin de %siteName% - %siteUrl%

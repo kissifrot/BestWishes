@@ -119,25 +119,25 @@ form.gift.purchaseComment: 'Purchase comment'
 form.category.name: 'Name'
 mail.alert_creation.title: '[%siteName%] - Creation alert'
 mail.alert_creation.body_text: |
-  Hello %userName%, the gift %createdGiftName% was added by %creatorName% to the list %listName% in the category %categoryName%.
+  Hello %userName%, the gift "%createdGiftName%" was added by %creatorName% to the list %listName% in the category %categoryName%.
 
   Regards,
   %siteName% admin - %siteUrl%
 mail.alert_deletion.title: '[%siteName%] - Deletion alert'
 mail.alert_deletion.body_text: |
-  Hello %userName%, the gift %deletedGiftName% of the list %listName% was deleted by %deleterName%.
+  Hello %userName%, the gift "%deletedGiftName%" of the list %listName% was deleted by %deleterName%.
 
   Regards,
   %siteName% admin - %siteUrl%
 mail.alert_edition.title: '[%siteName%] - Edit alert'
 mail.alert_edition.body_text: |
-  Hello %userName%, the gift %editedGiftName% of the list %listName% was edited by %editorName%.
+  Hello %userName%, the gift "%editedGiftName%" of the list %listName% was edited by %editorName%.
 
   Regards,
   %siteName% admin - %siteUrl%
 mail.alert_purchase.title: '[%siteName%] - Purchase alert'
 mail.alert_purchase.body_text: |
-  Hello %userName%, the gift %purchasedGiftName% of the list %listName% was bought by %buyerName%.
+  Hello %userName%, the gift "%purchasedGiftName%" of the list %listName% was bought by %buyerName%.
 
   Regards,
   %siteName% admin - %siteUrl%
