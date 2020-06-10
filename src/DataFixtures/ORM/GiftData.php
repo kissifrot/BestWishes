@@ -6,7 +6,7 @@ use BestWishes\Entity\Category;
 use BestWishes\Entity\Gift;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class GiftData extends Fixture implements DependentFixtureInterface
 {

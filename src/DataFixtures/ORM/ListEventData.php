@@ -4,7 +4,7 @@ namespace BestWishes\DataFixtures\ORM;
 
 use BestWishes\Entity\ListEvent;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class ListEventData extends Fixture
 {

@@ -31,7 +31,7 @@ class Mailer
 
     public function sendPurchaseAlertMessage(User $user, Gift $purchasedGift, UserInterface $buyer): void
     {
-        $templatedEmail = $this->renderMailTemplate('mail.alert_creation.title', 'emails/alert_purchase.txt.twig', $user, [
+        $templatedEmail = $this->renderMailTemplate('mail.alert_purchase.title', 'emails/alert_purchase.txt.twig', $user, [
             'buyer' => $buyer,
             'purchasedGift' => $purchasedGift,
         ]);
@@ -40,7 +40,7 @@ class Mailer
 
     public function sendCreationAlertMessage(User $user, Gift $createdGift, UserInterface $creator): void
     {
-        $templatedEmail = $this->renderMailTemplate('mail.alert_purchase.title', 'emails/alert_creation.txt.twig', $user, [
+        $templatedEmail = $this->renderMailTemplate('mail.alert_creation.title', 'emails/alert_creation.txt.twig', $user, [
             'creator' => $creator,
             'createdGift' => $createdGift,
         ]);
