@@ -29,7 +29,6 @@ services:
         tags: ['controller.service_arguments']
 
 
-
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
@@ -40,6 +39,7 @@ services:
     BestWishes\Mailer\Mailer:
         arguments:
             $fromAddress: '%env(GLOBAL_FROM_EMAIL_ADDRESS)%'
+            $siteName: '%env(SITE_NAME)%'
 
     BestWishes\Security\Acl\Voter\BestWishesAclVoter:
         arguments:

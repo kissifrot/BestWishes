@@ -4,85 +4,84 @@ namespace BestWishes\Mailer;
 
 use BestWishes\Entity\Gift;
 use BestWishes\Entity\User;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 class Mailer
 {
     private $mailer;
     private $router;
-    private $twig;
+    private $translator;
+    private $siteName;
     private $fromAddress;
 
-    public function __construct(MailerInterface $mailer, UrlGeneratorInterface $router, Environment $twig, string $fromAddress)
+    public function __construct(MailerInterface $mailer, UrlGeneratorInterface $router, TranslatorInterface $translator, string $siteName, string $fromAddress)
     {
         $this->mailer = $mailer;
         $this->router = $router;
-        $this->twig = $twig;
+        $this->translator = $translator;
+        $this->siteName = $siteName;
         $this->fromAddress = $fromAddress;
     }
 
     public function sendPurchaseAlertMessage(User $user, Gift $purchasedGift, UserInterface $buyer): void
     {
-        $rendered = $this->renderMailTemplate('emails/alert_purchase.txt.twig', $user, [
+        $templatedEmail = $this->renderMailTemplate('mail.alert_creation.title', 'emails/alert_purchase.txt.twig', $user, [
             'buyer' => $buyer,
             'purchasedGift' => $purchasedGift,
         ]);
-        $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
+        $this->sendEmailMessage($templatedEmail, $this->fromAddress, $user->getEmail());
     }
 
     public function sendCreationAlertMessage(User $user, Gift $createdGift, UserInterface $creator): void
     {
-        $rendered = $this->renderMailTemplate('emails/alert_creation.txt.twig', $user, [
+        $templatedEmail = $this->renderMailTemplate('mail.alert_purchase.title', 'emails/alert_creation.txt.twig', $user, [
             'creator' => $creator,
             'createdGift' => $createdGift,
         ]);
-        $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
+        $this->sendEmailMessage($templatedEmail, $this->fromAddress, $user->getEmail());
     }
 
     public function sendEditionAlertMessage(User $user, Gift $editedGift, UserInterface $editor): void
     {
-        $rendered = $this->renderMailTemplate('emails/alert_edition.txt.twig', $user, [
+        $templatedEmail = $this->renderMailTemplate('mail.alert_edition.title', 'emails/alert_edition.txt.twig', $user, [
             'editor' => $editor,
             'editedGift' => $editedGift
         ]);
-        $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
+        $this->sendEmailMessage($templatedEmail, $this->fromAddress, $user->getEmail());
     }
 
     public function sendDeletionAlertMessage(User $user, Gift $deletedGift, UserInterface $deleter): void
     {
-        $rendered = $this->renderMailTemplate('emails/alert_deletion.txt.twig', $user, [
+        $templatedEmail = $this->renderMailTemplate('mail.alert_deletion.title', 'emails/alert_deletion.txt.twig', $user, [
             'deleter' => $deleter,
             'deletedGift' => $deletedGift
         ]);
-        $this->sendEmailMessage($rendered, $this->fromAddress, (string) $user->getEmail());
+        $this->sendEmailMessage($templatedEmail, $this->fromAddress, $user->getEmail());
     }
 
-    private function renderMailTemplate(string $templateFile, User $user, array $data): string
+    private function renderMailTemplate(string $subjectTrans, string $templateFile, User $user, array $data): TemplatedEmail
     {
+        $subject = $this->translator->trans($subjectTrans, ['%siteName%' => $this->siteName]);
         $data = array_merge($data, [
             'home' => $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'user' => $user,
         ]);
-        return $this->twig->render($templateFile, $data);
+
+        return (new TemplatedEmail())->subject($subject)->textTemplate($templateFile)->context($data);
     }
 
-    protected function sendEmailMessage(string $renderedTemplate, string $fromEmail, string $toEmail): void
+    protected function sendEmailMessage(TemplatedEmail $renderedTemplate, string $fromEmail, string $toEmail): void
     {
-        // Render the email, use the first line as the subject, and the rest as the body
-        $renderedLines = explode("\n", trim($renderedTemplate));
-        $subject = array_shift($renderedLines);
-        $body = implode("\n", $renderedLines);
-
-        $email = (new Email())
-            ->subject($subject)
-            ->text($body)
+        $renderedTemplate
             ->from($fromEmail)
             ->to($toEmail);
 
-        $this->mailer->send($email);
+        $this->mailer->send($renderedTemplate);
     }
 }

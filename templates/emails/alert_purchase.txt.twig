@@ -1,8 +1,1 @@
-{% block subject %}
-🎁 {{ 'mail.alert_purchase.title'|trans({ '%siteName%': site_name }) }}
-{% endblock %}
-
-{% block body_text %}
 {{ 'mail.alert_purchase.body_text'|trans({ '%siteName%': site_name, '%userName%': user.name, '%purchasedGiftName%': purchasedGift.name, '%buyerName%': buyer.name, '%listName%': purchasedGift.list.name, '%siteUrl%': home }) }}
-{% endblock %}
-{% block body_html %}{% endblock %}

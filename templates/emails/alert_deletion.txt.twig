@@ -1,8 +1,1 @@
-{% block subject %}
-🎁 {{ 'mail.alert_deletion.title'|trans({ '%siteName%': site_name }) }}
-{% endblock %}
-
-{% block body_text %}
 {{ 'mail.alert_deletion.body_text'|trans({ '%siteName%': site_name, '%userName%': user.name, '%deletedGiftName%': deletedGift.name, '%deleterName%': deleter.name, '%listName%': deletedGift.list.name, '%siteUrl%': home }) }}
-{% endblock %}
-{% block body_html %}{% endblock %}

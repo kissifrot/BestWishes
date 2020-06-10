@@ -1,10 +1,1 @@
-{% block subject %}
-{%- autoescape false -%}
-🎁 {{ 'mail.alert_edition.title'|trans({ '%siteName%': site_name }) }}
-{%- endautoescape -%}
-{% endblock %}
-
-{% block body_text %}
 {{ 'mail.alert_edition.body_text'|trans({ '%siteName%': site_name, '%userName%': user.name, '%editedGiftName%': editedGift.name, '%editorName%': editor.name, '%listName%': editedGift.list.name, '%siteUrl%': home }) }}
-{% endblock %}
-{% block body_html %}{% endblock %}
