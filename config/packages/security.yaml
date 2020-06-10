@@ -25,7 +25,7 @@ security:
                 use_referer: true
 
             logout:       true
-            anonymous:    true
+            anonymous:    lazy
             remember_me:
                 secret:   'b%kernel.secret%w'
                 lifetime: 15778463 # 6 months in seconds
