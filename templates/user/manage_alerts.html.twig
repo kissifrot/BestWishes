@@ -44,7 +44,10 @@
         {% endfor %}
         </tbody>
     </table>
+</div>
+{% endblock %}
 
+{% block javascripts_footer %}
     <script type="text/javascript">
         $(document).ready(function() {
             $('.js-alert-check:not(.disabled)').click(function(evt) {
@@ -72,5 +75,4 @@
             })
         })
     </script>
-</div>
 {% endblock %}

@@ -6,8 +6,10 @@ use BestWishes\Security\Core\BestWishesSecurityContext;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class BestWishesSecurityExtension extends \Twig_Extension
+class BestWishesSecurityExtension extends AbstractExtension
 {
     /**
      * @var AuthorizationCheckerInterface
@@ -31,8 +33,8 @@ class BestWishesSecurityExtension extends \Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction('is_multi_granted', [$this, 'isMultiGranted']),
-            new \Twig_SimpleFunction('is_user_granted', [$this, 'isUserGranted']),
+            new TwigFunction('is_multi_granted', [$this, 'isMultiGranted']),
+            new TwigFunction('is_user_granted', [$this, 'isUserGranted']),
         ];
     }
 
