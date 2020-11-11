@@ -4,7 +4,7 @@ namespace BestWishes\Repository;
 
 use BestWishes\Entity\Gift;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class GiftRepository extends ServiceEntityRepository
 {
