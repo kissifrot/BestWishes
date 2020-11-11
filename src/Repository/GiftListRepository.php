@@ -77,7 +77,6 @@ class GiftListRepository extends ServiceEntityRepository
             ->getQuery()
             ->useQueryCache(true)
             ->enableResultCache(600, 'giftlist_full_surpr_excl_' . $id)
-            ->setResultCacheLifetime(600)
             ->getOneOrNullResult();
     }
 }
