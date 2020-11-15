@@ -4,13 +4,13 @@ BestWishes
 
 [![Build Status](https://travis-ci.org/kissifrot/BestWishes.svg?branch=master)](https://travis-ci.org/kissifrot/BestWishes)
 
-BestWishes is a multilanguage wishlist application allowing users to manage their wishlist and indicate who have bought what to avoid receiving the same gift for Christmas (for example).
+BestWishes is a multilingual wishlist application allowing users to manage their wishlist and indicate who have bought what to avoid receiving the same gift for Christmas (for example).
 
 Users can also add surprise gifts and manage additions and purchase alerts.
 
 Recurrent as well as "one-shot" events are also configurable.
 
-The current branch is based on symfony 4.x. For symfony 3.4 version see `0.x` branch.
+The current branch is based on symfony 5.x. For symfony 3.4 version see `0.x` branch.
 
 # Installation
 
@@ -28,9 +28,14 @@ You will have to enter main parameters such as database info and others in the `
 After having indicated the main parameters, run
 
 ```sh
-$ php bin/console doctrine:schema:create
+$ php bin/console doctrine:database:create
 ```
-to create the database schema.
+to create the database, and
+
+```sh
+$ php bin/console doctrine:migrations:migrate
+```
+to populate schema.
 
 ## Application setup
 
