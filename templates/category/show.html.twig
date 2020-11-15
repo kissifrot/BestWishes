@@ -24,6 +24,11 @@
                         <i class="ml-auto fas fa-gift fa-lg" style="color: #FA2864" title="{{ 'gift.bought_by.text'|trans({ '%purchaseDate%':gift.purchaseDate|date('d/m/Y') , '%buyerName%': gift.buyer.name})|raw }}"></i>
                     </div>
                     {% endif %}
+                    {% if gift.surprise and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <div class="ml-auto">
+                            <i class="fas fa-question fa-lg" style="color: #FA2864"  title="{{ 'gift.surprise.test'|trans }}"></i>
+                        </div>
+                    {% endif %}
                 </a>
             {% endfor %}
             </div>
