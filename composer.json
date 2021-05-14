@@ -7,17 +7,17 @@
         "php": ">= 7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "friendsofsymfony/jsrouting-bundle": "^2.6",
-        "knplabs/knp-snappy-bundle": "^1.7",
-        "sensio/framework-extra-bundle": "^5.6",
-        "sentry/sentry-symfony": "^3.5",
+        "friendsofsymfony/jsrouting-bundle": "^2.7",
+        "knplabs/knp-snappy-bundle": "^1.8",
+        "sensio/framework-extra-bundle": "^6.1",
+        "sentry/sentry-symfony": "^4.1",
         "stof/doctrine-extensions-bundle": "^1.5",
         "symfony/acl-bundle": "^2.0",
         "symfony/asset": "*",
         "symfony/console": "*",
         "symfony/dotenv": "*",
         "symfony/expression-language": "*",
-        "symfony/flex": "^1.10",
+        "symfony/flex": "^1.12",
         "symfony/form": "*",
         "symfony/framework-bundle": "*",
         "symfony/mailer": "*",
@@ -32,12 +32,12 @@
         "symfony/twig-bundle": "*",
         "symfony/validator": "*",
         "symfony/web-link": "*",
-        "symfony/webpack-encore-bundle": "^1.8",
+        "symfony/webpack-encore-bundle": "^1.11",
         "symfony/yaml": "*",
-        "symfonycasts/reset-password-bundle": "^1.1"
+        "symfonycasts/reset-password-bundle": "^1.8"
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^3.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "*",
@@ -93,7 +93,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "5.1.*"
+            "require": "5.2.*"
         }
     }
 }
