@@ -4,6 +4,7 @@ namespace BestWishes\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="BestWishes\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @var integer
@@ -89,12 +90,28 @@ class User implements UserInterface
         return $this->name;
     }
 
+    /**
+     * @deprecated use getUserIdentifier() instead
+     */
     public function getUsername(): string
+    {
+        return $this->getUserIdentifier();
+    }
+
+    /**
+     * @deprecated use setUserIdentifier() instead
+     */
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
+
+    public function getUserIdentifier(): string
     {
         return (string) $this->username;
     }
 
-    public function setUsername(string $username): void
+    public function setUserIdentifier(string $username): void
     {
         $this->username = $username;
     }

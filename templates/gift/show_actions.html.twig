@@ -3,17 +3,17 @@
     <a href="{{ path('gift_edit', { id: gift.id }) }}" class="btn btn-primary">
         <i class="fas fa-pencil-alt" aria-hidden="true"></i> {{ 'gift.action.edit'|trans }}
     </a>
-    <button class="btn btn-primary js-gift-delete">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-confirm-delete">
         <i class="fas fa-trash" aria-hidden="true"></i>&nbsp;{{ 'gift.action.delete'|trans }}
     </button>
 {% endif %}
 {% if is_granted('SURPRISE_ADD', gift.list) and not gift.bought %}
-    <button class="btn btn-primary js-gift-mark-bought">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-confirm-mark-bought">
         <i class="fas fa-shopping-cart" aria-hidden="true"></i>&nbsp;{{ 'gift.action.mark_bought'|trans }}
     </button>
 {% endif %}
 {% if is_multi_granted(attrib, gift.list) and not gift.received %}
-    <button class="btn btn-primary js-gift-mark-received">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-confirm-mark-received">
         <i class="fas fa-gift" aria-hidden="true"></i>&nbsp;{{ 'gift.action.mark_received'|trans }}
     </button>
 {% endif %}

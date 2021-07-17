@@ -19,34 +19,36 @@
     </head>
     <body>
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ path('homepage') }}">{{ site_name }}</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path('homepage') }}">{{ site_name }}</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                {% block navbar %}
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ 'global.navbar.lists'|trans }} <span class="caret"></span></a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            {{ render(controller('BestWishes\\Controller\\ListController::index')) }}
-                        </div>
-                    </li>
-                    {% block navbar_extra %}{% endblock %}
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto">
+                    {% block navbar %}
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ 'global.navbar.lists'|trans }} <span class="caret"></span></a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {{ render(controller('BestWishes\\Controller\\ListController::index')) }}
+                            </ul>
+                        </li>
+                        {% block navbar_extra %}{% endblock %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            <li class="nav-item"><a class="nav-link" href="{{ path('user_home') }}">{{ 'global.navbar.options'|trans }}</a></li>
+                        {% endif %}
+                    {% endblock %}
+                </ul>
+                <span class="navbar-text">
                     {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        <li class="nav-item"><a class="nav-link" href="{{ path('user_home') }}">{{ 'global.navbar.options'|trans }}</a></li>
+                        {{ 'global.navbar.text.logged'|trans({ '%username%': app.user.userIdentifier, '%logoutUrl%': path('app_logout') })|raw }}
+                        {% if is_granted('ROLE_ADMIN') %}&nbsp;<a href="{{ path('admin_lists') }}">{{  'global.navbar.admin_access'|trans }}</a>{% endif %}
+                    {% else %}
+                        <i class="far fa-user" aria-hidden="true"></i>&nbsp;{{ 'global.navbar.text.guest'|trans({ '%loginUrl%': path('app_login') })|raw }}
                     {% endif %}
-                {% endblock %}
-            </ul>
-            <span class="navbar-text">
-                {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    {{ 'global.navbar.text.logged'|trans({ '%username%': app.user.username, '%logoutUrl%': path('app_logout') })|raw }}
-                    {% if is_granted('ROLE_ADMIN') %}&nbsp;<a href="{{ path('admin_lists') }}">{{  'global.navbar.admin_access'|trans }}</a>{% endif %}
-                {% else %}
-                    <i class="far fa-user" aria-hidden="true"></i>&nbsp;{{ 'global.navbar.text.guest'|trans({ '%loginUrl%': path('app_login') })|raw }}
-                {% endif %}
-            </span>
+                </span>
+            </div>
         </div>
     </nav>
         {% block content %}

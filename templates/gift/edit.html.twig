@@ -6,11 +6,13 @@
     <div class="container">
         {% set gift = form.vars.value %}
 
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ path('list_show', { id: gift.list.id }) }}">{{ gift.list.name }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ path('category_show', { id: gift.category.id }) }}">{{ gift.category.name }}</a></li>
-            <li class="breadcrumb-item active">{{ gift.name }}</li>
-        </ol>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('list_show', { id: gift.list.id }) }}">{{ gift.list.name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('category_show', { id: gift.category.id }) }}">{{ gift.category.name }}</a></li>
+                <li class="breadcrumb-item active">{{ gift.name }}</li>
+            </ol>
+        </nav>
 
         <h1>{{ 'gift.title.edit'|trans }}</h1>
         {{ form_start(form) }}

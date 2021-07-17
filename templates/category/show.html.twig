@@ -4,10 +4,12 @@
 
 {% block content %}
     <div class="container">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ path('list_show', { id: category.list.id } ) }}">{{ category.list.name }}</a></li>
-            <li class="breadcrumb-item active">{{ category.name }}</li>
-        </ol>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('list_show', { id: category.list.id } ) }}">{{ category.list.name }}</a></li>
+                <li class="breadcrumb-item active">{{ category.name }}</li>
+            </ol>
+        </nav>
         <h1>{{ category.name }}</h1>
 
         {%- include 'default/flash_messages.html.twig' -%}
@@ -17,7 +19,7 @@
             {% for gift in category.gifts %}
                 <a href="{{ path('gift_show', { id: gift.id }) }}" class="list-group-item list-group-item-action d-flex">
                     <div>
-                        {{ gift.name }}<span class="badge"><i class="fas fa-info-circle fa-lg"></i></span>
+                        {{ gift.name }}
                     </div>
                     {% if (gift.bought or gift.surprise) and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         <div class="ml-auto">
@@ -46,12 +48,3 @@
 </nav>
 {% endblock %}
 
-{% block javascripts_footer %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.js-cat-delete').click(function () {
-                $('#modal-confirm-delete').modal();
-            });
-        });
-    </script>
-{% endblock %}

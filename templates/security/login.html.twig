@@ -14,22 +14,22 @@
         <form method="post">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="inputUsername" class="control-label required">{{ 'security.login.username'|trans }}</label>
                 <input type="text" class="form-control" id="inputUsername" name="username" value="{{ last_username }}" required="required" />
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="inputPassword" class="control-label required">{{ 'security.login.password'|trans }}</label>
                 <input type="password" class="form-control" id="inputPassword" name="password" required="required" />
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
                 <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <input type="submit" id="_submit" name="_submit" class="btn btn-primary" value="{{ 'security.login.submit'|trans }}" />
             </div>
             <p><a href="{{ path('app_forgot_password_request') }}">{{ 'security.login.lost_password.text'|trans({}, 'messages') }}</a></p>

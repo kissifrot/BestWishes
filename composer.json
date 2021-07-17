@@ -93,7 +93,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "5.2.*"
+            "require": "5.3.*"
         }
     }
 }

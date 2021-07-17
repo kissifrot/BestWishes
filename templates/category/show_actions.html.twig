@@ -2,7 +2,7 @@
     <a href="{{ path('category_edit', { id: category.id }) }}" class="btn btn-primary">
         <i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;{{ 'category.action.edit'|trans }}
     </a>
-    <button class="btn btn-primary js-cat-delete">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-confirm-delete">
         <i class="fas fa-trash" aria-hidden="true"></i>&nbsp;{{ 'category.action.delete'|trans }}
     </button>
     <a href="{{ path('gift_create', { catId: category.id }) }}" class="btn btn-primary">

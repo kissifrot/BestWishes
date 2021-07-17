@@ -4,13 +4,13 @@
             {{ form_start(deleteForm) }}
             <div class="modal-header">
                 <h5 class="modal-title">{{ 'category.modal.confirmation.text'|trans }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'category.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'category.modal.close.text'|trans }}"></button>
             </div>
             <div class="modal-body">
                 <p>{{ 'category.modal.delete_confirmation.text'|trans }}<br>{{ 'category.modal.delete_confirmation.text.second_line'|trans }}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'category.modal.close.text'|trans }}</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ 'category.modal.close.text'|trans }}</button>
                 <button type="submit" class="btn btn-primary">{{ 'category.modal.confirm.text'|trans }}</button>
             </div>
             {{ form_end(deleteForm) }}

@@ -13,18 +13,18 @@
         {%- include 'default/flash_messages.html.twig' -%}
 
         {% if list.categories is not empty %}
-            <ul class="list-group">
+            <div class="list-group">
             {% for category in list.categories %}
                 <a href="{{ path('category_show', { id: category.id }) }}" class="list-group-item list-group-item-action">
                     {% if not is_granted('OWNER', list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        {% if category.totalGiftsCount > 0 %}<span class="badge badge-primary badge-pill">{{ category.totalGiftsCount }}</span>{% endif %}
+                        {% if category.totalGiftsCount > 0 %}<span class="badge bg-primary rounded-pill">{{ category.totalGiftsCount }}</span>{% endif %}
                     {% else %}
-                        {% if category.viewableGiftsCount > 0 %}<span class="badge badge-primary badge-pill">{{ category.viewableGiftsCount }}</span>{% endif %}
+                        {% if category.viewableGiftsCount > 0 %}<span class="badge bg-primary rounded-pill">{{ category.viewableGiftsCount }}</span>{% endif %}
                     {% endif %}
                     {{ category.name }}
                 </a>
             {% endfor %}
-            </ul>
+            </div>
         {% else %}
             <p><em>{% if is_multi_granted(['OWNER', 'EDIT'], list) %}{{ 'gift_list.no_category.logged_can_edit'|trans|raw }}{% else %}{{ 'gift_list.no_category.guest'|trans }}{% endif %}</em></p>
         {% endif %}

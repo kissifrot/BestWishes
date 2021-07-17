@@ -5,21 +5,21 @@
             <i class="fas fa-pencil-alt" aria-hidden="true"></i>
         </a>
         <div class="btn-group btn-group-lg" role="group">
-            <button class="btn btn-primary js-gift-delete" title="{{ 'gift.action.delete'|trans }}" aria-label="{{ 'gift.action.delete'|trans }}">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-confirm-delete" title="{{ 'gift.action.delete'|trans }}" aria-label="{{ 'gift.action.delete'|trans }}">
                 <i class="fas fa-trash" aria-hidden="true"></i>
             </button>
         </div>
     {% endif %}
     {% if is_granted('SURPRISE_ADD', gift.list) and not gift.bought %}
         <div class="btn-group btn-group-lg" role="group">
-            <button class="btn btn-primary js-gift-mark-bought" title="{{ 'gift.action.mark_bought'|trans }}" aria-label="{{ 'gift.action.mark_bought'|trans }}">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-confirm-mark-bought" title="{{ 'gift.action.mark_bought'|trans }}" aria-label="{{ 'gift.action.mark_bought'|trans }}">
                 <i class="fas fa-shopping-cart" aria-hidden="true"></i>
             </button>
         </div>
     {% endif %}
     {% if is_multi_granted(attrib, gift.list) and not gift.received %}
         <div class="btn-group btn-group-lg" role="group">
-            <button class="btn btn-primary js-gift-mark-received" title="{{ 'gift.action.mark_received'|trans }}" aria-label="{{ 'gift.action.mark_received'|trans }}">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-confirm-mark-received" title="{{ 'gift.action.mark_received'|trans }}" aria-label="{{ 'gift.action.mark_received'|trans }}">
                 <i class="fas fa-gift" aria-hidden="true"></i>
             </button>
         </div>

@@ -1,4 +1,4 @@
-{% form_theme markBoughtForm 'bootstrap_4_layout.html.twig' %}
+{% form_theme markBoughtForm 'bootstrap_5_layout.html.twig' %}
 
 <div id="modal-confirm-delete" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -6,13 +6,13 @@
             {{ form_start(deleteForm) }}
             <div class="modal-header">
                 <h5 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <p>{{ 'gift.modal.delete_confirmation.text'|trans }}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'gift.modal.close.text'|trans }}</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ 'gift.modal.close.text'|trans }}</button>
                 <button type="submit" class="btn btn-primary">{{ 'gift.modal.confirm.text'|trans }}</button>
             </div>
             {{ form_end(deleteForm) }}
@@ -26,13 +26,13 @@
             {{ form_start(markReceivedForm) }}
             <div class="modal-header">
                 <h5 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <p>{{ 'gift.modal.mark_received.text'|trans }}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'gift.modal.close.text'|trans }}</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ 'gift.modal.close.text'|trans }}</button>
                 <button type="submit" class="btn btn-primary">{{ 'gift.modal.confirm.text'|trans }}</button>
             </div>
             {{ form_end(markReceivedForm) }}
@@ -46,14 +46,14 @@
             {{ form_start(markBoughtForm) }}
             <div class="modal-header">
                 <h5 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <p>{{ 'gift.modal.mark_bought.text'|trans }}</p>
                 {{ form_row(markBoughtForm.purchaseComment) }}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'gift.modal.close.text'|trans }}</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ 'gift.modal.close.text'|trans }}</button>
                 <button type="submit" class="btn btn-primary">{{ 'gift.modal.confirm.text'|trans }}</button>
             </div>
             {{ form_end(markBoughtForm) }}
