@@ -1,12 +1,12 @@
 {# messages types <-> classes association #}
-{% set messagesTypes = {'success': 'success', 'notice': 'success', 'error': 'danger'} %}
+{% set messagesTypes = {'success': 'success', 'notice': 'primary', 'error': 'danger'} %}
 
 {% if app.request.hasPreviousSession %}
     {% for type, messages in app.session.flashBag.all() %}
         {% for message in messages %}
             <div class="alert alert-dismissible alert-{{ messagesTypes[type] }}">
-                <button type="button" class="close" data-bs-dismiss="alert" aria-label="{{ 'global.close'|trans }}"></button>
                 {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ 'global.close'|trans }}"></button>
             </div>
         {% endfor %}
     {% endfor %}
