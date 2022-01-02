@@ -8,9 +8,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class LocaleSubscriber implements EventSubscriberInterface
 {
-    private $defaultLocale;
+    private string $defaultLocale;
 
-    public function __construct($defaultLocale = 'en')
+    public function __construct(string $defaultLocale = 'en')
     {
         $this->defaultLocale = $defaultLocale;
     }

@@ -1,4 +1,5 @@
 security:
+    enable_authenticator_manager: true
     encoders:
         BestWishes\Entity\User:
             algorithm: auto
@@ -20,12 +21,15 @@ security:
 
         main:
             pattern: ^/
+            entry_point: form_login
             form_login:
-                csrf_token_generator: security.csrf.token_manager
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
                 use_referer: true
 
-            logout:       true
-            anonymous:    lazy
+            logout:  true
+            lazy:    true
             remember_me:
                 secret:   'b%kernel.secret%w'
                 lifetime: 15778463 # 6 months in seconds

@@ -9,6 +9,7 @@ use BestWishes\Event\CategoryDeletedEvent;
 use BestWishes\Event\CategoryEditedEvent;
 use BestWishes\Form\Type\CategoryType;
 use BestWishes\Manager\SecurityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -19,24 +20,24 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Class CategoryController
  * @Route("cat")
  */
 class CategoryController extends AbstractController
 {
-    private $securityManager;
-    private $translator;
-    private $eventDispatcher;
+    private EntityManagerInterface $entityManager;
+    private SecurityManager $securityManager;
+    private TranslatorInterface $translator;
+    private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(SecurityManager $securityManager, TranslatorInterface $translator, EventDispatcherInterface $eventDispatcher)
+    public function __construct(EntityManagerInterface $entityManager, SecurityManager $securityManager, TranslatorInterface $translator, EventDispatcherInterface $eventDispatcher)
     {
+        $this->entityManager = $entityManager;
         $this->securityManager = $securityManager;
         $this->translator = $translator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
-     * @param Request $request
      * @Route("/{id}", name="category_show", requirements={"id": "\d+"}, methods={"GET"})
      *
      * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
@@ -60,26 +61,23 @@ class CategoryController extends AbstractController
     private function loadCategory(int $id): ?Category
     {
         if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return $this->getDoctrine()->getManager()->getRepository(Category::class)->findFullSurpriseExcludedById($id);
+            return $this->entityManager->getRepository(Category::class)->findFullSurpriseExcludedById($id);
         }
 
         // Load the list to check access on
-        $categoryGiftList = $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findByCategoryId($id);
+        $categoryGiftList = $this->entityManager->getRepository(GiftList::class)->findByCategoryId($id);
         if (!$categoryGiftList) {
             return null;
         }
 
         if ($this->isGranted('OWNER', $categoryGiftList)) {
-            return $this->getDoctrine()->getManager()->getRepository(Category::class)->findFullSurpriseExcludedById($id);
+            return $this->entityManager->getRepository(Category::class)->findFullSurpriseExcludedById($id);
         }
 
-        return $this->getDoctrine()->getManager()->getRepository(Category::class)->findFullById($id);
+        return $this->entityManager->getRepository(Category::class)->findFullById($id);
     }
 
     /**
-     * @param Request  $request
-     * @param GiftList $list
-     * @return Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @Route("/create/{listId}", name="category_create", requirements={"listId": "\d+"}, methods={"GET", "POST"})
@@ -98,11 +96,10 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush();
+            $this->entityManager->persist($category);
+            $this->entityManager->flush();
 
-            $this->eventDispatcher->dispatch( new CategoryCreatedEvent($category), CategoryCreatedEvent::NAME);
+            $this->eventDispatcher->dispatch(new CategoryCreatedEvent($category), CategoryCreatedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('category.message.created', ['%categoryName%' => $category->getName()]));
 
@@ -113,10 +110,7 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @param Request  $request
-     * @param Category $category
      *
-     * @return Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @Route("{id}/edit", name="category_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
@@ -130,9 +124,8 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush();
+            $this->entityManager->persist($category);
+            $this->entityManager->flush();
 
             $this->eventDispatcher->dispatch(new CategoryEditedEvent($category), CategoryEditedEvent::NAME);
 
@@ -145,11 +138,8 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Category    $category
      * @Route("/{id}/delete", name="category_delete", requirements={"id": "\d+"}, methods={"POST"})
      *
-     * @return Response
      */
     public function delete(Request $request, Category $category): Response
     {
@@ -159,10 +149,9 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $deletedCategory = clone $category;
-            $em->remove($category);
-            $em->flush();
+            $this->entityManager->remove($category);
+            $this->entityManager->flush();
 
             $this->eventDispatcher->dispatch(new CategoryDeletedEvent($deletedCategory), CategoryDeletedEvent::NAME);
 
@@ -175,7 +164,6 @@ class CategoryController extends AbstractController
     /**
      * Creates a form for deletion
      *
-     * @param Category   $category
      *
      * @return FormInterface Delete form
      */

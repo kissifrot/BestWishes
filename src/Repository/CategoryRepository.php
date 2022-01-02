@@ -16,8 +16,6 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param GiftList $list
-     * @return mixed
      */
     public function findByList(GiftList $list)
     {
@@ -30,8 +28,6 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $id
-     * @return Category|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findById(int $id): ?Category
@@ -48,8 +44,6 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $id
-     * @return Category|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findFullById(int $id): ?Category
@@ -67,8 +61,6 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $id
-     * @return Category|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findFullSurpriseExcludedById(int $id): ?Category

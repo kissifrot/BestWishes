@@ -5,6 +5,7 @@ namespace BestWishes\Controller;
 use BestWishes\Entity\GiftList;
 use BestWishes\Security\AclManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,11 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends AbstractController
 {
-    private $securityContext;
-    private $aclManager;
+    private EntityManagerInterface $entityManager;
+    private BestWishesSecurityContext $securityContext;
+    private AclManager $aclManager;
 
-    public function __construct(BestWishesSecurityContext $securityContext, AclManager $aclManager)
+    public function __construct(EntityManagerInterface $entityManager, BestWishesSecurityContext $securityContext, AclManager $aclManager)
     {
+        $this->entityManager = $entityManager;
         $this->securityContext = $securityContext;
         $this->aclManager = $aclManager;
     }
@@ -46,17 +49,16 @@ class UserController extends AbstractController
             'ALERT_EDIT',
             'ALERT_DELETE'
         ];
-        $lists = $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findAll();
+        $lists = $this->entityManager->getRepository(GiftList::class)->findAll();
         $user = $this->getUser();
-        return $this->render('user/manage_alerts.html.twig',
-            compact('lists', 'availableAlerts', 'user'));
+        return $this->render(
+            'user/manage_alerts.html.twig',
+            compact('lists', 'availableAlerts', 'user')
+        );
     }
 
     /**
      * @Route("/{id}/updateAlert", name="user_update_list_alert", requirements={"id": "\d+"}, options = { "expose" = true }, methods={"POST"})
-     * @param Request  $request
-     * @param GiftList $giftList
-     * @return JsonResponse
      */
     public function updateAlert(Request $request, GiftList $giftList): JsonResponse
     {
@@ -81,7 +83,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         // Build the mask to update
-        $alertMask = \constant(sprintf('BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_%s' , $alert));
+        $alertMask = \constant(sprintf('BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_%s', $alert));
         $hadAlert = $this->securityContext->isGranted($alert, $giftList, $user);
         $action = $hadAlert ? 'revoke' : 'grant';
         $this->aclManager->$action($giftList, $user, $alertMask);

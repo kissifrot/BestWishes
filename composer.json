@@ -23,18 +23,18 @@
         "symfony/console": "*",
         "symfony/dotenv": "*",
         "symfony/expression-language": "*",
-        "symfony/flex": "^1.12",
+        "symfony/flex": "^1.17|^2",
         "symfony/form": "*",
         "symfony/framework-bundle": "*",
         "symfony/mailer": "*",
         "symfony/monolog-bundle": "^3.6",
         "symfony/process": "*",
-        "symfony/property-access": "5.3.*",
-        "symfony/property-info": "5.3.*",
-        "symfony/proxy-manager-bridge": "5.3.*",
+        "symfony/property-access": "*",
+        "symfony/property-info": "*",
+        "symfony/proxy-manager-bridge": "*",
         "symfony/security-acl": "*",
         "symfony/security-bundle": "*",
-        "symfony/serializer": "5.3.*",
+        "symfony/serializer": "*",
         "symfony/templating": "*",
         "symfony/translation": "*",
         "symfony/twig-bundle": "*",
@@ -42,18 +42,20 @@
         "symfony/web-link": "*",
         "symfony/webpack-encore-bundle": "^1.11",
         "symfony/yaml": "*",
-        "symfonycasts/reset-password-bundle": "^1.8"
+        "symfonycasts/reset-password-bundle": "^1.11",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpunit/phpunit": "^9.5",
-        "symfony/browser-kit": "^5.3",
-        "symfony/css-selector": "^5.3",
-        "symfony/debug-bundle": "^5.3",
+        "symfony/browser-kit": "*",
+        "symfony/css-selector": "*",
+        "symfony/debug-bundle": "*",
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "*",
-        "symfony/stopwatch": "^5.3",
-        "symfony/web-profiler-bundle": "^5.3"
+        "symfony/stopwatch": "*",
+        "symfony/web-profiler-bundle": "*"
     },
     "config": {
         "preferred-install": {
@@ -63,6 +65,10 @@
         "sort-packages": true,
         "platform": {
             "php": "7.4"
+        },
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "symfony/flex": true
         }
     },
     "autoload": {
@@ -79,8 +85,8 @@
         "paragonie/random_compat": "2.*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php73": "*",
         "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php73": "*",
         "symfony/polyfill-php72": "*",
         "symfony/polyfill-php71": "*",
         "symfony/polyfill-php70": "*",
@@ -104,7 +110,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "5.3.*"
+            "require": "5.4.*"
         }
     }
 }

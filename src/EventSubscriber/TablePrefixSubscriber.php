@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class TablePrefixSubscriber implements EventSubscriber
 {
-    protected $prefix = '';
+    protected string $prefix = '';
 
     public function __construct(string $prefix)
     {

@@ -27,7 +27,6 @@ class GiftDeletedEvent extends Event
     }
 
     /**
-     * @return Gift
      */
     public function getGift(): Gift
     {
@@ -35,7 +34,6 @@ class GiftDeletedEvent extends Event
     }
 
     /**
-     * @return UserInterface
      */
     public function getDeleter(): UserInterface
     {

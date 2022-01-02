@@ -20,9 +20,9 @@ class CategoryType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => Category::class,
             'label_format' => 'form.category.%name%'
-        ));
+        ]);
     }
 }

@@ -25,9 +25,9 @@ class GiftListType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => GiftList::class,
             'label_format' => 'form.gift_list.%name%'
-        ));
+        ]);
     }
 }

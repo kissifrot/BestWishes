@@ -11,6 +11,7 @@ use BestWishes\Manager\UserManager;
 use BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder;
 use BestWishes\Security\AclManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -27,13 +28,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AdminController extends AbstractController
 {
-    private $securityContext;
-    private $aclManager;
-    private $eventDispatcher;
-    private $userManager;
+    private EntityManagerInterface $entityManager;
+    private BestWishesSecurityContext $securityContext;
+    private AclManager $aclManager;
+    private EventDispatcherInterface $eventDispatcher;
+    private UserManager $userManager;
 
-    public function __construct(BestWishesSecurityContext $securityContext, AclManager $aclManager, EventDispatcherInterface $eventDispatcher, UserManager $userManager)
+    public function __construct(EntityManagerInterface $entityManager, BestWishesSecurityContext $securityContext, AclManager $aclManager, EventDispatcherInterface $eventDispatcher, UserManager $userManager)
     {
+        $this->entityManager = $entityManager;
         $this->securityContext = $securityContext;
         $this->aclManager = $aclManager;
         $this->eventDispatcher = $eventDispatcher;
@@ -45,7 +48,7 @@ class AdminController extends AbstractController
      */
     public function lists(): Response
     {
-        $lists = $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findAll();
+        $lists = $this->entityManager->getRepository(GiftList::class)->findAll();
 
         $deleteForm = $this->createSimpleActionForm(new GiftList(), 'delete')->createView();
 
@@ -57,7 +60,7 @@ class AdminController extends AbstractController
      */
     public function listsRights(): Response
     {
-        $lists = $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findAll();
+        $lists = $this->entityManager->getRepository(GiftList::class)->findAll();
         $users = $this->userManager->findUsers();
         $availablePermissions = [
             'OWNER',
@@ -69,15 +72,14 @@ class AdminController extends AbstractController
             'ALERT_DELETE'
         ];
 
-        return $this->render('admin/lists_rights.html.twig',
-            compact('lists', 'users', 'availablePermissions'));
+        return $this->render(
+            'admin/lists_rights.html.twig',
+            compact('lists', 'users', 'availablePermissions')
+        );
     }
 
     /**
      * @Route("/list/{id}/updatePerm", name="admin_update_list_perm", requirements={"id": "\d+"}, options = { "expose" = true }, methods={"POST"})
-     * @param Request  $request
-     * @param GiftList $giftList
-     * @return JsonResponse
      */
     public function updatePermission(Request $request, GiftList $giftList): JsonResponse
     {
@@ -95,7 +97,7 @@ class AdminController extends AbstractController
         if (!\in_array($perm, $availablePermissions, true)) {
             return new JsonResponse($defaultData);
         }
-        $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
+        $user = $this->entityManager->getRepository(User::class)->find($userId);
         if (!$user) {
             return new JsonResponse(array_merge($defaultData, ['message' => 'User could not be found']));
         }
@@ -121,11 +123,8 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @param Request  $request
-     * @param GiftList $giftList
      * @Route("/list/{id}", name="admin_list_delete", requirements={"id": "\d+"}, methods={"DELETE"})
      *
-     * @return Response
      */
     public function listDelete(Request $request, GiftList $giftList): Response
     {
@@ -133,9 +132,8 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($giftList);
-            $em->flush();
+            $this->entityManager->remove($giftList);
+            $this->entityManager->flush();
 
             $this->addFlash('notice', sprintf('List "%s" deleted', $giftList->getName()));
         } else {
@@ -146,9 +144,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @param Request $request
      *
-     * @return Response
      * @Route("/list/create", name="admin_list_create", methods={"GET", "POST"})
      *
      * @throws \Doctrine\ORM\ORMException
@@ -162,10 +158,9 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($giftList);
+            $this->entityManager->persist($giftList);
             try {
-                $em->flush();
+                $this->entityManager->flush();
 
                 // Add the correct ACL for the owner
                 $permMask = BestWishesMaskBuilder::MASK_OWNER;
@@ -182,14 +177,13 @@ class AdminController extends AbstractController
             }
         }
 
-        return $this->render('admin/list_create.html.twig',
-            ['form' => $form->createView()]);
+        return $this->render(
+            'admin/list_create.html.twig',
+            ['form' => $form->createView()]
+        );
     }
 
     /**
-     * @param Request  $request
-     * @param GiftList $giftList
-     * @return Response
      *
      * @throws \Doctrine\ORM\ORMException
      * @Route("/list/{id}/edit", name="admin_list_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
@@ -202,8 +196,7 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($giftList);
+            $this->entityManager->persist($giftList);
             try {
                 $em->flush();
 
@@ -224,14 +217,15 @@ class AdminController extends AbstractController
             }
         }
 
-        return $this->render('admin/list_edit.html.twig',
-            ['form' => $form->createView(), 'list' => $giftList]);
+        return $this->render(
+            'admin/list_edit.html.twig',
+            ['form' => $form->createView(), 'list' => $giftList]
+        );
     }
 
     /**
      * Creates a form for simple actions
      *
-     * @param mixed  $entity
      * @param string $action Chosen action
      *
      * @return FormInterface|RedirectResponse Delete form or redirect
@@ -247,13 +241,14 @@ class AdminController extends AbstractController
                 break;
             default:
                 throw new \RuntimeException(sprintf('The "%s" type is not supported', \get_class($entity)));
-                break;
         }
         switch ($action) {
             case 'delete':
                 $method = 'DELETE';
-                $url = $this->generateUrl('admin_' . $routePart . '_delete',
-                    ['id' => !empty($entity->getId()) ? $entity->getId() : 99999999999999]);
+                $url = $this->generateUrl(
+                    'admin_' . $routePart . '_delete',
+                    ['id' => !empty($entity->getId()) ? $entity->getId() : 99999999999999]
+                );
                 break;
             default:
                 throw new \RuntimeException(sprintf('The "%s" action is not supported', $action));
@@ -267,11 +262,10 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/users", name="admin_users")
-     * @return Response
      */
     public function users(): Response
     {
-        $users = $this->getDoctrine()->getManager()->getRepository(User::class)->findAll();
+        $users = $this->entityManager->getRepository(User::class)->findAll();
 
         $deleteForm = $this->createSimpleActionForm(new User(), 'delete')->createView();
 
@@ -279,11 +273,8 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @param Request  $request
-     * @param User $user
      * @Route("/user/{id}", name="admin_user_delete", requirements={"id": "\d+"}, methods={"DELETE"})
      *
-     * @return Response
      */
     public function userDelete(Request $request, User $user): Response
     {
@@ -291,9 +282,8 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($user);
-            $em->flush();
+            $this->entityManager->remove($user);
+            $this->entityManager->flush();
 
             $this->addFlash('notice', sprintf('User "%s" deleted', $user->getName()));
         } else {
@@ -304,9 +294,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @param Request $request
      *
-     * @return Response
      * @throws \Doctrine\ORM\ORMException
      * @Route("/user/create", name="admin_user_create", methods={"GET", "POST"})
      */
@@ -319,11 +307,10 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $this->userManager->updatePassword($user, $form->get('plainPassword')->getData());
-            $em->persist($user);
+            $this->entityManager->persist($user);
             try {
-                $em->flush();
+                $this->entityManager->flush();
 
                 /** @var GiftList|null $chosenList */
                 $chosenList = $user->getList();
@@ -349,9 +336,6 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param User    $user
-     * @return Response
      *
      * @throws \Doctrine\ORM\ORMException
      * @Route("/user/{id}/edit", name="admin_user_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
@@ -363,11 +347,10 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $this->userManager->updatePassword($user, $form->get('plainPassword')->getData());
-            $em->persist($user);
+            $this->entityManager->persist($user);
             try {
-                $em->flush();
+                $this->entityManager->flush();
 
                 /** @var GiftList|null $chosenList */
                 $chosenList = $user->getList();

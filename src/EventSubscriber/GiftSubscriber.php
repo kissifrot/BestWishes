@@ -15,10 +15,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class GiftSubscriber implements EventSubscriberInterface
 {
-    private $userManager;
-    private $securityContext;
-    private $mailer;
-    private $cacheManager;
+    private UserManager $userManager;
+    private BestWishesSecurityContext $securityContext;
+    private Mailer $mailer;
+    private DoctrineCacheManager $cacheManager;
 
     public function __construct(UserManager $userManager, BestWishesSecurityContext $securityContext, Mailer $mailer, DoctrineCacheManager $cacheManager)
     {

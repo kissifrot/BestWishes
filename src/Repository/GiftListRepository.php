@@ -28,7 +28,7 @@ class GiftListRepository extends ServiceEntityRepository
             ->setParameter('received', false)
             ->getQuery()
             ->useQueryCache(true)
-            ->enableResultCache( 600, 'giftlist_full_slug_' . $slug)
+            ->enableResultCache(600, 'giftlist_full_slug_' . $slug)
             ->getOneOrNullResult();
     }
 

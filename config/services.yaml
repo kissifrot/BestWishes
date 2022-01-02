@@ -39,6 +39,7 @@ services:
     BestWishes\Controller\ResetPasswordController:
         arguments:
             $fromAddress: '%env(GLOBAL_FROM_EMAIL_ADDRESS)%'
+            $fromName: '%env(GLOBAL_FROM_EMAIL_NAME)%'
 
     BestWishes\Mailer\Mailer:
         arguments:

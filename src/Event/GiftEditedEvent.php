@@ -33,7 +33,6 @@ class GiftEditedEvent extends Event
     }
 
     /**
-     * @return Gift
      */
     public function getOriginGift(): Gift
     {
@@ -41,7 +40,6 @@ class GiftEditedEvent extends Event
     }
 
     /**
-     * @return Gift
      */
     public function getEditedGift(): Gift
     {
@@ -49,7 +47,6 @@ class GiftEditedEvent extends Event
     }
 
     /**
-     * @return UserInterface
      */
     public function getEditor(): UserInterface
     {

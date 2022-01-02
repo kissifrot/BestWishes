@@ -4,6 +4,7 @@ namespace BestWishes\Controller;
 
 use BestWishes\Entity\GiftList;
 use BestWishes\Manager\ListEventManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,16 +13,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class ListController
  * @Route("list")
  */
 class ListController extends AbstractController
 {
-    private $listEventManager;
-    private $pdf;
+    private EntityManagerInterface $entityManager;
+    private ListEventManager $listEventManager;
+    private Pdf $pdf;
 
-    public function __construct(ListEventManager $listEventManager, Pdf $pdf)
+    public function __construct(EntityManagerInterface $entityManager, ListEventManager $listEventManager, Pdf $pdf)
     {
+        $this->entityManager = $entityManager;
         $this->listEventManager = $listEventManager;
         $this->pdf = $pdf;
     }
@@ -31,7 +33,7 @@ class ListController extends AbstractController
      */
     public function index(): Response
     {
-        $lists = $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findAll();
+        $lists = $this->entityManager->getRepository(GiftList::class)->findAll();
 
         return $this->render('list/index.html.twig', compact('lists'));
     }
@@ -46,8 +48,8 @@ class ListController extends AbstractController
     {
         $id = $request->attributes->getInt('id');
         $list = $this->isGranted('IS_AUTHENTICATED_REMEMBERED')
-            ? $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findFullById($id)
-            : $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findFullSurpriseExcludedById($id)
+            ? $this->entityManager->getRepository(GiftList::class)->findFullById($id)
+            : $this->entityManager->getRepository(GiftList::class)->findFullSurpriseExcludedById($id)
         ;
         if (!$list) {
             throw $this->createNotFoundException();
@@ -66,8 +68,8 @@ class ListController extends AbstractController
     {
         $id = $request->attributes->getInt('id');
         $list = $this->isGranted('IS_AUTHENTICATED_REMEMBERED')
-            ? $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findFullById($id)
-            : $this->getDoctrine()->getManager()->getRepository(GiftList::class)->findFullSurpriseExcludedById($id)
+            ? $this->entityManager->getRepository(GiftList::class)->findFullById($id)
+            : $this->entityManager->getRepository(GiftList::class)->findFullSurpriseExcludedById($id)
         ;
         if (!$list) {
             throw $this->createNotFoundException();

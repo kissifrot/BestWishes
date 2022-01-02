@@ -23,16 +23,20 @@ change_password.flash.success: 'The password has been changed.'
 resetting.request.submit: 'Reset password'
 resetting.request.check_email.title: 'Password Reset Email Sent'
 resetting.request.check_email.content: |
-  <p>An email has been sent that contains a link that you can click to reset your password. This link will expire in %tokenLifetime% hour(s).</p>
+  <p>
+      If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.
+      This link will expire in %tokenExpiration%.
+  </p>
   <p>If you don't receive an email please check your spam folder or <a href="%passwordRequestLink%">try again</a>.</p>
 resetting.request.mail.title: Your password reset request
 resetting.request.mail.content: |
   <h1>Password reset</h1>
+  
+  <p>To reset your password, please visit the following link</p>
 
-  <p>
-  To reset your password, please visit <a href="%resetTokenLink%">here</a>.<br>
-  This link will expire in %tokenLifetime% hour(s)..
-  </p>
+  <a href="%resetTokenLink%">%resetTokenLink%</a>
+  
+  <p>This link will expire in %tokenExpiration%.</p>
 
   <p>
   Regards,<br>

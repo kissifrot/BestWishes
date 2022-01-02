@@ -4,17 +4,17 @@ namespace BestWishes\Manager;
 
 use BestWishes\Entity\User;
 use BestWishes\Repository\UserRepository;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 class UserManager
 {
-    private $passwordEncoder;
-    private $userRepository;
+    private UserPasswordHasherInterface $passwordHasher;
+    private UserRepository $userRepository;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository)
+    public function __construct(UserPasswordHasherInterface $passwordHasher, UserRepository $userRepository)
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
         $this->userRepository = $userRepository;
     }
 
@@ -23,9 +23,9 @@ class UserManager
         return new User();
     }
 
-    public function updatePassword(UserInterface $user, string $plainPassword): void
+    public function updatePassword(PasswordAuthenticatedUserInterface $user, string $plainPassword): void
     {
-        $encodedPassword = $this->passwordEncoder->encodePassword(
+        $encodedPassword = $this->passwordHasher->hashPassword(
             $user,
             $plainPassword
         );
@@ -34,7 +34,7 @@ class UserManager
     }
 
     /**
-     * @return User[]|array
+     * @return User[]
      */
     public function findUsers(): array
     {

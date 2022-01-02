@@ -126,8 +126,8 @@ class GiftData extends Fixture implements DependentFixtureInterface
                 'category3'
             ]
         ];
-        for($i = 1; $i <= 2; $i++) {
-            foreach($data as $giftData) {
+        for ($i = 1; $i <= 2; $i++) {
+            foreach ($data as $giftData) {
                 $cat = $this->getReference($giftData[1] . '-' . $i);
                 $gift = new Gift(false, $cat);
                 $gift->setName($giftData[0]);

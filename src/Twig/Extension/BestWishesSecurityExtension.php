@@ -11,17 +11,10 @@ use Twig\TwigFunction;
 
 class BestWishesSecurityExtension extends AbstractExtension
 {
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $securityChecker;
+    private BestWishesSecurityContext $securityContext;
+    private ?AuthorizationCheckerInterface $securityChecker;
 
-    /**
-     * @var BestWishesSecurityContext
-     */
-    private $securityContext;
-
-    public function __construct(AuthorizationCheckerInterface $securityChecker = null, BestWishesSecurityContext $securityContext)
+    public function __construct(BestWishesSecurityContext $securityContext, ?AuthorizationCheckerInterface $securityChecker = null)
     {
         $this->securityChecker = $securityChecker;
         $this->securityContext = $securityContext;
@@ -43,7 +36,6 @@ class BestWishesSecurityExtension extends AbstractExtension
      * @param      $roles
      * @param null $object
      * @param null $field
-     * @return bool
      */
     public function isMultiGranted($roles, $object = null, $field = null): bool
     {
@@ -73,10 +65,8 @@ class BestWishesSecurityExtension extends AbstractExtension
 
     /**
      * Checks if specified user has the specified role granted
-     * @param string $role
      * @param null   $object
      * @param        $user
-     * @return bool
      */
     public function isUserGranted(string $role, $object = null, $user): bool
     {

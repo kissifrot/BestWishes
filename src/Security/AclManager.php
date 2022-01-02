@@ -2,13 +2,14 @@
 
 namespace BestWishes\Security;
 
-use BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Model\AclInterface;
 use Symfony\Component\Security\Acl\Model\AclProviderInterface;
 use Symfony\Component\Security\Acl\Model\AuditableEntryInterface;
 use Symfony\Component\Security\Acl\Model\MutableAclInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -16,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class AclManager
 {
-    private $provider;
+    private AclProviderInterface $provider;
 
     public function __construct(AclProviderInterface $provider)
     {
@@ -25,12 +26,11 @@ class AclManager
 
     /**
      * Grant a permission
-     * @param mixed $entity DomainObject that we are adding the permission to
+     * @param mixed         $entity DomainObject that we are adding the permission to
      * @param UserInterface $user Concerned user
      * @param int           $mask The mask to grant
-     * @return mixed
      */
-    public function grant($entity, UserInterface $user, $mask = BestWishesMaskBuilder::MASK_EDIT)
+    public function grant($entity, UserInterface $user, int $mask = MaskBuilder::MASK_EDIT)
     {
         $acl = $this->getAcl($entity);
 
@@ -48,7 +48,7 @@ class AclManager
      * @param UserInterface $oldGranted User we're revoking the permission from
      * @param int           $mask The mask to exchange
      */
-    public function exchangePerms($entity, UserInterface $newGranted, UserInterface $oldGranted, $mask = BestWishesMaskBuilder::MASK_EDIT): void
+    public function exchangePerms($entity, UserInterface $newGranted, UserInterface $oldGranted, int $mask = MaskBuilder::MASK_EDIT): void
     {
         // Add the correct ACL for the new owner
         $this->grant($entity, $newGranted, $mask);
@@ -65,7 +65,7 @@ class AclManager
      * @param int|string    $mask The mask to revoke
      * @return $this
      */
-    public function revoke($entity, UserInterface $user, $mask = BestWishesMaskBuilder::MASK_EDIT): self
+    public function revoke($entity, UserInterface $user, int $mask = MaskBuilder::MASK_EDIT): self
     {
         $acl = $this->getAcl($entity);
         $aces = $acl->getObjectAces();
@@ -87,7 +87,7 @@ class AclManager
     /**
      * Get ACL of an entry
      * @param mixed $entity Entity to get the ACL from
-     * @return \Symfony\Component\Security\Acl\Model\AclInterface|MutableAclInterface
+     * @return AclInterface|MutableAclInterface
      */
     private function getAcl($entity)
     {
@@ -108,29 +108,22 @@ class AclManager
      * @param MutableAclInterface     $acl ACL to update
      * @param AuditableEntryInterface $ace ACE to remove the mask from
      * @param int                     $mask Mask to remove
-     * @return $this
      */
-    private function revokeMask($index, MutableAclInterface $acl, AuditableEntryInterface $ace, $mask): self
+    private function revokeMask(int $index, MutableAclInterface $acl, AuditableEntryInterface $ace, int $mask): void
     {
         $acl->updateObjectAce($index, $ace->getMask() & ~$mask);
-
-        return $this;
     }
 
     /**
      * Add a mask
      *
-     * @param SecurityIdentityInterface $securityIdentity
-     * @param integer|string            $mask
-     * @param MutableAclInterface   $acl ACL to update
-     * @return $this
+     * @param integer                   $mask
+     * @param MutableAclInterface       $acl ACL to update
      */
-    private function addMask(SecurityIdentityInterface $securityIdentity, $mask, MutableAclInterface $acl): self
+    private function addMask(SecurityIdentityInterface $securityIdentity, int $mask, MutableAclInterface $acl): void
     {
         $acl->insertObjectAce($securityIdentity, $mask);
         $this->provider->updateAcl($acl);
-
-        return $this;
     }
 
     /*

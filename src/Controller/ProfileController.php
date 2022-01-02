@@ -4,6 +4,7 @@ namespace BestWishes\Controller;
 
 use BestWishes\Form\ChangePasswordFormType;
 use BestWishes\Manager\UserManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ProfileController extends AbstractController
 {
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     /**
      * @Route("/change-password", name="user_profile_change_password")
      */
@@ -28,7 +36,7 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager->updatePassword($user, $form->get('plainPassword')->getData());
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             $this->addFlash('success', $translator->trans('change_password.flash.success'));
 

@@ -18,12 +18,12 @@ class ImageType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => Image::class,
             'label_format' => 'form.gift.image.%name%',
             'empty_data' => function (FormInterface $form) {
                 return new Image($form->get('url')->getData());
             },
-        ));
+        ]);
     }
 }

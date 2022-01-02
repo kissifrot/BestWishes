@@ -118,7 +118,7 @@ class Category
 
     public function getViewableGiftsCount(): int
     {
-        return $this->gifts->filter(function(Gift $gift) {
+        return $this->gifts->filter(function (Gift $gift) {
             return !$gift->isSurprise();
         })->count();
     }

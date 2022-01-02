@@ -6,19 +6,17 @@ use BestWishes\Entity\Gift;
 use BestWishes\Entity\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment;
 
 class Mailer
 {
-    private $mailer;
-    private $router;
-    private $translator;
-    private $siteName;
-    private $fromAddress;
+    private MailerInterface $mailer;
+    private UrlGeneratorInterface $router;
+    private TranslatorInterface $translator;
+    private string $siteName;
+    private string $fromAddress;
 
     public function __construct(MailerInterface $mailer, UrlGeneratorInterface $router, TranslatorInterface $translator, string $siteName, string $fromAddress)
     {

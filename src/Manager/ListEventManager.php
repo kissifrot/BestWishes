@@ -8,19 +8,14 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ListEventManager
 {
-    private $em;
+    private EntityManagerInterface $em;
 
-    /**
-     * @param EntityManagerInterface $em
-     */
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
     /**
-     * @param GiftList $list
-     *
      * @return bool|mixed
      */
     public function getNearestEventData(GiftList $list)
@@ -32,7 +27,7 @@ class ListEventManager
 
         $nextEventData = reset($calculatedEvents);
         // Today at 00:00:01
-        $currentTime = \DateTimeImmutable::createFromFormat('U', time())->setTime(0,0,1)->getTimestamp();
+        $currentTime = \DateTimeImmutable::createFromFormat('U', time())->setTime(0, 0, 1)->getTimestamp();
         $timeLeft = $nextEventData['time'] - $currentTime;
         $daysLeft = round($timeLeft / 3600 / 24);
         $nextEventData['daysLeft'] = (int)$daysLeft;
@@ -50,10 +45,9 @@ class ListEventManager
         }
 
         $activeEvents = $this->getAllActiveEvents();
-        $todayAtMidnight = \DateTimeImmutable::createFromFormat('U', time())->setTime(0,0,1);
+        $todayAtMidnight = \DateTimeImmutable::createFromFormat('U', time())->setTime(0, 0, 1);
         $currentTime = $todayAtMidnight->getTimestamp();
         // First update the "birthday" event with this list's birthdate
-        /** @var ListEvent $activeEvent */
         foreach ($activeEvents as $activeEvent) {
             if ($activeEvent->isBirthday()) {
                 $activeEvent->setDay($birthDate->format('j'));
@@ -86,7 +80,7 @@ class ListEventManager
         }
 
         // And finally sort them
-        usort($calculatedEvents, function ($a, $b) {
+        usort($calculatedEvents, static function ($a, $b) {
             return $a['time'] <=> $b['time'];
         });
 
@@ -95,7 +89,7 @@ class ListEventManager
 
     /**
      * Get a list of all active events
-     * @return array
+     * @return ListEvent[]
      */
     private function getAllActiveEvents(): array
     {

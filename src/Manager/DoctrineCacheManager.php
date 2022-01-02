@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class DoctrineCacheManager
 {
-    private $em;
+    private EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
     {
@@ -16,7 +16,7 @@ class DoctrineCacheManager
 
     public function clearGiftListCache(GiftList $list): void
     {
-        if (!$cacheDriver = $this->em->getConfiguration()->getResultCacheImpl()) {
+        if (!$cacheDriver = $this->em->getConfiguration()->getResultCache()) {
             return;
         }
         $cacheKeys = [
@@ -25,7 +25,7 @@ class DoctrineCacheManager
             sprintf('giftlist_full_surpr_excl_%u', $list->getId()),
         ];
         foreach ($cacheKeys as $cacheKey) {
-            $cacheDriver->delete($cacheKey);
+            $cacheDriver->deleteItem($cacheKey);
         }
     }
 }

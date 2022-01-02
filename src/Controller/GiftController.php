@@ -2,7 +2,6 @@
 
 namespace BestWishes\Controller;
 
-
 use BestWishes\Entity\Category;
 use BestWishes\Entity\Gift;
 use BestWishes\Event\GiftCreatedEvent;
@@ -12,6 +11,7 @@ use BestWishes\Event\GiftPurchasedEvent;
 use BestWishes\Event\GiftReceivedEvent;
 use BestWishes\Form\Type\GiftType;
 use BestWishes\Manager\SecurityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -26,17 +26,18 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Class GiftController
  * @Route("gift")
  */
 class GiftController extends AbstractController
 {
-    private $securityManager;
-    private $eventDispatcher;
-    private $translator;
+    private EntityManagerInterface $entityManager;
+    private SecurityManager $securityManager;
+    private EventDispatcherInterface $eventDispatcher;
+    private TranslatorInterface $translator;
 
-    public function __construct(SecurityManager $securityManager, EventDispatcherInterface $eventDispatcher, TranslatorInterface $translator)
+    public function __construct(EntityManagerInterface $entityManager, SecurityManager $securityManager, EventDispatcherInterface $eventDispatcher, TranslatorInterface $translator)
     {
+        $this->entityManager = $entityManager;
         $this->securityManager = $securityManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->translator = $translator;
@@ -52,8 +53,8 @@ class GiftController extends AbstractController
     {
         $id = $request->attributes->getInt('id');
         $gift = $this->isGranted('IS_AUTHENTICATED_REMEMBERED')
-            ? $this->getDoctrine()->getManager()->getRepository(Gift::class)->findFullById($id)
-            : $this->getDoctrine()->getManager()->getRepository(Gift::class)->findFullSurpriseExcludedById($id)
+            ? $this->entityManager->getRepository(Gift::class)->findFullById($id)
+            : $this->entityManager->getRepository(Gift::class)->findFullSurpriseExcludedById($id)
         ;
         if (!$gift) {
             throw $this->createNotFoundException();
@@ -62,8 +63,10 @@ class GiftController extends AbstractController
         $markReceivedForm = $this->createSimpleActionForm($gift, 'mark_received')->createView();
         $markBoughtForm = $this->createPurchaseForm($gift)->createView();
 
-        return $this->render('gift/show.html.twig',
-            compact('gift', 'deleteForm', 'markReceivedForm', 'markBoughtForm'));
+        return $this->render(
+            'gift/show.html.twig',
+            compact('gift', 'deleteForm', 'markReceivedForm', 'markBoughtForm')
+        );
     }
 
     /**
@@ -88,9 +91,8 @@ class GiftController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($gift);
-            $em->flush();
+            $this->entityManager->persist($gift);
+            $this->entityManager->flush();
 
             // Dispatch the creation event
             $this->eventDispatcher->dispatch(new GiftCreatedEvent($gift, $this->getUser()), GiftCreatedEvent::NAME);
@@ -100,8 +102,10 @@ class GiftController extends AbstractController
             return $this->redirectToRoute('category_show', ['id' => $category->getId()]);
         }
 
-        return $this->render('gift/create.html.twig',
-            ['form' => $form->createView(), 'category' => $category, 'isSurprise' => $isSurprise]);
+        return $this->render(
+            'gift/create.html.twig',
+            ['form' => $form->createView(), 'category' => $category, 'isSurprise' => $isSurprise]
+        );
     }
 
     /**
@@ -122,9 +126,8 @@ class GiftController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($gift);
-            $em->flush();
+            $this->entityManager->persist($gift);
+            $this->entityManager->flush();
 
             // Dispatch the edition event
             $this->eventDispatcher->dispatch(new GiftEditedEvent($originGift, $gift, $this->getUser()), GiftEditedEvent::NAME);
@@ -138,8 +141,6 @@ class GiftController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Gift    $gift
      * @Route("/{id}/delete", name="gift_delete", requirements={"id": "\d+"}, methods={"POST"})
      */
     public function delete(Request $request, Gift $gift): Response
@@ -153,10 +154,9 @@ class GiftController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $deletedGift = clone $gift;
-            $em->remove($gift);
-            $em->flush();
+            $this->entityManager->remove($gift);
+            $this->entityManager->flush();
 
             // Dispatch the deletion event
             $this->eventDispatcher->dispatch(new GiftDeletedEvent($deletedGift, $this->getUser()), GiftDeletedEvent::NAME);
@@ -168,8 +168,6 @@ class GiftController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Gift    $gift
      * @Route("/{id}/mark-received", name="gift_mark_received", requirements={"id": "\d+"}, methods={"POST"})
      */
     public function markReceived(Request $request, Gift $gift): Response
@@ -184,10 +182,9 @@ class GiftController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $gift->markReceived();
-            $em = $this->getDoctrine()->getManager();
             $receivedGift = clone $gift;
-            $em->persist($gift);
-            $em->flush();
+            $this->entityManager->persist($gift);
+            $this->entityManager->flush();
 
             // Dispatch the received event
             $this->eventDispatcher->dispatch(new GiftReceivedEvent($receivedGift), GiftReceivedEvent::NAME);
@@ -199,11 +196,8 @@ class GiftController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Gift    $gift
      * @Route("/{id}/mark-bought", name="gift_mark_bought", requirements={"id": "\d+"}, methods={"POST"})
      *
-     * @return Response
      */
     public function markBought(Request $request, Gift $gift): Response
     {
@@ -217,9 +211,8 @@ class GiftController extends AbstractController
             $purchaseComment = $data['purchaseComment'];
 
             $gift->markPurchasedBy($this->getUser(), $data['purchaseComment']);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($gift);
-            $em->flush();
+            $this->entityManager->persist($gift);
+            $this->entityManager->flush();
 
             // Dispatch the purchase event
             $this->eventDispatcher->dispatch(new GiftPurchasedEvent($gift, $this->getUser(), $purchaseComment), GiftPurchasedEvent::NAME);
@@ -233,7 +226,6 @@ class GiftController extends AbstractController
     /**
      * Creates a form for simple actions
      *
-     * @param Gift   $gift
      * @param string $action Chosen action
      *
      * @return FormInterface|RedirectResponse Delete form or redirect
@@ -261,8 +253,6 @@ class GiftController extends AbstractController
 
     /**
      * Creates a form for the purchase action
-     * @param Gift $gift
-     * @return FormInterface
      */
     private function createPurchaseForm(Gift $gift): FormInterface
     {

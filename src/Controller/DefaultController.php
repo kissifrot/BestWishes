@@ -10,7 +10,6 @@ class DefaultController extends AbstractController
 {
     /**
      * @Route("/", name="homepage")
-     * @return Response
      */
     public function index(): Response
     {
@@ -19,7 +18,6 @@ class DefaultController extends AbstractController
 
     /**
      * @Route("/test", name="test")
-     * @return Response
      */
     public function test(): Response
     {

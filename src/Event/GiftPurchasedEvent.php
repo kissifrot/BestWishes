@@ -26,8 +26,6 @@ class GiftPurchasedEvent extends Event
     private $purchaseComment;
 
     /**
-     * @param Gift          $gift
-     * @param UserInterface $buyer
      * @param string        $purchaseComment
      */
     public function __construct(Gift $gift, UserInterface $buyer, ?string $purchaseComment = '')
@@ -38,7 +36,6 @@ class GiftPurchasedEvent extends Event
     }
 
     /**
-     * @return Gift
      */
     public function getGift(): Gift
     {
@@ -46,7 +43,6 @@ class GiftPurchasedEvent extends Event
     }
 
     /**
-     * @return UserInterface
      */
     public function getBuyer(): UserInterface
     {

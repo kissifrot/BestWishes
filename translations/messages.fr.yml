@@ -23,16 +23,20 @@ change_password.flash.success: 'Le mot de passe a été modifié.'
 resetting.request.submit: 'Réinitialiser le mot de passe'
 resetting.request.check_email.title: 'E-mail de réinitialisation de mot de passe envoyé'
 resetting.request.check_email.content: |
-  <p>Un e-mail a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe. Ce lien est valable %tokenLifetime% heure(s).</p>
+  <p>
+      Si un compte correspondant à votre e-mail existe, un e-mail vient d'être envoyé qui contient un lien que vous pouvez utiliser pour réinitialiser votre mot de passe.
+      Ce lien expirera dans %tokenExpiration%.
+  </p>
   <p>Si vous ne recevez pas d'e-mail, vérifiez votre dossier spam ou <a href="%passwordRequestLink%">essayez à nouveau</a>.</p>
 resetting.request.mail.title: Votre demande de réinitialisation de mot de passe
 resetting.request.mail.content: |
   <h1>Réinitialisation de mot de passe</h1>
+  
+  <p>Pour réinitialiser votre mot de passe veuillez cliquer sur le lien suivant</p>
 
-  <p>
-  Pour réinitialiser votre mot de passe veuillez cliquer <a href="%resetTokenLink%">ici</a>.<br>
-  Ce lien expirera dans %tokenLifetime% heure(s)...
-  </p>
+  <a href="%resetTokenLink%">%resetTokenLink%</a>
+  
+  <p>Ce lien expirera dans %tokenExpiration%.</p>
 
   <p>
   Cordialement,<br>

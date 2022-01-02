@@ -20,7 +20,6 @@ class GiftReceivedEvent extends Event
     }
 
     /**
-     * @return Gift
      */
     public function getGift(): Gift
     {

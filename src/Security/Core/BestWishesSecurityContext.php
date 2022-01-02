@@ -12,11 +12,8 @@ use Symfony\Component\Security\Acl\Model\AclProviderInterface;
 
 class BestWishesSecurityContext
 {
-    /**
-     * @var array
-     */
-    private $aclCache;
-    private $aclProvider;
+    private AclProviderInterface $aclProvider;
+    private array $aclCache;
 
     public function __construct(AclProviderInterface $aclProvider)
     {
@@ -24,13 +21,7 @@ class BestWishesSecurityContext
         $this->aclCache = [];
     }
 
-    /**
-     * @param      $mask
-     * @param      $object
-     * @param User $user
-     * @return bool
-     */
-    public function isGranted($mask, $object, User $user)
+    public function isGranted($mask, $object, User $user): bool
     {
         $objectIdentity = ObjectIdentity::fromDomainObject($object);
         $securityIdentity = UserSecurityIdentity::fromAccount($user);

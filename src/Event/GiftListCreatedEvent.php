@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BestWishes\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
