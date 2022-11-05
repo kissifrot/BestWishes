@@ -15,12 +15,15 @@
         <h1>{{ gift.name }}</h1>
         {% if gift.addedDate is not empty %}<p>{{ 'gift.added_on.text'|trans({ '%addedDate%': gift.addedDate|date('d/m/Y')})|raw }}</p>{% endif %}
         {% if gift.image.url is not empty  %}<p><img src="{{ gift.image.url }}" alt="Image" class="img-fluid" style="max-height: 500px"></p>{% endif %}
-        {% if gift.moreDetailUrl is not empty %}<p><a href="{{ gift.moreDetailUrl }}" target="_blank">{{ 'gift.more_details.text'|trans }}</a></p>{% endif %}
+        {% if gift.moreDetailUrl is not empty %}<p><a href="{{ gift.moreDetailUrl }}" target="_blank">{{ 'gift.more_details.text'|trans }} <i class="fa-solid fa-up-right-from-square"></i></a></p>{% endif %}
         {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
         {% if gift.bought and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <p>{{ 'gift.bought_by.text'|trans({ '%purchaseDate%':gift.purchaseDate|date('d/m/Y') , '%buyerName%': gift.buyer.name})|raw }}</p>
             {% if gift.purchaseComment is not empty %}
-                <p>{{ 'gift.comment.text'|trans }}</p> <blockquote class="blockquote">{{ gift.purchaseComment }}</blockquote>
+                <p>{{ 'gift.comment.text'|trans }}</p>
+                <figure>
+                    <blockquote class="blockquote">{{ gift.purchaseComment }}</blockquote>
+                </figure>
             {% endif %}
         {% endif %}
         {% if gift.received %}

@@ -15,18 +15,18 @@
         {%- include 'default/flash_messages.html.twig' -%}
 
         {% if category.gifts is not empty %}
+            <i><i class="fa-solid fa-circle-info"></i> {{ 'gift.more_details.info.text'|trans }}</i>
+
             <div class="list-group">
             {% for gift in category.gifts %}
                 <a href="{{ path('gift_show', { id: gift.id }) }}" class="list-group-item list-group-item-action d-flex">
                     <div>
                         {{ gift.name }}
+                        {% if (gift.bought or gift.surprise) and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            {% if gift.surprise %} <i class="fas fa-question fa-lg" style="color: #FA2864" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ 'gift.surprise.test'|trans }}"></i>{% endif %}
+                            {% if gift.bought %} <i class="fas fa-gift fa-lg" style="color: #FA2864" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-original-title="{{ 'gift.bought_by.text'|trans({ '%purchaseDate%':gift.purchaseDate|date('d/m/Y') , '%buyerName%': gift.buyer.name})|raw }}"></i>{% endif %}
+                        {% endif %}
                     </div>
-                    {% if (gift.bought or gift.surprise) and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        <div class="ml-auto">
-                            {% if gift.surprise %}<i class="fas fa-question fa-lg" style="color: #FA2864"  title="{{ 'gift.surprise.test'|trans }}"></i>{% endif %}
-                            {% if gift.bought %}<i class="fas fa-gift fa-lg" style="color: #FA2864" title="{{ 'gift.bought_by.text'|trans({ '%purchaseDate%':gift.purchaseDate|date('d/m/Y') , '%buyerName%': gift.buyer.name})|raw }}"></i>{% endif %}
-                        </div>
-                    {% endif %}
                 </a>
             {% endfor %}
             </div>
