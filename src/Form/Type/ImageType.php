@@ -8,12 +8,14 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class ImageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('url', UrlType::class, ['required' => false]);
+        $builder->add('url', UrlType::class, ['required' => false,
+            'help' => new TranslatableMessage('form.gift.image.url.help'),]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

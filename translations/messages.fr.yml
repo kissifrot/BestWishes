@@ -120,6 +120,7 @@ form.gift_list.owner: 'Propriétaire'
 form.gift_list.birthDate: 'Date de naissance'
 form.gift.name: 'Nom'
 form.gift.image.url: 'URL de l''image'
+form.gift.image.url.help: 'Vous pouvez coller l''adresse de l''image du cadeau ici (clic droit -> Copier le lien de l''image dans votre navigateur)'
 form.gift.moreDetailUrl: 'URL vers des détails'
 form.gift.moreDetail: 'Plus de détails'
 form.gift.purchaseComment: 'Commentaire d''achat'
@@ -127,6 +128,11 @@ form.category.name: 'Nom'
 mail.alert_creation.title: '[%siteName%] - Alerte création'
 mail.alert_creation.body_text: |
   Bonjour %userName%, le cadeau "%createdGiftName% "a été ajouté par %creatorName% à la liste %listName% dans la catégorie %categoryName%.
+
+  Cordialement,
+  l'admin de %siteName% - %siteUrl%
+mail.alert_surprise_creation.body_text: |
+  Bonjour %userName%, le cadeau surprise "%createdGiftName% "a été ajouté par %creatorName% à la liste %listName% dans la catégorie %categoryName%.
 
   Cordialement,
   l'admin de %siteName% - %siteUrl%
@@ -145,6 +151,11 @@ mail.alert_edition.body_text: |
 mail.alert_purchase.title: '[%siteName%] - Alerte achat'
 mail.alert_purchase.body_text: |
   Bonjour %userName%, le cadeau "%purchasedGiftName%" de la liste %listName% a été acheté par %buyerName%.
+
+  Cordialement,
+  l'admin de %siteName% - %siteUrl%
+mail.alert_surprise_purchase.body_text: |
+  Bonjour %userName%, le cadeau surprise "%purchasedGiftName%" de la liste %listName% a été acheté par %buyerName%.
 
   Cordialement,
   l'admin de %siteName% - %siteUrl%

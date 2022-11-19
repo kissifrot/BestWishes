@@ -120,6 +120,7 @@ form.gift_list.owner: 'Owner'
 form.gift_list.birthDate: 'Birth date'
 form.gift.name: 'Name'
 form.gift.image.url: 'Image URL'
+form.gift.image.url.help: 'You can paste gift image URL here (right click -> Copy Image Url in your browser)'
 form.gift.moreDetailUrl: 'More details URL'
 form.gift.moreDetail: 'More details'
 form.gift.purchaseComment: 'Purchase comment'
@@ -127,6 +128,11 @@ form.category.name: 'Name'
 mail.alert_creation.title: '[%siteName%] - Creation alert'
 mail.alert_creation.body_text: |
   Hello %userName%, the gift "%createdGiftName%" was added by %creatorName% to the list %listName% in the category %categoryName%.
+
+  Regards,
+  %siteName% admin - %siteUrl%
+mail.alert_surprise_creation.body_text: |
+  Hello %userName%, the surprise gift "%createdGiftName%" was added by %creatorName% to the list %listName% in the category %categoryName%.
 
   Regards,
   %siteName% admin - %siteUrl%
@@ -145,6 +151,11 @@ mail.alert_edition.body_text: |
 mail.alert_purchase.title: '[%siteName%] - Purchase alert'
 mail.alert_purchase.body_text: |
   Hello %userName%, the gift "%purchasedGiftName%" of the list %listName% was bought by %buyerName%.
+
+  Regards,
+  %siteName% admin - %siteUrl%
+mail.alert_surprise_purchase.body_text: |
+  Hello %userName%, the surprise gift "%purchasedGiftName%" of the list %listName% was bought by %buyerName%.
 
   Regards,
   %siteName% admin - %siteUrl%
