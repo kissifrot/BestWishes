@@ -1,3 +1,5 @@
-# FOSJsRoutingBundle route
-fos_js_routing:
-  resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: BestWishes\Controller
+    type: attribute

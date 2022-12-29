@@ -8,22 +8,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class GiftCreatedEvent extends Event
 {
-    public const NAME = 'gift.created';
+    final public const NAME = 'gift.created';
 
-    /**
-     * @var Gift
-     */
-    protected $gift;
-
-    /**
-     * @var UserInterface
-     */
-    private $creator;
-
-    public function __construct(Gift $gift, UserInterface $creator)
+    public function __construct(protected Gift $gift, private readonly UserInterface $creator)
     {
-        $this->gift = $gift;
-        $this->creator = $creator;
     }
 
     /**

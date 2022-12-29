@@ -6,10 +6,10 @@
             {{ form_start(deleteForm) }}
             <div class="modal-header">
                 <h5 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"></button>
             </div>
             <div class="modal-body">
-                <p>{{ 'gift.modal.delete_confirmation.text'|trans }}</p>
+                <p>{{ 'gift.modal.delete_confirmation.text'|trans|raw }}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal">{{ 'gift.modal.close.text'|trans }}</button>
@@ -26,7 +26,7 @@
             {{ form_start(markReceivedForm) }}
             <div class="modal-header">
                 <h5 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"></button>
             </div>
             <div class="modal-body">
                 <p>{{ 'gift.modal.mark_received.text'|trans }}</p>
@@ -46,7 +46,7 @@
             {{ form_start(markBoughtForm) }}
             <div class="modal-header">
                 <h5 class="modal-title">{{ 'gift.modal.confirmation.text'|trans }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'gift.modal.close.text'|trans }}"></button>
             </div>
             <div class="modal-body">
                 <p>{{ 'gift.modal.mark_bought.text'|trans }}</p>

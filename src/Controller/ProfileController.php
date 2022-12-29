@@ -2,6 +2,7 @@
 
 namespace BestWishes\Controller;
 
+use BestWishes\Entity\User;
 use BestWishes\Form\ChangePasswordFormType;
 use BestWishes\Manager\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,24 +13,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/profile")
- * @IsGranted("ROLE_USER")
- */
+#[Route(path: '/profile')]
+#[IsGranted('ROLE_USER')]
 class ProfileController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
-    /**
-     * @Route("/change-password", name="user_profile_change_password")
-     */
+    #[Route(path: '/change-password', name: 'user_profile_change_password')]
     public function changePassword(Request $request, UserManager $userManager, TranslatorInterface $translator): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         $form = $this->createForm(ChangePasswordFormType::class);
         $form->handleRequest($request);

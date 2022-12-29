@@ -7,13 +7,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class CategoryDeletedEvent extends Event
 {
-    public const NAME = 'category.deleted';
+    final public const NAME = 'category.deleted';
 
-    protected $category;
-
-    public function __construct(Category $category)
+    public function __construct(protected Category $category)
     {
-        $this->category = $category;
     }
 
     public function getCategory(): Category

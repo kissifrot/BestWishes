@@ -4,4 +4,6 @@ knp_snappy:
         binary:     '%env(WKHTMLTOPDF_PATH)%'
         options:    []
     image:
-        enabled:    false
+        enabled:    true
+        binary:     '%env(WKHTMLTOIMAGE_PATH)%'
+        options:    []

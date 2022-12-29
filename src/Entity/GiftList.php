@@ -2,69 +2,43 @@
 
 namespace BestWishes\Entity;
 
+use BestWishes\Repository\GiftListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * GiftList
- *
- * @ORM\Table(indexes={@ORM\Index(name="list_slug_idx", columns={"slug"}),@ORM\Index(name="list_name_idx", columns={"name"})})
- * @ORM\Entity(repositoryClass="BestWishes\Repository\GiftListRepository")
- */
+#[ORM\Table]
+#[ORM\Index(columns: ['slug'], name: 'list_slug_idx')]
+#[ORM\Index(columns: ['name'], name: 'list_name_idx')]
+#[ORM\Entity(repositoryClass: GiftListRepository::class)]
 class GiftList
 {
-    /**
-     * @var null|integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", length=50)
-     */
-    private $name;
+    #[ORM\Column(name: 'name', length: 50)]
+    private ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @Gedmo\Slug(fields={"name"})
-     * @ORM\Column(name="slug", length=50)
-     */
-    private $slug;
+    #[Gedmo\Slug(fields: ['name'])]
+    #[ORM\Column(name: 'slug', length: 50)]
+    private ?string $slug = null;
 
-    /**
-     * @var \DateTimeImmutable
-     *
-     * @ORM\Column(name="last_update", type="date_immutable")
-     */
-    private $lastUpdate;
+    #[ORM\Column(name: 'last_update', type: 'date_immutable')]
+    private \DateTimeImmutable $lastUpdate;
 
-    /**
-     * @var \DateTimeImmutable
-     *
-     * @ORM\Column(name="birthdate", type="date_immutable")
-     */
-    private $birthDate;
+    #[ORM\Column(name: 'birthdate', type: 'date_immutable')]
+    private ?\DateTimeImmutable $birthDate = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $owner;
+    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private ?User $owner = null;
 
-    /**
-     * @var Collection
-     *
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="list")
-     */
-    private $categories;
+    /** @var Collection<int, Category> */
+    #[ORM\OneToMany(mappedBy: 'list', targetEntity: Category::class)]
+    private Collection $categories;
 
     public function __construct()
     {
@@ -117,21 +91,27 @@ class GiftList
         $this->birthDate = $birthDate;
     }
 
-    public function getOwner()
+    public function getOwner(): ?User
     {
         return $this->owner;
     }
 
-    public function setOwner($owner): void
+    public function setOwner(User $owner): void
     {
         $this->owner = $owner;
     }
 
+    /**
+     * @return Collection<int, Category>
+     */
     public function getCategories(): Collection
     {
         return $this->categories;
     }
 
+    /**
+     * @param Collection<int, Category> $categories
+     */
     public function setCategories(Collection $categories): void
     {
         $this->categories = $categories;

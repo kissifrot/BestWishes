@@ -2,65 +2,43 @@
 
 namespace BestWishes\Entity;
 
+use BestWishes\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Category
- *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="BestWishes\Repository\CategoryRepository")
- */
-class Category
+#[ORM\Table]
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+class Category implements \Stringable
 {
-    /**
-     * @var null|integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
-    /**
-     * @var null|string
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(min = 2)
-     * @ORM\Column(name="name", length=150)
-     */
-    private $name;
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2)]
+    #[ORM\Column(name: 'name', length: 150)]
+    private ?string $name = null;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_visible", type="boolean")
-     */
-    private $visible;
+    #[ORM\Column(name: 'is_visible', type: 'boolean')]
+    private bool $visible = true;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\OneToMany(targetEntity="Gift", mappedBy="category")
-     */
-    private $gifts;
+    /** @var Collection<int, Gift> */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Gift::class)]
+    private Collection $gifts;
 
-    /**
-     * @var GiftList
-     * @ORM\ManyToOne(targetEntity="GiftList", inversedBy="categories")
-     * @ORM\JoinColumn(name="list_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $list;
+    #[ORM\ManyToOne(targetEntity: GiftList::class, inversedBy: 'categories')]
+    #[ORM\JoinColumn(name: 'list_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private ?GiftList $list = null;
 
-    public function __construct(int $givenId = null)
+    public function __construct()
     {
         $this->gifts = new ArrayCollection();
-        $this->visible = true;
-        $this->id = $givenId;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf(
             'Name: %s, Id: %u',
@@ -74,7 +52,7 @@ class Category
         return $this->id;
     }
 
-    public function setName($name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -106,7 +84,10 @@ class Category
         $this->gifts->removeElement($gifts);
     }
 
-    public function getGifts(): \Doctrine\Common\Collections\Collection
+    /**
+     * @return Collection<int, Gift>
+     */
+    public function getGifts(): Collection
     {
         return $this->gifts;
     }
@@ -118,9 +99,7 @@ class Category
 
     public function getViewableGiftsCount(): int
     {
-        return $this->gifts->filter(function (Gift $gift) {
-            return !$gift->isSurprise();
-        })->count();
+        return $this->gifts->filter(fn (Gift $gift) => !$gift->isSurprise())->count();
     }
 
     public function setList(?GiftList $list): void

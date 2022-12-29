@@ -3,6 +3,7 @@
 namespace BestWishes\Controller;
 
 use BestWishes\Entity\GiftList;
+use BestWishes\Entity\User;
 use BestWishes\Security\AclManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,34 +14,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("user")
- * @IsGranted("ROLE_USER")
- */
+#[Route(path: 'user')]
+#[IsGranted('ROLE_USER')]
 class UserController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private BestWishesSecurityContext $securityContext;
-    private AclManager $aclManager;
-
-    public function __construct(EntityManagerInterface $entityManager, BestWishesSecurityContext $securityContext, AclManager $aclManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly BestWishesSecurityContext $securityContext, private readonly AclManager $aclManager)
     {
-        $this->entityManager = $entityManager;
-        $this->securityContext = $securityContext;
-        $this->aclManager = $aclManager;
     }
 
-    /**
-     * @Route("/", name="user_home")
-     */
+    #[Route(path: '/', name: 'user_home')]
     public function index(): Response
     {
         return $this->render('user/index.html.twig');
     }
 
-    /**
-     * @Route("/manage-alerts", name="user_manage_alerts")
-     */
+    #[Route(path: '/manage-alerts', name: 'user_manage_alerts')]
     public function manageAlerts(): Response
     {
         $availableAlerts = [
@@ -57,9 +45,7 @@ class UserController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/updateAlert", name="user_update_list_alert", requirements={"id": "\d+"}, options = { "expose" = true }, methods={"POST"})
-     */
+    #[Route(path: '/{id}/updateAlert', name: 'user_update_list_alert', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function updateAlert(Request $request, GiftList $giftList): JsonResponse
     {
         $defaultData = [
@@ -80,6 +66,7 @@ class UserController extends AbstractController
         if (!\in_array($alert, $availableAlerts, true)) {
             return new JsonResponse($defaultData);
         }
+        /** @var User $user */
         $user = $this->getUser();
 
         // Build the mask to update

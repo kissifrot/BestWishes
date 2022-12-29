@@ -7,7 +7,7 @@ use BestWishes\Repository\UserRepository;
 
 class UserProvider
 {
-    private UserRepository $userRepository;
+    private readonly UserRepository $userRepository;
 
     public function __construct(UserRepository $userRepository)
     {

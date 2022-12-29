@@ -2,133 +2,69 @@
 
 namespace BestWishes\Entity;
 
+use BestWishes\Repository\GiftRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Gift entity
- *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="BestWishes\Repository\GiftRepository")
- */
+#[ORM\Table]
+#[ORM\Entity(repositoryClass: GiftRepository::class)]
 class Gift
 {
-    /**
-     * @var null|integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
-    /**
-     * @var null|string
-     * @Assert\NotBlank()
-     * @Assert\Length(min = 2)
-     *
-     * @ORM\Column(name="name", type="string", length=150)
-     */
-    private $name;
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2)]
+    #[ORM\Column(name: 'name', type: 'string', length: 150)]
+    private ?string $name = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="added_date", type="date")
-     */
-    private $addedDate;
+    #[ORM\Column(name: 'added_date', type: 'date_immutable')]
+    private readonly \DateTimeImmutable $addedDate;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="edits_count", type="smallint", options={"default":0})
-     */
-    private $editsCount;
+    #[ORM\Column(name: 'edits_count', type: 'smallint', options: ['default' => 0])]
+    private int $editsCount = 0;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_bought", type="boolean", options={"default":false})
-     */
-    private $bought;
+    #[ORM\Column(name: 'is_bought', type: 'boolean', options: ['default' => false])]
+    private bool $bought = false;
 
-    /**
-     * @var null|User
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="buyer_id", referencedColumnName="id", nullable=true)
-     */
-    private $buyer;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'buyer_id', referencedColumnName: 'id', nullable: true)]
+    private ?User $buyer = null;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_received", type="boolean", options={"default":false})
-     */
-    private $received;
+    #[ORM\Column(name: 'is_received', type: 'boolean', options: ['default' => false])]
+    private bool $received = false;
 
-    /**
-     * @var null|\DateTime
-     *
-     * @ORM\Column(name="received_date", type="datetime", nullable=true)
-     */
-    private $receivedDate;
+    #[ORM\Column(name: 'received_date', type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $receivedDate = null;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_surprise", type="boolean", options={"default":false})
-     */
-    private $surprise;
+    #[ORM\Column(name: 'is_surprise', type: 'boolean', options: ['default' => false])]
+    private readonly bool $surprise;
 
-    /**
-     * @var null|Image
-     *
-     * @ORM\Embedded(class="BestWishes\Entity\Image", columnPrefix="image_")
-     */
-    private $image;
+    #[ORM\Embedded(class: Image::class, columnPrefix: 'image_')]
+    private ?Image $image = null;
 
-    /**
-     * @var null|\DateTime
-     *
-     * @ORM\Column(name="purchase_date", type="date", nullable=true)
-     */
-    private $purchaseDate;
+    #[ORM\Column(name: 'purchase_date', type: 'date_immutable', nullable: true)]
+    private ?\DateTimeImmutable $purchaseDate = null;
 
-    /**
-     * @var null|string
-     *
-     * @ORM\Column(name="purchase_comment", type="text", nullable=true)
-     */
-    private $purchaseComment;
+    #[ORM\Column(name: 'purchase_comment', type: 'text', nullable: true)]
+    private ?string $purchaseComment = null;
 
-    /**
-     * @var null|string
-     *
-     * @Assert\Url()
-     * @ORM\Column(name="more_detail_url", length=255, nullable=true)
-     */
-    private $moreDetailUrl;
+    #[Assert\Url]
+    #[ORM\Column(name: 'more_detail_url', length: 255, nullable: true)]
+    private ?string $moreDetailUrl = null;
 
-    /**
-     * @var null|string
-     *
-     * @ORM\Column(name="more_detail", type="text", nullable=true)
-     */
-    private $moreDetail;
+    #[ORM\Column(name: 'more_detail', type: 'text', nullable: true)]
+    private ?string $moreDetail = null;
 
-    /**
-     * null|Category
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="gifts")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $category;
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'gifts')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private Category $category;
 
     public function __construct(bool $isSurprise, Category $category)
     {
-        $this->addedDate = \DateTime::createFromFormat('U', time());
-        $this->editsCount = 0;
-        $this->bought = false;
-        $this->received = false;
+        $this->addedDate = \DateTimeImmutable::createFromFormat('U', (string) time());
         $this->surprise = $isSurprise;
         $this->category = $category;
     }
@@ -148,7 +84,7 @@ class Gift
         $this->name = $name;
     }
 
-    public function getAddedDate(): \DateTime
+    public function getAddedDate(): \DateTimeImmutable
     {
         return $this->addedDate;
     }
@@ -173,7 +109,7 @@ class Gift
         return $this->received;
     }
 
-    public function getReceivedDate(): ?\DateTime
+    public function getReceivedDate(): ?\DateTimeImmutable
     {
         return $this->receivedDate;
     }
@@ -183,7 +119,7 @@ class Gift
         return $this->surprise;
     }
 
-    public function getPurchaseDate(): ?\DateTime
+    public function getPurchaseDate(): ?\DateTimeImmutable
     {
         return $this->purchaseDate;
     }
@@ -246,13 +182,13 @@ class Gift
     public function markReceived(): void
     {
         $this->received = true;
-        $this->receivedDate = \DateTime::createFromFormat('U', time());
+        $this->receivedDate = \DateTimeImmutable::createFromFormat('U', (string) time());
     }
 
     public function markPurchasedBy(User $user, ?string $purchasedComment): void
     {
         $this->bought = true;
-        $this->purchaseDate = \DateTime::createFromFormat('U', time());
+        $this->purchaseDate = \DateTimeImmutable::createFromFormat('U', (string) time());
         $this->buyer = $user;
         $this->purchaseComment = $purchasedComment;
     }

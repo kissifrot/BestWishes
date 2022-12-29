@@ -9,13 +9,9 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 class UserManager
 {
-    private UserPasswordHasherInterface $passwordHasher;
-    private UserRepository $userRepository;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher, UserRepository $userRepository)
+    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher, private readonly UserRepository $userRepository)
     {
-        $this->passwordHasher = $passwordHasher;
-        $this->userRepository = $userRepository;
     }
 
     public function createUser(): User
@@ -30,6 +26,7 @@ class UserManager
             $plainPassword
         );
 
+        /** @var User $user */
         $user->setPassword($encodedPassword);
     }
 

@@ -6,5 +6,5 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class GiftListCreatedEvent extends Event
 {
-    public const NAME = 'giftlist.created';
+    final public const NAME = 'giftlist.created';
 }

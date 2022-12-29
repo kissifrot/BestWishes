@@ -22,30 +22,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("admin")
- * @IsGranted("ROLE_ADMIN")
- */
+#[Route(path: 'admin')]
+#[IsGranted('ROLE_ADMIN')]
 class AdminController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private BestWishesSecurityContext $securityContext;
-    private AclManager $aclManager;
-    private EventDispatcherInterface $eventDispatcher;
-    private UserManager $userManager;
-
-    public function __construct(EntityManagerInterface $entityManager, BestWishesSecurityContext $securityContext, AclManager $aclManager, EventDispatcherInterface $eventDispatcher, UserManager $userManager)
-    {
-        $this->entityManager = $entityManager;
-        $this->securityContext = $securityContext;
-        $this->aclManager = $aclManager;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->userManager = $userManager;
+    private const AVAILABLE_PERMISSIONS = ['EDIT', 'SURPRISE_ADD', 'ALERT_ADD', 'ALERT_PURCHASE', 'ALERT_EDIT', 'ALERT_DELETE'];
+    public function __construct(
+        private readonly EntityManagerInterface    $entityManager,
+        private readonly BestWishesSecurityContext $securityContext,
+        private readonly AclManager                $aclManager,
+        private readonly EventDispatcherInterface  $eventDispatcher,
+        private readonly UserManager               $userManager
+    ) {
     }
 
-    /**
-     * @Route("/lists", name="admin_lists")
-     */
+    #[Route(path: '/lists', name: 'admin_lists')]
     public function lists(): Response
     {
         $lists = $this->entityManager->getRepository(GiftList::class)->findAll();
@@ -55,9 +46,7 @@ class AdminController extends AbstractController
         return $this->render('admin/lists.html.twig', compact('lists', 'deleteForm'));
     }
 
-    /**
-     * @Route("/lists/rights", name="admin_lists_rights")
-     */
+    #[Route(path: '/lists/rights', name: 'admin_lists_rights')]
     public function listsRights(): Response
     {
         $lists = $this->entityManager->getRepository(GiftList::class)->findAll();
@@ -78,9 +67,7 @@ class AdminController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/list/{id}/updatePerm", name="admin_update_list_perm", requirements={"id": "\d+"}, options = { "expose" = true }, methods={"POST"})
-     */
+    #[Route(path: '/list/{id}/updatePerm', name: 'admin_update_list_perm', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function updatePermission(Request $request, GiftList $giftList): JsonResponse
     {
         $defaultData = [
@@ -93,8 +80,7 @@ class AdminController extends AbstractController
         if (empty($perm) || empty($userId)) {
             new JsonResponse($defaultData);
         }
-        $availablePermissions = ['EDIT', 'SURPRISE_ADD', 'ALERT_ADD', 'ALERT_PURCHASE', 'ALERT_EDIT', 'ALERT_DELETE'];
-        if (!\in_array($perm, $availablePermissions, true)) {
+        if (!\in_array($perm, self::AVAILABLE_PERMISSIONS, true)) {
             return new JsonResponse($defaultData);
         }
         $user = $this->entityManager->getRepository(User::class)->find($userId);
@@ -122,10 +108,7 @@ class AdminController extends AbstractController
         return new JsonResponse($successData);
     }
 
-    /**
-     * @Route("/list/{id}", name="admin_list_delete", requirements={"id": "\d+"}, methods={"DELETE"})
-     *
-     */
+    #[Route(path: '/list/{id}', name: 'admin_list_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function listDelete(Request $request, GiftList $giftList): Response
     {
         $form = $this->createSimpleActionForm($giftList, 'delete');
@@ -144,11 +127,9 @@ class AdminController extends AbstractController
     }
 
     /**
-     *
-     * @Route("/list/create", name="admin_list_create", methods={"GET", "POST"})
-     *
      * @throws \Doctrine\ORM\ORMException
      */
+    #[Route(path: '/list/create', name: 'admin_list_create', methods: ['GET', 'POST'])]
     public function listCreate(Request $request): Response
     {
         $giftList = new GiftList();
@@ -169,7 +150,7 @@ class AdminController extends AbstractController
                 $this->addFlash('notice', sprintf('List "%s" created', $giftList->getName()));
 
                 // Dispatch the creation event
-                $this->eventDispatcher->dispatch(GiftListCreatedEvent::NAME, new GiftListCreatedEvent());
+                $this->eventDispatcher->dispatch(new GiftListCreatedEvent(), GiftListCreatedEvent::NAME);
 
                 return $this->redirectToRoute('admin_lists');
             } catch (\Exception $e) {
@@ -184,10 +165,9 @@ class AdminController extends AbstractController
     }
 
     /**
-     *
      * @throws \Doctrine\ORM\ORMException
-     * @Route("/list/{id}/edit", name="admin_list_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
+    #[Route(path: '/list/{id}/edit', name: 'admin_list_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function listEdit(Request $request, GiftList $giftList): Response
     {
         $originGiftList = clone $giftList;
@@ -198,7 +178,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($giftList);
             try {
-                $em->flush();
+                $this->entityManager->flush();
 
                 if ($originGiftList->getOwner() !== $giftList->getOwner()) {
                     // Exchange permissions
@@ -227,27 +207,20 @@ class AdminController extends AbstractController
      * Creates a form for simple actions
      *
      * @param string $action Chosen action
-     *
-     * @return FormInterface|RedirectResponse Delete form or redirect
      */
-    private function createSimpleActionForm($entity, $action = 'delete')
+    private function createSimpleActionForm(mixed $entity, string $action = 'delete'): FormInterface
     {
-        switch (\get_class($entity)) {
-            case GiftList::class:
-                $routePart = 'list';
-                break;
-            case User::class:
-                $routePart = 'user';
-                break;
-            default:
-                throw new \RuntimeException(sprintf('The "%s" type is not supported', \get_class($entity)));
-        }
+        $routePart = match ($entity::class) {
+            GiftList::class => 'list',
+            User::class => 'user',
+            default => throw new \RuntimeException(sprintf('The "%s" type is not supported', $entity::class)),
+        };
         switch ($action) {
             case 'delete':
                 $method = 'DELETE';
                 $url = $this->generateUrl(
                     'admin_' . $routePart . '_delete',
-                    ['id' => !empty($entity->getId()) ? $entity->getId() : 99999999999999]
+                    ['id' => !empty($entity->getId()) ? $entity->getId() : 99_999_999_999_999]
                 );
                 break;
             default:
@@ -260,9 +233,7 @@ class AdminController extends AbstractController
             ->getForm();
     }
 
-    /**
-     * @Route("/users", name="admin_users")
-     */
+    #[Route(path: '/users', name: 'admin_users')]
     public function users(): Response
     {
         $users = $this->entityManager->getRepository(User::class)->findAll();
@@ -272,10 +243,7 @@ class AdminController extends AbstractController
         return $this->render('admin/users.html.twig', compact('users', 'deleteForm'));
     }
 
-    /**
-     * @Route("/user/{id}", name="admin_user_delete", requirements={"id": "\d+"}, methods={"DELETE"})
-     *
-     */
+    #[Route(path: '/user/{id}', name: 'admin_user_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function userDelete(Request $request, User $user): Response
     {
         $form = $this->createSimpleActionForm($user, 'delete');
@@ -294,10 +262,9 @@ class AdminController extends AbstractController
     }
 
     /**
-     *
      * @throws \Doctrine\ORM\ORMException
-     * @Route("/user/create", name="admin_user_create", methods={"GET", "POST"})
      */
+    #[Route(path: '/user/create', name: 'admin_user_create', methods: ['GET', 'POST'])]
     public function userCreate(Request $request): Response
     {
         $user = $this->userManager->createUser();
@@ -324,11 +291,11 @@ class AdminController extends AbstractController
                     );
                 }
 
-                $this->addFlash('notice', sprintf('User "%s" created', $user->getUsername()));
+                $this->addFlash('notice', sprintf('User "%s" created', $user->getUserIdentifier()));
 
                 return $this->redirectToRoute('admin_users');
             } catch (\Exception $e) {
-                $this->addFlash('error', sprintf('Error creating "%s": %s', $user->getUsername(), $e->getMessage()));
+                $this->addFlash('error', sprintf('Error creating "%s": %s', $user->getUserIdentifier(), $e->getMessage()));
             }
         }
 
@@ -336,10 +303,9 @@ class AdminController extends AbstractController
     }
 
     /**
-     *
      * @throws \Doctrine\ORM\ORMException
-     * @Route("/user/{id}/edit", name="admin_user_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
+    #[Route(path: '/user/{id}/edit', name: 'admin_user_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function userEdit(Request $request, User $user): Response
     {
         $form = $this->createForm(UserType::class, $user, ['isEditing' => true]);

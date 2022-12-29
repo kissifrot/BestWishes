@@ -4,14 +4,32 @@ namespace BestWishes\Repository;
 
 use BestWishes\Entity\ListEvent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<ListEvent>
+ * @method ListEvent|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ListEvent|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ListEvent[]    findAll()
+ * @method ListEvent[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
 class ListEventRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ListEvent::class);
     }
+
+    public function save(ListEvent $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
 
     /**
      * @return ListEvent[]
@@ -26,17 +44,18 @@ class ListEventRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
     public function findBirthdate(): ?ListEvent
     {
-        return $this->createQueryBuilder('le')
-            ->where('le.type = :type')
-            ->setParameter('type', ListEvent::BIRTHDAY_TYPE)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->useQueryCache(true)
-            ->getOneOrNullResult();
+        try {
+            return $this->createQueryBuilder('le')
+                ->where('le.type = :type')
+                ->setParameter('type', ListEvent::BIRTHDAY_TYPE)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->useQueryCache(true)
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException) {
+            return null;
+        }
     }
 }

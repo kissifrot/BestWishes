@@ -8,50 +8,22 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class GiftPurchasedEvent extends Event
 {
-    public const NAME = 'gift.purchased';
+    final public const NAME = 'gift.purchased';
 
-    /**
-     * @var Gift
-     */
-    protected $gift;
-
-    /**
-     * @var UserInterface
-     */
-    private $buyer;
-
-    /**
-     * @var string
-     */
-    private $purchaseComment;
-
-    /**
-     * @param string        $purchaseComment
-     */
-    public function __construct(Gift $gift, UserInterface $buyer, ?string $purchaseComment = '')
+    public function __construct(protected Gift $gift, private readonly UserInterface $buyer, private ?string $purchaseComment = null)
     {
-        $this->gift = $gift;
-        $this->buyer = $buyer;
-        $this->purchaseComment = $purchaseComment;
     }
 
-    /**
-     */
     public function getGift(): Gift
     {
         return $this->gift;
     }
 
-    /**
-     */
     public function getBuyer(): UserInterface
     {
         return $this->buyer;
     }
 
-    /**
-     * @return string
-     */
     public function getPurchaseComment(): ?string
     {
         return $this->purchaseComment;

@@ -4,6 +4,7 @@ namespace BestWishes\Controller;
 
 use BestWishes\Entity\Category;
 use BestWishes\Entity\Gift;
+use BestWishes\Entity\User;
 use BestWishes\Event\GiftCreatedEvent;
 use BestWishes\Event\GiftDeletedEvent;
 use BestWishes\Event\GiftEditedEvent;
@@ -11,7 +12,7 @@ use BestWishes\Event\GiftPurchasedEvent;
 use BestWishes\Event\GiftReceivedEvent;
 use BestWishes\Form\Type\GiftType;
 use BestWishes\Manager\SecurityManager;
-use Doctrine\ORM\EntityManagerInterface;
+use BestWishes\Repository\GiftRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -20,41 +21,28 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("gift")
- */
+#[Route(path: 'gift')]
 class GiftController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private SecurityManager $securityManager;
-    private EventDispatcherInterface $eventDispatcher;
-    private TranslatorInterface $translator;
-
-    public function __construct(EntityManagerInterface $entityManager, SecurityManager $securityManager, EventDispatcherInterface $eventDispatcher, TranslatorInterface $translator)
-    {
-        $this->entityManager = $entityManager;
-        $this->securityManager = $securityManager;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->translator = $translator;
+    public function __construct(
+        private readonly GiftRepository           $giftRepository,
+        private readonly SecurityManager          $securityManager,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly TranslatorInterface      $translator
+    ) {
     }
 
-    /**
-     * @Route("/{id}", name="gift_show", requirements={"id": "\d+"}, methods={"GET"})
-     *
-     * @return Response|NotFoundHttpException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function show(Request $request)
+    #[Route(path: '/{id}', name: 'gift_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function show(Request $request): Response
     {
         $id = $request->attributes->getInt('id');
         $gift = $this->isGranted('IS_AUTHENTICATED_REMEMBERED')
-            ? $this->entityManager->getRepository(Gift::class)->findFullById($id)
-            : $this->entityManager->getRepository(Gift::class)->findFullSurpriseExcludedById($id)
+            ? $this->giftRepository->findFullById($id)
+            : $this->giftRepository->findFullSurpriseExcludedById($id)
         ;
         if (!$gift) {
             throw $this->createNotFoundException();
@@ -69,12 +57,8 @@ class GiftController extends AbstractController
         );
     }
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("/create/{catId}", name="gift_create", requirements={"catId": "\d+"}, methods={"GET", "POST"})
-     * @ParamConverter("category", options={"id" = "catId"})
-     */
+    #[Route(path: '/create/{catId}', name: 'gift_create', requirements: ['catId' => '\d+'], methods: ['GET', 'POST'])]
+    #[ParamConverter('category', class: Category::class, options: ['id' => 'catId'])]
     public function create(Request $request, Category $category): Response
     {
         $isSurprise = $request->query->getBoolean('surprise');
@@ -91,8 +75,7 @@ class GiftController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($gift);
-            $this->entityManager->flush();
+            $this->giftRepository->save($gift, flush: true);
 
             // Dispatch the creation event
             $this->eventDispatcher->dispatch(new GiftCreatedEvent($gift, $this->getUser()), GiftCreatedEvent::NAME);
@@ -108,11 +91,7 @@ class GiftController extends AbstractController
         );
     }
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("{id}/edit", name="gift_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
-     */
+    #[Route(path: '{id}/edit', name: 'gift_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Gift $gift): Response
     {
         $this->securityManager->checkAccess(
@@ -126,8 +105,7 @@ class GiftController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($gift);
-            $this->entityManager->flush();
+            $this->giftRepository->save($gift, flush: true);
 
             // Dispatch the edition event
             $this->eventDispatcher->dispatch(new GiftEditedEvent($originGift, $gift, $this->getUser()), GiftEditedEvent::NAME);
@@ -140,9 +118,7 @@ class GiftController extends AbstractController
         return $this->render('gift/edit.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/{id}/delete", name="gift_delete", requirements={"id": "\d+"}, methods={"POST"})
-     */
+    #[Route(path: '{id}/delete', name: 'gift_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(Request $request, Gift $gift): Response
     {
         $this->securityManager->checkAccess(
@@ -155,8 +131,7 @@ class GiftController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $deletedGift = clone $gift;
-            $this->entityManager->remove($gift);
-            $this->entityManager->flush();
+            $this->giftRepository->remove($gift, flush: true);
 
             // Dispatch the deletion event
             $this->eventDispatcher->dispatch(new GiftDeletedEvent($deletedGift, $this->getUser()), GiftDeletedEvent::NAME);
@@ -167,9 +142,7 @@ class GiftController extends AbstractController
         return $this->redirectToRoute('category_show', ['id' => $gift->getCategoryId()]);
     }
 
-    /**
-     * @Route("/{id}/mark-received", name="gift_mark_received", requirements={"id": "\d+"}, methods={"POST"})
-     */
+    #[Route(path: '{id}/mark-received', name: 'gift_mark_received', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function markReceived(Request $request, Gift $gift): Response
     {
         $this->securityManager->checkAccess(
@@ -183,8 +156,7 @@ class GiftController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $gift->markReceived();
             $receivedGift = clone $gift;
-            $this->entityManager->persist($gift);
-            $this->entityManager->flush();
+            $this->giftRepository->save($gift, flush: true);
 
             // Dispatch the received event
             $this->eventDispatcher->dispatch(new GiftReceivedEvent($receivedGift), GiftReceivedEvent::NAME);
@@ -195,10 +167,7 @@ class GiftController extends AbstractController
         return $this->redirectToRoute('category_show', ['id' => $gift->getCategoryId()]);
     }
 
-    /**
-     * @Route("/{id}/mark-bought", name="gift_mark_bought", requirements={"id": "\d+"}, methods={"POST"})
-     *
-     */
+    #[Route(path: '{id}/mark-bought', name: 'gift_mark_bought', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function markBought(Request $request, Gift $gift): Response
     {
         $this->securityManager->checkAccess('SURPRISE_ADD', $gift->getList());
@@ -210,9 +179,10 @@ class GiftController extends AbstractController
             $data = $form->getData();
             $purchaseComment = $data['purchaseComment'];
 
-            $gift->markPurchasedBy($this->getUser(), $data['purchaseComment']);
-            $this->entityManager->persist($gift);
-            $this->entityManager->flush();
+            /** @var User $user */
+            $user = $this->getUser();
+            $gift->markPurchasedBy($user, $data['purchaseComment']);
+            $this->giftRepository->save($gift, flush: true);
 
             // Dispatch the purchase event
             $this->eventDispatcher->dispatch(new GiftPurchasedEvent($gift, $this->getUser(), $purchaseComment), GiftPurchasedEvent::NAME);
@@ -227,10 +197,8 @@ class GiftController extends AbstractController
      * Creates a form for simple actions
      *
      * @param string $action Chosen action
-     *
-     * @return FormInterface|RedirectResponse Delete form or redirect
      */
-    private function createSimpleActionForm(Gift $gift, $action = 'delete')
+    private function createSimpleActionForm(Gift $gift, string $action = 'delete'): FormInterface
     {
         switch ($action) {
             case 'delete':
@@ -242,7 +210,7 @@ class GiftController extends AbstractController
                 $url = $this->generateUrl('gift_mark_received', ['id' => $gift->getId()]);
                 break;
             default:
-                return $this->redirectToRoute('category_show', ['id' => $gift->getCategoryId()]);
+                throw new \UnexpectedValueException(sprintf('Unable to create for for action "%s"', $action));
         }
 
         return $this->createFormBuilder()

@@ -2,81 +2,45 @@
 
 namespace BestWishes\Entity;
 
+use BestWishes\Repository\ListEventRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * ListEvent
- *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="BestWishes\Repository\ListEventRepository")
- */
+#[ORM\Table]
+#[ORM\Entity(repositoryClass: ListEventRepository::class)]
 class ListEvent
 {
-    public const BIRTHDAY_TYPE = 'birthday';
+    final public const BIRTHDAY_TYPE = 'birthday';
 
-    /**
-     * @var null|integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
-    /**
-     * @var null|string
-     *
-     * @ORM\Column(name="name", length=60)
-     */
-    private $name;
+    #[ORM\Column(name: 'name', length: 60)]
+    private ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="e_type", length=20)
-     */
-    private $type;
+    #[ORM\Column(name: 'e_type', length: 20)]
+    private string $type;
 
-    /**
-     * @var null|integer
-     *
-     * @ORM\Column(name="event_day", type="smallint", nullable=true)
-     */
-    private $day;
+    #[ORM\Column(name: 'event_day', type: 'smallint', nullable: true)]
+    private ?int $day = null;
 
-    /**
-     * @var null|integer
-     *
-     * @ORM\Column(name="event_month", type="smallint", nullable=true)
-     */
-    private $month;
+    #[ORM\Column(name: 'event_month', type: 'smallint', nullable: true)]
+    private ?int $month = null;
 
-    /**
-     * @var null|integer
-     *
-     * @ORM\Column(name="event_year", type="smallint", nullable=true)
-     */
-    private $year;
+    #[ORM\Column(name: 'event_year', type: 'smallint', nullable: true)]
+    private ?int $year = null;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_active", type="boolean", options={"default":true})
-     */
-    private $active;
+    #[ORM\Column(name: 'is_active', type: 'boolean', options: ['default' => true])]
+    private bool $active = true;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_permanent", type="boolean", options={"default":false})
-     */
-    private $permanent;
+    #[ORM\Column(name: 'is_permanent', type: 'boolean', options: ['default' => false])]
+    private bool $permanent;
 
     public function __construct(bool $isPermanent = false, string $type = 'default')
     {
         $this->permanent = $isPermanent;
         $this->type = $type;
-        $this->active = true;
     }
 
     public function getId(): ?int

@@ -5,25 +5,15 @@ namespace BestWishes\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Embeddable
- */
+#[ORM\Embeddable]
 class Image
 {
-    /**
-     * @var null|string
-     *
-     * @Assert\Url()
-     * @ORM\Column(name="url", length=255, nullable=true)
-     */
-    private $url;
+    #[Assert\Url]
+    #[ORM\Column(name: 'url', length: 255, nullable: true)]
+    private ?string $url = null;
 
-    /**
-     * @var null|string
-     *
-     * @ORM\Column(name="extension", length=4, nullable=true)
-     */
-    private $extension;
+    #[ORM\Column(name: 'extension', length: 4, nullable: true)]
+    private ?string $extension = null;
 
     public function __construct(?string $url)
     {

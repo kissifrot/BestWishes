@@ -7,13 +7,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class CategoryCreatedEvent extends Event
 {
-    public const NAME = 'category.created';
+    final public const NAME = 'category.created';
 
-    protected $category;
-
-    public function __construct(Category $category)
+    public function __construct(protected Category $category)
     {
-        $this->category = $category;
     }
 
     public function getCategory(): Category

@@ -2,19 +2,16 @@
 
 namespace BestWishes\EventSubscriber;
 
+use BestWishes\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
 class LastLoginSubscriber implements EventSubscriberInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public static function getSubscribedEvents(): array
@@ -28,8 +25,8 @@ class LastLoginSubscriber implements EventSubscriberInterface
     {
         $user = $event->getAuthenticationToken()->getUser();
 
-        if ($user instanceof UserInterface) {
-            $user->setLastLogin(new \DateTimeImmutable());
+        if ($user instanceof User) {
+            $user->markLoggedIn();
             $this->entityManager->persist($user);
             $this->entityManager->flush();
         }

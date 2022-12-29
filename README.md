@@ -4,13 +4,13 @@ BestWishes
 
 [![Build Status](https://travis-ci.org/kissifrot/BestWishes.svg?branch=master)](https://travis-ci.org/kissifrot/BestWishes)
 
-BestWishes is a multilingual wishlist application allowing users to manage their wishlist and indicate who have bought what to avoid receiving the same gift for Christmas (for example).
+BestWishes is a multilingual wishlist application allowing users to manage their wishlist and indicate who have[composer.json](..%2Fsf6.2%2Fcomposer.json) bought what to avoid receiving the same gift for Christmas (for example).
 
 Users can also add surprise gifts and manage additions and purchase alerts.
 
 Recurrent as well as "one-shot" events are also configurable.
 
-The current branch is based on symfony 5.x. For symfony 3.4 version see `0.x` branch.
+The current branch is based on symfony 6.x. For symfony 5.4 version see `1.x` branch.
 
 # Installation
 

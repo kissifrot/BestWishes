@@ -2,9 +2,8 @@
 
 namespace BestWishes\Controller;
 
-use BestWishes\Entity\GiftList;
 use BestWishes\Manager\ListEventManager;
-use Doctrine\ORM\EntityManagerInterface;
+use BestWishes\Repository\GiftListRepository;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,44 +11,32 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("list")
- */
+#[Route(path: 'list')]
 class ListController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private ListEventManager $listEventManager;
-    private Pdf $pdf;
-
-    public function __construct(EntityManagerInterface $entityManager, ListEventManager $listEventManager, Pdf $pdf)
+    public function __construct(
+        private readonly GiftListRepository     $giftListRepository,
+        private readonly ListEventManager       $listEventManager,
+        private readonly Pdf                    $pdf
+    )
     {
-        $this->entityManager = $entityManager;
-        $this->listEventManager = $listEventManager;
-        $this->pdf = $pdf;
     }
 
-    /**
-     * @Route("/", name="list_index")
-     */
+    #[Route(path: '/', name: 'list_index')]
     public function index(): Response
     {
-        $lists = $this->entityManager->getRepository(GiftList::class)->findAll();
+        $lists = $this->giftListRepository->findAll();
 
         return $this->render('list/index.html.twig', compact('lists'));
     }
 
-    /**
-     * @Route("/{id}", name="list_show", requirements={"id": "\d+"})
-     *
-     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function show(Request $request)
+    #[Route(path: '/{id}', name: 'list_show', requirements: ['id' => '\d+'])]
+    public function show(Request $request): Response
     {
         $id = $request->attributes->getInt('id');
         $list = $this->isGranted('IS_AUTHENTICATED_REMEMBERED')
-            ? $this->entityManager->getRepository(GiftList::class)->findFullById($id)
-            : $this->entityManager->getRepository(GiftList::class)->findFullSurpriseExcludedById($id)
+            ? $this->giftListRepository->findFullById($id)
+            : $this->giftListRepository->findFullSurpriseExcludedById($id)
         ;
         if (!$list) {
             throw $this->createNotFoundException();
@@ -59,17 +46,13 @@ class ListController extends AbstractController
         return $this->render('list/show.html.twig', compact('list', 'nextEventData'));
     }
 
-    /**
-     * @Route("/export/{id}", name="list_export_pdf", requirements={"id": "\d+"})
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
+    #[Route(path: '/export/{id}', name: 'list_export_pdf', requirements: ['id' => '\d+'])]
     public function pdfExport(Request $request): PdfResponse
     {
         $id = $request->attributes->getInt('id');
         $list = $this->isGranted('IS_AUTHENTICATED_REMEMBERED')
-            ? $this->entityManager->getRepository(GiftList::class)->findFullById($id)
-            : $this->entityManager->getRepository(GiftList::class)->findFullSurpriseExcludedById($id)
+            ? $this->giftListRepository->findFullById($id)
+            : $this->giftListRepository->findFullSurpriseExcludedById($id)
         ;
         if (!$list) {
             throw $this->createNotFoundException();

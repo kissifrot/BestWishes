@@ -7,13 +7,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class CategoryEditedEvent extends Event
 {
-    public const NAME = 'category.edited';
+    final public const NAME = 'category.edited';
 
-    protected $category;
-
-    public function __construct(Category $category)
+    public function __construct(protected Category $category)
     {
-        $this->category = $category;
     }
 
     public function getCategory(): Category

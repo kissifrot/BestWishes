@@ -3,22 +3,19 @@
 namespace BestWishes\Manager;
 
 use BestWishes\Entity\GiftList;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
 
 class SecurityManager
 {
-    private Security $security;
-
-    public function __construct(Security $security)
+    public function __construct(private readonly Security $security)
     {
-        $this->security = $security;
     }
 
     /**
      * Check if current user has specific for a specific GiftList
      */
-    public function checkAccess($attributes, GiftList $list): void
+    public function checkAccess(mixed $attributes, GiftList $list): void
     {
         if (!\is_array($attributes)) {
             $attributes = [$attributes];

@@ -7,6 +7,13 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<GiftList>
+ * @method GiftList|null find($id, $lockMode = null, $lockVersion = null)
+ * @method GiftList|null findOneBy(array $criteria, array $orderBy = null)
+ * @method GiftList[]    findAll()
+ * @method GiftList[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
 class GiftListRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)

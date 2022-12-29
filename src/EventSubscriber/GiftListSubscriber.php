@@ -4,16 +4,13 @@ namespace BestWishes\EventSubscriber;
 
 use BestWishes\Entity\ListEvent;
 use BestWishes\Event\GiftListCreatedEvent;
-use Doctrine\ORM\EntityManagerInterface;
+use BestWishes\Repository\ListEventRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class GiftListSubscriber implements EventSubscriberInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private readonly ListEventRepository $listEventRepository)
     {
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -28,17 +25,14 @@ class GiftListSubscriber implements EventSubscriberInterface
 
     /**
      * Ensure there's at least the birthdate event
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function onGiftListCreation(GiftListCreatedEvent $event): void
     {
-        $birthdateEvent = $this->entityManager->getRepository(ListEvent::class)->findBirthdate();
+        $birthdateEvent = $this->listEventRepository->findBirthdate();
         if (null !== $birthdateEvent) {
             return;
         }
         $birthdateEvent = new ListEvent(true, ListEvent::BIRTHDAY_TYPE);
-        $this->entityManager->persist($birthdateEvent);
-        $this->entityManager->flush();
+        $this->listEventRepository->save($birthdateEvent, flush: true);
     }
 }

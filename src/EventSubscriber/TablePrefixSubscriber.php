@@ -4,20 +4,18 @@ namespace BestWishes\EventSubscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class TablePrefixSubscriber implements EventSubscriber
 {
-    protected string $prefix = '';
-
-    public function __construct(string $prefix)
+    public function __construct(protected string $prefix = '')
     {
-        $this->prefix = $prefix;
     }
 
     public function getSubscribedEvents(): array
     {
-        return ['loadClassMetadata'];
+        return [Events::loadClassMetadata];
     }
 
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void

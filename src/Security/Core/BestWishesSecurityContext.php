@@ -12,21 +12,19 @@ use Symfony\Component\Security\Acl\Model\AclProviderInterface;
 
 class BestWishesSecurityContext
 {
-    private AclProviderInterface $aclProvider;
-    private array $aclCache;
+    /** @var array<mixed> */
+    private array $aclCache = [];
 
-    public function __construct(AclProviderInterface $aclProvider)
+    public function __construct(private readonly AclProviderInterface $aclProvider)
     {
-        $this->aclProvider = $aclProvider;
-        $this->aclCache = [];
     }
 
-    public function isGranted($mask, $object, User $user): bool
+    public function isGranted(mixed $mask, mixed $object, User $user): bool
     {
         $objectIdentity = ObjectIdentity::fromDomainObject($object);
         $securityIdentity = UserSecurityIdentity::fromAccount($user);
 
-        $aclCacheId = (string)$objectIdentity;
+        $aclCacheId = (string) $objectIdentity;
 
         if (isset($this->aclCache[$aclCacheId])) {
             $acl = $this->aclCache[$aclCacheId];
@@ -47,7 +45,7 @@ class BestWishesSecurityContext
         }
 
         try {
-            return $acl->isGranted([$mask], [$securityIdentity], false);
+            return $acl->isGranted([$mask], [$securityIdentity]);
         } catch (NoAceFoundException $e) {
             return false;
         }

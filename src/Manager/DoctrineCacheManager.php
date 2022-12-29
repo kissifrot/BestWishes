@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class DoctrineCacheManager
 {
-    private EntityManagerInterface $em;
+    private readonly EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
     {

@@ -4,10 +4,9 @@ namespace BestWishes\Security;
 
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Model\AclInterface;
-use Symfony\Component\Security\Acl\Model\AclProviderInterface;
 use Symfony\Component\Security\Acl\Model\AuditableEntryInterface;
 use Symfony\Component\Security\Acl\Model\MutableAclInterface;
+use Symfony\Component\Security\Acl\Model\MutableAclProviderInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -17,11 +16,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class AclManager
 {
-    private AclProviderInterface $provider;
-
-    public function __construct(AclProviderInterface $provider)
+    public function __construct(private readonly MutableAclProviderInterface $provider)
     {
-        $this->provider = $provider;
     }
 
     /**
@@ -30,7 +26,7 @@ class AclManager
      * @param UserInterface $user Concerned user
      * @param int           $mask The mask to grant
      */
-    public function grant($entity, UserInterface $user, int $mask = MaskBuilder::MASK_EDIT)
+    public function grant(mixed $entity, UserInterface $user, int $mask = MaskBuilder::MASK_EDIT): mixed
     {
         $acl = $this->getAcl($entity);
 
@@ -48,7 +44,7 @@ class AclManager
      * @param UserInterface $oldGranted User we're revoking the permission from
      * @param int           $mask The mask to exchange
      */
-    public function exchangePerms($entity, UserInterface $newGranted, UserInterface $oldGranted, int $mask = MaskBuilder::MASK_EDIT): void
+    public function exchangePerms(mixed $entity, UserInterface $newGranted, UserInterface $oldGranted, int $mask = MaskBuilder::MASK_EDIT): void
     {
         // Add the correct ACL for the new owner
         $this->grant($entity, $newGranted, $mask);
@@ -62,10 +58,10 @@ class AclManager
      *
      * @param mixed         $entity DomainObject that we are revoking the permission for
      * @param UserInterface $user Concerned user
-     * @param int|string    $mask The mask to revoke
+     * @param int           $mask The mask to revoke
      * @return $this
      */
-    public function revoke($entity, UserInterface $user, int $mask = MaskBuilder::MASK_EDIT): self
+    public function revoke(mixed $entity, UserInterface $user, int $mask = MaskBuilder::MASK_EDIT): self
     {
         $acl = $this->getAcl($entity);
         $aces = $acl->getObjectAces();
@@ -87,15 +83,14 @@ class AclManager
     /**
      * Get ACL of an entry
      * @param mixed $entity Entity to get the ACL from
-     * @return AclInterface|MutableAclInterface
      */
-    private function getAcl($entity)
+    private function getAcl(mixed $entity): MutableAclInterface
     {
         $aclProvider = $this->provider;
         $objectIdentity = ObjectIdentity::fromDomainObject($entity);
         try {
             $acl = $aclProvider->createAcl($objectIdentity);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $acl = $aclProvider->findAcl($objectIdentity);
         }
 
@@ -117,8 +112,7 @@ class AclManager
     /**
      * Add a mask
      *
-     * @param integer                   $mask
-     * @param MutableAclInterface       $acl ACL to update
+     * @param MutableAclInterface $acl ACL to update
      */
     private function addMask(SecurityIdentityInterface $securityIdentity, int $mask, MutableAclInterface $acl): void
     {

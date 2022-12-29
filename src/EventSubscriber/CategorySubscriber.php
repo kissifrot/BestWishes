@@ -10,11 +10,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CategorySubscriber implements EventSubscriberInterface
 {
-    private DoctrineCacheManager $cacheManager;
-
-    public function __construct(DoctrineCacheManager $cacheManager)
+    public function __construct(private readonly DoctrineCacheManager $cacheManager)
     {
-        $this->cacheManager = $cacheManager;
     }
 
     /**

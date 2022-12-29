@@ -9,7 +9,8 @@ use BestWishes\Event\CategoryDeletedEvent;
 use BestWishes\Event\CategoryEditedEvent;
 use BestWishes\Form\Type\CategoryType;
 use BestWishes\Manager\SecurityManager;
-use Doctrine\ORM\EntityManagerInterface;
+use BestWishes\Repository\CategoryRepository;
+use BestWishes\Repository\GiftListRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -19,31 +20,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("cat")
- */
+#[Route(path: 'cat')]
 class CategoryController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private SecurityManager $securityManager;
-    private TranslatorInterface $translator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(EntityManagerInterface $entityManager, SecurityManager $securityManager, TranslatorInterface $translator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->entityManager = $entityManager;
-        $this->securityManager = $securityManager;
-        $this->translator = $translator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private readonly CategoryRepository       $categoryRepository,
+        private readonly GiftListRepository       $giftListRepository,
+        private readonly SecurityManager          $securityManager,
+        private readonly TranslatorInterface      $translator,
+        private readonly EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
-    /**
-     * @Route("/{id}", name="category_show", requirements={"id": "\d+"}, methods={"GET"})
-     *
-     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function show(Request $request)
+    #[Route(path: '/{id}', name: 'category_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function show(Request $request): Response
     {
         $id = $request->attributes->getInt('id');
         $category = $this->loadCategory($id);
@@ -61,29 +51,24 @@ class CategoryController extends AbstractController
     private function loadCategory(int $id): ?Category
     {
         if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return $this->entityManager->getRepository(Category::class)->findFullSurpriseExcludedById($id);
+            return $this->categoryRepository->findFullSurpriseExcludedById($id);
         }
 
         // Load the list to check access on
-        $categoryGiftList = $this->entityManager->getRepository(GiftList::class)->findByCategoryId($id);
+        $categoryGiftList = $this->giftListRepository->findByCategoryId($id);
         if (!$categoryGiftList) {
             return null;
         }
 
         if ($this->isGranted('OWNER', $categoryGiftList)) {
-            return $this->entityManager->getRepository(Category::class)->findFullSurpriseExcludedById($id);
+            return $this->categoryRepository->findFullSurpriseExcludedById($id);
         }
 
-        return $this->entityManager->getRepository(Category::class)->findFullById($id);
+        return $this->categoryRepository->findFullById($id);
     }
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("/create/{listId}", name="category_create", requirements={"listId": "\d+"}, methods={"GET", "POST"})
-     * @ParamConverter("list", options={"id" = "listId"})
-     *
-     */
+    #[Route(path: '/create/{listId}', name: 'category_create', requirements: ['listId' => '\d+'], methods: ['GET', 'POST'])]
+    #[ParamConverter('list', class: GiftList::class, options: ['id' => 'listId'])]
     public function create(Request $request, GiftList $list): Response
     {
         $this->securityManager->checkAccess(['OWNER', 'EDIT'], $list);
@@ -96,8 +81,7 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($category);
-            $this->entityManager->flush();
+            $this->categoryRepository->save($category, flush: true);
 
             $this->eventDispatcher->dispatch(new CategoryCreatedEvent($category), CategoryCreatedEvent::NAME);
 
@@ -110,11 +94,10 @@ class CategoryController extends AbstractController
     }
 
     /**
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("{id}/edit", name="category_edit", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
+    #[Route(path: '{id}/edit', name: 'category_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category): Response
     {
         $this->securityManager->checkAccess(['OWNER', 'EDIT'], $category->getList());
@@ -124,8 +107,7 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($category);
-            $this->entityManager->flush();
+            $this->categoryRepository->save($category, flush: true);
 
             $this->eventDispatcher->dispatch(new CategoryEditedEvent($category), CategoryEditedEvent::NAME);
 
@@ -137,10 +119,7 @@ class CategoryController extends AbstractController
         return $this->render('category/edit.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/{id}/delete", name="category_delete", requirements={"id": "\d+"}, methods={"POST"})
-     *
-     */
+    #[Route(path: '{id}/delete', name: 'category_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(Request $request, Category $category): Response
     {
         $this->securityManager->checkAccess(['OWNER', 'EDIT'], $category->getList());
@@ -150,8 +129,7 @@ class CategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $deletedCategory = clone $category;
-            $this->entityManager->remove($category);
-            $this->entityManager->flush();
+            $this->categoryRepository->remove($category, flush: true);
 
             $this->eventDispatcher->dispatch(new CategoryDeletedEvent($deletedCategory), CategoryDeletedEvent::NAME);
 
@@ -163,7 +141,6 @@ class CategoryController extends AbstractController
 
     /**
      * Creates a form for deletion
-     *
      *
      * @return FormInterface Delete form
      */

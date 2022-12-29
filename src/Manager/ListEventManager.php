@@ -4,21 +4,19 @@ namespace BestWishes\Manager;
 
 use BestWishes\Entity\GiftList;
 use BestWishes\Entity\ListEvent;
+use BestWishes\Repository\ListEventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ListEventManager
 {
-    private EntityManagerInterface $em;
-
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(private readonly ListEventRepository $listEventRepository)
     {
-        $this->em = $em;
     }
 
     /**
      * @return bool|mixed
      */
-    public function getNearestEventData(GiftList $list)
+    public function getNearestEventData(GiftList $list): mixed
     {
         $calculatedEvents = $this->getNearestEvents($list->getBirthDate());
         if (empty($calculatedEvents)) {
@@ -27,7 +25,7 @@ class ListEventManager
 
         $nextEventData = reset($calculatedEvents);
         // Today at 00:00:01
-        $currentTime = \DateTimeImmutable::createFromFormat('U', time())->setTime(0, 0, 1)->getTimestamp();
+        $currentTime = \DateTimeImmutable::createFromFormat('U', (string) time())->setTime(0, 0, 1)->getTimestamp();
         $timeLeft = $nextEventData['time'] - $currentTime;
         $daysLeft = round($timeLeft / 3600 / 24);
         $nextEventData['daysLeft'] = (int)$daysLeft;
@@ -37,6 +35,7 @@ class ListEventManager
 
     /**
      * Get the nearest events of a list
+     * @return array<int, array<string, int|string|null>>
      */
     private function getNearestEvents(\DateTimeImmutable $birthDate = null): array
     {
@@ -45,13 +44,13 @@ class ListEventManager
         }
 
         $activeEvents = $this->getAllActiveEvents();
-        $todayAtMidnight = \DateTimeImmutable::createFromFormat('U', time())->setTime(0, 0, 1);
+        $todayAtMidnight = \DateTimeImmutable::createFromFormat('U', (string) time())->setTime(0, 0, 1);
         $currentTime = $todayAtMidnight->getTimestamp();
         // First update the "birthday" event with this list's birthdate
         foreach ($activeEvents as $activeEvent) {
             if ($activeEvent->isBirthday()) {
-                $activeEvent->setDay($birthDate->format('j'));
-                $activeEvent->setMonth($birthDate->format('n'));
+                $activeEvent->setDay((int) $birthDate->format('j'));
+                $activeEvent->setMonth((int) $birthDate->format('n'));
                 break;
             }
         }
@@ -80,9 +79,7 @@ class ListEventManager
         }
 
         // And finally sort them
-        usort($calculatedEvents, static function ($a, $b) {
-            return $a['time'] <=> $b['time'];
-        });
+        usort($calculatedEvents, static fn ($a, $b) => $a['time'] <=> $b['time']);
 
         return $calculatedEvents;
     }
@@ -93,6 +90,6 @@ class ListEventManager
      */
     private function getAllActiveEvents(): array
     {
-        return $this->em->getRepository(ListEvent::class)->findAllActive();
+        return $this->listEventRepository->findAllActive();
     }
 }

@@ -9,65 +9,47 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
- *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="BestWishes\Repository\UserRepository")
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[ORM\Table]
+#[ORM\Entity(repositoryClass: \BestWishes\Repository\UserRepository::class)]
+class User implements UserInterface, PasswordAuthenticatedUserInterface, \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=100, unique=true)
-     */
-    private $username;
+    #[ORM\Column(type: 'string', length: 100, unique: true)]
+    private ?string $username = null;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $roles = [];
+    /** @var string[] */
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
-    private $lastLogin;
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $lastLogin = null;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    private $password;
+    #[ORM\Column(type: 'string')]
+    private ?string $password = null;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=180)
-     */
-    private $email;
+    #[ORM\Column(type: 'string', length: 180)]
+    private ?string $email = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=40)
-     * @Assert\NotBlank()
-     */
-    private $name;
+    #[ORM\Column(name: 'name', type: 'string', length: 40)]
+    #[Assert\NotBlank]
+    private ?string $name = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="GiftList", cascade={"remove"})
-     */
-    private $list;
+    #[ORM\OneToOne(targetEntity: GiftList::class, cascade: ['remove'])]
+    private ?GiftList $list = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function __toString(): string
     {
-        return $this->getUsername();
+        return $this->getUserIdentifier();
     }
 
     public function setList(?GiftList $list): void
@@ -116,6 +98,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $username;
     }
 
+    /**
+     * @return string[]
+     */
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -124,9 +109,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param string[] $roles
+     */
     public function setRoles(array $roles): void
     {
         $this->roles = $roles;
+    }
+
+    public function markLoggedIn(): void
+    {
+        $this->lastLogin = \DateTimeImmutable::createFromFormat('U', (string) time());
     }
 
     public function setLastLogin(?\DateTimeImmutable $time): void
@@ -159,14 +152,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $password;
     }
 
-    public function getSalt()
-    {
-        // not needed when using the "bcrypt" algorithm in security.yaml
-    }
-
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 }

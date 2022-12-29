@@ -8,46 +8,23 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class GiftEditedEvent extends Event
 {
-    public const NAME = 'gift.edited';
+    final public const NAME = 'gift.edited';
 
-    /**
-     * @var Gift
-     */
-    protected $originGift;
 
-    /**
-     * @var Gift
-     */
-    protected $editedGift;
-
-    /**
-     * @var UserInterface
-     */
-    private $editor;
-
-    public function __construct(Gift $originGift, Gift $editedGift, UserInterface $editor)
+    public function __construct(protected Gift $originGift, protected Gift $editedGift, private readonly UserInterface $editor)
     {
-        $this->originGift = $originGift;
-        $this->editedGift = $editedGift;
-        $this->editor = $editor;
     }
 
-    /**
-     */
     public function getOriginGift(): Gift
     {
         return $this->originGift;
     }
 
-    /**
-     */
     public function getEditedGift(): Gift
     {
         return $this->editedGift;
     }
 
-    /**
-     */
     public function getEditor(): UserInterface
     {
         return $this->editor;

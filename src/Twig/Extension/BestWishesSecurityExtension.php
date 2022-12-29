@@ -2,6 +2,7 @@
 
 namespace BestWishes\Twig\Extension;
 
+use BestWishes\Entity\User;
 use BestWishes\Security\Core\BestWishesSecurityContext;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -11,8 +12,8 @@ use Twig\TwigFunction;
 
 class BestWishesSecurityExtension extends AbstractExtension
 {
-    private BestWishesSecurityContext $securityContext;
-    private ?AuthorizationCheckerInterface $securityChecker;
+    private readonly BestWishesSecurityContext $securityContext;
+    private readonly ?AuthorizationCheckerInterface $securityChecker;
 
     public function __construct(BestWishesSecurityContext $securityContext, ?AuthorizationCheckerInterface $securityChecker = null)
     {
@@ -33,11 +34,8 @@ class BestWishesSecurityExtension extends AbstractExtension
 
     /**
      * Checks if current user has the specified roles granted
-     * @param      $roles
-     * @param null $object
-     * @param null $field
      */
-    public function isMultiGranted($roles, $object = null, $field = null): bool
+    public function isMultiGranted(mixed $roles, mixed $object = null, string $field = null): bool
     {
         if (null === $this->securityChecker) {
             return false;
@@ -65,17 +63,12 @@ class BestWishesSecurityExtension extends AbstractExtension
 
     /**
      * Checks if specified user has the specified role granted
-     * @param null   $object
-     * @param        $user
      */
-    public function isUserGranted(string $role, $object = null, $user): bool
+    public function isUserGranted(string $role, User $user, mixed $object = null): bool
     {
         return $this->securityContext->isGranted($role, $object, $user);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'bw_security';

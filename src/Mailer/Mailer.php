@@ -12,19 +12,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Mailer
 {
-    private MailerInterface $mailer;
-    private UrlGeneratorInterface $router;
-    private TranslatorInterface $translator;
-    private string $siteName;
-    private string $fromAddress;
-
-    public function __construct(MailerInterface $mailer, UrlGeneratorInterface $router, TranslatorInterface $translator, string $siteName, string $fromAddress)
+    public function __construct(private readonly MailerInterface       $mailer,
+                                private readonly UrlGeneratorInterface $router,
+                                private readonly TranslatorInterface   $translator,
+                                private readonly string                $siteName,
+                                private readonly string                $fromAddress)
     {
-        $this->mailer = $mailer;
-        $this->router = $router;
-        $this->translator = $translator;
-        $this->siteName = $siteName;
-        $this->fromAddress = $fromAddress;
     }
 
     public function sendPurchaseAlertMessage(User $user, Gift $purchasedGift, UserInterface $buyer): void
@@ -63,6 +56,9 @@ class Mailer
         $this->sendEmailMessage($templatedEmail, $this->fromAddress, $user->getEmail());
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     private function renderMailTemplate(string $subjectTrans, string $templateFile, User $user, array $data): TemplatedEmail
     {
         $subject = $this->translator->trans($subjectTrans, ['%siteName%' => $this->siteName]);

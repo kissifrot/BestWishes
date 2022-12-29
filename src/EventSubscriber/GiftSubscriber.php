@@ -15,17 +15,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class GiftSubscriber implements EventSubscriberInterface
 {
-    private UserManager $userManager;
-    private BestWishesSecurityContext $securityContext;
-    private Mailer $mailer;
-    private DoctrineCacheManager $cacheManager;
-
-    public function __construct(UserManager $userManager, BestWishesSecurityContext $securityContext, Mailer $mailer, DoctrineCacheManager $cacheManager)
+    public function __construct(
+        private readonly UserManager               $userManager,
+        private readonly BestWishesSecurityContext $securityContext,
+        private readonly Mailer                    $mailer,
+        private readonly DoctrineCacheManager      $cacheManager
+    )
     {
-        $this->userManager     = $userManager;
-        $this->securityContext = $securityContext;
-        $this->mailer          = $mailer;
-        $this->cacheManager = $cacheManager;
     }
 
     /**
