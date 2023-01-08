@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block javascripts_head %}
-    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
 {% endblock %}
 
@@ -48,31 +48,5 @@
 {% endblock %}
 
 {% block javascripts_footer %}
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('.js-alert-check:not(.disabled)').click(function(evt) {
-                evt.preventDefault();
-                console.log(arguments);
-                var elem = $(this);
-                var currData = $(this).data();
-                var currUrl = Routing.generate('user_update_list_alert', { id: currData.list });
-
-                console.log(currUrl);
-                $.ajax({
-                    url: currUrl,
-                    method: 'POST',
-                    data: {
-                        alert: currData.alert
-                    },
-                    dataType: 'json',
-                    error: function(jqXHR, textStatus, errorThrown) {
-
-                    },
-                    success: function(data, textStatus, jqXHR) {
-                        elem.toggleClass('text-success fa-check').toggleClass('text-danger fa-times');
-                    }
-                });
-            })
-        })
-    </script>
+    {{ encore_entry_script_tags('manage_alerts') }}
 {% endblock %}

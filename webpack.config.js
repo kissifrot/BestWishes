@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const FosRouting = require('fos-router/webpack/FosRouting');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -21,6 +22,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
+    .addEntry('manage_alerts', './assets/js/manage_alerts.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     // .enableStimulusBridge('./assets/controllers.json')
@@ -71,6 +73,10 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     .autoProvidejQuery()
+
+    // Enable FOS JS Routing plugin
+    .addPlugin(new FosRouting())
+
 ;
 
 module.exports = Encore.getWebpackConfig();

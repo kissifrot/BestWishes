@@ -45,7 +45,7 @@ class UserController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/updateAlert', name: 'user_update_list_alert', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[Route(path: '/{id}/updateAlert', name: 'user_update_list_alert', requirements: ['id' => '\d+'], options: ['expose' => true], methods: ['POST'])]
     public function updateAlert(Request $request, GiftList $giftList): JsonResponse
     {
         $defaultData = [
