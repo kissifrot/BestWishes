@@ -54,11 +54,9 @@
         {% block content %}
         {% endblock %}
         {% block footer %}
-        <nav class="navbar fixed-bottom navbar-light d-sm-none">
-            <p class="text-center">
-                <small class="text-muted ">Powered by BestWishes v{{ constant('\\BestWishes\\AppVersion::VERSION') }}</small>
-            </p>
-        </nav>
+            <!--
+            Powered by BestWishes v{{ constant('\\BestWishes\\AppVersion::VERSION') }}
+            -->
         {% endblock %}
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
