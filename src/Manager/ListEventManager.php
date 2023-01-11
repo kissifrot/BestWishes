@@ -25,10 +25,13 @@ class ListEventManager
 
         $nextEventData = reset($calculatedEvents);
         // Today at 00:00:01
-        $currentTime = \DateTimeImmutable::createFromFormat('U', (string) time())->setTime(0, 0, 1)->getTimestamp();
+        $currentTime = \DateTimeImmutable::createFromFormat('U', (string) time());
+        if ($currentTime instanceof \DateTimeImmutable) {
+            $currentTime = $currentTime->setTime(0, 0, 1)->getTimestamp();
+        }
         $timeLeft = $nextEventData['time'] - $currentTime;
         $daysLeft = round($timeLeft / 3600 / 24);
-        $nextEventData['daysLeft'] = (int)$daysLeft;
+        $nextEventData['daysLeft'] = (int) $daysLeft;
 
         return $nextEventData;
     }

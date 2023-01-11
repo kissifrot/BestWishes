@@ -13,18 +13,22 @@ use PHPUnit\Framework\TestCase;
  */
 class GiftTest extends TestCase
 {
-    private $now;
-    /** @var Category */
-    private $category;
-    /** @var GiftList */
-    private $giftList;
-    /** @var User */
-    private $buyer;
+    private \DateTimeImmutable $now;
+    private Category $category;
+    private GiftList $giftList;
+    private User $buyer;
 
     public function setUp(): void
     {
-        $this->now = \DateTime::createFromFormat('U', time());
-        $this->category = new Category(1);
+        $this->now = \DateTimeImmutable::createFromFormat('U', time());
+
+        // Force id on category
+        $reflectionClass = new \ReflectionClass(Category::class);
+        $reflectionProperty = $reflectionClass->getProperty('id');
+        $reflectionProperty->setAccessible(true);
+        $this->category = new Category();
+        $reflectionProperty->setValue($this->category, 1);
+
         $this->giftList = new GiftList();
         $this->category->setList($this->giftList);
         $this->buyer = new User();
