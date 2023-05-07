@@ -14,6 +14,7 @@ use BestWishes\Form\Type\GiftType;
 use BestWishes\Manager\SecurityManager;
 use BestWishes\Repository\GiftRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -58,8 +59,7 @@ class GiftController extends AbstractController
     }
 
     #[Route(path: '/create/{catId}', name: 'gift_create', requirements: ['catId' => '\d+'], methods: ['GET', 'POST'])]
-    #[ParamConverter('category', class: Category::class, options: ['id' => 'catId'])]
-    public function create(Request $request, Category $category): Response
+    public function create(Request $request, #[MapEntity(expr: 'repository.find(catId)')] Category $category): Response
     {
         $isSurprise = $request->query->getBoolean('surprise');
 

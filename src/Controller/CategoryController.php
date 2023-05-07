@@ -11,7 +11,7 @@ use BestWishes\Form\Type\CategoryType;
 use BestWishes\Manager\SecurityManager;
 use BestWishes\Repository\CategoryRepository;
 use BestWishes\Repository\GiftListRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
@@ -68,8 +68,7 @@ class CategoryController extends AbstractController
     }
 
     #[Route(path: '/create/{listId}', name: 'category_create', requirements: ['listId' => '\d+'], methods: ['GET', 'POST'])]
-    #[ParamConverter('list', class: GiftList::class, options: ['id' => 'listId'])]
-    public function create(Request $request, GiftList $list): Response
+    public function create(Request $request, #[MapEntity(expr: 'repository.find(listId)')] GiftList $list): Response
     {
         $this->securityManager->checkAccess(['OWNER', 'EDIT'], $list);
 
