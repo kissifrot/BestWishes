@@ -1,3 +1,9 @@
+{% macro encore_absolute_link_tags(entry_point) %}
+    {% for file in encore_entry_css_files(entry_point) %}
+        <link href="{{ absolute_url(asset(file)) }}" rel="stylesheet" />
+    {% endfor %}
+{% endmacro %}
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,8 +11,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ site_name }} - {% block title %}Wishlist management{% endblock %}</title>
-        <link href="{{ absolute_url(asset('build/css/app.css')) }}" rel="stylesheet">
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            {{ _self.encore_absolute_link_tags('app') }}
+        {% endblock %}
         <meta name="theme-color" content="#ffffff">
         {% block javascripts_head %}{% endblock %}
     </head>

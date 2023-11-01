@@ -18,10 +18,10 @@
                     {% for gift in category.gifts %}
                         <a href="{{ path('gift_show', { id: gift.id }) }}" class="list-group-item list-group-item-action d-flex">
                             <div>
-                                {% if gift.bought and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                                    <i class="fas fa-gift fa-lg"></i>&nbsp;
-                                {% endif %}
                                 {{ gift.name }}
+                                {% if gift.bought and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                    <i class="fas fa-gift fa-lg" style="color: #FA2864"></i>&nbsp;
+                                {% endif %}
                                 {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
                             </div>
                         </a>
