@@ -20,8 +20,7 @@ class GiftSubscriber implements EventSubscriberInterface
         private readonly BestWishesSecurityContext $securityContext,
         private readonly Mailer                    $mailer,
         private readonly DoctrineCacheManager      $cacheManager
-    )
-    {
+    ) {
     }
 
     /**

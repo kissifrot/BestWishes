@@ -9,7 +9,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 class UserManager
 {
-
     public function __construct(private readonly UserPasswordHasherInterface $passwordHasher, private readonly UserRepository $userRepository)
     {
     }

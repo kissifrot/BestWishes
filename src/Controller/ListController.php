@@ -18,8 +18,7 @@ class ListController extends AbstractController
         private readonly GiftListRepository     $giftListRepository,
         private readonly ListEventManager       $listEventManager,
         private readonly Pdf                    $pdf
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/', name: 'list_index')]

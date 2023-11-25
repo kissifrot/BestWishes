@@ -5,7 +5,6 @@ namespace BestWishes\Manager;
 use BestWishes\Entity\GiftList;
 use BestWishes\Entity\ListEvent;
 use BestWishes\Repository\ListEventRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 class ListEventManager
 {

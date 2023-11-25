@@ -150,12 +150,12 @@ mail.alert_edition.body_text: |
   l'admin de %siteName% - %siteUrl%
 mail.alert_purchase.title: '[%siteName%] - Alerte achat'
 mail.alert_purchase.body_text: |
-  Bonjour %userName%, le cadeau "%purchasedGiftName%" de la liste %listName% a été acheté par %buyerName%.
+  Bonjour %userName%, le cadeau "%purchasedGiftName%" de la liste %listName% (catégorie %categoryName%) a été acheté par %buyerName%.
 
   Cordialement,
   l'admin de %siteName% - %siteUrl%
 mail.alert_surprise_purchase.body_text: |
-  Bonjour %userName%, le cadeau surprise "%purchasedGiftName%" de la liste %listName% a été acheté par %buyerName%.
+  Bonjour %userName%, le cadeau surprise "%purchasedGiftName%" de la liste %listName% (catégorie %categoryName%) a été acheté par %buyerName%.
 
   Cordialement,
   l'admin de %siteName% - %siteUrl%

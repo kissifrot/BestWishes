@@ -12,12 +12,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Mailer
 {
-    public function __construct(private readonly MailerInterface       $mailer,
-                                private readonly UrlGeneratorInterface $router,
-                                private readonly TranslatorInterface   $translator,
-                                private readonly string                $siteName,
-                                private readonly string                $fromAddress)
-    {
+    public function __construct(
+        private readonly MailerInterface       $mailer,
+        private readonly UrlGeneratorInterface $router,
+        private readonly TranslatorInterface   $translator,
+        private readonly string                $siteName,
+        private readonly string                $fromAddress
+    ) {
     }
 
     public function sendPurchaseAlertMessage(User $user, Gift $purchasedGift, UserInterface $buyer): void
