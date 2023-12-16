@@ -224,7 +224,7 @@ class ListEventManagerTest extends TestCase
         $this->assertEquals([
             'name' => 'Next year event',
             'time' => $refTime,
-            'daysLeft' => $refDatetime->format('L') ? 364 : 365
+            'daysLeft' => '1' === $refDatetime->format('L') ? 365 : 364
         ], $result);
     }
 
@@ -250,7 +250,7 @@ class ListEventManagerTest extends TestCase
         $this->assertEquals([
             'name' => 'Birthday',
             'time' => $refTime,
-            'daysLeft' =>  $refDatetime->format('L') ? 364 : 365
+            'daysLeft' => '1' === $refDatetime->format('L') ? 365 : 364
         ], $result);
     }
 }
