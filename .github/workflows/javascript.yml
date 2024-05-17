@@ -1,0 +1,25 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build with Javascript
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install JS dependencies
+      uses: bahmutov/npm-install@v1
+      run: yarn install
+
+    - name: Check for JS security advisories
+      run: yarn audit

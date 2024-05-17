@@ -41,8 +41,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-${{ matrix.php-version }}-php-
 
-    - name: Install dependencies
+    - name: Install PHP dependencies
       run: composer install --prefer-dist --no-progress
+
+    - name: Check for PHP security advisories
+      run: composer audit
 
     - name: Run phpstan
       run: vendor/bin/phpstan analyse -l 6 src
