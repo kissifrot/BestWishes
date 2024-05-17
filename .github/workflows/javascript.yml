@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Javascript
 
 on:
   push:
@@ -16,9 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: bahmutov/npm-install@v1
 
     - name: Install JS dependencies
-      uses: bahmutov/npm-install@v1
       run: yarn install
 
     - name: Check for JS security advisories
