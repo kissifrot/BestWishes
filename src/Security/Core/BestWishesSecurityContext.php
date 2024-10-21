@@ -32,7 +32,7 @@ class BestWishesSecurityContext
             try {
                 $acl = $this->aclProvider->findAcl($objectIdentity, [$securityIdentity]);
                 $this->aclCache[$aclCacheId] = $acl;
-            } catch (AclNotFoundException $e) {
+            } catch (AclNotFoundException) {
                 return false;
             }
         }
@@ -46,7 +46,7 @@ class BestWishesSecurityContext
 
         try {
             return $acl->isGranted([$mask], [$securityIdentity]);
-        } catch (NoAceFoundException $e) {
+        } catch (NoAceFoundException) {
             return false;
         }
     }

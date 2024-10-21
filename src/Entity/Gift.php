@@ -4,6 +4,7 @@ namespace BestWishes\Entity;
 
 use BestWishes\Repository\GiftRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table]
@@ -64,7 +65,7 @@ class Gift
 
     public function __construct(bool $isSurprise, Category $category)
     {
-        $this->addedDate = \DateTimeImmutable::createFromFormat('U', (string) time());
+        $this->addedDate = new DatePoint();
         $this->surprise = $isSurprise;
         $this->category = $category;
     }
@@ -182,13 +183,13 @@ class Gift
     public function markReceived(): void
     {
         $this->received = true;
-        $this->receivedDate = \DateTimeImmutable::createFromFormat('U', (string) time());
+        $this->receivedDate = new DatePoint();
     }
 
     public function markPurchasedBy(User $user, ?string $purchasedComment): void
     {
         $this->bought = true;
-        $this->purchaseDate = \DateTimeImmutable::createFromFormat('U', (string) time());
+        $this->purchaseDate = new DatePoint();
         $this->buyer = $user;
         $this->purchaseComment = $purchasedComment;
     }

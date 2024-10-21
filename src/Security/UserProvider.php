@@ -7,11 +7,8 @@ use BestWishes\Repository\UserRepository;
 
 class UserProvider
 {
-    private readonly UserRepository $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private readonly UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
     }
 
     public function findUserByUsernameOrEmail(string $usernameOrEmail): ?User

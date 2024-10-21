@@ -74,8 +74,6 @@ class GiftController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->giftRepository->save($gift, flush: true);
-
-            // Dispatch the creation event
             $this->eventDispatcher->dispatch(new GiftCreatedEvent($gift, $this->getUser()), GiftCreatedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('gift.message.created', ['%giftName%' => $gift->getName()]));
@@ -104,8 +102,6 @@ class GiftController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->giftRepository->save($gift, flush: true);
-
-            // Dispatch the edition event
             $this->eventDispatcher->dispatch(new GiftEditedEvent($originGift, $gift, $this->getUser()), GiftEditedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('gift.message.updated', ['%giftName%' => $gift->getName()]));

@@ -9,12 +9,15 @@ use BestWishes\Repository\ListEventRepository;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\PhpUnit\ClockMock;
+use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 /**
  * @group time-sensitive
  */
 class ListEventManagerTest extends TestCase
 {
+    use ClockSensitiveTrait;
     private MockObject|ListEventRepository $listEventRepository;
 
     public function setUp(): void
@@ -26,10 +29,11 @@ class ListEventManagerTest extends TestCase
 
     public function testNoActiveEvents(): void
     {
+        static::mockTime(new \DateTimeImmutable('2024-11-05 20:00:00'));
         $this->listEventRepository->expects($this->once())->method('findAllActive')->willReturn([]);
         $listEventManager = new ListEventManager($this->listEventRepository);
         $gitList = new GiftList();
-        $today = \DateTimeImmutable::createFromFormat('U', (string) time());
+        $today = new DatePoint();
         $gitList->setBirthDate($today);
 
         $result = $listEventManager->getNearestEventData($gitList);
@@ -38,10 +42,8 @@ class ListEventManagerTest extends TestCase
 
     public function testTodayBirthdayEvent(): void
     {
-        ClockMock::withClockMock(strtotime('2019-11-05 20:00:00'));
-        ClockMock::register(ListEventManager::class);
-
-        $now = \DateTimeImmutable::createFromFormat('U', (string) time());
+        static::mockTime(new \DateTimeImmutable('2024-11-05 20:00:00'));
+        $now = new DatePoint();
 
         $listEventBirthdate = new ListEvent();
         $listEventBirthdate->setName('Birthday');
@@ -64,14 +66,14 @@ class ListEventManagerTest extends TestCase
 
     public function testChristmasEvent(): void
     {
-        ClockMock::withClockMock(strtotime('2019-11-05 20:00:00'));
-        ClockMock::register(ListEventManager::class);
+        static::mockTime(new \DateTimeImmutable('2024-11-05 20:00:00'));
+        $now = new DatePoint();
 
         $listEventChristmas = new ListEvent();
         $listEventChristmas->setName('Christmas');
         $listEventChristmas->setDay(25);
         $listEventChristmas->setMonth(12);
-        $today = \DateTimeImmutable::createFromFormat('U', (string) time())->setTime(0, 0, 1);
+        $today = $now->setTime(0, 0, 1);
 
         $this->listEventRepository->expects($this->once())->method('findAllActive')->willReturn([$listEventChristmas]);
         $listEventManager = new ListEventManager($this->listEventRepository);
@@ -81,17 +83,16 @@ class ListEventManagerTest extends TestCase
         $result = $listEventManager->getNearestEventData($gitList);
         $this->assertEquals([
             'name' => 'Christmas',
-            'time' => 1577232001,
+            'time' => 1735084801,
             'daysLeft' => 50
         ], $result);
     }
 
     public function testTwoEventsToday(): void
     {
-        ClockMock::withClockMock(strtotime('2019-11-05 20:00:00'));
-        ClockMock::register(ListEventManager::class);
+        static::mockTime(new \DateTimeImmutable('2024-10-21 20:00:00'));
 
-        $now = \DateTimeImmutable::createFromFormat('U', (string) time());
+        $now = new DatePoint();
 
         $listEventBirthdate = new ListEvent();
         $listEventBirthdate->setName('Birthday');
@@ -111,14 +112,15 @@ class ListEventManagerTest extends TestCase
         $result = $listEventManager->getNearestEventData($gitList);
         $this->assertEquals([
             'name' => 'Birthday',
-            'time' => 1572912001,
+            'time' => 1729468801,
             'daysLeft' => 0
         ], $result);
     }
 
     public function testTwoNextEvents(): void
     {
-        $now = \DateTimeImmutable::createFromFormat('U', (string) time());
+        static::mockTime(new \DateTimeImmutable('2024-10-21 20:00:00'));
+        $now = new DatePoint();
         $inThreeMonths = $now->add(new \DateInterval('P3M'));
         $tomorrow = $now->add(new \DateInterval('P1D'));
         $afterTomorrow = $now->add(new \DateInterval('P2D'));
@@ -155,7 +157,8 @@ class ListEventManagerTest extends TestCase
 
     public function testEventInThreeDays(): void
     {
-        $now = \DateTimeImmutable::createFromFormat('U', (string) time());
+        static::mockTime(new \DateTimeImmutable('2024-10-21 20:00:00'));
+        $now = new DatePoint();
         $nextThreeDays = $now->add(new \DateInterval('P3D'));
 
         $listEvent = new ListEvent();
@@ -181,9 +184,8 @@ class ListEventManagerTest extends TestCase
 
     public function testYesterdayEvent(): void
     {
-        ClockMock::withClockMock(strtotime('2019-11-05 20:00:00'));
-
-        $now = \DateTimeImmutable::createFromFormat('U', (string) time());
+        static::mockTime(new \DateTimeImmutable('2024-11-05 20:00:00'));
+        $now = new DatePoint();
         $yesterday = $now->sub(new \DateInterval('P1D'));
 
         $listEvent = new ListEvent();
@@ -203,7 +205,8 @@ class ListEventManagerTest extends TestCase
 
     public function testNextYearEvent(): void
     {
-        $now = \DateTimeImmutable::createFromFormat('U', (string) time());
+        static::mockTime(new \DateTimeImmutable('2024-10-21 20:00:00'));
+        $now = new DatePoint();
         $yesterday = $now->sub(new \DateInterval('P1D'));
 
         $listEvent = new ListEvent(true);
@@ -230,7 +233,8 @@ class ListEventManagerTest extends TestCase
 
     public function testNextYearBirthday(): void
     {
-        $now = \DateTimeImmutable::createFromFormat('U', (string) time());
+        static::mockTime(new \DateTimeImmutable('2024-10-21 20:00:00'));
+        $now = new DatePoint();
         $yesterday = $now->sub(new \DateInterval('P1D'));
 
         $listEventBirthdate = new ListEvent(true);

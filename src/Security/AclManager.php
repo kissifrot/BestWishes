@@ -119,14 +119,4 @@ class AclManager
         $acl->insertObjectAce($securityIdentity, $mask);
         $this->provider->updateAcl($acl);
     }
-
-    /*
-    private function addMask($securityIdentity, $mask, MutableAclInterface $acl)
-    {
-        $acl->updateObjectAce($index, $ace->getMask() & ~$mask);
-        $acl->insertObjectAce($securityIdentity, $mask);
-        $this->provider->updateAcl($acl);
-
-        return $this;
-    }*/
 }

@@ -50,7 +50,6 @@ class GiftRepository extends ServiceEntityRepository
             ->addSelect('c', 'l')
             ->setParameter('id', $id)
             ->getQuery()
-            ->useQueryCache(true)
             ->getOneOrNullResult();
     }
 
@@ -68,7 +67,6 @@ class GiftRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->setParameter('surprise', false)
             ->getQuery()
-            ->useQueryCache(true)
             ->getOneOrNullResult();
     }
 }

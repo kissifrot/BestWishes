@@ -7,10 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Clock\DatePoint;
 
 #[ORM\Table]
-#[ORM\Index(columns: ['slug'], name: 'list_slug_idx')]
-#[ORM\Index(columns: ['name'], name: 'list_name_idx')]
+#[ORM\Index(name: 'list_slug_idx', columns: ['slug'])]
+#[ORM\Index(name: 'list_name_idx', columns: ['name'])]
 #[ORM\Entity(repositoryClass: GiftListRepository::class)]
 class GiftList
 {
@@ -37,13 +38,13 @@ class GiftList
     private ?User $owner = null;
 
     /** @var Collection<int, Category> */
-    #[ORM\OneToMany(mappedBy: 'list', targetEntity: Category::class)]
+    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'list')]
     private Collection $categories;
 
     public function __construct()
     {
         $this->categories = new ArrayCollection();
-        $this->lastUpdate = new \DateTimeImmutable();
+        $this->lastUpdate = new DatePoint();
     }
 
     public function getId(): ?int

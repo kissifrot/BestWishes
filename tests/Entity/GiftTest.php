@@ -7,12 +7,16 @@ use BestWishes\Entity\Gift;
 use BestWishes\Entity\GiftList;
 use BestWishes\Entity\User;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 /**
  * @group time-sensitive
  */
 class GiftTest extends TestCase
 {
+    use ClockSensitiveTrait;
+
     private \DateTimeImmutable $now;
     private Category $category;
     private GiftList $giftList;
@@ -20,7 +24,8 @@ class GiftTest extends TestCase
 
     public function setUp(): void
     {
-        $this->now = \DateTimeImmutable::createFromFormat('U', time());
+        static::mockTime(new \DateTimeImmutable('2024-10-21 10:00:00'));
+        $this->now = new DatePoint();
 
         // Force id on category
         $reflectionClass = new \ReflectionClass(Category::class);

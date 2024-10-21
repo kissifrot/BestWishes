@@ -26,7 +26,7 @@ class Category implements \Stringable
     private bool $visible = true;
 
     /** @var Collection<int, Gift> */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Gift::class)]
+    #[ORM\OneToMany(targetEntity: Gift::class, mappedBy: 'category')]
     private Collection $gifts;
 
     #[ORM\ManyToOne(targetEntity: GiftList::class, inversedBy: 'categories')]

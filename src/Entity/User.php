@@ -2,7 +2,9 @@
 
 namespace BestWishes\Entity;
 
+use BestWishes\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -11,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * User
  */
 #[ORM\Table]
-#[ORM\Entity(repositoryClass: \BestWishes\Repository\UserRepository::class)]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -119,7 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
     public function markLoggedIn(): void
     {
-        $this->lastLogin = \DateTimeImmutable::createFromFormat('U', (string) time());
+        $this->lastLogin = new DatePoint();
     }
 
     public function setLastLogin(?\DateTimeImmutable $time): void

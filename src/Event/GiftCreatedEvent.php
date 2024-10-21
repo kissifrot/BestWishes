@@ -14,15 +14,11 @@ class GiftCreatedEvent extends Event
     {
     }
 
-    /**
-     */
     public function getGift(): Gift
     {
         return $this->gift;
     }
 
-    /**
-     */
     public function getCreator(): UserInterface
     {
         return $this->creator;

@@ -5,6 +5,7 @@ namespace BestWishes\Manager;
 use BestWishes\Entity\GiftList;
 use BestWishes\Entity\ListEvent;
 use BestWishes\Repository\ListEventRepository;
+use Symfony\Component\Clock\DatePoint;
 
 class ListEventManager
 {
@@ -24,10 +25,8 @@ class ListEventManager
 
         $nextEventData = reset($calculatedEvents);
         // Today at 00:00:01
-        $currentTime = \DateTimeImmutable::createFromFormat('U', (string) time());
-        if ($currentTime instanceof \DateTimeImmutable) {
-            $currentTime = $currentTime->setTime(0, 0, 1)->getTimestamp();
-        }
+        $currentTime = new DatePoint();
+        $currentTime = $currentTime->setTime(0, 0, 1)->getTimestamp();
         $timeLeft = $nextEventData['time'] - $currentTime;
         $daysLeft = round($timeLeft / 3600 / 24);
         $nextEventData['daysLeft'] = (int) $daysLeft;
@@ -46,7 +45,7 @@ class ListEventManager
         }
 
         $activeEvents = $this->getAllActiveEvents();
-        $todayAtMidnight = \DateTimeImmutable::createFromFormat('U', (string) time())->setTime(0, 0, 1);
+        $todayAtMidnight = (new DatePoint())->setTime(0, 0, 1);
         $currentTime = $todayAtMidnight->getTimestamp();
         // First update the "birthday" event with this list's birthdate
         foreach ($activeEvents as $activeEvent) {

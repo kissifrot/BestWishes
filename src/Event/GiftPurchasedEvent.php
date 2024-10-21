@@ -10,7 +10,7 @@ class GiftPurchasedEvent extends Event
 {
     final public const NAME = 'gift.purchased';
 
-    public function __construct(protected Gift $gift, private readonly UserInterface $buyer, private ?string $purchaseComment = null)
+    public function __construct(protected Gift $gift, private readonly UserInterface $buyer, private readonly ?string $purchaseComment = null)
     {
     }
 

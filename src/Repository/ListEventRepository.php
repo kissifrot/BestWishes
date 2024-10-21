@@ -30,7 +30,6 @@ class ListEventRepository extends ServiceEntityRepository
         }
     }
 
-
     /**
      * @return ListEvent[]
      */
@@ -39,7 +38,6 @@ class ListEventRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('le')
             ->where('le.active = true')
             ->getQuery()
-            ->useQueryCache(true)
             ->enableResultCache(3600, 'all_active')
             ->getResult();
     }
@@ -52,7 +50,6 @@ class ListEventRepository extends ServiceEntityRepository
                 ->setParameter('type', ListEvent::BIRTHDAY_TYPE)
                 ->setMaxResults(1)
                 ->getQuery()
-                ->useQueryCache(true)
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException) {
             return null;

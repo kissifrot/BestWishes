@@ -12,7 +12,6 @@ use BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder;
 use BestWishes\Security\AclManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
@@ -317,11 +316,11 @@ class AdminController extends AbstractController
                     );
                 }
 
-                $this->addFlash('notice', sprintf('User "%s" updated', $user->getUsername()));
+                $this->addFlash('notice', sprintf('User "%s" updated', $user->getUserIdentifier()));
 
                 return $this->redirectToRoute('admin_users');
             } catch (\Exception $e) {
-                $this->addFlash('error', sprintf('Error editing "%s": %s', $user->getUsername(), $e->getMessage()));
+                $this->addFlash('error', sprintf('Error editing "%s": %s', $user->getUserIdentifier(), $e->getMessage()));
             }
         }
 

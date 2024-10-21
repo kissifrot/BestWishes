@@ -41,35 +41,6 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Category[]
-     */
-    public function findByList(GiftList $list): array
-    {
-        return $this->createQueryBuilder('c')
-            ->where('c.list = :list')
-            ->setParameter('list', $list)
-            ->getQuery()
-            ->useQueryCache(true)
-            ->getResult();
-    }
-
-    /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function findById(int $id): ?Category
-    {
-        return $this->createQueryBuilder('c')
-            ->where('c.id = :id')
-            ->leftJoin('c.gifts', 'g', Join::WITH, 'g.received = :received')
-            ->addSelect('g')
-            ->setParameter('id', $id)
-            ->setParameter('received', false)
-            ->getQuery()
-            ->useQueryCache(true)
-            ->getOneOrNullResult();
-    }
-
-    /**
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findFullById(int $id): ?Category
@@ -82,7 +53,6 @@ class CategoryRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->setParameter('received', false)
             ->getQuery()
-            ->useQueryCache(true)
             ->getOneOrNullResult();
     }
 
@@ -100,7 +70,6 @@ class CategoryRepository extends ServiceEntityRepository
             ->setParameter('received', false)
             ->setParameter('surprise', false)
             ->getQuery()
-            ->useQueryCache(true)
             ->getOneOrNullResult();
     }
 }

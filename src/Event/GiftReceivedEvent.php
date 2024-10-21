@@ -11,7 +11,6 @@ class GiftReceivedEvent extends Event
 
     public function __construct(protected Gift $gift)
     {
-        $this->gift = $gift;
     }
 
     public function getGift(): Gift

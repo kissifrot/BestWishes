@@ -51,4 +51,4 @@ jobs:
       run: vendor/bin/phpstan analyse -l 6 src
 
     - name: Run test suite
-      run: vendor/bin/phpunit
+      run: bin/phpunit

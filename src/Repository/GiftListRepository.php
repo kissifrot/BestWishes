@@ -21,24 +21,6 @@ class GiftListRepository extends ServiceEntityRepository
         parent::__construct($registry, GiftList::class);
     }
 
-    /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function findFullBySlug(string $slug): ?GiftList
-    {
-        return $this->createQueryBuilder('l')
-            ->where('l.slug = :slug')
-            ->leftJoin('l.categories', 'c')
-            ->leftJoin('c.gifts', 'g', Join::WITH, 'g.received = :received')
-            ->addSelect('c', 'g')
-            ->setParameter('slug', $slug)
-            ->setParameter('received', false)
-            ->getQuery()
-            ->useQueryCache(true)
-            ->enableResultCache(600, 'giftlist_full_slug_' . $slug)
-            ->getOneOrNullResult();
-    }
-
     public function findByCategoryId(int $catId): ?GiftList
     {
         return $this->createQueryBuilder('l')
@@ -63,7 +45,6 @@ class GiftListRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->setParameter('received', false)
             ->getQuery()
-            ->useQueryCache(true)
             ->enableResultCache(600, 'giftlist_full_' . $id)
             ->getOneOrNullResult();
     }
@@ -82,7 +63,6 @@ class GiftListRepository extends ServiceEntityRepository
             ->setParameter('received', false)
             ->setParameter('surprise', false)
             ->getQuery()
-            ->useQueryCache(true)
             ->enableResultCache(600, 'giftlist_full_surpr_excl_' . $id)
             ->getOneOrNullResult();
     }
