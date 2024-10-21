@@ -11,13 +11,14 @@ use BestWishes\Form\Type\CategoryType;
 use BestWishes\Manager\SecurityManager;
 use BestWishes\Repository\CategoryRepository;
 use BestWishes\Repository\GiftListRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route(path: 'cat')]
@@ -46,7 +47,7 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     private function loadCategory(int $id): ?Category
     {
@@ -93,7 +94,6 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     #[Route(path: '{id}/edit', name: 'category_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]

@@ -12,13 +12,14 @@ use BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder;
 use BestWishes\Security\AclManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: 'admin')]
@@ -89,9 +90,8 @@ class AdminController extends AbstractController
 
         // Build the mask to update
         $permMask = \constant('BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_' . $perm);
-        $hadPerm = $this->securityContext->isGranted($perm, $giftList, $user);
 
-        if ($hadPerm) {
+        if ($this->securityContext->isGranted($perm, $giftList, $user)) {
             // Remove the specified permission
             $this->aclManager->revoke($giftList, $user, $permMask);
         } else {
@@ -125,9 +125,6 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_lists');
     }
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     */
     #[Route(path: '/list/create', name: 'admin_list_create', methods: ['GET', 'POST'])]
     public function listCreate(Request $request): Response
     {
@@ -163,9 +160,6 @@ class AdminController extends AbstractController
         );
     }
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     */
     #[Route(path: '/list/{id}/edit', name: 'admin_list_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function listEdit(Request $request, GiftList $giftList): Response
     {
@@ -260,9 +254,6 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_users');
     }
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     */
     #[Route(path: '/user/create', name: 'admin_user_create', methods: ['GET', 'POST'])]
     public function userCreate(Request $request): Response
     {
@@ -301,9 +292,6 @@ class AdminController extends AbstractController
         return $this->render('admin/user_create.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     */
     #[Route(path: '/user/{id}/edit', name: 'admin_user_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function userEdit(Request $request, User $user): Response
     {

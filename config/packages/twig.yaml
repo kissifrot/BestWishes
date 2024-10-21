@@ -4,6 +4,7 @@ twig:
         - 'bootstrap_5_layout.html.twig'
     globals:
         site_name: "%env(SITE_NAME)%"
+    file_name_pattern: '*.twig'
 
 when@test:
     twig:
