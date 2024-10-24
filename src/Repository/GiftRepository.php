@@ -4,6 +4,7 @@ namespace BestWishes\Repository;
 
 use BestWishes\Entity\Gift;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,7 +40,7 @@ class GiftRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findFullById(int $id): ?Gift
     {
@@ -54,7 +55,7 @@ class GiftRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findFullSurpriseExcludedById(int $id): ?Gift
     {

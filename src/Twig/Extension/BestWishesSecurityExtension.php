@@ -12,13 +12,8 @@ use Twig\TwigFunction;
 
 class BestWishesSecurityExtension extends AbstractExtension
 {
-    private readonly BestWishesSecurityContext $securityContext;
-    private readonly ?AuthorizationCheckerInterface $securityChecker;
-
-    public function __construct(BestWishesSecurityContext $securityContext, ?AuthorizationCheckerInterface $securityChecker = null)
+    public function __construct(private readonly BestWishesSecurityContext $securityContext, private readonly ?AuthorizationCheckerInterface $securityChecker = null)
     {
-        $this->securityChecker = $securityChecker;
-        $this->securityContext = $securityContext;
     }
 
     /**
@@ -56,7 +51,7 @@ class BestWishesSecurityExtension extends AbstractExtension
             }
 
             return false;
-        } catch (AuthenticationCredentialsNotFoundException $e) {
+        } catch (AuthenticationCredentialsNotFoundException) {
             return false;
         }
     }

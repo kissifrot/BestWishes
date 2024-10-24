@@ -5,6 +5,7 @@ namespace BestWishes\Repository;
 use BestWishes\Entity\Category;
 use BestWishes\Entity\GiftList;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr\Join;
 
@@ -41,7 +42,7 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findFullById(int $id): ?Category
     {
@@ -57,7 +58,7 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findFullSurpriseExcludedById(int $id): ?Category
     {
