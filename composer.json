@@ -7,6 +7,7 @@
         "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/dbal": "<4.0",
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.3",
@@ -36,6 +37,7 @@
         "symfony/property-info": "6.4.*",
         "symfony/runtime": "6.4.*",
         "symfony/security-bundle": "6.4.*",
+        "symfony/security-acl": "^3.3",
         "symfony/serializer": "6.4.*",
         "symfony/string": "6.4.*",
         "symfony/translation": "6.4.*",
@@ -49,6 +51,7 @@
         "twig/twig": "^2.12|^3.0"
     },
     "config": {
+        "minimum-stability": "dev",
         "optimize-autoloader": true,
         "sort-packages": true,
         "allow-plugins": {
