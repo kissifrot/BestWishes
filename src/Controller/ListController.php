@@ -62,7 +62,7 @@ class ListController extends AbstractController
 
         return new PdfResponse(
             $this->pdf->getOutputFromHtml($html),
-            sprintf('list_%s.pdf', $list->getSlug())
+            \sprintf('list_%s.pdf', $list->getSlug())
         );
     }
 }

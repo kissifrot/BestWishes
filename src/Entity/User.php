@@ -4,6 +4,7 @@ namespace BestWishes\Entity;
 
 use BestWishes\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity('username')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -35,6 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     private ?string $password = null;
 
     #[ORM\Column(type: 'string', length: 180)]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(name: 'name', type: 'string', length: 40)]

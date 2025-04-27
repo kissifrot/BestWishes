@@ -70,14 +70,14 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         // Build the mask to update
-        $alertMask = \constant(sprintf('BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_%s', $alert));
+        $alertMask = \constant(\sprintf('BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_%s', $alert));
         $hadAlert = $this->securityContext->isGranted($alert, $giftList, $user);
         $action = $hadAlert ? 'revoke' : 'grant';
         $this->aclManager->$action($giftList, $user, $alertMask);
 
         $successData = [
             'success'  => true,
-            'message' => sprintf('Alert updated for "%s"', $giftList->getName())
+            'message' => \sprintf('Alert updated for "%s"', $giftList->getName())
         ];
 
         return new JsonResponse($successData);

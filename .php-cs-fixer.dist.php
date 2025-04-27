@@ -10,6 +10,8 @@ return $config->setRules([
     'no_unused_imports' => true,
     'no_superfluous_phpdoc_tags' => true,
     'array_syntax' => ['syntax' => 'short'],
+    'native_function_invocation' => ['include' => ['@compiler_optimized']],
 ])
     ->setFinder($finder)
-    ;
+    ->setRiskyAllowed(true)
+;

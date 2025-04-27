@@ -3,7 +3,6 @@
 namespace BestWishes\Repository;
 
 use BestWishes\Entity\Category;
-use BestWishes\Entity\GiftList;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;

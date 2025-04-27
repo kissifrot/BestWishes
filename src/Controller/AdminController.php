@@ -100,7 +100,7 @@ class AdminController extends AbstractController
 
         $successData = [
             'success'  => true,
-            'message' => sprintf('Permission updated for "%s"', $giftList->getName())
+            'message' => \sprintf('Permission updated for "%s"', $giftList->getName())
         ];
 
         return new JsonResponse($successData);
@@ -116,9 +116,9 @@ class AdminController extends AbstractController
             $this->entityManager->remove($giftList);
             $this->entityManager->flush();
 
-            $this->addFlash('notice', sprintf('List "%s" deleted', $giftList->getName()));
+            $this->addFlash('notice', \sprintf('List "%s" deleted', $giftList->getName()));
         } else {
-            $this->addFlash('error', sprintf('Could not delete list "%s"', $giftList->getName()));
+            $this->addFlash('error', \sprintf('Could not delete list "%s"', $giftList->getName()));
         }
 
         return $this->redirectToRoute('admin_lists');
@@ -142,14 +142,14 @@ class AdminController extends AbstractController
                 $permMask = BestWishesMaskBuilder::MASK_OWNER;
                 $this->aclManager->grant($giftList, $giftList->getOwner(), $permMask);
 
-                $this->addFlash('notice', sprintf('List "%s" created', $giftList->getName()));
+                $this->addFlash('notice', \sprintf('List "%s" created', $giftList->getName()));
 
                 // Dispatch the creation event
                 $this->eventDispatcher->dispatch(new GiftListCreatedEvent(), GiftListCreatedEvent::NAME);
 
                 return $this->redirectToRoute('admin_lists');
             } catch (\Exception $e) {
-                $this->addFlash('error', sprintf('Error creating "%s": %s', $giftList->getName(), $e->getMessage()));
+                $this->addFlash('error', \sprintf('Error creating "%s": %s', $giftList->getName(), $e->getMessage()));
             }
         }
 
@@ -181,11 +181,11 @@ class AdminController extends AbstractController
                         BestWishesMaskBuilder::MASK_OWNER
                     );
                 }
-                $this->addFlash('notice', sprintf('List "%s" updated', $giftList->getName()));
+                $this->addFlash('notice', \sprintf('List "%s" updated', $giftList->getName()));
 
                 return $this->redirectToRoute('admin_lists');
             } catch (\Exception $e) {
-                $this->addFlash('error', sprintf('Error editing "%s": %s', $giftList->getName(), $e->getMessage()));
+                $this->addFlash('error', \sprintf('Error editing "%s": %s', $giftList->getName(), $e->getMessage()));
             }
         }
 
@@ -205,7 +205,7 @@ class AdminController extends AbstractController
         $routePart = match ($entity::class) {
             GiftList::class => 'list',
             User::class => 'user',
-            default => throw new \RuntimeException(sprintf('The "%s" type is not supported', $entity::class)),
+            default => throw new \RuntimeException(\sprintf('The "%s" type is not supported', $entity::class)),
         };
         switch ($action) {
             case 'delete':
@@ -216,7 +216,7 @@ class AdminController extends AbstractController
                 );
                 break;
             default:
-                throw new \RuntimeException(sprintf('The "%s" action is not supported', $action));
+                throw new \RuntimeException(\sprintf('The "%s" action is not supported', $action));
         }
 
         return $this->createFormBuilder()
@@ -245,9 +245,9 @@ class AdminController extends AbstractController
             $this->entityManager->remove($user);
             $this->entityManager->flush();
 
-            $this->addFlash('notice', sprintf('User "%s" deleted', $user->getName()));
+            $this->addFlash('notice', \sprintf('User "%s" deleted', $user->getName()));
         } else {
-            $this->addFlash('error', sprintf('Could not delete user "%s"', $user->getName()));
+            $this->addFlash('error', \sprintf('Could not delete user "%s"', $user->getName()));
         }
 
         return $this->redirectToRoute('admin_users');
@@ -280,11 +280,11 @@ class AdminController extends AbstractController
                     );
                 }
 
-                $this->addFlash('notice', sprintf('User "%s" created', $user->getUserIdentifier()));
+                $this->addFlash('notice', \sprintf('User "%s" created', $user->getUserIdentifier()));
 
                 return $this->redirectToRoute('admin_users');
             } catch (\Exception $e) {
-                $this->addFlash('error', sprintf('Error creating "%s": %s', $user->getUserIdentifier(), $e->getMessage()));
+                $this->addFlash('error', \sprintf('Error creating "%s": %s', $user->getUserIdentifier(), $e->getMessage()));
             }
         }
 
@@ -316,11 +316,11 @@ class AdminController extends AbstractController
                     );
                 }
 
-                $this->addFlash('notice', sprintf('User "%s" updated', $user->getUserIdentifier()));
+                $this->addFlash('notice', \sprintf('User "%s" updated', $user->getUserIdentifier()));
 
                 return $this->redirectToRoute('admin_users');
             } catch (\Exception $e) {
-                $this->addFlash('error', sprintf('Error editing "%s": %s', $user->getUserIdentifier(), $e->getMessage()));
+                $this->addFlash('error', \sprintf('Error editing "%s": %s', $user->getUserIdentifier(), $e->getMessage()));
             }
         }
 

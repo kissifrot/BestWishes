@@ -204,7 +204,7 @@ class GiftController extends AbstractController
                 $url = $this->generateUrl('gift_mark_received', ['id' => $gift->getId()]);
                 break;
             default:
-                throw new \UnexpectedValueException(sprintf('Unable to create for for action "%s"', $action));
+                throw new \UnexpectedValueException(\sprintf('Unable to create for for action "%s"', $action));
         }
 
         return $this->createFormBuilder()

@@ -40,7 +40,7 @@ class Category implements \Stringable
 
     public function __toString(): string
     {
-        return sprintf(
+        return \sprintf(
             'Name: %s, Id: %u',
             $this->name,
             $this->id

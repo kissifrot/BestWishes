@@ -20,9 +20,9 @@ class DoctrineCacheManager
             return;
         }
         $cacheKeys = [
-            sprintf('giftlist_full_slug_%s', $list->getSlug()),
-            sprintf('giftlist_full_%u', $list->getId()),
-            sprintf('giftlist_full_surpr_excl_%u', $list->getId()),
+            \sprintf('giftlist_full_slug_%s', $list->getSlug()),
+            \sprintf('giftlist_full_%u', $list->getId()),
+            \sprintf('giftlist_full_surpr_excl_%u', $list->getId()),
         ];
         foreach ($cacheKeys as $cacheKey) {
             $cacheDriver->deleteItem($cacheKey);

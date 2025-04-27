@@ -39,9 +39,10 @@ to populate schema.
 
 ## Application setup
 
-_TODO_
-
-
-An installer is needed, didn't have the time to do it yet.
+A basic setup command is included, you can use it by running the command:
+```sh
+$ php bin/console bw:setup
+```
+This command will create an admin user and defaults events if needed.
 
 
