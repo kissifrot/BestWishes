@@ -2,23 +2,28 @@
 
 namespace BestWishes\EventSubscriber;
 
+use BestWishes\Entity\User;
 use BestWishes\Event\GiftCreatedEvent;
 use BestWishes\Event\GiftDeletedEvent;
 use BestWishes\Event\GiftEditedEvent;
 use BestWishes\Event\GiftPurchasedEvent;
 use BestWishes\Event\GiftReceivedEvent;
-use BestWishes\Mailer\Mailer;
 use BestWishes\Manager\DoctrineCacheManager;
 use BestWishes\Manager\UserManager;
+use BestWishes\Message\CreationAlertMessage;
+use BestWishes\Message\DeletionAlertMessage;
+use BestWishes\Message\EditionAlertMessage;
+use BestWishes\Message\PurchaseAlertMessage;
 use BestWishes\Security\Core\BestWishesSecurityContext;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class GiftSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private readonly UserManager               $userManager,
         private readonly BestWishesSecurityContext $securityContext,
-        private readonly Mailer                    $mailer,
+        private readonly MessageBusInterface       $messageBus,
         private readonly DoctrineCacheManager      $cacheManager
     ) {
     }
@@ -58,10 +63,12 @@ class GiftSubscriber implements EventSubscriberInterface
         }
 
         $this->cacheManager->clearGiftListCache($list);
+        /** @var User $creator */
+        $creator = $event->getCreator();
 
         if (!empty($mailedUsers)) {
             foreach ($mailedUsers as $mailedUser) {
-                $this->mailer->sendCreationAlertMessage($mailedUser, $event->getGift(), $event->getCreator());
+                $this->messageBus->dispatch(new CreationAlertMessage($mailedUser->getId(), $event->getGift()->getId(), $creator->getId()));
             }
         }
     }
@@ -87,10 +94,12 @@ class GiftSubscriber implements EventSubscriberInterface
         }
 
         $this->cacheManager->clearGiftListCache($list);
+        /** @var User $deleter */
+        $deleter = $event->getDeleter();
 
         if (!empty($mailedUsers)) {
             foreach ($mailedUsers as $mailedUser) {
-                $this->mailer->sendDeletionAlertMessage($mailedUser, $event->getGift(), $event->getDeleter());
+                $this->messageBus->dispatch(new DeletionAlertMessage($mailedUser->getId(), $event->getGift()->getId(), $deleter->getId()));
             }
         }
     }
@@ -114,10 +123,12 @@ class GiftSubscriber implements EventSubscriberInterface
                 $mailedUsers[] = $anUser;
             }
         }
+        /** @var User $buyer */
+        $buyer = $event->getBuyer();
 
         if (!empty($mailedUsers)) {
             foreach ($mailedUsers as $mailedUser) {
-                $this->mailer->sendPurchaseAlertMessage($mailedUser, $event->getGift(), $event->getBuyer());
+                $this->messageBus->dispatch(new PurchaseAlertMessage($mailedUser->getId(), $event->getGift()->getId(), $buyer->getId()));
             }
         }
     }
@@ -146,10 +157,12 @@ class GiftSubscriber implements EventSubscriberInterface
                 $mailedUsers[] = $anUser;
             }
         }
+        /** @var User $editor */
+        $editor = $event->getEditor();
 
         if (!empty($mailedUsers)) {
             foreach ($mailedUsers as $mailedUser) {
-                $this->mailer->sendEditionAlertMessage($mailedUser, $event->getEditedGift(), $event->getEditor());
+                $this->messageBus->dispatch(new EditionAlertMessage($mailedUser->getId(), $event->getEditedGift()->getId(), $editor->getId()));
             }
         }
     }

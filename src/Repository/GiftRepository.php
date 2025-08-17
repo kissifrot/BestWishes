@@ -10,9 +10,9 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<Gift>
  * @method Gift|null find($id, $lockMode = null, $lockVersion = null)
- * @method Gift|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Gift|null findOneBy(array<string, string|string[]> $criteria, ?array<string, string> $orderBy = null)
  * @method Gift[]    findAll()
- * @method Gift[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Gift[]    findBy(array<string, string|string[]> $criteria, ?array<string, string> $orderBy = null, $limit = null, $offset = null)
  */
 class GiftRepository extends ServiceEntityRepository
 {

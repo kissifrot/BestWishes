@@ -117,7 +117,7 @@ class SetupCommand extends Command
         $errors = $this->validator->validate($user);
 
         if (\count($errors) > 0) {
-            $errorsString = (string) $errors;
+            $errorsString = $errors->__toString();
             $this->style->error('Validation failed: ' . $errorsString);
             $this->style->error('Please check the input data and try again.');
             return Command::FAILURE;

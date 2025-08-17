@@ -10,9 +10,9 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<ListEvent>
  * @method ListEvent|null find($id, $lockMode = null, $lockVersion = null)
- * @method ListEvent|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ListEvent|null findOneBy(array<string, string|string[]> $criteria, ?array<string, string> $orderBy = null)
  * @method ListEvent[]    findAll()
- * @method ListEvent[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ListEvent[]    findBy(array<string, string|string[]> $criteria, ?array<string, string> $orderBy = null, $limit = null, $offset = null)
  */
 class ListEventRepository extends ServiceEntityRepository
 {
