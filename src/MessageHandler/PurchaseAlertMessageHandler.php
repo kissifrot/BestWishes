@@ -26,6 +26,6 @@ class PurchaseAlertMessageHandler
         if (null === $mailedUser || null === $gift || null === $buyer) {
             return;
         }
-        $this->mailer->sendPurchaseAlertMessage($mailedUser, $gift, $buyer);
+        $this->mailer->sendPurchaseAlertMessage($mailedUser, $gift, $buyer, $message->getHomeUrl());
     }
 }

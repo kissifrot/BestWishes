@@ -26,6 +26,6 @@ class CreationAlertMessageHandler
         if (null === $mailedUser || null === $gift || null === $creator) {
             return;
         }
-        $this->mailer->sendCreationAlertMessage($mailedUser, $gift, $creator);
+        $this->mailer->sendCreationAlertMessage($mailedUser, $gift, $creator, $message->getHomeUrl());
     }
 }

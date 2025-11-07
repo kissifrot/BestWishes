@@ -5,7 +5,9 @@ $finder = PhpCsFixer\Finder::create()
 ;
 
 $config = new PhpCsFixer\Config();
-return $config->setRules([
+return $config
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
+    ->setRules([
     '@PSR12' => true,
     'no_unused_imports' => true,
     'no_superfluous_phpdoc_tags' => true,

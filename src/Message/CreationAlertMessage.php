@@ -8,6 +8,7 @@ class CreationAlertMessage
         private readonly int $mailedUserId,
         private readonly int $giftId,
         private readonly int $creatorId,
+        private readonly string $homeUrl,
     ) {
     }
 
@@ -24,5 +25,10 @@ class CreationAlertMessage
     public function getCreatorId(): int
     {
         return $this->creatorId;
+    }
+
+    public function getHomeUrl(): string
+    {
+        return $this->homeUrl;
     }
 }

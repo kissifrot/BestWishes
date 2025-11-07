@@ -26,6 +26,6 @@ class DeletionAlertMessageHandler
         if (null === $mailedUser || null === $gift || null === $deleter) {
             return;
         }
-        $this->mailer->sendDeletionAlertMessage($mailedUser, $gift, $deleter);
+        $this->mailer->sendDeletionAlertMessage($mailedUser, $gift, $deleter, $message->getHomeUrl());
     }
 }

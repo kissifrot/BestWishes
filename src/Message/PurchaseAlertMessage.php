@@ -8,6 +8,7 @@ class PurchaseAlertMessage
         private readonly int $mailedUserId,
         private readonly int $giftId,
         private readonly int $buyerId,
+        private readonly string $homeUrl,
     ) {
     }
 
@@ -24,5 +25,10 @@ class PurchaseAlertMessage
     public function getBuyerId(): int
     {
         return $this->buyerId;
+    }
+
+    public function getHomeUrl(): string
+    {
+        return $this->homeUrl;
     }
 }
