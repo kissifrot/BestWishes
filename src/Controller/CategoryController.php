@@ -4,6 +4,7 @@ namespace BestWishes\Controller;
 
 use BestWishes\Entity\Category;
 use BestWishes\Entity\GiftList;
+use BestWishes\Entity\GiftListPermission;
 use BestWishes\Event\CategoryCreatedEvent;
 use BestWishes\Event\CategoryDeletedEvent;
 use BestWishes\Event\CategoryEditedEvent;
@@ -61,7 +62,7 @@ class CategoryController extends AbstractController
             return null;
         }
 
-        if ($this->isGranted('OWNER', $categoryGiftList)) {
+        if ($this->isGranted(GiftListPermission::PERMISSION_OWNER, $categoryGiftList)) {
             return $this->categoryRepository->findFullSurpriseExcludedById($id);
         }
 
@@ -71,7 +72,7 @@ class CategoryController extends AbstractController
     #[Route(path: '/create/{listId}', name: 'category_create', requirements: ['listId' => '\d+'], methods: ['GET', 'POST'])]
     public function create(Request $request, #[MapEntity(expr: 'repository.find(listId)')] GiftList $list): Response
     {
-        $this->securityManager->checkAccess(['OWNER', 'EDIT'], $list);
+        $this->securityManager->checkAccess([GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT], $list);
 
         $category = new Category();
         $category->setList($list);
@@ -99,7 +100,7 @@ class CategoryController extends AbstractController
     #[Route(path: '{id}/edit', name: 'category_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category): Response
     {
-        $this->securityManager->checkAccess(['OWNER', 'EDIT'], $category->getList());
+        $this->securityManager->checkAccess([GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT], $category->getList());
 
         $form = $this->createForm(CategoryType::class, $category);
 
@@ -121,7 +122,7 @@ class CategoryController extends AbstractController
     #[Route(path: '{id}/delete', name: 'category_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(Request $request, Category $category): Response
     {
-        $this->securityManager->checkAccess(['OWNER', 'EDIT'], $category->getList());
+        $this->securityManager->checkAccess([GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT], $category->getList());
 
         $form = $this->createDeleteForm($category);
         $form->handleRequest($request);

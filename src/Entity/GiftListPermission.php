@@ -11,22 +11,17 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: GiftListPermissionRepository::class)]
 class GiftListPermission
 {
-    public const PERMISSION_OWNER = 'OWNER';
-    public const PERMISSION_VIEW = 'VIEW';
-    public const PERMISSION_EDIT = 'EDIT';
-    public const PERMISSION_DELETE = 'DELETE';
-    public const PERMISSION_SURPRISE_ADD = 'SURPRISE_ADD';
-    public const PERMISSION_ALERT_ADD = 'ALERT_ADD';
-    public const PERMISSION_ALERT_PURCHASE = 'ALERT_PURCHASE';
-    public const PERMISSION_ALERT_EDIT = 'ALERT_EDIT';
-    public const PERMISSION_ALERT_DELETE = 'ALERT_DELETE';
+    public const string PERMISSION_OWNER = 'OWNER';
+    public const string PERMISSION_VIEW = 'VIEW';
+    public const string PERMISSION_EDIT = 'EDIT';
+    public const string PERMISSION_DELETE = 'DELETE';
+    public const string PERMISSION_SURPRISE_ADD = 'SURPRISE_ADD';
+    public const string PERMISSION_ALERT_ADD = 'ALERT_ADD';
+    public const string PERMISSION_ALERT_PURCHASE = 'ALERT_PURCHASE';
+    public const string PERMISSION_ALERT_EDIT = 'ALERT_EDIT';
+    public const string PERMISSION_ALERT_DELETE = 'ALERT_DELETE';
 
-    public const ALL_PERMISSIONS = [
-        self::PERMISSION_OWNER,
-        self::PERMISSION_VIEW,
-        self::PERMISSION_EDIT,
-        self::PERMISSION_DELETE,
-        self::PERMISSION_SURPRISE_ADD,
+    public const array ALERT_PERMISSIONS = [
         self::PERMISSION_ALERT_ADD,
         self::PERMISSION_ALERT_PURCHASE,
         self::PERMISSION_ALERT_EDIT,
@@ -40,14 +35,14 @@ class GiftListPermission
 
     #[ORM\ManyToOne(targetEntity: GiftList::class)]
     #[ORM\JoinColumn(name: 'gift_list_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private ?GiftList $giftList = null;
+    private GiftList $giftList;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private ?User $user = null;
+    private User $user;
 
     #[ORM\Column(name: 'permission', type: 'string', length: 50)]
-    private ?string $permission = null;
+    private string $permission;
 
     public function getId(): ?int
     {

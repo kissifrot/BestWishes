@@ -21,21 +21,21 @@ class GiftList
     private ?int $id = null;
 
     #[ORM\Column(name: 'name', length: 50)]
-    private ?string $name = null;
+    private string $name;
 
     #[Gedmo\Slug(fields: ['name'])]
     #[ORM\Column(name: 'slug', length: 50)]
-    private ?string $slug = null;
+    private string $slug;
 
     #[ORM\Column(name: 'last_update', type: 'date_immutable')]
     private \DateTimeImmutable $lastUpdate;
 
     #[ORM\Column(name: 'birthdate', type: 'date_immutable')]
-    private ?\DateTimeImmutable $birthDate = null;
+    private \DateTimeImmutable $birthDate;
 
     #[ORM\OneToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private ?User $owner = null;
+    private User $owner;
 
     /** @var Collection<int, Category> */
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'list')]

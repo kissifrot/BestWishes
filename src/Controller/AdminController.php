@@ -3,6 +3,7 @@
 namespace BestWishes\Controller;
 
 use BestWishes\Entity\GiftList;
+use BestWishes\Entity\GiftListPermission;
 use BestWishes\Entity\User;
 use BestWishes\Event\GiftListCreatedEvent;
 use BestWishes\Form\Type\GiftListType;
@@ -24,7 +25,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class AdminController extends AbstractController
 {
-    private const AVAILABLE_PERMISSIONS = ['EDIT', 'SURPRISE_ADD', 'ALERT_ADD', 'ALERT_PURCHASE', 'ALERT_EDIT', 'ALERT_DELETE'];
+    private const array AVAILABLE_PERMISSIONS = ['EDIT', 'SURPRISE_ADD', 'ALERT_ADD', 'ALERT_PURCHASE', 'ALERT_EDIT', 'ALERT_DELETE'];
     public function __construct(
         private readonly EntityManagerInterface    $entityManager,
         private readonly BestWishesSecurityContext $securityContext,
@@ -50,13 +51,13 @@ class AdminController extends AbstractController
         $lists = $this->entityManager->getRepository(GiftList::class)->findAll();
         $users = $this->userManager->findUsers();
         $availablePermissions = [
-            'OWNER',
-            'EDIT',
-            'SURPRISE_ADD',
-            'ALERT_ADD',
-            'ALERT_PURCHASE',
-            'ALERT_EDIT',
-            'ALERT_DELETE',
+            GiftListPermission::PERMISSION_OWNER,
+            GiftListPermission::PERMISSION_EDIT,
+            GiftListPermission::PERMISSION_SURPRISE_ADD,
+            GiftListPermission::PERMISSION_ALERT_ADD,
+            GiftListPermission::PERMISSION_ALERT_PURCHASE,
+            GiftListPermission::PERMISSION_ALERT_EDIT,
+            GiftListPermission::PERMISSION_ALERT_DELETE,
         ];
 
         return $this->render(
@@ -135,7 +136,7 @@ class AdminController extends AbstractController
                 $this->entityManager->flush();
 
                 // Grant owner permission
-                $this->permissionManager->grant($giftList, $giftList->getOwner(), 'OWNER');
+                $this->permissionManager->grant($giftList, $giftList->getOwner(), GiftListPermission::PERMISSION_OWNER);
 
                 $this->addFlash('notice', \sprintf('List "%s" created', $giftList->getName()));
 
@@ -173,7 +174,7 @@ class AdminController extends AbstractController
                         $giftList,
                         $giftList->getOwner(),
                         $originGiftList->getOwner(),
-                        'OWNER'
+                        GiftListPermission::PERMISSION_OWNER
                     );
                 }
                 $this->addFlash('notice', \sprintf('List "%s" updated', $giftList->getName()));
@@ -271,7 +272,7 @@ class AdminController extends AbstractController
                         $chosenList,
                         $user,
                         $chosenList->getOwner(),
-                        'OWNER'
+                        GiftListPermission::PERMISSION_OWNER
                     );
                 }
 
@@ -307,7 +308,7 @@ class AdminController extends AbstractController
                         $chosenList,
                         $user,
                         $chosenList->getOwner(),
-                        'OWNER'
+                        GiftListPermission::PERMISSION_OWNER
                     );
                 }
 

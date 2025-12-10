@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ListEventRepository::class)]
 class ListEvent
 {
-    final public const BIRTHDAY_TYPE = 'birthday';
+    final public const string BIRTHDAY_TYPE = 'birthday';
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -17,7 +17,7 @@ class ListEvent
     private ?int $id = null;
 
     #[ORM\Column(name: 'name', length: 60)]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(name: 'e_type', length: 20)]
     private string $type;

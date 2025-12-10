@@ -19,7 +19,7 @@ class Gift
     #[Assert\NotBlank]
     #[Assert\Length(min: 2)]
     #[ORM\Column(name: 'name', type: 'string', length: 150)]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(name: 'added_date', type: 'date_immutable')]
     private readonly \DateTimeImmutable $addedDate;

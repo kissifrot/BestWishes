@@ -20,7 +20,7 @@ class Category implements \Stringable
     #[Assert\NotBlank]
     #[Assert\Length(min: 2)]
     #[ORM\Column(name: 'name', length: 150)]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(name: 'is_visible', type: 'boolean')]
     private bool $visible = true;
@@ -31,7 +31,7 @@ class Category implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: GiftList::class, inversedBy: 'categories')]
     #[ORM\JoinColumn(name: 'list_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private ?GiftList $list = null;
+    private GiftList $list;
 
     public function __construct()
     {
