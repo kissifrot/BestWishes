@@ -22,7 +22,7 @@ jobs:
       with:
         php-version: 8.3
     - name: Install PHP dependencies (for FOS)
-      run: composer install --prefer-dist --no-progress
+      run: composer install --prefer-dist --no-progress --ignore-platform-req=ext-amqp
 
     - uses: bahmutov/npm-install@v1
 
