@@ -1,8 +1,7 @@
 BestWishes
 =============
 
-
-[![Build Status](https://travis-ci.org/kissifrot/BestWishes.svg?branch=master)](https://travis-ci.org/kissifrot/BestWishes)
+[![PHP Build status](https://github.com/kissifrot/BestWishes/actions/workflows/php.yml/badge.svg)](https://github.com/kissifrot/BestWishes/actions/workflows/php.yml)
 
 BestWishes is a multilingual wishlist application allowing users to manage their wishlist and indicate who have[composer.json](..%2Fsf6.2%2Fcomposer.json) bought what to avoid receiving the same gift for Christmas (for example).
 
