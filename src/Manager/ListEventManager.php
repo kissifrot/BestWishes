@@ -65,7 +65,7 @@ class ListEventManager
             if ($currentYearEvent >= $currentTime) {
                 $calculatedEvents[] = [
                     'name' => $activeEvent->getName(),
-                    'time' => $currentYearEvent
+                    'time' => $currentYearEvent,
                 ];
             }
             if ($activeEvent->isPermanent()) {
@@ -73,7 +73,7 @@ class ListEventManager
                 if ($nextYearEvent >= $currentTime) {
                     $calculatedEvents[] = [
                         'name' => $activeEvent->getName(),
-                        'time' => $nextYearEvent
+                        'time' => $nextYearEvent,
                     ];
                 }
             }

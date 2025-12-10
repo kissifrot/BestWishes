@@ -19,8 +19,8 @@ class GiftListVoterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->permissionRepository = $this->createMock(GiftListPermissionRepository::class);
-        $this->security = $this->createMock(Security::class);
+        $this->permissionRepository = $this->createStub(GiftListPermissionRepository::class);
+        $this->security = $this->createStub(Security::class);
         $this->voter = new GiftListVoter($this->permissionRepository, $this->security);
     }
 
@@ -142,7 +142,7 @@ class GiftListVoterTest extends TestCase
     {
         $owner = $this->createUser(1, 'owner');
         $giftList = $this->createGiftList(1, $owner);
-        $token = $this->createMock(TokenInterface::class);
+        $token = $this->createStub(TokenInterface::class);
         $token->method('getUser')->willReturn(null);
 
         $this->security->method('isGranted')->willReturn(false);
@@ -169,7 +169,7 @@ class GiftListVoterTest extends TestCase
 
     private function createUser(int $id, string $username): User
     {
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getId')->willReturn($id);
         $user->method('getUserIdentifier')->willReturn($username);
         return $user;
@@ -177,7 +177,7 @@ class GiftListVoterTest extends TestCase
 
     private function createGiftList(int $id, User $owner): GiftList
     {
-        $giftList = $this->createMock(GiftList::class);
+        $giftList = $this->createStub(GiftList::class);
         $giftList->method('getId')->willReturn($id);
         $giftList->method('getOwner')->willReturn($owner);
         return $giftList;
@@ -185,7 +185,7 @@ class GiftListVoterTest extends TestCase
 
     private function createToken(User $user): TokenInterface
     {
-        $token = $this->createMock(TokenInterface::class);
+        $token = $this->createStub(TokenInterface::class);
         $token->method('getUser')->willReturn($user);
         return $token;
     }

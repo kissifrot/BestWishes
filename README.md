@@ -10,7 +10,13 @@ Users can also add surprise gifts and manage additions and purchase alerts.
 
 Recurrent as well as "one-shot" events are also configurable.
 
-The current branch is based on symfony 6.x. For symfony 5.4 version see `1.x` branch.
+# Symfony versions support
+
+| Project version | Symfony version |   |   |   |
+|-----------------|-----------------|---|---|---|
+| 0.x             | 5.4             |   |   |   |
+| 1.x             | 6.4             |   |   |   |
+| (current)       | 7.4             |   |   |   |
 
 # Installation
 

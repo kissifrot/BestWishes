@@ -27,7 +27,7 @@ class GiftType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Gift::class,
-            'label_format' => 'form.gift.%name%'
+            'label_format' => 'form.gift.%name%',
         ]);
     }
 }

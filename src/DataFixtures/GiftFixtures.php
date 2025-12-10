@@ -34,7 +34,7 @@ class GiftFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            CategoryFixtures::class
+            CategoryFixtures::class,
         ];
     }
 }
