@@ -35,7 +35,7 @@ class UserController extends AbstractController
             'ALERT_ADD',
             'ALERT_PURCHASE',
             'ALERT_EDIT',
-            'ALERT_DELETE'
+            'ALERT_DELETE',
         ];
         $lists = $this->entityManager->getRepository(GiftList::class)->findAll();
         $user = $this->getUser();
@@ -50,7 +50,7 @@ class UserController extends AbstractController
     {
         $defaultData = [
             'success'  => false,
-            'message' => 'An error occurred'
+            'message' => 'An error occurred',
         ];
         $alert = $request->request->get('alert');
         // Do some input checks
@@ -61,7 +61,7 @@ class UserController extends AbstractController
             'ALERT_ADD',
             'ALERT_PURCHASE',
             'ALERT_EDIT',
-            'ALERT_DELETE'
+            'ALERT_DELETE',
         ];
         if (!\in_array($alert, $availableAlerts, true)) {
             return new JsonResponse($defaultData);
@@ -78,7 +78,7 @@ class UserController extends AbstractController
 
         $successData = [
             'success'  => true,
-            'message' => \sprintf('Alert updated for "%s"', $giftList->getName())
+            'message' => \sprintf('Alert updated for "%s"', $giftList->getName()),
         ];
 
         return new JsonResponse($successData);

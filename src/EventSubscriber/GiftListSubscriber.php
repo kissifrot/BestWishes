@@ -19,7 +19,7 @@ class GiftListSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            GiftListCreatedEvent::NAME => 'onGiftListCreation'
+            GiftListCreatedEvent::NAME => 'onGiftListCreation',
         ];
     }
 

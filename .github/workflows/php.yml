@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ["8.2", "8.3", "8.4"]
+        php-version: ["8.3", "8.4", "8.5"]
 
     runs-on: ubuntu-latest
     env:
@@ -51,4 +51,4 @@ jobs:
       run: vendor/bin/phpstan analyse -l 6 src
 
     - name: Run test suite
-      run: bin/phpunit
+      run: vendor/bin/phpunit

@@ -54,7 +54,7 @@ class GiftListFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            UserFixtures::class
+            UserFixtures::class,
         ];
     }
 }

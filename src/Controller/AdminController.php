@@ -56,7 +56,7 @@ class AdminController extends AbstractController
             'ALERT_ADD',
             'ALERT_PURCHASE',
             'ALERT_EDIT',
-            'ALERT_DELETE'
+            'ALERT_DELETE',
         ];
 
         return $this->render(
@@ -70,7 +70,7 @@ class AdminController extends AbstractController
     {
         $defaultData = [
             'success'  => false,
-            'message' => 'An error occurred'
+            'message' => 'An error occurred',
         ];
         $userId = $request->request->getInt('userId');
         $perm = $request->request->get('perm');
@@ -96,7 +96,7 @@ class AdminController extends AbstractController
 
         $successData = [
             'success'  => true,
-            'message' => \sprintf('Permission updated for "%s"', $giftList->getName())
+            'message' => \sprintf('Permission updated for "%s"', $giftList->getName()),
         ];
 
         return new JsonResponse($successData);

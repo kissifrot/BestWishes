@@ -60,7 +60,7 @@ class Mailer
             $homeUrl,
             [
                 'editor' => $editor,
-                'editedGift' => $editedGift
+                'editedGift' => $editedGift,
             ]
         );
         $this->sendEmailMessage($templatedEmail, $this->fromAddress, $user->getEmail());
@@ -75,7 +75,7 @@ class Mailer
             $homeUrl,
             [
                 'deleter' => $deleter,
-                'deletedGift' => $deletedGift
+                'deletedGift' => $deletedGift,
             ]
         );
         $this->sendEmailMessage($templatedEmail, $this->fromAddress, $user->getEmail());

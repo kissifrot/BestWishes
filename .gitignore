@@ -22,7 +22,7 @@ yarn-error.log
 
 ###> phpunit/phpunit ###
 /phpunit.xml
-.phpunit.result.cache
+/.phpunit.cache/
 ###< phpunit/phpunit ###
 
 /tools/php-cs-fixer/vendor/

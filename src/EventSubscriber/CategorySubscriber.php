@@ -22,7 +22,7 @@ class CategorySubscriber implements EventSubscriberInterface
         return [
             CategoryCreatedEvent::NAME   => 'onCategoryCreation',
             CategoryEditedEvent::NAME   => 'onCategoryEdition',
-            CategoryDeletedEvent::NAME => 'onCategoryDeletion'
+            CategoryDeletedEvent::NAME => 'onCategoryDeletion',
         ];
     }
 

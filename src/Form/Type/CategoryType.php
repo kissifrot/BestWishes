@@ -22,7 +22,7 @@ class CategoryType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Category::class,
-            'label_format' => 'form.category.%name%'
+            'label_format' => 'form.category.%name%',
         ]);
     }
 }
