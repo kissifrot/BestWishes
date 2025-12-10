@@ -1,8 +1,0 @@
-acl:
-  connection: default
-  tables:
-    class:                '%tables_prefix%acl_classes'
-    entry:                '%tables_prefix%acl_entries'
-    object_identity:      '%tables_prefix%acl_object_identities'
-    object_identity_ancestors:  '%tables_prefix%acl_object_identity_ancestors'
-    security_identity:    '%tables_prefix%acl_security_identities'

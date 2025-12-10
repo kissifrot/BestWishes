@@ -23,6 +23,7 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
     .addEntry('manage_alerts', './assets/js/manage_alerts.js')
+    .addEntry('manage_rights', './assets/js/manage_rights.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     // .enableStimulusBridge('./assets/controllers.json')

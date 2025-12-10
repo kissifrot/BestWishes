@@ -1,5 +1,5 @@
 <div class="btn-group btn-group-lg btn-group-justified" role="group" aria-label="{{ 'category.actions.text'|trans }}">
-{% if is_multi_granted(['ONWER', 'EDIT'], category.list) %}
+{% if is_multi_granted(['OWNER', 'EDIT'], category.list) %}
     <a href="{{ path('category_edit', { id: category.id }) }}" class="btn btn-primary" title="{{ 'category.action.edit'|trans }}" aria-label="{{ 'category.action.edit'|trans }}">
         <i class="fas fa-pencil-alt" aria-hidden="true"></i>
     </a>

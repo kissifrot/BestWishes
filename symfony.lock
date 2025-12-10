@@ -142,9 +142,6 @@
             "config/packages/stof_doctrine_extensions.yaml"
         ]
     },
-    "symfony/acl-bundle": {
-        "version": "v2.3.0"
-    },
     "symfony/console": {
         "version": "6.4",
         "recipe": {

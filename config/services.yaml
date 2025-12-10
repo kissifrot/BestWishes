@@ -35,18 +35,6 @@ services:
             $fromAddress: '%env(GLOBAL_FROM_EMAIL_ADDRESS)%'
             $siteName: '%env(SITE_NAME)%'
 
-    BestWishes\Security\Acl\Voter\BestWishesAclVoter:
-        arguments:
-            $oidRetrievalStrategy: '@security.acl.object_identity_retrieval_strategy'
-            $sidRetrievalStrategy: '@security.acl.security_identity_retrieval_strategy'
-            $permissionMap: '@BestWishes\Security\Acl\Permissions\BestWishesPermissionMap'
-        tags:
-            - { name: security.voter }
-
-    BestWishes\Security\AclManager:
-        arguments:
-            $provider: '@security.acl.provider'
-
 
     BestWishes\EventSubscriber\TablePrefixSubscriber:
         arguments:

@@ -8,8 +8,7 @@ use BestWishes\Event\GiftListCreatedEvent;
 use BestWishes\Form\Type\GiftListType;
 use BestWishes\Form\Type\UserType;
 use BestWishes\Manager\UserManager;
-use BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder;
-use BestWishes\Security\AclManager;
+use BestWishes\Security\PermissionManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +28,7 @@ class AdminController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface    $entityManager,
         private readonly BestWishesSecurityContext $securityContext,
-        private readonly AclManager                $aclManager,
+        private readonly PermissionManager         $permissionManager,
         private readonly EventDispatcherInterface  $eventDispatcher,
         private readonly UserManager               $userManager
     ) {
@@ -66,7 +65,7 @@ class AdminController extends AbstractController
         );
     }
 
-    #[Route(path: '/list/{id}/updatePerm', name: 'admin_update_list_perm', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[Route(path: '/list/{id}/updatePerm', name: 'admin_update_list_perm', requirements: ['id' => '\d+'], options: ['expose' => true], methods: ['POST'])]
     public function updatePermission(Request $request, GiftList $giftList): JsonResponse
     {
         $defaultData = [
@@ -87,15 +86,12 @@ class AdminController extends AbstractController
             return new JsonResponse(array_merge($defaultData, ['message' => 'User could not be found']));
         }
 
-        // Build the mask to update
-        $permMask = \constant('BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_' . $perm);
-
         if ($this->securityContext->isGranted($perm, $giftList, $user)) {
             // Remove the specified permission
-            $this->aclManager->revoke($giftList, $user, $permMask);
+            $this->permissionManager->revoke($giftList, $user, $perm);
         } else {
             // Add the specified permission
-            $this->aclManager->grant($giftList, $user, $permMask);
+            $this->permissionManager->grant($giftList, $user, $perm);
         }
 
         $successData = [
@@ -138,9 +134,8 @@ class AdminController extends AbstractController
             try {
                 $this->entityManager->flush();
 
-                // Add the correct ACL for the owner
-                $permMask = BestWishesMaskBuilder::MASK_OWNER;
-                $this->aclManager->grant($giftList, $giftList->getOwner(), $permMask);
+                // Grant owner permission
+                $this->permissionManager->grant($giftList, $giftList->getOwner(), 'OWNER');
 
                 $this->addFlash('notice', \sprintf('List "%s" created', $giftList->getName()));
 
@@ -174,11 +169,11 @@ class AdminController extends AbstractController
 
                 if ($originGiftList->getOwner() !== $giftList->getOwner()) {
                     // Exchange permissions
-                    $this->aclManager->exchangePerms(
+                    $this->permissionManager->exchangePerms(
                         $giftList,
                         $giftList->getOwner(),
                         $originGiftList->getOwner(),
-                        BestWishesMaskBuilder::MASK_OWNER
+                        'OWNER'
                     );
                 }
                 $this->addFlash('notice', \sprintf('List "%s" updated', $giftList->getName()));
@@ -272,11 +267,11 @@ class AdminController extends AbstractController
                 $chosenList = $user->getList();
                 if (null !== $chosenList && $chosenList->getOwner()->getId() !== $user->getId()) {
                     // Exchange permissions
-                    $this->aclManager->exchangePerms(
+                    $this->permissionManager->exchangePerms(
                         $chosenList,
                         $user,
                         $chosenList->getOwner(),
-                        BestWishesMaskBuilder::MASK_OWNER
+                        'OWNER'
                     );
                 }
 
@@ -308,11 +303,11 @@ class AdminController extends AbstractController
                 $chosenList = $user->getList();
                 if (null !== $chosenList && $chosenList->getOwner()->getId() !== $user->getId()) {
                     // Exchange permissions
-                    $this->aclManager->exchangePerms(
+                    $this->permissionManager->exchangePerms(
                         $chosenList,
                         $user,
                         $chosenList->getOwner(),
-                        BestWishesMaskBuilder::MASK_OWNER
+                        'OWNER'
                     );
                 }
 

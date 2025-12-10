@@ -4,7 +4,6 @@ namespace BestWishes\Twig\Extension;
 
 use BestWishes\Entity\User;
 use BestWishes\Security\Core\BestWishesSecurityContext;
-use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Twig\Extension\AbstractExtension;
@@ -16,9 +15,6 @@ class BestWishesSecurityExtension extends AbstractExtension
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [
@@ -28,16 +24,12 @@ class BestWishesSecurityExtension extends AbstractExtension
     }
 
     /**
-     * Checks if current user has the specified roles granted
+     * Check if current user has the specified roles granted
      */
-    public function isMultiGranted(mixed $roles, mixed $object = null, string $field = null): bool
+    public function isMultiGranted(mixed $roles, mixed $object = null): bool
     {
         if (null === $this->securityChecker) {
             return false;
-        }
-
-        if (null !== $field) {
-            $object = new FieldVote($object, $field);
         }
 
         try {
@@ -57,11 +49,15 @@ class BestWishesSecurityExtension extends AbstractExtension
     }
 
     /**
-     * Checks if specified user has the specified role granted
+     * Check if a specific user has a permission on an object
+     *
+     * @param string $permission Permission to check (e.g., 'EDIT', 'ALERT_ADD')
+     * @param mixed $object Object to check permission on (e.g., GiftList)
+     * @param User $user User to check permission for
      */
-    public function isUserGranted(string $role, User $user, mixed $object = null): bool
+    public function isUserGranted(string $permission, mixed $object, User $user): bool
     {
-        return $this->securityContext->isGranted($role, $object, $user);
+        return $this->securityContext->isGranted($permission, $object, $user);
     }
 
     public function getName(): string
