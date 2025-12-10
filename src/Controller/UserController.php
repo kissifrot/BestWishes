@@ -3,6 +3,7 @@
 namespace BestWishes\Controller;
 
 use BestWishes\Entity\GiftList;
+use BestWishes\Entity\GiftListPermission;
 use BestWishes\Entity\User;
 use BestWishes\Security\PermissionManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
@@ -31,12 +32,7 @@ class UserController extends AbstractController
     #[Route(path: '/manage-alerts', name: 'user_manage_alerts')]
     public function manageAlerts(): Response
     {
-        $availableAlerts = [
-            'ALERT_ADD',
-            'ALERT_PURCHASE',
-            'ALERT_EDIT',
-            'ALERT_DELETE',
-        ];
+        $availableAlerts = GiftListPermission::ALERT_PERMISSIONS;
         $lists = $this->entityManager->getRepository(GiftList::class)->findAll();
         $user = $this->getUser();
         return $this->render(
@@ -57,12 +53,7 @@ class UserController extends AbstractController
         if (empty($alert)) {
             new JsonResponse($defaultData);
         }
-        $availableAlerts = [
-            'ALERT_ADD',
-            'ALERT_PURCHASE',
-            'ALERT_EDIT',
-            'ALERT_DELETE',
-        ];
+        $availableAlerts = GiftListPermission::ALERT_PERMISSIONS;
         if (!\in_array($alert, $availableAlerts, true)) {
             return new JsonResponse($defaultData);
         }

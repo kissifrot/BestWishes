@@ -24,7 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     protected ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 100, unique: true)]
-    private ?string $username = null;
+    private string $username;
 
     /** @var string[] */
     #[ORM\Column(type: 'json')]
@@ -34,15 +34,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     private ?\DateTimeImmutable $lastLogin = null;
 
     #[ORM\Column(type: 'string')]
-    private ?string $password = null;
+    private string $password;
 
     #[ORM\Column(type: 'string', length: 180)]
     #[Assert\Email]
-    private ?string $email = null;
+    private string $email;
 
     #[ORM\Column(name: 'name', type: 'string', length: 40)]
     #[Assert\NotBlank]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\OneToOne(targetEntity: GiftList::class, cascade: ['remove'])]
     private ?GiftList $list = null;

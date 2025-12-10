@@ -52,9 +52,10 @@
         "optimize-autoloader": true,
         "sort-packages": true,
         "allow-plugins": {
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true,
             "symfony/flex": true,
-            "symfony/runtime": true,
-            "php-http/discovery": true
+            "symfony/runtime": true
         }
     },
     "autoload": {
@@ -101,7 +102,10 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.7",
         "friendsofphp/php-cs-fixer": "^3.91",
+        "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^12.4",
         "roave/security-advisories": "dev-latest",
         "symfony/browser-kit": "7.4.*",

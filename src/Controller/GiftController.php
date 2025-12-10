@@ -4,6 +4,7 @@ namespace BestWishes\Controller;
 
 use BestWishes\Entity\Category;
 use BestWishes\Entity\Gift;
+use BestWishes\Entity\GiftListPermission;
 use BestWishes\Entity\User;
 use BestWishes\Event\GiftCreatedEvent;
 use BestWishes\Event\GiftDeletedEvent;
@@ -62,8 +63,11 @@ class GiftController extends AbstractController
         $isSurprise = $request->query->getBoolean('surprise');
 
         // Access control
+        $permissionsToCheck = $isSurprise
+            ? [GiftListPermission::PERMISSION_EDIT, GiftListPermission::PERMISSION_SURPRISE_ADD]
+            : [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT];
         $this->securityManager->checkAccess(
-            $isSurprise ? ['EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
+            $permissionsToCheck,
             $category->getList()
         );
 
@@ -90,8 +94,11 @@ class GiftController extends AbstractController
     #[Route(path: '{id}/edit', name: 'gift_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Gift $gift): Response
     {
+        $permissionsToCheck = $gift->isSurprise()
+            ? [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT, GiftListPermission::PERMISSION_SURPRISE_ADD]
+            : [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT];
         $this->securityManager->checkAccess(
-            $gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
+            $permissionsToCheck,
             $gift->getList()
         );
 
@@ -115,8 +122,11 @@ class GiftController extends AbstractController
     #[Route(path: '{id}/delete', name: 'gift_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(Request $request, Gift $gift): Response
     {
+        $permissionsToCheck = $gift->isSurprise()
+            ? [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT, GiftListPermission::PERMISSION_SURPRISE_ADD]
+            : [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT];
         $this->securityManager->checkAccess(
-            $gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
+            $permissionsToCheck,
             $gift->getList()
         );
 
@@ -139,8 +149,11 @@ class GiftController extends AbstractController
     #[Route(path: '{id}/mark-received', name: 'gift_mark_received', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function markReceived(Request $request, Gift $gift): Response
     {
+        $permissionsToCheck = $gift->isSurprise()
+            ? [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT, GiftListPermission::PERMISSION_SURPRISE_ADD]
+            : [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT];
         $this->securityManager->checkAccess(
-            $gift->isSurprise() ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'],
+            $permissionsToCheck,
             $gift->getList()
         );
 
@@ -164,7 +177,7 @@ class GiftController extends AbstractController
     #[Route(path: '{id}/mark-bought', name: 'gift_mark_bought', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function markBought(Request $request, Gift $gift): Response
     {
-        $this->securityManager->checkAccess('SURPRISE_ADD', $gift->getList());
+        $this->securityManager->checkAccess(GiftListPermission::PERMISSION_SURPRISE_ADD, $gift->getList());
 
         $form = $this->createPurchaseForm($gift);
         $form->handleRequest($request);
@@ -219,7 +232,7 @@ class GiftController extends AbstractController
     private function createPurchaseForm(Gift $gift): FormInterface
     {
         return $this->createFormBuilder()
-            ->add('purchaseComment', TextareaType::class, ['label_format' => 'form.gift.purchaseComment', 'constraints' => [ new Length(['max' => 1000])]])
+            ->add('purchaseComment', TextareaType::class, ['label_format' => 'form.gift.purchaseComment', 'constraints' => [ new Length(max: 1000)]])
             ->setAction($this->generateUrl('gift_mark_bought', ['id' => $gift->getId()]))
             ->setMethod('POST')
             ->getForm();

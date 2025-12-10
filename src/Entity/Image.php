@@ -34,4 +34,9 @@ class Image
     {
         return $this->extension;
     }
+
+    public function setExtension(?string $extension): void
+    {
+        $this->extension = $extension;
+    }
 }

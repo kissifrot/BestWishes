@@ -38,7 +38,7 @@ class ListEventManager
      * Get the nearest events of a list
      * @return array<int, array<string, int|string|null>>
      */
-    private function getNearestEvents(\DateTimeImmutable $birthDate = null): array
+    private function getNearestEvents(?\DateTimeImmutable $birthDate = null): array
     {
         if (null === $birthDate) {
             return [];
