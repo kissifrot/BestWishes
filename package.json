@@ -9,7 +9,7 @@
         "@symfony/webpack-encore": "^5.0.0",
         "bootstrap": "^5.3.3",
         "core-js": "^3.36.1",
-        "fos-router": "^2.4.6",
+        "fos-router": "file:vendor/friendsofsymfony/jsrouting-bundle/Resources",
         "jquery": "^3.6.3",
         "regenerator-runtime": "^0.14.1",
         "sass": "^1.72.0",

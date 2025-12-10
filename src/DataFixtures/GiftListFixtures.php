@@ -4,8 +4,7 @@ namespace BestWishes\DataFixtures;
 
 use BestWishes\Entity\GiftList;
 use BestWishes\Entity\User;
-use BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder;
-use BestWishes\Security\AclManager;
+use BestWishes\Security\PermissionManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -15,7 +14,7 @@ class GiftListFixtures extends Fixture implements DependentFixtureInterface
     public const GIFT_LIST_1_REFERENCE = 'gift-list-1';
     public const GIFT_LIST_2_REFERENCE = 'gift-list-2';
 
-    public function __construct(private readonly AclManager $aclManager)
+    public function __construct(private readonly PermissionManager $permissionManager)
     {
     }
 
@@ -37,15 +36,15 @@ class GiftListFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($giftList2);
         $manager->flush();
-        $this->aclManager->grant(
+        $this->permissionManager->grant(
             $giftList1,
             $this->getReference(UserFixtures::BASE_USER_1_REFERENCE, User::class),
-            BestWishesMaskBuilder::MASK_OWNER
+            'OWNER'
         );
-        $this->aclManager->grant(
+        $this->permissionManager->grant(
             $giftList2,
             $this->getReference(UserFixtures::BASE_USER_2_REFERENCE, User::class),
-            BestWishesMaskBuilder::MASK_OWNER
+            'OWNER'
         );
 
         $this->addReference(self::GIFT_LIST_1_REFERENCE, $giftList1);

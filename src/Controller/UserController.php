@@ -4,7 +4,7 @@ namespace BestWishes\Controller;
 
 use BestWishes\Entity\GiftList;
 use BestWishes\Entity\User;
-use BestWishes\Security\AclManager;
+use BestWishes\Security\PermissionManager;
 use BestWishes\Security\Core\BestWishesSecurityContext;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class UserController extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly BestWishesSecurityContext $securityContext, private readonly AclManager $aclManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly BestWishesSecurityContext $securityContext, private readonly PermissionManager $permissionManager)
     {
     }
 
@@ -69,11 +69,12 @@ class UserController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        // Build the mask to update
-        $alertMask = \constant(\sprintf('BestWishes\Security\Acl\Permissions\BestWishesMaskBuilder::MASK_%s', $alert));
         $hadAlert = $this->securityContext->isGranted($alert, $giftList, $user);
-        $action = $hadAlert ? 'revoke' : 'grant';
-        $this->aclManager->$action($giftList, $user, $alertMask);
+        if ($hadAlert) {
+            $this->permissionManager->revoke($giftList, $user, $alert);
+        } else {
+            $this->permissionManager->grant($giftList, $user, $alert);
+        }
 
         $successData = [
             'success'  => true,
