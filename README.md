@@ -12,11 +12,11 @@ Recurrent as well as "one-shot" events are also configurable.
 
 # Symfony versions support
 
-| Project version | Symfony version |   |   |   |
-|-----------------|-----------------|---|---|---|
-| 0.x             | 5.4             |   |   |   |
-| 1.x             | 6.4             |   |   |   |
-| (current)       | 7.4             |   |   |   |
+| Project version | Symfony version |
+|-----------------|-----------------|
+| 0.x             | 5.4             |
+| 1.x             | 6.4             |
+| (current)       | 7.4             |
 
 # Installation
 
