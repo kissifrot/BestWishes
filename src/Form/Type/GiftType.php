@@ -16,10 +16,10 @@ class GiftType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, ['trim' => true])
             ->add('image', ImageType::class, ['required' => false])
             ->add('moreDetailUrl', UrlType::class, ['required' => false])
-            ->add('moreDetail', TextareaType::class, ['required' => false])
+            ->add('moreDetail', TextareaType::class, ['required' => false, 'trim' => true])
             ->add('save', SubmitType::class, ['label_format' => 'form.save']);
     }
 
