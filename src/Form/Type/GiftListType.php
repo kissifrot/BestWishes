@@ -17,7 +17,7 @@ class GiftListType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, ['trim' => true])
             ->add('owner', EntityType::class, ['class' => User::class, 'choice_label' => 'name'])
             ->add('birthDate', DateType::class, ['years' => range(date('Y') - 120, date('Y'))])
             ->add('save', SubmitType::class, ['label_format' => 'form.save']);
