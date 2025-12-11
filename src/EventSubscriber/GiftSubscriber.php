@@ -17,7 +17,6 @@ use BestWishes\Message\PurchaseAlertMessage;
 use BestWishes\Security\Core\BestWishesSecurityContext;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class GiftSubscriber implements EventSubscriberInterface
 {
@@ -25,8 +24,7 @@ class GiftSubscriber implements EventSubscriberInterface
         private readonly UserManager               $userManager,
         private readonly BestWishesSecurityContext $securityContext,
         private readonly MessageBusInterface       $messageBus,
-        private readonly DoctrineCacheManager      $cacheManager,
-        private readonly UrlGeneratorInterface     $router,
+        private readonly DoctrineCacheManager      $cacheManager
     ) {
     }
 
@@ -67,11 +65,10 @@ class GiftSubscriber implements EventSubscriberInterface
         $this->cacheManager->clearGiftListCache($list);
         /** @var User $creator */
         $creator = $event->getCreator();
-        $homeUrl = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         if (!empty($mailedUsers)) {
             foreach ($mailedUsers as $mailedUser) {
-                $this->messageBus->dispatch(new CreationAlertMessage($mailedUser->getId(), $event->getGift()->getId(), $creator->getId(), $homeUrl));
+                $this->messageBus->dispatch(new CreationAlertMessage($mailedUser->getId(), $event->getGift()->getId(), $creator->getId()));
             }
         }
     }
@@ -99,11 +96,10 @@ class GiftSubscriber implements EventSubscriberInterface
         $this->cacheManager->clearGiftListCache($list);
         /** @var User $deleter */
         $deleter = $event->getDeleter();
-        $homeUrl = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         if (!empty($mailedUsers)) {
             foreach ($mailedUsers as $mailedUser) {
-                $this->messageBus->dispatch(new DeletionAlertMessage($mailedUser->getId(), $event->getGift()->getId(), $deleter->getId(), $homeUrl));
+                $this->messageBus->dispatch(new DeletionAlertMessage($mailedUser->getId(), $event->getGift()->getId(), $deleter->getId()));
             }
         }
     }
@@ -129,11 +125,10 @@ class GiftSubscriber implements EventSubscriberInterface
         }
         /** @var User $buyer */
         $buyer = $event->getBuyer();
-        $homeUrl = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         if (!empty($mailedUsers)) {
             foreach ($mailedUsers as $mailedUser) {
-                $this->messageBus->dispatch(new PurchaseAlertMessage($mailedUser->getId(), $event->getGift()->getId(), $buyer->getId(), $homeUrl));
+                $this->messageBus->dispatch(new PurchaseAlertMessage($mailedUser->getId(), $event->getGift()->getId(), $buyer->getId()));
             }
         }
     }
@@ -147,7 +142,6 @@ class GiftSubscriber implements EventSubscriberInterface
     {
         $list  = $event->getEditedGift()->getList();
         $users = $this->userManager->findUsers();
-        $homeUrl = $this->router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $mailedUsers = [];
         foreach ($users as $anUser) {
@@ -168,7 +162,7 @@ class GiftSubscriber implements EventSubscriberInterface
 
         if (!empty($mailedUsers)) {
             foreach ($mailedUsers as $mailedUser) {
-                $this->messageBus->dispatch(new EditionAlertMessage($mailedUser->getId(), $event->getEditedGift()->getId(), $editor->getId(), $homeUrl));
+                $this->messageBus->dispatch(new EditionAlertMessage($mailedUser->getId(), $event->getEditedGift()->getId(), $editor->getId()));
             }
         }
     }
