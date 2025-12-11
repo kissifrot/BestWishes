@@ -8,7 +8,6 @@ class EditionAlertMessage
         private readonly int $mailedUserId,
         private readonly int $giftId,
         private readonly int $editorId,
-        private readonly string $homeUrl,
     ) {
     }
 
@@ -25,10 +24,5 @@ class EditionAlertMessage
     public function getEditorId(): int
     {
         return $this->editorId;
-    }
-
-    public function getHomeUrl(): string
-    {
-        return $this->homeUrl;
     }
 }
