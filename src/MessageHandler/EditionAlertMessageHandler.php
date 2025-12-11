@@ -26,6 +26,6 @@ class EditionAlertMessageHandler
         if (null === $mailedUser || null === $gift || null === $editor) {
             return;
         }
-        $this->mailer->sendEditionAlertMessage($mailedUser, $gift, $editor, $message->getHomeUrl());
+        $this->mailer->sendEditionAlertMessage($mailedUser, $gift, $editor);
     }
 }
