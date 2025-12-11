@@ -5,10 +5,10 @@ $finder = PhpCsFixer\Finder::create()
     ->notPath(['config/reference.php'])
 ;
 
-$config = new PhpCsFixer\Config();
-return $config
+$config = (new PhpCsFixer\Config())
     ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
-    ->setRules([
+;
+return $config->setRules([
     '@PSR12' => true,
     'no_unused_imports' => true,
     'no_superfluous_phpdoc_tags' => true,
