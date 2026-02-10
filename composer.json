@@ -56,6 +56,9 @@
             "phpstan/extension-installer": true,
             "symfony/flex": true,
             "symfony/runtime": true
+        },
+        "platform": {
+            "php": "8.3"
         }
     },
     "autoload": {
