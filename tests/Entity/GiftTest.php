@@ -30,7 +30,6 @@ class GiftTest extends TestCase
         // Force id on category
         $reflectionClass = new \ReflectionClass(Category::class);
         $reflectionProperty = $reflectionClass->getProperty('id');
-        $reflectionProperty->setAccessible(true);
         $this->category = new Category();
         $reflectionProperty->setValue($this->category, 1);
 
