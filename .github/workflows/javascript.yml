@@ -24,6 +24,10 @@ jobs:
     - name: Install PHP dependencies (for FOS)
       run: composer install --prefer-dist --no-progress --ignore-platform-req=ext-amqp
 
+    - uses: actions/setup-node@v6
+      with:
+        node-version: "22.x"
+
     - uses: bahmutov/npm-install@v1
 
     - name: Install JS dependencies
