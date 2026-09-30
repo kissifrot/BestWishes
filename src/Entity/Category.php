@@ -18,7 +18,7 @@ class Category implements \Stringable
     private ?int $id = null;
 
     #[Assert\NotBlank]
-    #[Assert\Length(min: 2)]
+    #[Assert\Length(min: 2, max: 150)]
     #[ORM\Column(name: 'name', length: 150)]
     private string $name;
 

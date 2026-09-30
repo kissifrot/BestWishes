@@ -23,6 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
+    #[Assert\Length(max: 100)]
     #[ORM\Column(type: 'string', length: 100, unique: true)]
     private string $username;
 
@@ -36,8 +37,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\Column(type: 'string')]
     private string $password;
 
-    #[ORM\Column(type: 'string', length: 180)]
     #[Assert\Email]
+    #[Assert\Length(min: 5, max: 180)]
+    #[ORM\Column(type: 'string', length: 180)]
     private string $email;
 
     #[ORM\Column(name: 'name', type: 'string', length: 40)]

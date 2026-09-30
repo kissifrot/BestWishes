@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Image
 {
     #[Assert\Url]
+    #[Assert\Length(max: 255)]
     #[ORM\Column(name: 'url', length: 255, nullable: true)]
     private ?string $url = null;
 

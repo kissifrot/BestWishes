@@ -17,7 +17,7 @@ class Gift
     private ?int $id = null;
 
     #[Assert\NotBlank]
-    #[Assert\Length(min: 2)]
+    #[Assert\Length(min: 2, max: 150)]
     #[ORM\Column(name: 'name', type: 'string', length: 150)]
     private string $name;
 
@@ -53,6 +53,7 @@ class Gift
     private ?string $purchaseComment = null;
 
     #[Assert\Url]
+    #[Assert\Length(max: 255)]
     #[ORM\Column(name: 'more_detail_url', length: 255, nullable: true)]
     private ?string $moreDetailUrl = null;
 

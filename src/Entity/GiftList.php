@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Clock\DatePoint;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table]
 #[ORM\Index(name: 'list_slug_idx', columns: ['slug'])]
@@ -20,10 +21,12 @@ class GiftList
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
+    #[Assert\Length(min: 2, max: 50)]
     #[ORM\Column(name: 'name', length: 50)]
     private string $name;
 
     #[Gedmo\Slug(fields: ['name'])]
+    #[Assert\Length(min: 2, max: 50)]
     #[ORM\Column(name: 'slug', length: 50)]
     private string $slug;
 
