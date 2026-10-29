@@ -4,7 +4,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.3.36",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^2.18",
@@ -58,7 +58,7 @@
             "symfony/runtime": true
         },
         "platform": {
-            "php": "8.3"
+            "php": "8.3.36"
         }
     },
     "autoload": {
