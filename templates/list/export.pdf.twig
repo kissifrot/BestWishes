@@ -16,7 +16,7 @@
                 <h3 class="pdf">{{ category.name }}</h3>
                 <div class="list-group">
                     {% for gift in category.gifts %}
-                        <a href="{{ path('gift_show', { id: gift.id }) }}" class="list-group-item list-group-item-action d-flex">
+                        <a href="{{ url('gift_show', { id: gift.id }) }}" class="list-group-item list-group-item-action d-flex">
                             <div>
                                 {{ gift.name }}
                                 {% if gift.bought and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}

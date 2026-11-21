@@ -11,7 +11,6 @@
         "doctrine/doctrine-migrations-bundle": "^3.7",
         "doctrine/orm": "^3.5",
         "friendsofsymfony/jsrouting-bundle": "^3.6",
-        "knplabs/knp-snappy-bundle": "^1.8",
         "phpdocumentor/reflection-docblock": "^5.6",
         "phpstan/phpdoc-parser": "^2.3",
         "sentry/sentry-symfony": "^5.8",
@@ -58,7 +57,7 @@
             "symfony/runtime": true
         },
         "platform": {
-            "php": "8.3.36"
+            "php": "8.3.37"
         }
     },
     "autoload": {

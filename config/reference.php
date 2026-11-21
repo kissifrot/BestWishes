@@ -1469,6 +1469,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     dsn?: scalar|Param|null, // If this value is not provided, the SDK will try to read it from the SENTRY_DSN environment variable. If that variable also does not exist, the SDK will not send any events.
  *     register_error_listener?: bool|Param, // Default: true
  *     register_error_handler?: bool|Param, // Default: true
+ *     register_monolog_handler?: bool|Param, // EXPERIMENT: automatically push a Sentry handler onto every Monolog channel (requires MonologBundle). // Default: false
  *     logger?: scalar|Param|null, // The service ID of the PSR-3 logger used to log messages coming from the SDK client. Be aware that setting the same logger of the application may create a circular loop when an event fails to be sent. // Default: null
  *     options?: array{
  *         integrations?: mixed, // Default: []
@@ -1476,11 +1477,15 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         prefixes?: list<scalar|Param|null>,
  *         sample_rate?: float|Param, // The sampling factor to apply to events. A value of 0 will deny sending any event, and a value of 1 will send all events.
  *         enable_tracing?: bool|Param,
- *         traces_sample_rate?: float|Param, // The sampling factor to apply to transactions. A value of 0 will deny sending any transaction, and a value of 1 will send all transactions.
+ *         traces_sample_rate?: float|Param, // The sampling factor to apply to transactions. A value of 0 will deny sending any transaction, and a value of 1 will send all transactions. A value of null disables tracing unless "traces_sampler" is set.
  *         traces_sampler?: scalar|Param|null,
  *         profiles_sample_rate?: float|Param, // The sampling factor to apply to profiles. A value of 0 will deny sending any profiles, and a value of 1 will send all profiles. Profiles are sampled in relation to traces_sample_rate
+ *         profiles_sampler?: scalar|Param|null,
+ *         profile_session_sample_rate?: float|Param, // The sampling factor to apply to continuous profiling sessions. A value of 0 disables continuous profiling, and a value of 1 profiles every session.
+ *         profile_lifecycle?: "manual"|"trace"|Param, // Whether the continuous profiler is started and stopped manually ("manual") or runs while a sampled transaction is active ("trace").
  *         enable_logs?: bool|Param,
  *         log_flush_threshold?: mixed, // Default: null
+ *         metric_flush_threshold?: mixed, // Default: null
  *         enable_metrics?: bool|Param, // Default: true
  *         attach_stacktrace?: bool|Param,
  *         attach_metric_code_locations?: bool|Param,
@@ -1494,6 +1499,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         server_name?: scalar|Param|null,
  *         ignore_exceptions?: list<scalar|Param|null>,
  *         ignore_transactions?: list<scalar|Param|null>,
+ *         trace_ignore_status_codes?: list<mixed>,
  *         before_send?: scalar|Param|null,
  *         before_send_transaction?: scalar|Param|null,
  *         before_send_check_in?: scalar|Param|null,
@@ -1505,6 +1511,8 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         tags?: array<string, scalar|Param|null>,
  *         error_types?: scalar|Param|null,
  *         max_breadcrumbs?: int|Param,
+ *         max_breadth?: mixed,
+ *         send_client_reports?: bool|Param,
  *         before_breadcrumb?: mixed,
  *         in_app_exclude?: list<scalar|Param|null>,
  *         in_app_include?: list<scalar|Param|null>,
@@ -1552,6 +1560,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         http_connect_timeout?: float|Param, // The maximum number of seconds to wait while trying to connect to a server. It works only when using the default transport.
  *         http_timeout?: float|Param, // The maximum execution time for the request+response as a whole. It works only when using the default transport.
  *         http_ssl_verify_peer?: bool|Param,
+ *         http_ssl_native_ca?: bool|Param,
  *         http_compression?: bool|Param,
  *         capture_silenced_errors?: bool|Param,
  *         max_request_body_size?: "none"|"never"|"small"|"medium"|"always"|Param,
@@ -1637,22 +1646,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     persist_default_translation?: bool|Param, // Default: false
  *     skip_translation_on_load?: bool|Param, // Default: false
  *     metadata_cache_pool?: scalar|Param|null, // Default: null
- * }
- * @psalm-type KnpSnappyConfig = array{
- *     temporary_folder?: scalar|Param|null,
- *     process_timeout?: int|Param, // Generator process timeout in seconds.
- *     pdf?: array{
- *         enabled?: bool|Param, // Default: true
- *         binary?: scalar|Param|null, // Default: "wkhtmltopdf"
- *         options?: array<string, scalar|Param|null>,
- *         env?: list<scalar|Param|null>,
- *     },
- *     image?: array{
- *         enabled?: bool|Param, // Default: true
- *         binary?: scalar|Param|null, // Default: "wkhtmltoimage"
- *         options?: array<string, scalar|Param|null>,
- *         env?: list<scalar|Param|null>,
- *     },
  * }
  * @psalm-type TwigExtraConfig = array{
  *     cache?: bool|array{
@@ -1742,7 +1735,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     monolog?: MonologConfig,
  *     sentry?: SentryConfig,
  *     stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
- *     knp_snappy?: KnpSnappyConfig,
  *     twig_extra?: TwigExtraConfig,
  *     symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
  *     webpack_encore?: WebpackEncoreConfig,
@@ -1762,7 +1754,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         maker?: MakerConfig,
  *         sentry?: SentryConfig,
  *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
- *         knp_snappy?: KnpSnappyConfig,
  *         twig_extra?: TwigExtraConfig,
  *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
  *         webpack_encore?: WebpackEncoreConfig,
@@ -1780,7 +1771,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         monolog?: MonologConfig,
  *         sentry?: SentryConfig,
  *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
- *         knp_snappy?: KnpSnappyConfig,
  *         twig_extra?: TwigExtraConfig,
  *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
  *         webpack_encore?: WebpackEncoreConfig,
@@ -1800,7 +1790,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         debug?: DebugConfig,
  *         sentry?: SentryConfig,
  *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
- *         knp_snappy?: KnpSnappyConfig,
  *         twig_extra?: TwigExtraConfig,
  *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
  *         webpack_encore?: WebpackEncoreConfig,

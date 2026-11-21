@@ -3,10 +3,10 @@
 namespace BestWishes\Controller;
 
 use BestWishes\Manager\ListEventManager;
+use BestWishes\Pdf\GotenbergRenderer;
 use BestWishes\Repository\GiftListRepository;
-use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
-use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,7 +17,7 @@ class ListController extends AbstractController
     public function __construct(
         private readonly GiftListRepository     $giftListRepository,
         private readonly ListEventManager       $listEventManager,
-        private readonly Pdf                    $pdf
+        private readonly GotenbergRenderer      $pdf
     ) {
     }
 
@@ -46,7 +46,7 @@ class ListController extends AbstractController
     }
 
     #[Route(path: '/export/{id}', name: 'list_export_pdf', requirements: ['id' => '\d+'])]
-    public function pdfExport(Request $request): PdfResponse
+    public function pdfExport(Request $request): Response
     {
         $id = $request->attributes->getInt('id');
         $list = $this->isGranted('IS_AUTHENTICATED_REMEMBERED')
@@ -58,11 +58,14 @@ class ListController extends AbstractController
         }
         $nextEventData = $this->listEventManager->getNearestEventData($list);
 
-        $html = $this->renderView('list/export.pdf.twig', compact('list', 'nextEventData'));
+        $pdf = $this->pdf->render('list/export.pdf.twig', compact('list', 'nextEventData'));
 
-        return new PdfResponse(
-            $this->pdf->getOutputFromHtml($html),
-            \sprintf('list_%s.pdf', $list->getSlug())
-        );
+        return new Response($pdf, Response::HTTP_OK, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => HeaderUtils::makeDisposition(
+                HeaderUtils::DISPOSITION_ATTACHMENT,
+                \sprintf('list_%s.pdf', $list->getSlug())
+            ),
+        ]);
     }
 }

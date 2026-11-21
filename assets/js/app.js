@@ -1,3 +1,7 @@
+require('@fontsource/open-sans/400.css');
+require('@fontsource/open-sans/700.css');
+require('@fontsource/open-sans/400-italic.css');
+require('@fontsource/open-sans/700-italic.css');
 require('../scss/app.scss');
 
 const $ = require('jquery');

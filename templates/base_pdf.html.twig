@@ -1,9 +1,3 @@
-{% macro encore_absolute_link_tags(entry_point) %}
-    {% for file in encore_entry_css_files(entry_point) %}
-        <link href="{{ absolute_url(asset(file)) }}" rel="stylesheet" />
-    {% endfor %}
-{% endmacro %}
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,7 +6,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ site_name }} - {% block title %}Wishlist management{% endblock %}</title>
         {% block stylesheets %}
-            {{ _self.encore_absolute_link_tags('app') }}
+            {% for file in pdfStylesheets %}
+                <link href="{{ file }}" rel="stylesheet">
+            {% endfor %}
+            <style>
+                .list-group-item { break-inside: avoid; }
+                h3.pdf { break-after: avoid; }
+            </style>
         {% endblock %}
         <meta name="theme-color" content="#ffffff">
         {% block javascripts_head %}{% endblock %}
