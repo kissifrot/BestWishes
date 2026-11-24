@@ -27,6 +27,8 @@ security:
                 check_path: app_login
                 enable_csrf: true
                 use_referer: true
+            login_throttling:
+                max_attempts: 3
             remember_me:
                 secret:   'b%kernel.secret%w'
                 lifetime: 15778463 # 6 months in seconds
