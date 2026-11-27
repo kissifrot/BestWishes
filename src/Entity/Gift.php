@@ -43,6 +43,7 @@ class Gift
     #[ORM\Column(name: 'is_surprise', type: 'boolean', options: ['default' => false])]
     private readonly bool $surprise;
 
+    #[Assert\Valid]
     #[ORM\Embedded(class: Image::class, columnPrefix: 'image_')]
     private ?Image $image = null;
 
