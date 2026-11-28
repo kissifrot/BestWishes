@@ -24,7 +24,7 @@
                         {{ gift.name }}
                         {% if (gift.bought or gift.surprise) and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                             {% if gift.surprise %} <i class="fas fa-question fa-lg" style="color: #FA2864" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ 'gift.surprise.test'|trans }}"></i>{% endif %}
-                            {% if gift.bought %} <i class="fas fa-gift fa-lg" style="color: #FA2864" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-original-title="{{ 'gift.bought_by.text'|trans({ '%purchaseDate%':gift.purchaseDate|date('d/m/Y') , '%buyerName%': gift.buyer.name})|raw }}"></i>{% endif %}
+                            {% if gift.bought %} <i class="fas fa-gift fa-lg" style="color: #FA2864" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ 'gift.bought_by.text'|trans({ '%purchaseDate%':gift.purchaseDate|date('d/m/Y') , '%buyerName%': gift.buyer.name}) }}"></i>{% endif %}
                         {% endif %}
                     </div>
                 </a>

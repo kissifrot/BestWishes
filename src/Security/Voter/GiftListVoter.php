@@ -5,9 +5,9 @@ namespace BestWishes\Security\Voter;
 use BestWishes\Entity\GiftList;
 use BestWishes\Entity\User;
 use BestWishes\Repository\GiftListPermissionRepository;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
  * Voter for GiftList permissions
@@ -19,6 +19,7 @@ class GiftListVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
     public const OWNER = 'OWNER';
+    public const VIEW_SURPRISES = 'VIEW_SURPRISES';
 
     // Custom permissions
     public const SURPRISE_ADD = 'SURPRISE_ADD';
@@ -32,6 +33,7 @@ class GiftListVoter extends Voter
         self::EDIT,
         self::DELETE,
         self::OWNER,
+        self::VIEW_SURPRISES,
         self::SURPRISE_ADD,
         self::ALERT_ADD,
         self::ALERT_PURCHASE,
@@ -41,7 +43,7 @@ class GiftListVoter extends Voter
 
     public function __construct(
         private readonly GiftListPermissionRepository $permissionRepository,
-        private readonly Security $security,
+        private readonly RoleHierarchyInterface $roleHierarchy,
     ) {
     }
 
@@ -65,13 +67,12 @@ class GiftListVoter extends Voter
         /** @var GiftList $giftList */
         $giftList = $subject;
 
-        // Admins have all rights
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
+        if ($attribute === self::VIEW_SURPRISES || $attribute === self::OWNER) {
+            return $this->hasPermissionForUser($attribute, $giftList, $user);
         }
 
-        // Check database for specific permission (including for owner)
-        return $this->permissionRepository->hasPermission($giftList, $user, $attribute);
+        return $this->isAdmin($token->getRoleNames())
+            || $this->permissionRepository->hasPermission($giftList, $user, $attribute);
     }
 
     /**
@@ -79,7 +80,20 @@ class GiftListVoter extends Voter
      */
     public function hasPermissionForUser(string $attribute, GiftList $giftList, User $user): bool
     {
-        // Always check database - don't apply admin logic when checking another user's permissions
-        return $this->permissionRepository->hasPermission($giftList, $user, $attribute);
+        return match ($attribute) {
+            self::OWNER => $giftList->isOwnedBy($user),
+            self::VIEW_SURPRISES => !$giftList->isOwnedBy($user) && (
+                $this->isAdmin($user->getRoles())
+                || $this->permissionRepository->hasPermission($giftList, $user, self::EDIT)
+                || $this->permissionRepository->hasPermission($giftList, $user, self::SURPRISE_ADD)
+            ),
+            default => $this->permissionRepository->hasPermission($giftList, $user, $attribute),
+        };
+    }
+
+    /** @param string[] $roles */
+    private function isAdmin(array $roles): bool
+    {
+        return \in_array('ROLE_ADMIN', $this->roleHierarchy->getReachableRoleNames($roles), true);
     }
 }

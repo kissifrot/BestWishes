@@ -26,7 +26,9 @@ $ composer create-project webdl/bestwishes path/to/install
 ```
 
 Composer will create a new BestWishes project under the `path/to/install` directory.  
-You will have to enter main parameters such as database info and others in the `.env` file.
+Set local or deployment values through environment variables or in `.env.local`. Generate a distinct `APP_SECRET` for each installation (for example, using `openssl rand -hex 32`). Replace the previous bundled secret if your installation used it. This invalidates existing remember-me cookies and outstanding password-reset links.
+
+In production, use `APP_ENV=prod`, `APP_DEBUG=0` and configure the web server to serve only `public/`. Set `DEFAULT_URI` to the canonical public HTTPS URL, including any installation subpath. Password-reset email links use this URL. Restrict accepted hostnames at the reverse proxy and set `SYMFONY_TRUSTED_HOSTS` to the allowed host patterns (for example, `^wishlist[.]example[.]org$`). For local development, set `APP_ENV=dev` in `.env.local`.
 
 ## Database setup
 

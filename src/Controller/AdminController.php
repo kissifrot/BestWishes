@@ -69,6 +69,10 @@ class AdminController extends AbstractController
     #[Route(path: '/list/{id}/updatePerm', name: 'admin_update_list_perm', requirements: ['id' => '\d+'], options: ['expose' => true], methods: ['POST'])]
     public function updatePermission(Request $request, GiftList $giftList): JsonResponse
     {
+        if (!$this->isCsrfTokenValid('admin_list_permission', $request->request->getString('_token'))) {
+            return new JsonResponse(['success' => false], Response::HTTP_FORBIDDEN);
+        }
+
         $defaultData = [
             'success'  => false,
             'message' => 'An error occurred',
@@ -77,7 +81,7 @@ class AdminController extends AbstractController
         $perm = $request->request->get('perm');
         // Do some input checks
         if (empty($perm) || empty($userId)) {
-            new JsonResponse($defaultData);
+            return new JsonResponse($defaultData, Response::HTTP_BAD_REQUEST);
         }
         if (!\in_array($perm, self::AVAILABLE_PERMISSIONS, true)) {
             return new JsonResponse($defaultData);
@@ -135,9 +139,6 @@ class AdminController extends AbstractController
             try {
                 $this->entityManager->flush();
 
-                // Grant owner permission
-                $this->permissionManager->grant($giftList, $giftList->getOwner(), GiftListPermission::PERMISSION_OWNER);
-
                 $this->addFlash('notice', \sprintf('List "%s" created', $giftList->getName()));
 
                 // Dispatch the creation event
@@ -158,7 +159,6 @@ class AdminController extends AbstractController
     #[Route(path: '/list/{id}/edit', name: 'admin_list_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function listEdit(Request $request, GiftList $giftList): Response
     {
-        $originGiftList = clone $giftList;
         $form = $this->createForm(GiftListType::class, $giftList);
 
         $form->handleRequest($request);
@@ -168,15 +168,6 @@ class AdminController extends AbstractController
             try {
                 $this->entityManager->flush();
 
-                if ($originGiftList->getOwner() !== $giftList->getOwner()) {
-                    // Exchange permissions
-                    $this->permissionManager->exchangePerms(
-                        $giftList,
-                        $giftList->getOwner(),
-                        $originGiftList->getOwner(),
-                        GiftListPermission::PERMISSION_OWNER
-                    );
-                }
                 $this->addFlash('notice', \sprintf('List "%s" updated', $giftList->getName()));
 
                 return $this->redirectToRoute('admin_lists');
@@ -264,18 +255,6 @@ class AdminController extends AbstractController
             try {
                 $this->entityManager->flush();
 
-                /** @var GiftList|null $chosenList */
-                $chosenList = $user->getList();
-                if (null !== $chosenList && $chosenList->getOwner()->getId() !== $user->getId()) {
-                    // Exchange permissions
-                    $this->permissionManager->exchangePerms(
-                        $chosenList,
-                        $user,
-                        $chosenList->getOwner(),
-                        GiftListPermission::PERMISSION_OWNER
-                    );
-                }
-
                 $this->addFlash('notice', \sprintf('User "%s" created', $user->getUserIdentifier()));
 
                 return $this->redirectToRoute('admin_users');
@@ -299,18 +278,6 @@ class AdminController extends AbstractController
             $this->entityManager->persist($user);
             try {
                 $this->entityManager->flush();
-
-                /** @var GiftList|null $chosenList */
-                $chosenList = $user->getList();
-                if (null !== $chosenList && $chosenList->getOwner()->getId() !== $user->getId()) {
-                    // Exchange permissions
-                    $this->permissionManager->exchangePerms(
-                        $chosenList,
-                        $user,
-                        $chosenList->getOwner(),
-                        GiftListPermission::PERMISSION_OWNER
-                    );
-                }
 
                 $this->addFlash('notice', \sprintf('User "%s" updated', $user->getUserIdentifier()));
 

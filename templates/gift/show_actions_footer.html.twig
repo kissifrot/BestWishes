@@ -1,4 +1,4 @@
-{% set attrib = gift.surprise ? ['OWNER', 'EDIT', 'SURPRISE_ADD'] : ['OWNER', 'EDIT'] %}
+{% set attrib = gift.surprise ? ['VIEW_SURPRISES'] : ['OWNER', 'EDIT'] %}
 <div class="btn-group btn-group-lg btn-group-justified" role="group" aria-label="{{ 'gift.actions.text'|trans }}">
     {% if is_multi_granted(attrib, gift.list) %}
         <a href="{{ path('gift_edit', { id: gift.id }) }}" class="btn btn-primary" title="{{ 'gift.action.edit'|trans }}" aria-label="{{ 'gift.action.edit'|trans }}">

@@ -42,7 +42,8 @@
                 </ul>
                 <span class="navbar-text">
                     {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        {{ 'global.navbar.text.logged'|trans({ '%username%': app.user.userIdentifier, '%logoutUrl%': path('app_logout') })|raw }}
+                        {{ 'global.navbar.text.logged'|trans({ '%username%': app.user.userIdentifier }) }}
+                        <a href="{{ path('app_logout') }}">{{ 'global.navbar.logout'|trans }}</a>
                         {% if is_granted('ROLE_ADMIN') %}&nbsp;<a href="{{ path('admin_lists') }}">{{  'global.navbar.admin_access'|trans }}</a>{% endif %}
                     {% else %}
                         <i class="far fa-user" aria-hidden="true"></i>&nbsp;{{ 'global.navbar.text.guest'|trans({ '%loginUrl%': path('app_login') })|raw }}

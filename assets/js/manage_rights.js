@@ -10,6 +10,7 @@ $(document).ready(function() {
             url: currUrl,
             method: 'POST',
             data: {
+                _token: elem.closest('[data-csrf-token]').data('csrf-token'),
                 perm: currData.role,
                 userId: currData.user
             },
@@ -18,6 +19,9 @@ $(document).ready(function() {
                 alert(errorThrown + '(' + textStatus + ')');
             },
             success: function(data, textStatus, jqXHR) {
+                if (!data.success) {
+                    return;
+                }
                 elem.toggleClass('text-success fa-check').toggleClass('text-danger fa-times');
             }
         });

@@ -18,7 +18,7 @@
 {% import _self as utils %}
 
 {% block content %}
-<div class="container">
+<div class="container" data-csrf-token="{{ csrf_token('user_list_alert') }}">
 
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('user_home') }}">{{ 'global.navbar.options'|trans }}</a></li>

@@ -14,6 +14,7 @@ use BestWishes\Event\GiftReceivedEvent;
 use BestWishes\Form\Type\GiftType;
 use BestWishes\Manager\SecurityManager;
 use BestWishes\Repository\GiftRepository;
+use BestWishes\Security\Voter\GiftListVoter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -28,6 +29,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route(path: 'gift')]
 class GiftController extends AbstractController
 {
+    private const array EDIT_PERMISSIONS = [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT];
+
     public function __construct(
         private readonly GiftRepository           $giftRepository,
         private readonly SecurityManager          $securityManager,
@@ -40,11 +43,8 @@ class GiftController extends AbstractController
     public function show(Request $request): Response
     {
         $id = $request->attributes->getInt('id');
-        $gift = $this->isGranted('IS_AUTHENTICATED_REMEMBERED')
-            ? $this->giftRepository->findFullById($id)
-            : $this->giftRepository->findFullSurpriseExcludedById($id)
-        ;
-        if (!$gift) {
+        $gift = $this->giftRepository->findFullById($id);
+        if (!$gift || ($gift->isSurprise() && !$this->isGranted(GiftListVoter::VIEW_SURPRISES, $gift->getList()))) {
             throw $this->createNotFoundException();
         }
         $deleteForm = $this->createSimpleActionForm($gift, 'delete')->createView();
@@ -53,7 +53,8 @@ class GiftController extends AbstractController
 
         return $this->render(
             'gift/show.html.twig',
-            compact('gift', 'deleteForm', 'markReceivedForm', 'markBoughtForm')
+            compact('gift', 'deleteForm', 'markReceivedForm', 'markBoughtForm'),
+            new Response(headers: ['Cache-Control' => 'private, no-store'])
         );
     }
 
@@ -64,8 +65,8 @@ class GiftController extends AbstractController
 
         // Access control
         $permissionsToCheck = $isSurprise
-            ? [GiftListPermission::PERMISSION_EDIT, GiftListPermission::PERMISSION_SURPRISE_ADD]
-            : [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT];
+            ? GiftListVoter::VIEW_SURPRISES
+            : self::EDIT_PERMISSIONS;
         $this->securityManager->checkAccess(
             $permissionsToCheck,
             $category->getList()
@@ -95,8 +96,8 @@ class GiftController extends AbstractController
     public function edit(Request $request, Gift $gift): Response
     {
         $permissionsToCheck = $gift->isSurprise()
-            ? [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT, GiftListPermission::PERMISSION_SURPRISE_ADD]
-            : [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT];
+            ? GiftListVoter::VIEW_SURPRISES
+            : self::EDIT_PERMISSIONS;
         $this->securityManager->checkAccess(
             $permissionsToCheck,
             $gift->getList()
@@ -123,8 +124,8 @@ class GiftController extends AbstractController
     public function delete(Request $request, Gift $gift): Response
     {
         $permissionsToCheck = $gift->isSurprise()
-            ? [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT, GiftListPermission::PERMISSION_SURPRISE_ADD]
-            : [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT];
+            ? GiftListVoter::VIEW_SURPRISES
+            : self::EDIT_PERMISSIONS;
         $this->securityManager->checkAccess(
             $permissionsToCheck,
             $gift->getList()
@@ -150,8 +151,8 @@ class GiftController extends AbstractController
     public function markReceived(Request $request, Gift $gift): Response
     {
         $permissionsToCheck = $gift->isSurprise()
-            ? [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT, GiftListPermission::PERMISSION_SURPRISE_ADD]
-            : [GiftListPermission::PERMISSION_OWNER, GiftListPermission::PERMISSION_EDIT];
+            ? GiftListVoter::VIEW_SURPRISES
+            : self::EDIT_PERMISSIONS;
         $this->securityManager->checkAccess(
             $permissionsToCheck,
             $gift->getList()
@@ -178,6 +179,9 @@ class GiftController extends AbstractController
     public function markBought(Request $request, Gift $gift): Response
     {
         $this->securityManager->checkAccess(GiftListPermission::PERMISSION_SURPRISE_ADD, $gift->getList());
+        if ($gift->isSurprise()) {
+            $this->securityManager->checkAccess(GiftListVoter::VIEW_SURPRISES, $gift->getList());
+        }
 
         $form = $this->createPurchaseForm($gift);
         $form->handleRequest($request);
@@ -188,11 +192,13 @@ class GiftController extends AbstractController
 
             /** @var User $user */
             $user = $this->getUser();
-            $gift->markPurchasedBy($user, $data['purchaseComment']);
-            $this->giftRepository->save($gift, flush: true);
+            $purchasedGift = $this->giftRepository->recordPurchase($gift, $user, $purchaseComment);
+            if ($purchasedGift === null) {
+                return new Response(status: Response::HTTP_CONFLICT);
+            }
 
             // Dispatch the purchase event
-            $this->eventDispatcher->dispatch(new GiftPurchasedEvent($gift, $this->getUser(), $purchaseComment), GiftPurchasedEvent::NAME);
+            $this->eventDispatcher->dispatch(new GiftPurchasedEvent($purchasedGift, $user, $purchaseComment), GiftPurchasedEvent::NAME);
 
             $this->addFlash('notice', $this->translator->trans('gift.message.marked_bought', ['%giftName%' => $gift->getName()]));
         }

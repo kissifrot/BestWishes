@@ -100,6 +100,13 @@ class GiftList
         return $this->owner;
     }
 
+    public function isOwnedBy(User $user): bool
+    {
+        return isset($this->owner) && (
+            $this->owner === $user || ($user->getId() !== null && $this->owner->getId() === $user->getId())
+        );
+    }
+
     public function setOwner(User $owner): void
     {
         $this->owner = $owner;

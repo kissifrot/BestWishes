@@ -4,6 +4,8 @@ namespace BestWishes\Mailer;
 
 use BestWishes\Entity\Gift;
 use BestWishes\Entity\User;
+use BestWishes\Security\Core\BestWishesSecurityContext;
+use BestWishes\Security\Voter\GiftListVoter;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -13,16 +15,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class Mailer
 {
     public function __construct(
-        private readonly MailerInterface       $mailer,
-        private readonly UrlGeneratorInterface $router,
-        private readonly TranslatorInterface   $translator,
-        private readonly string                $siteName,
-        private readonly string                $fromAddress
+        private readonly MailerInterface           $mailer,
+        private readonly UrlGeneratorInterface     $router,
+        private readonly TranslatorInterface       $translator,
+        private readonly string                    $siteName,
+        private readonly string                    $fromAddress,
+        private readonly BestWishesSecurityContext $securityContext,
     ) {
     }
 
     public function sendPurchaseAlertMessage(User $user, Gift $purchasedGift, UserInterface $buyer): void
     {
+        if (!$this->canSendAlert($user, $purchasedGift)) {
+            return;
+        }
+
         $templatedEmail = $this->renderMailTemplate(
             'mail.alert_purchase.title',
             'emails/alert_purchase.txt.twig',
@@ -37,6 +44,10 @@ class Mailer
 
     public function sendCreationAlertMessage(User $user, Gift $createdGift, UserInterface $creator): void
     {
+        if (!$this->canSendAlert($user, $createdGift)) {
+            return;
+        }
+
         $templatedEmail = $this->renderMailTemplate(
             'mail.alert_creation.title',
             'emails/alert_creation.txt.twig',
@@ -51,6 +62,10 @@ class Mailer
 
     public function sendEditionAlertMessage(User $user, Gift $editedGift, UserInterface $editor): void
     {
+        if (!$this->canSendAlert($user, $editedGift)) {
+            return;
+        }
+
         $templatedEmail = $this->renderMailTemplate(
             'mail.alert_edition.title',
             'emails/alert_edition.txt.twig',
@@ -65,6 +80,10 @@ class Mailer
 
     public function sendDeletionAlertMessage(User $user, Gift $deletedGift, UserInterface $deleter): void
     {
+        if (!$this->canSendAlert($user, $deletedGift)) {
+            return;
+        }
+
         $templatedEmail = $this->renderMailTemplate(
             'mail.alert_deletion.title',
             'emails/alert_deletion.txt.twig',
@@ -75,6 +94,12 @@ class Mailer
             ]
         );
         $this->sendEmailMessage($templatedEmail, $this->fromAddress, $user->getEmail());
+    }
+
+    private function canSendAlert(User $user, Gift $gift): bool
+    {
+        return !$gift->isSurprise()
+            || $this->securityContext->isGranted(GiftListVoter::VIEW_SURPRISES, $gift->getList(), $user);
     }
 
     /**

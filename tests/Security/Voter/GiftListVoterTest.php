@@ -6,35 +6,32 @@ use BestWishes\Entity\GiftList;
 use BestWishes\Entity\User;
 use BestWishes\Repository\GiftListPermissionRepository;
 use BestWishes\Security\Voter\GiftListVoter;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class GiftListVoterTest extends TestCase
 {
-    private GiftListPermissionRepository $permissionRepository;
-    private Security $security;
+    private GiftListPermissionRepository&Stub $permissionRepository;
     private GiftListVoter $voter;
 
     protected function setUp(): void
     {
         $this->permissionRepository = $this->createStub(GiftListPermissionRepository::class);
-        $this->security = $this->createStub(Security::class);
-        $this->voter = new GiftListVoter($this->permissionRepository, $this->security);
+        $hierarchy = new RoleHierarchy(['ROLE_SUPER_ADMIN' => ['ROLE_ADMIN']]);
+        $this->voter = new GiftListVoter($this->permissionRepository, $hierarchy);
     }
 
     public function testOwnerWithPermissionHasAccess(): void
     {
         $owner = $this->createUser(1, 'owner');
-        $giftList = $this->createGiftList(1, $owner);
+        $giftList = $this->createGiftList($owner);
         $token = $this->createToken($owner);
-
-        $this->security->method('isGranted')->willReturn(false);
 
         // Owner HAS permission in DB
         $this->permissionRepository->method('hasPermission')
-            ->with($giftList, $owner, 'EDIT')
             ->willReturn(true);
 
         // Owner with permission in DB has access
@@ -47,14 +44,11 @@ class GiftListVoterTest extends TestCase
     public function testOwnerWithoutPermissionIsDenied(): void
     {
         $owner = $this->createUser(1, 'owner');
-        $giftList = $this->createGiftList(1, $owner);
+        $giftList = $this->createGiftList($owner);
         $token = $this->createToken($owner);
-
-        $this->security->method('isGranted')->willReturn(false);
 
         // Owner does NOT have permission in DB
         $this->permissionRepository->method('hasPermission')
-            ->with($giftList, $owner, 'DELETE')
             ->willReturn(false);
 
         // Owner without permission in DB is denied (just like old ACL system)
@@ -67,14 +61,11 @@ class GiftListVoterTest extends TestCase
     public function testOwnerCanHaveAlertPermissionsIfConfigured(): void
     {
         $owner = $this->createUser(1, 'owner');
-        $giftList = $this->createGiftList(1, $owner);
+        $giftList = $this->createGiftList($owner);
         $token = $this->createToken($owner);
-
-        $this->security->method('isGranted')->willReturn(false);
 
         // Owner HAS alerts configured in DB
         $this->permissionRepository->method('hasPermission')
-            ->with($giftList, $owner, 'ALERT_ADD')
             ->willReturn(true);
 
         // Owner CAN have alert permissions if explicitly configured
@@ -84,14 +75,12 @@ class GiftListVoterTest extends TestCase
         );
     }
 
-    public function testAdminHasAllPermissions(): void
+    public function testSuperAdminInheritsAdminRights(): void
     {
-        $admin = $this->createUser(2, 'admin');
+        $admin = $this->createUser(2, 'admin', ['ROLE_SUPER_ADMIN']);
         $owner = $this->createUser(1, 'owner');
-        $giftList = $this->createGiftList(1, $owner);
+        $giftList = $this->createGiftList($owner);
         $token = $this->createToken($admin);
-
-        $this->security->method('isGranted')->with('ROLE_ADMIN')->willReturn(true);
 
         // Admin has all rights
         $this->assertEquals(
@@ -104,12 +93,10 @@ class GiftListVoterTest extends TestCase
     {
         $user = $this->createUser(2, 'user');
         $owner = $this->createUser(1, 'owner');
-        $giftList = $this->createGiftList(1, $owner);
+        $giftList = $this->createGiftList($owner);
         $token = $this->createToken($user);
 
-        $this->security->method('isGranted')->willReturn(false);
         $this->permissionRepository->method('hasPermission')
-            ->with($giftList, $user, 'ALERT_ADD')
             ->willReturn(true);
 
         // User with permission has access
@@ -123,12 +110,10 @@ class GiftListVoterTest extends TestCase
     {
         $user = $this->createUser(2, 'user');
         $owner = $this->createUser(1, 'owner');
-        $giftList = $this->createGiftList(1, $owner);
+        $giftList = $this->createGiftList($owner);
         $token = $this->createToken($user);
 
-        $this->security->method('isGranted')->willReturn(false);
         $this->permissionRepository->method('hasPermission')
-            ->with($giftList, $user, 'EDIT')
             ->willReturn(false);
 
         // User without permission is denied
@@ -141,11 +126,9 @@ class GiftListVoterTest extends TestCase
     public function testAnonymousUserIsDenied(): void
     {
         $owner = $this->createUser(1, 'owner');
-        $giftList = $this->createGiftList(1, $owner);
+        $giftList = $this->createGiftList($owner);
         $token = $this->createStub(TokenInterface::class);
         $token->method('getUser')->willReturn(null);
-
-        $this->security->method('isGranted')->willReturn(false);
 
         // Anonymous user is denied
         $this->assertEquals(
@@ -167,19 +150,34 @@ class GiftListVoterTest extends TestCase
         );
     }
 
-    private function createUser(int $id, string $username): User
+    public function testOwnerComesFromTheListEvenWhenAnOldPermissionStillExists(): void
+    {
+        $owner = $this->createUser(1, 'owner');
+        $formerOwner = $this->createUser(2, 'former-owner');
+        $list = $this->createGiftList($owner);
+
+        $this->permissionRepository->method('hasPermission')->willReturnCallback(
+            static fn (GiftList $list, User $user, string $permission): bool => $permission === 'OWNER'
+        );
+
+        self::assertSame(VoterInterface::ACCESS_GRANTED, $this->voter->vote($this->createToken($owner), $list, ['OWNER']));
+        self::assertSame(VoterInterface::ACCESS_DENIED, $this->voter->vote($this->createToken($formerOwner), $list, ['OWNER']));
+    }
+
+    /** @param list<string> $roles */
+    private function createUser(int $id, string $username, array $roles = ['ROLE_USER']): User
     {
         $user = $this->createStub(User::class);
         $user->method('getId')->willReturn($id);
         $user->method('getUserIdentifier')->willReturn($username);
+        $user->method('getRoles')->willReturn($roles);
         return $user;
     }
 
-    private function createGiftList(int $id, User $owner): GiftList
+    private function createGiftList(User $owner): GiftList
     {
-        $giftList = $this->createStub(GiftList::class);
-        $giftList->method('getId')->willReturn($id);
-        $giftList->method('getOwner')->willReturn($owner);
+        $giftList = new GiftList();
+        $giftList->setOwner($owner);
         return $giftList;
     }
 
@@ -187,6 +185,7 @@ class GiftListVoterTest extends TestCase
     {
         $token = $this->createStub(TokenInterface::class);
         $token->method('getUser')->willReturn($user);
+        $token->method('getRoleNames')->willReturn($user->getRoles());
         return $token;
     }
 }

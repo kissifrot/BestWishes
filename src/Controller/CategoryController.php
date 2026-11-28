@@ -13,6 +13,7 @@ use BestWishes\Manager\SecurityManager;
 use BestWishes\Repository\CategoryRepository;
 use BestWishes\Repository\GiftListRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use BestWishes\Security\Voter\GiftListVoter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -44,7 +45,11 @@ class CategoryController extends AbstractController
         }
         $deleteForm = $this->createDeleteForm($category)->createView();
 
-        return $this->render('category/show.html.twig', compact('category', 'deleteForm'));
+        return $this->render(
+            'category/show.html.twig',
+            compact('category', 'deleteForm'),
+            new Response(headers: ['Cache-Control' => 'private, no-store'])
+        );
     }
 
     /**
@@ -62,11 +67,9 @@ class CategoryController extends AbstractController
             return null;
         }
 
-        if ($this->isGranted(GiftListPermission::PERMISSION_OWNER, $categoryGiftList)) {
-            return $this->categoryRepository->findFullSurpriseExcludedById($id);
-        }
-
-        return $this->categoryRepository->findFullById($id);
+        return $this->isGranted(GiftListVoter::VIEW_SURPRISES, $categoryGiftList)
+            ? $this->categoryRepository->findFullById($id)
+            : $this->categoryRepository->findFullSurpriseExcludedById($id);
     }
 
     #[Route(path: '/create/{listId}', name: 'category_create', requirements: ['listId' => '\d+'], methods: ['GET', 'POST'])]

@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[Assert\NotBlank]
     private string $name;
 
-    #[ORM\OneToOne(targetEntity: GiftList::class, cascade: ['remove'])]
+    #[ORM\OneToOne(targetEntity: GiftList::class)]
     private ?GiftList $list = null;
 
     public function getId(): ?int

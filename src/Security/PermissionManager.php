@@ -54,15 +54,6 @@ class PermissionManager
     }
 
     /**
-     * Exchange a permission between two users
-     */
-    public function exchangePerms(GiftList $giftList, User $newGranted, User $oldGranted, string $permission): void
-    {
-        $this->grant($giftList, $newGranted, $permission);
-        $this->revoke($giftList, $oldGranted, $permission);
-    }
-
-    /**
      * Check if a user has a specific permission
      */
     public function hasPermission(GiftList $giftList, User $user, string $permission): bool

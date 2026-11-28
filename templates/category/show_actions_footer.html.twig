@@ -13,7 +13,7 @@
         <i class="fas fa-gift" aria-hidden="true"></i>
     </a>
 {% endif %}
-{% if is_granted('SURPRISE_ADD', category.list) %}
+{% if is_granted('VIEW_SURPRISES', category.list) %}
     <a href="{{ path('gift_create', { catId: category.id, surprise: true }) }}" class="btn btn-primary" title="{{ 'category.action.create_surprise_gift'|trans }}" aria-label="{{ 'category.action.create_surprise_gift'|trans }}">
         <i class="fas fa-plus-circle" aria-hidden="true"></i>
         <i class="fas fa-question" aria-hidden="true"></i>

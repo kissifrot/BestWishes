@@ -44,6 +44,10 @@ class UserController extends AbstractController
     #[Route(path: '/{id}/updateAlert', name: 'user_update_list_alert', requirements: ['id' => '\d+'], options: ['expose' => true], methods: ['POST'])]
     public function updateAlert(Request $request, GiftList $giftList): JsonResponse
     {
+        if (!$this->isCsrfTokenValid('user_list_alert', $request->request->getString('_token'))) {
+            return new JsonResponse(['success' => false], Response::HTTP_FORBIDDEN);
+        }
+
         $defaultData = [
             'success'  => false,
             'message' => 'An error occurred',
@@ -51,7 +55,7 @@ class UserController extends AbstractController
         $alert = $request->request->get('alert');
         // Do some input checks
         if (empty($alert)) {
-            new JsonResponse($defaultData);
+            return new JsonResponse($defaultData, Response::HTTP_BAD_REQUEST);
         }
         $availableAlerts = GiftListPermission::ALERT_PERMISSIONS;
         if (!\in_array($alert, $availableAlerts, true)) {

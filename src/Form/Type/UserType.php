@@ -2,9 +2,7 @@
 
 namespace BestWishes\Form\Type;
 
-use BestWishes\Entity\GiftList;
 use BestWishes\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -23,7 +21,6 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, ['trim' => true])
             ->add('name', TextType::class, ['trim' => true])
             ->add('plainPassword', PasswordType::class, ['constraints' => new Length(min: 6), 'required' => !$options['isEditing'], 'mapped' => false])
-            ->add('list', EntityType::class, ['class' => GiftList::class, 'choice_label' => 'name', 'required' => false])
             ->add('save', SubmitType::class, ['label_format' => 'form.save']);
     }
 

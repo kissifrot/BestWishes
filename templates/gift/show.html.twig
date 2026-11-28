@@ -18,7 +18,7 @@
         {% if gift.moreDetailUrl is not empty %}<p><a href="{{ gift.moreDetailUrl }}" target="_blank">{{ 'gift.more_details.text'|trans }} <i class="fa-solid fa-up-right-from-square"></i></a></p>{% endif %}
         {% if gift.moreDetail is not empty %}<p>{{ gift.moreDetail }}</p>{% endif %}
         {% if gift.bought and not is_granted('OWNER', gift.category.list) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <p>{{ 'gift.bought_by.text'|trans({ '%purchaseDate%':gift.purchaseDate|date('d/m/Y') , '%buyerName%': gift.buyer.name})|raw }}</p>
+            <p>{{ 'gift.bought_by.text'|trans({ '%purchaseDate%':gift.purchaseDate|date('d/m/Y') , '%buyerName%': gift.buyer.name}) }}</p>
             {% if gift.purchaseComment is not empty %}
                 <p>{{ 'gift.comment.text'|trans }}</p>
                 <figure>
